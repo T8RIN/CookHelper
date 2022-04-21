@@ -2,14 +2,18 @@ package ru.tech.prokitchen.presentation.app.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FindReplace
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,27 +21,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import kotlinx.coroutines.launch
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.viewModel.MainViewModel
 import ru.tech.prokitchen.presentation.dish_details.DishDetailsScreen
 import ru.tech.prokitchen.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
 import ru.tech.prokitchen.presentation.favourite_dishes.FavouriteListScreen
 import ru.tech.prokitchen.presentation.fridge_list.FridgeScreen
-import ru.tech.prokitchen.presentation.recipes_list.CuisineScreen
+import ru.tech.prokitchen.presentation.recipes_list.RecipesList
 import ru.tech.prokitchen.presentation.ui.theme.ProKitchenTheme
-import ru.tech.prokitchen.presentation.ui.utils.Screen
-import ru.tech.prokitchen.presentation.ui.utils.showSnackbar
+import ru.tech.prokitchen.presentation.ui.utils.*
+import ru.tech.prokitchen.presentation.ui.utils.Screen.Favourites.asString
 
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
@@ -52,205 +61,314 @@ fun ProKitchenApp(viewModel: MainViewModel = viewModel()) {
             val navController = rememberNavController()
             val scope = rememberCoroutineScope()
 
-            Scaffold(
-                topBar = {
-                    val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
-                    val backgroundColor = backgroundColors.containerColor(
-                        scrollFraction = viewModel.scrollBehavior.scrollFraction
-                    ).value
-                    val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = Color.Transparent
-                    )
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            ModalNavigationDrawer(
+                drawerContent = {
+                    LazyColumn(contentPadding = WindowInsets.systemBars.asPaddingValues()) {
+                        item {
+                            Column {
+                                AsyncImage(
+                                    model = "https://kastybiy.herokuapp.com/static/img/recipe_1.jpg",
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .padding(start = 15.dp, top = 15.dp)
+                                        .size(52.dp)
+                                        .clip(CircleShape)
+                                )
+                                Spacer(Modifier.size(10.dp))
+                                Column(
+                                    Modifier
+                                        .height(52.dp)
+                                        .padding(start = 15.dp)
+                                ) {
+                                    Text(
+                                        "Малик Мухаметзянов",
+                                        style = MaterialTheme.typography.headlineSmall
+                                    )
+                                    Spacer(Modifier.weight(1f))
+                                    Text(
+                                        "@t8rin",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Spacer(Modifier.size(30.dp))
+                            }
+                        }
+                        itemsIndexed(drawerList) { _, item ->
+                            val selected = viewModel.currentScreen == item
 
-                    Surface(color = backgroundColor) {
-                        CenterAlignedTopAppBar(
-                            modifier = Modifier.statusBarsPadding(),
-                            navigationIcon = {
-                                val focus = LocalFocusManager.current
-                                if (viewModel.selectedItem == 0) {
-                                    IconButton(onClick = {
-                                        if (viewModel.searchMode) {
-                                            focus.clearFocus()
-                                            viewModel.updateSearch("")
-                                        }
-                                        viewModel.searchMode = !viewModel.searchMode
-                                    }) {
-                                        Icon(
-                                            if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
-                                            null
-                                        )
+                            NavigationDrawerItem(
+                                icon = {
+                                    Icon(
+                                        if (selected) item.selectedIcon else item.baseIcon,
+                                        null
+                                    )
+                                },
+                                shape = RoundedCornerShape(
+                                    topStart = 0.0.dp,
+                                    topEnd = 36.0.dp,
+                                    bottomEnd = 36.0.dp,
+                                    bottomStart = 0.0.dp
+                                ),
+                                modifier = Modifier.padding(end = 12.dp),
+                                label = { Text(stringResource(item.title)) },
+                                selected = selected,
+                                onClick = {
+                                    viewModel.title = item.title
+                                    viewModel.currentScreen = item
+
+                                    if (item is Screen.Home) {
+                                        viewModel.title = Screen.Recipes.title
+                                        viewModel.selectedItem = 0
+                                        navController.navigate(Screen.Recipes.route)
                                     }
-                                }
-                            },
-                            actions = {
-                                if (viewModel.selectedItem == 0 && viewModel.searchMode) {
-                                    IconButton(onClick = {
-                                        if (viewModel.searchString.value.isNotEmpty())
-                                            viewModel.updateSearch("")
-                                    }) {
-                                        Icon(Icons.Rounded.Close, null)
+
+                                    scope.launch {
+                                        drawerState.animateTo(DrawerValue.Closed, tween())
                                     }
+                                    clearState()
                                 }
-                            },
-                            title = {
-                                Box {
-                                    if (!viewModel.searchMode) {
-                                        Text(viewModel.title)
-                                    } else {
-                                        SearchBar(
-                                            searchString = viewModel.searchString.value,
-                                            onValueChange = { viewModel.updateSearch(it) }
-                                        )
-                                    }
-                                }
-                            },
-                            scrollBehavior = viewModel.scrollBehavior,
-                            colors = foregroundColors
-                        )
+                            )
+                            if (item is Screen.Home || item is Screen.BlockList) {
+                                Spacer(Modifier.size(10.dp))
+                                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Spacer(Modifier.size(10.dp))
+                            }
+                        }
                     }
                 },
-                bottomBar = {
-                    Surface(
-                        color = TopAppBarDefaults.smallTopAppBarColors().containerColor(100f).value
-                    ) {
-                        NavigationBar(modifier = Modifier.navigationBarsPadding()) {
-                            val items = listOf(
-                                Screen.Cuisine,
-                                Screen.Fridge,
-                                Screen.Favourites
-                            )
+                drawerState = drawerState,
+                gesturesEnabled = viewModel.inNavigationMode
+            ) {
+                Column {
 
-                            items.forEachIndexed { index, screen ->
-
-                                viewModel.selectedItem =
-                                    items.indexOfFirst { it.route == navController.currentDestination?.route }
-
-                                NavigationBarItem(
-                                    icon = {
-                                        if (screen.baseIcon != Icons.Outlined.PhoneAndroid) {
+                    AnimatedVisibility(visible = viewModel.inNavigationMode) {
+                        val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
+                        val backgroundColor = backgroundColors.containerColor(
+                            scrollFraction = viewModel.scrollBehavior.scrollFraction
+                        ).value
+                        val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
+                            containerColor = Color.Transparent,
+                            scrolledContainerColor = Color.Transparent
+                        )
+                        Surface(color = backgroundColor) {
+                            CenterAlignedTopAppBar(
+                                modifier = Modifier.statusBarsPadding(),
+                                navigationIcon = {
+                                    IconButton(onClick = {
+                                        scope.launch {
+                                            drawerState.animateTo(
+                                                DrawerValue.Open,
+                                                tween()
+                                            )
+                                        }
+                                    }) {
+                                        Icon(Icons.Rounded.Menu, null)
+                                    }
+                                },
+                                actions = {
+                                    if (viewModel.selectedItem == 0 && viewModel.searchMode) {
+                                        val focus = LocalFocusManager.current
+                                        IconButton(onClick = {
+                                            if (viewModel.searchMode) {
+                                                focus.clearFocus()
+                                                viewModel.updateSearch("")
+                                            }
+                                            viewModel.searchMode = !viewModel.searchMode
+                                        }) {
                                             Icon(
-                                                if (viewModel.selectedItem == index) screen.selectedIcon else screen.baseIcon,
+                                                if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
                                                 null
                                             )
+                                        }
+                                    }
+                                },
+                                title = {
+                                    Box {
+                                        if (!viewModel.searchMode) {
+                                            Text(viewModel.title.asString())
                                         } else {
-                                            Icon(
-                                                if (viewModel.selectedItem == index) painterResource(
-                                                    R.drawable.fridge
-                                                ) else painterResource(R.drawable.fridge_outline),
-                                                null
+                                            SearchBar(
+                                                searchString = viewModel.searchString.value,
+                                                onValueChange = {
+                                                    viewModel.updateSearch(
+                                                        it
+                                                    )
+                                                }
                                             )
+                                        }
+                                    }
+                                },
+                                scrollBehavior = viewModel.scrollBehavior,
+                                colors = foregroundColors
+                            )
+                        }
+                    }
+
+                    AnimatedContent(
+                        targetState = viewModel.currentScreen, modifier = Modifier
+                            .nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
+                    ) { screen ->
+                        when (screen) {
+                            is Screen.Home -> {
+                                Scaffold(
+                                    bottomBar = {
+                                        Surface(
+                                            color = TopAppBarDefaults.smallTopAppBarColors()
+                                                .containerColor(100f).value
+                                        ) {
+                                            NavigationBar(modifier = Modifier.navigationBarsPadding()) {
+                                                val items = navBarList
+
+                                                items.forEachIndexed { index, screen ->
+
+                                                    viewModel.selectedItem =
+                                                        items.indexOfFirst { it.route == navController.currentDestination?.route }
+
+                                                    NavigationBarItem(
+                                                        icon = {
+                                                            if (screen.baseIcon != Icons.Outlined.PhoneAndroid) {
+                                                                Icon(
+                                                                    if (viewModel.selectedItem == index) screen.selectedIcon else screen.baseIcon,
+                                                                    null
+                                                                )
+                                                            } else {
+                                                                Icon(
+                                                                    if (viewModel.selectedItem == index) painterResource(
+                                                                        R.drawable.fridge
+                                                                    ) else painterResource(R.drawable.fridge_outline),
+                                                                    null
+                                                                )
+                                                            }
+                                                        },
+                                                        alwaysShowLabel = false,
+                                                        label = { Text(screen.shortTitle.asString()) },
+                                                        selected = viewModel.selectedItem == index,
+                                                        onClick = {
+                                                            if (viewModel.selectedItem != index) {
+                                                                viewModel.title = screen.title
+                                                                viewModel.selectedItem = index
+                                                                navController.navigate(screen.route) {
+                                                                    navController.popBackStack()
+                                                                    launchSingleTop = true
+                                                                }
+                                                                viewModel.searchMode = false
+                                                                viewModel.updateSearch("")
+
+                                                                clearState()
+                                                            }
+                                                        }
+                                                    )
+                                                }
+                                            }
                                         }
                                     },
-                                    alwaysShowLabel = false,
-                                    label = { Text(screen.shortTitle) },
-                                    selected = viewModel.selectedItem == index,
-                                    onClick = {
-                                        if (viewModel.selectedItem != index) {
-                                            viewModel.title = screen.title
-                                            viewModel.selectedItem = index
-                                            navController.navigate(screen.route) {
-                                                navController.popBackStack()
-                                                launchSingleTop = true
+                                    floatingActionButton = {
+                                        AnimatedVisibility(
+                                            visible = viewModel.selectedItem == 2,
+                                            enter = fadeIn() + scaleIn(),
+                                            exit = fadeOut() + scaleOut()
+                                        ) {
+                                            Column(horizontalAlignment = Alignment.End) {
+                                                SmallFloatingActionButton(
+                                                    onClick = {
+                                                        if (viewModel.productsList.value.error.isNotBlank()) {
+                                                            showSnackbar(
+                                                                scope,
+                                                                snackbarHostState,
+                                                                viewModel.productsList.value.error,
+                                                                "Яхшы"
+                                                            ) {
+                                                                if (it == SnackbarResult.ActionPerformed) viewModel.reload()
+                                                            }
+                                                        } else if (viewModel.productsList.value.list?.isNotEmpty() == true) {
+                                                            viewModel.showProductsDialog = true
+                                                        } else {
+                                                            showSnackbar(
+                                                                scope,
+                                                                snackbarHostState,
+                                                                "Суыткыч тулысынча тулы",
+                                                                ""
+                                                            ) {}
+                                                        }
+                                                    },
+                                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                                                ) {
+                                                    Icon(Icons.Rounded.Add, null)
+                                                }
+                                                Spacer(Modifier.size(8.dp))
+                                                ExtendedFloatingActionButton(
+                                                    onClick = {
+                                                        if (viewModel.productsList.value.list != null) viewModel.currentScreen =
+                                                            Screen.MatchedRecipes(Screen.Home)
+                                                    },
+                                                    text = {
+                                                        Text(stringResource(R.string.match))
+                                                    },
+                                                    icon = {
+                                                        Icon(Icons.Outlined.FindReplace, null)
+                                                    })
                                             }
-                                            viewModel.searchMode = false
-                                            viewModel.updateSearch("")
                                         }
+                                    },
+                                    snackbarHost = { SnackbarHost(snackbarHostState) },
+                                ) { contentPadding ->
+
+                                    NavHost(
+                                        navController = navController,
+                                        startDestination = Screen.Recipes.route,
+                                        Modifier.padding(contentPadding)
+                                    ) {
+                                        composable(Screen.Recipes.route) {
+                                            RecipesList(
+                                                snackbarHostState,
+                                                viewModel.searchString,
+                                                onRecipeClick = {
+                                                    viewModel.currentScreen =
+                                                        Screen.RecipeDetails(it, screen)
+                                                }
+                                            )
+                                        }
+                                        composable(Screen.Fridge.route) {
+                                            FridgeScreen()
+                                        }
+                                        composable(Screen.Forum.route) {
+
+                                        }
+                                    }
+                                }
+                            }
+                            is Screen.Favourites -> {
+                                FavouriteListScreen(
+                                    snackState = snackbarHostState,
+                                    onRecipeClicked = {
+                                        viewModel.currentScreen = Screen.RecipeDetails(it, screen)
                                     }
                                 )
                             }
-                        }
-                    }
-                },
-                floatingActionButton = {
-                    AnimatedVisibility(
-                        visible = viewModel.selectedItem == 1,
-                        enter = fadeIn() + scaleIn(),
-                        exit = fadeOut() + scaleOut()
-                    ) {
-                        Column(horizontalAlignment = Alignment.End) {
-                            SmallFloatingActionButton(
-                                onClick = {
-                                    if (viewModel.productsList.value.error.isNotBlank()) {
-                                        showSnackbar(
-                                            scope,
-                                            snackbarHostState,
-                                            viewModel.productsList.value.error,
-                                            "Яхшы"
-                                        ) {
-                                            if (it == SnackbarResult.ActionPerformed) viewModel.reload()
-                                        }
-                                    } else if (viewModel.productsList.value.list?.isNotEmpty() == true) {
-                                        viewModel.showProductsDialog = true
-                                    } else {
-                                        showSnackbar(
-                                            scope,
-                                            snackbarHostState,
-                                            "Суыткыч тулысынча тулы",
-                                            ""
-                                        ) {}
-                                    }
-                                },
-                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                            ) {
-                                Icon(Icons.Rounded.Add, null)
+                            is Screen.RecipeDetails -> {
+                                val id = screen.id
+                                val back: () -> Unit =
+                                    { viewModel.currentScreen = screen.previousScreen }
+                                BackHandler { back() }
+                                DishDetailsScreen(id, goBack = { back() })
                             }
-                            Spacer(Modifier.size(8.dp))
-                            ExtendedFloatingActionButton(
-                                onClick = {
-                                    if (viewModel.productsList.value.list != null) viewModel.openSheet =
-                                        true
-                                },
-                                text = {
-                                    Text("Сайларга")
-                                },
-                                icon = {
-                                    Icon(Icons.Outlined.FindReplace, null)
-                                })
+                            is Screen.MatchedRecipes -> {
+                                val back: () -> Unit =
+                                    { viewModel.currentScreen = screen.previousScreen }
+                                BackHandler { back() }
+                                OnFridgeBasedDishes(
+                                    onRecipeClicked = {
+                                        viewModel.currentScreen = Screen.RecipeDetails(it, screen)
+                                    },
+                                    goBack = { back() })
+                            }
                         }
                     }
-                },
-                snackbarHost = { SnackbarHost(snackbarHostState) },
-                modifier = Modifier.nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
-            ) { contentPadding ->
-                NavHost(
-                    navController = navController,
-                    startDestination = Screen.Cuisine.route,
-                    Modifier.padding(contentPadding)
-                ) {
-                    composable(Screen.Cuisine.route) {
-                        CuisineScreen(snackbarHostState, viewModel.id, viewModel.searchString)
-                    }
-                    composable(Screen.Fridge.route) {
-                        FridgeScreen()
-                    }
-                    composable(Screen.Favourites.route) {
-                        FavouriteListScreen(snackbarHostState, viewModel.id)
-                    }
                 }
-            }
-
-            AnimatedVisibility(
-                visible = viewModel.openSheet,
-                enter = fadeIn() + slideInHorizontally(),
-                exit = fadeOut() + slideOutHorizontally()
-            ) {
-                BackHandler {
-                    viewModel.openSheet = false
-                }
-                OnFridgeBasedDishes(viewModel.id, goBack = { viewModel.openSheet = false })
-            }
-
-            AnimatedVisibility(
-                visible = viewModel.id.value != -1,
-                enter = fadeIn() + scaleIn(),
-                exit = fadeOut() + scaleOut()
-            ) {
-                BackHandler {
-                    viewModel.id.value = -1
-                }
-                DishDetailsScreen(viewModel.id.value, goBack = { viewModel.id.value = -1 })
             }
 
             if (viewModel.showProductsDialog) {

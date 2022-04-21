@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,14 +27,18 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var searchMode by mutableStateOf(false)
-    var openSheet by mutableStateOf(false)
 
+    var currentScreen by mutableStateOf<Screen>(Screen.Home)
     var selectedItem by mutableStateOf(0)
-    var title by mutableStateOf(Screen.Cuisine.title)
-    val id = mutableStateOf(-1)
+
+    var title by mutableStateOf(Screen.Recipes.title)
     val searchString = mutableStateOf("")
 
     var showProductsDialog by mutableStateOf(false)
+
+    val inNavigationMode: Boolean get() {
+        return currentScreen !is Screen.RecipeDetails && currentScreen !is Screen.MatchedRecipes
+    }
 
     @ExperimentalMaterial3Api
     val scrollBehavior by mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
@@ -62,7 +67,7 @@ class MainViewModel @Inject constructor(
                     default.clear()
                     result.data?.let { default.addAll(it) }
                 }
-                is Action.Empty -> {
+                is Action.Error -> {
                     _productsList.value = ProductsListState(
                         error = result.message ?: "Нәрсәдер начар булып чыккан"
                     )

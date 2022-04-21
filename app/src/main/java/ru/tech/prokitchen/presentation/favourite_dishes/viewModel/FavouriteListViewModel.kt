@@ -30,7 +30,7 @@ class FavouriteListViewModel @Inject constructor(
                 is Action.Success -> {
                     _favState.value = CuisineState(recipeList = result.data)
                 }
-                is Action.Empty -> {
+                is Action.Error -> {
                     _favState.value = CuisineState(
                         error = result.message ?: "Нәрсәдер начар булып чыккан"
                     )

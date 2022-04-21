@@ -16,19 +16,22 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.tech.prokitchen.R
 import ru.tech.prokitchen.domain.model.Recipe
 import ru.tech.prokitchen.presentation.app.components.Placeholder
 import ru.tech.prokitchen.presentation.recipes_list.components.CuisineItem
 import ru.tech.prokitchen.presentation.recipes_list.viewModel.CuisineViewModel
+import ru.tech.prokitchen.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.prokitchen.presentation.ui.utils.showSnackbar
 
 @Composable
-fun CuisineScreen(
+fun RecipesList(
     snackState: SnackbarHostState,
-    idState: MutableState<Int>,
     searchString: MutableState<String>,
+    onRecipeClick: (id: Int) -> Unit,
     viewModel: CuisineViewModel = hiltViewModel()
 ) {
 
@@ -47,20 +50,20 @@ fun CuisineScreen(
                 if (data.isEmpty()) {
                     Placeholder(
                         icon = Icons.TwoTone.FindInPage,
-                        text = "Бу сузләр өчен бернәрсәдә табылмаган"
+                        text = stringResource(R.string.nothing_found_by_the_search)
                     )
                 }
             }
-            LazyColumn {
+            LazyColumn(state = rememberForeverLazyListState(key = "recipes")) {
                 items(data.size) { index ->
                     CuisineItem(data[index]) {
-                        idState.value = it
+                        onRecipeClick(it)
                     }
                     Spacer(Modifier.height(10.dp))
                 }
             }
         } else if (!state.isLoading) {
-            Placeholder(icon = Icons.TwoTone.Error, text = "Нәрсәдер начар булып чыккан")
+            Placeholder(icon = Icons.TwoTone.Error, text = stringResource(R.string.smt_went_wrong))
         }
 
         if (state.error.isNotBlank()) {

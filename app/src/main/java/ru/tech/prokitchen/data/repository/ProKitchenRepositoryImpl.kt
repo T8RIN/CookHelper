@@ -27,7 +27,7 @@ class ProKitchenRepositoryImpl @Inject constructor(
             val remoteCoins = api.getCuisine()
             emit(Action.Success(remoteCoins.map { it.toRecipe() }))
         } catch (e: Exception) {
-            emit(Action.Empty(e.localizedMessage))
+            emit(Action.Error(e.localizedMessage))
         }
     }
 
@@ -37,7 +37,7 @@ class ProKitchenRepositoryImpl @Inject constructor(
             val remoteData = api.getDishById(id)
             emit(Action.Success(remoteData.toRecipe()))
         } catch (e: Exception) {
-            emit(Action.Empty(e.localizedMessage))
+            emit(Action.Error(e.localizedMessage))
         }
     }
 
@@ -63,7 +63,7 @@ class ProKitchenRepositoryImpl @Inject constructor(
                 }
             }
             if (data.isNotEmpty()) emit(Action.Success(data))
-            else emit(Action.Empty("Сезнең сайланма рецептлар буш"))
+            else emit(Action.Empty())
         }
 
     }
@@ -85,7 +85,7 @@ class ProKitchenRepositoryImpl @Inject constructor(
                 }
             }
             if (data.isNotEmpty()) emit(Action.Success(data))
-            else emit(Action.Empty("Сезнең суыткыч буш, башланырга өчен ашамлыкларны кушыгыз"))
+            else emit(Action.Empty())
         }
     }
 
@@ -103,7 +103,7 @@ class ProKitchenRepositoryImpl @Inject constructor(
             val remoteCoins = api.getProducts()
             emit(Action.Success(remoteCoins.map { it.toProduct() }))
         } catch (e: Exception) {
-            emit(Action.Empty(e.localizedMessage))
+            emit(Action.Error(e.localizedMessage))
         }
     }
 

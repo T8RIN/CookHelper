@@ -30,7 +30,7 @@ class CuisineViewModel @Inject constructor(
                 is Action.Success -> {
                     _cuisineState.value = CuisineState(recipeList = result.data)
                 }
-                is Action.Empty -> {
+                is Action.Error -> {
                     _cuisineState.value = CuisineState(
                         error = result.message ?: "Нәрсәдер начар булып чыккан"
                     )

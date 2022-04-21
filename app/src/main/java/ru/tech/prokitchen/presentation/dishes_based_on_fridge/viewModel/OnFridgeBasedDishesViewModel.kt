@@ -61,7 +61,7 @@ class OnFridgeBasedDishesViewModel @Inject constructor(
                             _dishes.value =
                                 PodborState(recipeList = lst.sortedByDescending { it.second })
                         }
-                        is Action.Empty -> {
+                        is Action.Error -> {
                             _dishes.value = PodborState(
                                 error = result1.message ?: "Нәрсәдер начар булып чыккан"
                             )

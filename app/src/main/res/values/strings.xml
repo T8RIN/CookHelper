@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">PROkitchen (Борщ)</string>
+    <string name="recipe_bank">Банк рецептов</string>
+    <string name="recipes">Рецепты</string>
+    <string name="fav_dishes">Любимые блюда</string>
+    <string name="fav">Избранное</string>
+    <string name="fridge">Холодильник</string>
+    <string name="forum_title">Домашний форум</string>
+    <string name="forum">Форум</string>
+    <string name="profile">Профиль</string>
+    <string name="blockList">Блок-лист</string>
+    <string name="home">Главная</string>
+    <string name="settings">Настройки</string>
+    <string name="shopping_list">Список покупок</string>
+    <string name="messages">Сообщения</string>
+    <string name="match">Подобрать</string>
+    <string name="no_favs">У вас нет любимых блюд</string>
+    <string name="again">Повторить</string>
+    <string name="nothing_found_by_the_search">Ничего не найдено по данному запросу</string>
+    <string name="smt_went_wrong">Что-то пошло не так</string>
 </resources>

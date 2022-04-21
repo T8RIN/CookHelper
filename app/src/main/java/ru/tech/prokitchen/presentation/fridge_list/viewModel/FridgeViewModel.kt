@@ -33,7 +33,7 @@ class FridgeViewModel @Inject constructor(
                 is Action.Success -> {
                     _listState.value = FridgeListState(products = result.data?.sortedBy { it.name })
                 }
-                is Action.Empty -> {
+                is Action.Error -> {
                     _listState.value = FridgeListState(
                         error = result.message ?: "Нәрсәдер начар булып чыккан"
                     )

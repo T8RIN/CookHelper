@@ -45,7 +45,7 @@ class DishDetailsViewModel @Inject constructor(
                 is Action.Success -> {
                     _dishState.value = DishDetailsState(dish = result.data)
                 }
-                is Action.Empty -> {
+                is Action.Error -> {
                     _dishState.value = DishDetailsState(
                         error = result.message ?: "Нәрсәдер начар булып чыккан"
                     )

@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
 
-    <item android:drawable="@color/ic_launcher_background" />
+    <item android:drawable="@color/splash" />
 
     <item
         android:drawable="@drawable/ic_fridge_logo_144"

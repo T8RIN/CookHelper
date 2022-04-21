@@ -11,21 +11,23 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.components.Placeholder
 import ru.tech.prokitchen.presentation.favourite_dishes.viewModel.FavouriteListViewModel
 import ru.tech.prokitchen.presentation.recipes_list.components.CuisineItem
+import ru.tech.prokitchen.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.prokitchen.presentation.ui.utils.showSnackbar
 
 @Composable
 fun FavouriteListScreen(
     snackState: SnackbarHostState,
-    idState: MutableState<Int>,
+    onRecipeClicked: (id: Int) -> Unit,
     viewModel: FavouriteListViewModel = hiltViewModel()
 ) {
 
@@ -33,16 +35,16 @@ fun FavouriteListScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.recipeList != null) {
-            LazyColumn {
+            LazyColumn(state = rememberForeverLazyListState(key = "fav")) {
                 items(state.recipeList.size) { index ->
                     CuisineItem(state.recipeList[index]) {
-                        idState.value = it
+                        onRecipeClicked(it)
                     }
                     Spacer(Modifier.height(10.dp))
                 }
             }
         } else if (!state.isLoading) {
-            Placeholder(icon = Icons.TwoTone.CloudOff, text = "Сезнең сайланма рецептлар буш")
+            Placeholder(icon = Icons.TwoTone.CloudOff, text = stringResource(R.string.no_favs))
         }
 
         if (state.error.isNotBlank()) {
@@ -50,7 +52,7 @@ fun FavouriteListScreen(
                 rememberCoroutineScope(),
                 snackState,
                 state.error,
-                "Тагын"
+                stringResource(R.string.again)
             ) {
                 if (it == SnackbarResult.ActionPerformed) {
                     viewModel.reload()
