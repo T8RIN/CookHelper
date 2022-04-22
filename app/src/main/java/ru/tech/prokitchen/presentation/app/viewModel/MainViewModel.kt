@@ -6,7 +6,6 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -16,6 +15,7 @@ import ru.tech.prokitchen.domain.use_case.get_fridge_list.GetFridgeListUseCase
 import ru.tech.prokitchen.domain.use_case.get_prod_list.GetProductsListUseCase
 import ru.tech.prokitchen.domain.use_case.update_fridge.UpdateFridgeUseCase
 import ru.tech.prokitchen.presentation.app.components.ProductsListState
+import ru.tech.prokitchen.presentation.ui.utils.Dialog
 import ru.tech.prokitchen.presentation.ui.utils.Screen
 import javax.inject.Inject
 
@@ -28,17 +28,14 @@ class MainViewModel @Inject constructor(
 
     var searchMode by mutableStateOf(false)
 
-    var currentScreen by mutableStateOf<Screen>(Screen.Home)
+    val currentDialog = mutableStateOf<Dialog>(Dialog.None)
+    val currentScreen = mutableStateOf<Screen>(Screen.Home)
+
+    var navDestination by mutableStateOf<Screen>(Screen.Recipes)
     var selectedItem by mutableStateOf(0)
 
     var title by mutableStateOf(Screen.Recipes.title)
     val searchString = mutableStateOf("")
-
-    var showProductsDialog by mutableStateOf(false)
-
-    val inNavigationMode: Boolean get() {
-        return currentScreen !is Screen.RecipeDetails && currentScreen !is Screen.MatchedRecipes
-    }
 
     @ExperimentalMaterial3Api
     val scrollBehavior by mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
@@ -69,12 +66,13 @@ class MainViewModel @Inject constructor(
                 }
                 is Action.Error -> {
                     _productsList.value = ProductsListState(
-                        error = result.message ?: "Нәрсәдер начар булып чыккан"
+                        error = result.message.toString()
                     )
                 }
                 is Action.Loading -> {
                     _productsList.value = ProductsListState(isLoading = true)
                 }
+                is Action.Empty -> {}
             }
         }.launchIn(viewModelScope)
         getFridgeListUseCase().onEach { result ->

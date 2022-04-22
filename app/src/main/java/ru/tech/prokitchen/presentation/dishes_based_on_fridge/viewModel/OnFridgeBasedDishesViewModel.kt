@@ -63,11 +63,14 @@ class OnFridgeBasedDishesViewModel @Inject constructor(
                         }
                         is Action.Error -> {
                             _dishes.value = PodborState(
-                                error = result1.message ?: "Нәрсәдер начар булып чыккан"
+                                error = result1.message.toString()
                             )
                         }
                         is Action.Loading -> {
                             _dishes.value = PodborState(isLoading = true)
+                        }
+                        else -> {
+                            _dishes.value = PodborState()
                         }
                     }
                 }

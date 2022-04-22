@@ -11,7 +11,6 @@ import androidx.compose.ui.res.stringResource
 import ru.tech.prokitchen.R
 
 sealed class Screen(
-    val route: String,
     @StringRes val title: Int = R.string.app_name,
     @StringRes val shortTitle: Int = R.string.app_name,
     val baseIcon: ImageVector = Icons.Outlined.PhoneAndroid,
@@ -19,7 +18,6 @@ sealed class Screen(
 ) {
 
     object Forum : Screen(
-        route = "forum",
         title = R.string.forum_title,
         shortTitle = R.string.forum,
         baseIcon = Icons.Outlined.Forum,
@@ -27,7 +25,6 @@ sealed class Screen(
     )
 
     object Recipes : Screen(
-        route = "recipes",
         title = R.string.recipe_bank,
         shortTitle = R.string.recipes,
         baseIcon = Icons.Outlined.DinnerDining,
@@ -35,7 +32,6 @@ sealed class Screen(
     )
 
     object Favourites : Screen(
-        route = "favourites",
         title = R.string.fav_dishes,
         shortTitle = R.string.fav,
         baseIcon = Icons.Outlined.FavoriteBorder,
@@ -43,13 +39,11 @@ sealed class Screen(
     )
 
     object Fridge : Screen(
-        route = "fridge",
         title = R.string.fridge,
         shortTitle = R.string.fridge
     )
 
     object Profile : Screen(
-        route = "profile",
         title = R.string.profile,
         shortTitle = R.string.profile,
         baseIcon = Icons.Outlined.AccountCircle,
@@ -57,7 +51,6 @@ sealed class Screen(
     )
 
     object BlockList : Screen(
-        route = "ban_list",
         title = R.string.blockList,
         shortTitle = R.string.blockList,
         baseIcon = Icons.Outlined.Report,
@@ -65,7 +58,6 @@ sealed class Screen(
     )
 
     object Home : Screen(
-        route = "home",
         title = R.string.home,
         shortTitle = R.string.home,
         baseIcon = Icons.Outlined.Home,
@@ -73,7 +65,6 @@ sealed class Screen(
     )
 
     object Settings : Screen(
-        route = "settings",
         title = R.string.settings,
         shortTitle = R.string.settings,
         baseIcon = Icons.Outlined.Settings,
@@ -81,7 +72,6 @@ sealed class Screen(
     )
 
     object Cart : Screen(
-        route = "cart",
         title = R.string.shopping_list,
         shortTitle = R.string.shopping_list,
         baseIcon = Icons.Outlined.ShoppingCart,
@@ -89,16 +79,15 @@ sealed class Screen(
     )
 
     object Messages : Screen(
-        route = "messages",
         title = R.string.messages,
         shortTitle = R.string.messages,
         baseIcon = Icons.Outlined.Message,
         selectedIcon = Icons.Filled.Message
     )
 
-    class RecipeDetails(val id: Int, val previousScreen: Screen) : Screen(route = "details")
+    class RecipeDetails(val id: Int, val previousScreen: Screen) : Screen()
 
-    class MatchedRecipes(val previousScreen: Screen) : Screen(route = "matched")
+    class MatchedRecipes(val previousScreen: Screen) : Screen()
 
     @Composable
     fun Int.asString(): String {

@@ -71,7 +71,7 @@ fun RecipesList(
                 rememberCoroutineScope(),
                 snackState,
                 state.error,
-                "Тагын"
+                stringResource(R.string.again)
             ) {
                 if (it == SnackbarResult.ActionPerformed) {
                     viewModel.reload()

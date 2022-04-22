@@ -12,8 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.components.Placeholder
 import ru.tech.prokitchen.presentation.dishes_based_on_fridge.viewModel.OnFridgeBasedDishesViewModel
 import ru.tech.prokitchen.presentation.recipes_list.components.CuisineItem
@@ -60,34 +62,21 @@ fun OnFridgeBasedDishes(
             modifier = Modifier.nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                if (state.recipeList != null) {
-                    if (state.recipeList.isNotEmpty()) {
-                        LazyColumn {
-                            items(state.recipeList.size) { index ->
-                                Row {
-                                    Text(
-                                        "${state.recipeList[index].second}%",
-                                        modifier = Modifier.padding(top = 10.dp, start = 10.dp)
-                                    )
-                                    CuisineItem(state.recipeList[index].first) {
-                                        onRecipeClicked(it)
-                                    }
+                if (state.recipeList != null && state.recipeList.isNotEmpty()) {
+                    LazyColumn {
+                        items(state.recipeList.size) { index ->
+                            Row {
+                                Text(
+                                    "${state.recipeList[index].second}%",
+                                    modifier = Modifier.padding(top = 10.dp, start = 10.dp)
+                                )
+                                CuisineItem(state.recipeList[index].first) {
+                                    onRecipeClicked(it)
                                 }
-                                Spacer(Modifier.height(10.dp))
                             }
+                            Spacer(Modifier.height(10.dp))
                         }
-                    } else {
-                        Placeholder(
-                            icon = Icons.TwoTone.FindInPage,
-                            text = "Бирелгән ашамлыклар буенча\nашлар табылмады"
-                        )
                     }
-
-                } else if (!state.isLoading && state.error.isBlank()) {
-                    Placeholder(
-                        icon = Icons.TwoTone.Error,
-                        text = "Нәрсәдер начар булып чыккан"
-                    )
                 }
 
                 if (state.error.isNotBlank()) {

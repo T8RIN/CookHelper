@@ -1,5 +1,6 @@
 package ru.tech.prokitchen.presentation.app.components
 
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -16,9 +17,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import ru.tech.prokitchen.R
@@ -47,395 +43,462 @@ import ru.tech.prokitchen.presentation.recipes_list.RecipesList
 import ru.tech.prokitchen.presentation.ui.theme.ProKitchenTheme
 import ru.tech.prokitchen.presentation.ui.utils.*
 import ru.tech.prokitchen.presentation.ui.utils.Screen.Favourites.asString
+import ru.tech.prokitchen.presentation.ui.utils.provider.*
 
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
-fun ProKitchenApp(viewModel: MainViewModel = viewModel()) {
+fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewModel()) {
     ProKitchenTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+        val snackbarHostState = remember { SnackbarHostState() }
+        val scope = rememberCoroutineScope()
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+        CompositionLocalProvider(
+            values = arrayOf(
+                LocalScreenController provides viewModel.currentScreen,
+                LocalDialogController provides viewModel.currentDialog
+            )
         ) {
-            val snackbarHostState = remember { SnackbarHostState() }
-            val navController = rememberNavController()
-            val scope = rememberCoroutineScope()
+            val screenController = LocalScreenController.current
+            val dialogController = LocalDialogController.current
 
-            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-            ModalNavigationDrawer(
-                drawerContent = {
-                    LazyColumn(contentPadding = WindowInsets.systemBars.asPaddingValues()) {
-                        item {
-                            Column {
-                                AsyncImage(
-                                    model = "https://kastybiy.herokuapp.com/static/img/recipe_1.jpg",
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .padding(start = 15.dp, top = 15.dp)
-                                        .size(52.dp)
-                                        .clip(CircleShape)
-                                )
-                                Spacer(Modifier.size(10.dp))
-                                Column(
-                                    Modifier
-                                        .height(52.dp)
-                                        .padding(start = 15.dp)
-                                ) {
-                                    Text(
-                                        "Малик Мухаметзянов",
-                                        style = MaterialTheme.typography.headlineSmall
-                                    )
-                                    Spacer(Modifier.weight(1f))
-                                    Text(
-                                        "@t8rin",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Spacer(Modifier.size(30.dp))
-                            }
-                        }
-                        itemsIndexed(drawerList) { _, item ->
-                            val selected = viewModel.currentScreen == item
+            val inNavigationMode by derivedStateOf {
+                screenController.currentScreen !is Screen.RecipeDetails && screenController.currentScreen !is Screen.MatchedRecipes
+            }
 
-                            NavigationDrawerItem(
-                                icon = {
-                                    Icon(
-                                        if (selected) item.selectedIcon else item.baseIcon,
-                                        null
-                                    )
-                                },
-                                shape = RoundedCornerShape(
-                                    topStart = 0.0.dp,
-                                    topEnd = 36.0.dp,
-                                    bottomEnd = 36.0.dp,
-                                    bottomStart = 0.0.dp
-                                ),
-                                modifier = Modifier.padding(end = 12.dp),
-                                label = { Text(stringResource(item.title)) },
-                                selected = selected,
-                                onClick = {
-                                    viewModel.title = item.title
-                                    viewModel.currentScreen = item
-
-                                    if (item is Screen.Home) {
-                                        viewModel.title = Screen.Recipes.title
-                                        viewModel.selectedItem = 0
-                                        navController.navigate(Screen.Recipes.route)
-                                    }
-
-                                    scope.launch {
-                                        drawerState.animateTo(DrawerValue.Closed, tween())
-                                    }
-                                    clearState()
-                                }
-                            )
-                            if (item is Screen.Home || item is Screen.BlockList) {
-                                Spacer(Modifier.size(10.dp))
-                                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Spacer(Modifier.size(10.dp))
-                            }
-                        }
-                    }
-                },
-                drawerState = drawerState,
-                gesturesEnabled = viewModel.inNavigationMode
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
             ) {
-                Column {
+                ModalNavigationDrawer(
+                    drawerContent = {
+                        LazyColumn(contentPadding = WindowInsets.systemBars.asPaddingValues()) {
+                            item {
+                                Column {
+                                    AsyncImage(
+                                        model = "https://kastybiy.herokuapp.com/static/img/recipe_1.jpg",
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .padding(start = 15.dp, top = 15.dp)
+                                            .size(64.dp)
+                                            .clip(CircleShape)
+                                    )
+                                    Spacer(Modifier.size(10.dp))
+                                    Column(
+                                        Modifier
+                                            .height(52.dp)
+                                            .padding(start = 15.dp)
+                                    ) {
+                                        Text(
+                                            "Малик Мухаметзянов",
+                                            style = MaterialTheme.typography.headlineSmall
+                                        )
+                                        Spacer(Modifier.weight(1f))
+                                        Text(
+                                            "@t8rin",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                    Spacer(Modifier.size(30.dp))
+                                }
+                            }
+                            itemsIndexed(drawerList) { _, item ->
+                                val selected = screenController.currentScreen == item
 
-                    AnimatedVisibility(visible = viewModel.inNavigationMode) {
-                        val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
-                        val backgroundColor = backgroundColors.containerColor(
-                            scrollFraction = viewModel.scrollBehavior.scrollFraction
-                        ).value
-                        val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
-                            containerColor = Color.Transparent,
-                            scrolledContainerColor = Color.Transparent
-                        )
-                        Surface(color = backgroundColor) {
-                            CenterAlignedTopAppBar(
-                                modifier = Modifier.statusBarsPadding(),
-                                navigationIcon = {
-                                    IconButton(onClick = {
+                                NavigationDrawerItem(
+                                    icon = {
+                                        Icon(
+                                            if (selected) item.selectedIcon else item.baseIcon,
+                                            null
+                                        )
+                                    },
+                                    shape = RoundedCornerShape(
+                                        topStart = 0.0.dp,
+                                        topEnd = 36.0.dp,
+                                        bottomEnd = 36.0.dp,
+                                        bottomStart = 0.0.dp
+                                    ),
+                                    modifier = Modifier.padding(end = 12.dp),
+                                    label = { Text(stringResource(item.title)) },
+                                    selected = selected,
+                                    onClick = {
+                                        viewModel.title = item.title
+                                        screenController.navigate(item)
+
+                                        if (item is Screen.Home) {
+                                            viewModel.title = Screen.Recipes.title
+                                            viewModel.selectedItem = 0
+                                            viewModel.navDestination = Screen.Recipes
+                                        }
+
                                         scope.launch {
-                                            drawerState.animateTo(
-                                                DrawerValue.Open,
-                                                tween()
-                                            )
+                                            drawerState.animateTo(DrawerValue.Closed, tween())
                                         }
-                                    }) {
-                                        Icon(Icons.Rounded.Menu, null)
+                                        clearState()
                                     }
-                                },
-                                actions = {
-                                    if (viewModel.selectedItem == 0 && viewModel.searchMode) {
-                                        val focus = LocalFocusManager.current
-                                        IconButton(onClick = {
-                                            if (viewModel.searchMode) {
-                                                focus.clearFocus()
-                                                viewModel.updateSearch("")
-                                            }
-                                            viewModel.searchMode = !viewModel.searchMode
-                                        }) {
-                                            Icon(
-                                                if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
-                                                null
-                                            )
-                                        }
-                                    }
-                                },
-                                title = {
-                                    Box {
-                                        if (!viewModel.searchMode) {
-                                            Text(viewModel.title.asString())
-                                        } else {
-                                            SearchBar(
-                                                searchString = viewModel.searchString.value,
-                                                onValueChange = {
-                                                    viewModel.updateSearch(
-                                                        it
-                                                    )
-                                                }
-                                            )
-                                        }
-                                    }
-                                },
-                                scrollBehavior = viewModel.scrollBehavior,
-                                colors = foregroundColors
-                            )
+                                )
+                                if (item is Screen.Home || item is Screen.BlockList) {
+                                    Spacer(Modifier.size(10.dp))
+                                    Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Spacer(Modifier.size(10.dp))
+                                }
+                            }
                         }
-                    }
+                    },
+                    drawerState = drawerState,
+                    gesturesEnabled = inNavigationMode
+                ) {
+                    Column {
 
-                    AnimatedContent(
-                        targetState = viewModel.currentScreen, modifier = Modifier
-                            .nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
-                    ) { screen ->
-                        when (screen) {
-                            is Screen.Home -> {
-                                Scaffold(
-                                    bottomBar = {
-                                        Surface(
-                                            color = TopAppBarDefaults.smallTopAppBarColors()
-                                                .containerColor(100f).value
-                                        ) {
-                                            NavigationBar(modifier = Modifier.navigationBarsPadding()) {
-                                                val items = navBarList
+                        AnimatedVisibility(visible = inNavigationMode) {
+                            val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
+                            val backgroundColor = backgroundColors.containerColor(
+                                scrollFraction = viewModel.scrollBehavior.scrollFraction
+                            ).value
+                            val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
+                                containerColor = Color.Transparent,
+                                scrolledContainerColor = Color.Transparent
+                            )
+                            Surface(color = backgroundColor) {
+                                CenterAlignedTopAppBar(
+                                    modifier = Modifier.statusBarsPadding(),
+                                    navigationIcon = {
+                                        IconButton(onClick = {
+                                            scope.launch {
+                                                drawerState.animateTo(
+                                                    DrawerValue.Open,
+                                                    tween()
+                                                )
+                                            }
+                                        }) {
+                                            Icon(Icons.Rounded.Menu, null)
+                                        }
+                                    },
+                                    actions = {
+                                        if (viewModel.selectedItem == 0 && viewModel.searchMode) {
+                                            val focus = LocalFocusManager.current
+                                            IconButton(onClick = {
+                                                if (viewModel.searchMode) {
+                                                    focus.clearFocus()
+                                                    viewModel.updateSearch("")
+                                                }
+                                                viewModel.searchMode = !viewModel.searchMode
+                                            }) {
+                                                Icon(
+                                                    if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
+                                                    null
+                                                )
+                                            }
+                                        }
+                                    },
+                                    title = {
+                                        Box {
+                                            if (!viewModel.searchMode) {
+                                                Text(viewModel.title.asString())
+                                            } else {
+                                                SearchBar(
+                                                    searchString = viewModel.searchString.value,
+                                                    onValueChange = {
+                                                        viewModel.updateSearch(
+                                                            it
+                                                        )
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    },
+                                    scrollBehavior = viewModel.scrollBehavior,
+                                    colors = foregroundColors
+                                )
+                            }
+                        }
 
-                                                items.forEachIndexed { index, screen ->
+                        AnimatedContent(
+                            targetState = screenController.currentScreen, modifier = Modifier
+                                .nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
+                        ) { screen ->
+                            when (screen) {
+                                is Screen.Home -> {
+                                    Scaffold(
+                                        bottomBar = {
+                                            Surface(
+                                                color = TopAppBarDefaults.smallTopAppBarColors()
+                                                    .containerColor(100f).value
+                                            ) {
+                                                NavigationBar(modifier = Modifier.navigationBarsPadding()) {
+                                                    val items = navBarList
 
-                                                    viewModel.selectedItem =
-                                                        items.indexOfFirst { it.route == navController.currentDestination?.route }
+                                                    items.forEachIndexed { index, screen ->
 
-                                                    NavigationBarItem(
-                                                        icon = {
-                                                            if (screen.baseIcon != Icons.Outlined.PhoneAndroid) {
-                                                                Icon(
-                                                                    if (viewModel.selectedItem == index) screen.selectedIcon else screen.baseIcon,
-                                                                    null
-                                                                )
+                                                        if (viewModel.navDestination == screen) {
+                                                            viewModel.selectedItem = index
+                                                        }
+
+                                                        NavigationBarItem(
+                                                            icon = {
+                                                                if (screen.baseIcon != Icons.Outlined.PhoneAndroid) {
+                                                                    Icon(
+                                                                        if (viewModel.selectedItem == index) screen.selectedIcon else screen.baseIcon,
+                                                                        null
+                                                                    )
+                                                                } else {
+                                                                    Icon(
+                                                                        painterResource(if (viewModel.selectedItem == index) R.drawable.fridge else R.drawable.fridge_outline),
+                                                                        null
+                                                                    )
+                                                                }
+                                                            },
+                                                            alwaysShowLabel = false,
+                                                            label = { Text(screen.shortTitle.asString()) },
+                                                            selected = viewModel.selectedItem == index,
+                                                            onClick = {
+                                                                if (viewModel.selectedItem != index) {
+                                                                    viewModel.title = screen.title
+                                                                    viewModel.selectedItem = index
+
+                                                                    viewModel.navDestination =
+                                                                        screen
+
+                                                                    viewModel.searchMode = false
+                                                                    viewModel.updateSearch("")
+
+                                                                    clearState()
+                                                                }
+                                                            }
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        floatingActionButton = {
+                                            AnimatedVisibility(
+                                                visible = viewModel.selectedItem == 2,
+                                                enter = fadeIn() + scaleIn(),
+                                                exit = fadeOut() + scaleOut()
+                                            ) {
+                                                Column(horizontalAlignment = Alignment.End) {
+                                                    SmallFloatingActionButton(
+                                                        onClick = {
+                                                            if (viewModel.productsList.value.error.isNotBlank()) {
+                                                                showSnackbar(
+                                                                    scope,
+                                                                    snackbarHostState,
+                                                                    viewModel.productsList.value.error,
+                                                                    "Яхшы"
+                                                                ) {
+                                                                    if (it == SnackbarResult.ActionPerformed) viewModel.reload()
+                                                                }
+                                                            } else if (viewModel.productsList.value.list?.isNotEmpty() == true) {
+                                                                dialogController.show(Dialog.PickProducts)
                                                             } else {
-                                                                Icon(
-                                                                    if (viewModel.selectedItem == index) painterResource(
-                                                                        R.drawable.fridge
-                                                                    ) else painterResource(R.drawable.fridge_outline),
-                                                                    null
-                                                                )
+                                                                showSnackbar(
+                                                                    scope,
+                                                                    snackbarHostState,
+                                                                    "Суыткыч тулысынча тулы",
+                                                                    ""
+                                                                ) {}
                                                             }
                                                         },
-                                                        alwaysShowLabel = false,
-                                                        label = { Text(screen.shortTitle.asString()) },
-                                                        selected = viewModel.selectedItem == index,
+                                                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                                                    ) {
+                                                        Icon(Icons.Rounded.Add, null)
+                                                    }
+                                                    Spacer(Modifier.size(8.dp))
+                                                    ExtendedFloatingActionButton(
                                                         onClick = {
-                                                            if (viewModel.selectedItem != index) {
-                                                                viewModel.title = screen.title
-                                                                viewModel.selectedItem = index
-                                                                navController.navigate(screen.route) {
-                                                                    navController.popBackStack()
-                                                                    launchSingleTop = true
-                                                                }
-                                                                viewModel.searchMode = false
-                                                                viewModel.updateSearch("")
+                                                            if (viewModel.productsList.value.list != null) screenController.navigate(
+                                                                Screen.MatchedRecipes(Screen.Home)
+                                                            )
+                                                        },
+                                                        text = {
+                                                            Text(stringResource(R.string.match))
+                                                        },
+                                                        icon = {
+                                                            Icon(Icons.Outlined.FindReplace, null)
+                                                        })
+                                                }
+                                            }
+                                        },
+                                        snackbarHost = { SnackbarHost(snackbarHostState) },
+                                    ) { contentPadding ->
 
-                                                                clearState()
-                                                            }
+                                        AnimatedContent(
+                                            targetState = viewModel.navDestination,
+                                            modifier = Modifier.padding(contentPadding)
+                                        ) { deepScreen ->
+                                            when (deepScreen) {
+                                                is Screen.Recipes -> {
+                                                    RecipesList(
+                                                        snackbarHostState,
+                                                        viewModel.searchString,
+                                                        onRecipeClick = {
+                                                            screenController.navigate(
+                                                                Screen.RecipeDetails(
+                                                                    it,
+                                                                    screen
+                                                                )
+                                                            )
                                                         }
                                                     )
                                                 }
+                                                is Screen.Fridge -> {
+                                                    FridgeScreen()
+                                                }
+                                                is Screen.Forum -> {
+
+                                                }
+                                                else -> {}
                                             }
                                         }
-                                    },
-                                    floatingActionButton = {
-                                        AnimatedVisibility(
-                                            visible = viewModel.selectedItem == 2,
-                                            enter = fadeIn() + scaleIn(),
-                                            exit = fadeOut() + scaleOut()
-                                        ) {
-                                            Column(horizontalAlignment = Alignment.End) {
-                                                SmallFloatingActionButton(
-                                                    onClick = {
-                                                        if (viewModel.productsList.value.error.isNotBlank()) {
-                                                            showSnackbar(
-                                                                scope,
-                                                                snackbarHostState,
-                                                                viewModel.productsList.value.error,
-                                                                "Яхшы"
-                                                            ) {
-                                                                if (it == SnackbarResult.ActionPerformed) viewModel.reload()
-                                                            }
-                                                        } else if (viewModel.productsList.value.list?.isNotEmpty() == true) {
-                                                            viewModel.showProductsDialog = true
-                                                        } else {
-                                                            showSnackbar(
-                                                                scope,
-                                                                snackbarHostState,
-                                                                "Суыткыч тулысынча тулы",
-                                                                ""
-                                                            ) {}
-                                                        }
-                                                    },
-                                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                                                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                                                ) {
-                                                    Icon(Icons.Rounded.Add, null)
-                                                }
-                                                Spacer(Modifier.size(8.dp))
-                                                ExtendedFloatingActionButton(
-                                                    onClick = {
-                                                        if (viewModel.productsList.value.list != null) viewModel.currentScreen =
-                                                            Screen.MatchedRecipes(Screen.Home)
-                                                    },
-                                                    text = {
-                                                        Text(stringResource(R.string.match))
-                                                    },
-                                                    icon = {
-                                                        Icon(Icons.Outlined.FindReplace, null)
-                                                    })
-                                            }
-                                        }
-                                    },
-                                    snackbarHost = { SnackbarHost(snackbarHostState) },
-                                ) { contentPadding ->
 
-                                    NavHost(
-                                        navController = navController,
-                                        startDestination = Screen.Recipes.route,
-                                        Modifier.padding(contentPadding)
-                                    ) {
-                                        composable(Screen.Recipes.route) {
-                                            RecipesList(
-                                                snackbarHostState,
-                                                viewModel.searchString,
-                                                onRecipeClick = {
-                                                    viewModel.currentScreen =
-                                                        Screen.RecipeDetails(it, screen)
-                                                }
-                                            )
-                                        }
-                                        composable(Screen.Fridge.route) {
-                                            FridgeScreen()
-                                        }
-                                        composable(Screen.Forum.route) {
-
-                                        }
                                     }
                                 }
-                            }
-                            is Screen.Favourites -> {
-                                FavouriteListScreen(
-                                    snackState = snackbarHostState,
-                                    onRecipeClicked = {
-                                        viewModel.currentScreen = Screen.RecipeDetails(it, screen)
-                                    }
-                                )
-                            }
-                            is Screen.RecipeDetails -> {
-                                val id = screen.id
-                                val back: () -> Unit =
-                                    { viewModel.currentScreen = screen.previousScreen }
-                                BackHandler { back() }
-                                DishDetailsScreen(id, goBack = { back() })
-                            }
-                            is Screen.MatchedRecipes -> {
-                                val back: () -> Unit =
-                                    { viewModel.currentScreen = screen.previousScreen }
-                                BackHandler { back() }
-                                OnFridgeBasedDishes(
-                                    onRecipeClicked = {
-                                        viewModel.currentScreen = Screen.RecipeDetails(it, screen)
-                                    },
-                                    goBack = { back() })
+                                is Screen.Favourites -> {
+                                    FavouriteListScreen(
+                                        snackState = snackbarHostState,
+                                        onRecipeClicked = {
+                                            screenController.navigate(
+                                                Screen.RecipeDetails(
+                                                    it,
+                                                    screen
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                                is Screen.RecipeDetails -> {
+                                    val id = screen.id
+                                    val back: () -> Unit =
+                                        { screenController.navigate(screen.previousScreen) }
+                                    BackHandler { back() }
+                                    DishDetailsScreen(id, goBack = { back() })
+                                }
+                                is Screen.MatchedRecipes -> {
+                                    val back: () -> Unit =
+                                        { screenController.navigate(screen.previousScreen) }
+                                    BackHandler { back() }
+                                    OnFridgeBasedDishes(
+                                        onRecipeClicked = {
+                                            screenController.navigate(
+                                                Screen.RecipeDetails(
+                                                    it,
+                                                    screen
+                                                )
+                                            )
+                                        },
+                                        goBack = { back() })
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if (viewModel.showProductsDialog) {
-
-                val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.75f
-
-                AlertDialog(
-                    modifier = Modifier.heightIn(max = maxHeight),
-                    onDismissRequest = {},
-                    confirmButton = {
-                        TextButton(onClick = {
-                            viewModel.processToFridge()
-                            viewModel.showProductsDialog = false
-                        }) {
-                            Text("Яхшы")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { viewModel.showProductsDialog = false }) {
-                            Text("Артка")
-                        }
-                    },
-                    title = {
-                        Text("Ашамлыкларны сайлагыз")
-                    },
-                    text = {
-                        val state = viewModel.productsList.value
-
-                        Box(Modifier.fillMaxWidth()) {
-                            if (state.list != null && !state.isLoading) {
-                                LazyColumn {
-                                    items(state.list.size) { index ->
-                                        Row(
-                                            Modifier.fillMaxWidth(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Text(
-                                                state.list[index].name.replaceFirstChar { it.uppercase() },
-                                                textAlign = TextAlign.Start,
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                modifier = Modifier.padding(horizontal = 10.dp)
-                                            )
-                                            Spacer(Modifier.weight(1f))
-                                            Checkbox(
-                                                checked = viewModel.tempList.contains(state.list[index].id),
-                                                onCheckedChange = {
-                                                    if (it) viewModel.tempList.add(state.list[index].id)
-                                                    else viewModel.tempList.remove(state.list[index].id)
-                                                }
-                                            )
-                                        }
-                                        Spacer(Modifier.height(10.dp))
+                AnimatedVisibility(visible = dialogController.currentDialog != Dialog.None) {
+                    when (val dialog = dialogController.currentDialog) {
+                        is Dialog.Exit -> {
+                            AlertDialog(
+                                title = { Text(stringResource(R.string.app_closing)) },
+                                text = {
+                                    Text(
+                                        stringResource(R.string.app_closing_message),
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
+                                onDismissRequest = { dialogController.close() },
+                                icon = { Icon(dialog.icon, null) },
+                                confirmButton = {
+                                    TextButton(onClick = { dialogController.close() }) {
+                                        Text(stringResource(R.string.stay))
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { activity.finishAffinity() }) {
+                                        Text(stringResource(R.string.close))
                                     }
                                 }
-                            }
+                            )
+                        }
+                        is Dialog.PickProducts -> {
+                            val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.75f
 
-                            if (state.isLoading) {
-                                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                            }
+                            AlertDialog(
+                                modifier = Modifier.heightIn(max = maxHeight),
+                                onDismissRequest = {},
+                                confirmButton = {
+                                    TextButton(onClick = {
+                                        viewModel.processToFridge()
+                                        dialogController.close()
+                                    }) {
+                                        Text(stringResource(R.string.okk))
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { dialogController.close() }) {
+                                        Text(stringResource(R.string.cancel))
+                                    }
+                                },
+                                title = {
+                                    Text(stringResource(R.string.pick_products))
+                                },
+                                text = {
+                                    val state = viewModel.productsList.value
+
+                                    Box(Modifier.fillMaxWidth()) {
+                                        if (state.list != null && !state.isLoading) {
+                                            LazyColumn {
+                                                items(state.list.size) { index ->
+                                                    Row(
+                                                        Modifier.fillMaxWidth(),
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Text(
+                                                            state.list[index].name.replaceFirstChar { it.uppercase() },
+                                                            textAlign = TextAlign.Start,
+                                                            style = MaterialTheme.typography.bodyLarge,
+                                                            modifier = Modifier.padding(horizontal = 10.dp)
+                                                        )
+                                                        Spacer(Modifier.weight(1f))
+                                                        Checkbox(
+                                                            checked = viewModel.tempList.contains(
+                                                                state.list[index].id
+                                                            ),
+                                                            onCheckedChange = {
+                                                                if (it) viewModel.tempList.add(state.list[index].id)
+                                                                else viewModel.tempList.remove(state.list[index].id)
+                                                            }
+                                                        )
+                                                    }
+                                                    Spacer(Modifier.height(10.dp))
+                                                }
+                                            }
+                                        }
+
+                                        if (state.isLoading) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.align(
+                                                    Alignment.Center
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+                            )
                         }
                     }
-                )
-            }
+                }
 
-            if (viewModel.searchMode && viewModel.searchString.value.isEmpty()) {
                 BackHandler {
-                    viewModel.searchMode = false
+                    dialogController.show(Dialog.Exit)
+                }
+
+                if (viewModel.searchMode && viewModel.searchString.value.isEmpty()) {
+                    BackHandler {
+                        viewModel.searchMode = false
+                    }
                 }
             }
         }
