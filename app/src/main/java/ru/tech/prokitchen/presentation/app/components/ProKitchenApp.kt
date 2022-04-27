@@ -134,9 +134,8 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             viewModel.navDestination = Screen.Recipes
                                         }
 
-                                        scope.launch {
-                                            drawerState.animateTo(DrawerValue.Closed, tween())
-                                        }
+                                        scope.launch { drawerState.close() }
+
                                         clearState()
                                     }
                                 )
@@ -167,12 +166,7 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     modifier = Modifier.statusBarsPadding(),
                                     navigationIcon = {
                                         IconButton(onClick = {
-                                            scope.launch {
-                                                drawerState.animateTo(
-                                                    DrawerValue.Open,
-                                                    tween()
-                                                )
-                                            }
+                                            scope.launch { drawerState.open() }
                                         }) {
                                             Icon(Icons.Rounded.Menu, null)
                                         }
@@ -392,6 +386,14 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         },
                                         goBack = { back() })
                                 }
+                                is Screen.BlockList -> TODO()
+                                is Screen.Cart -> TODO()
+                                is Screen.Forum -> TODO()
+                                is Screen.Fridge -> TODO()
+                                is Screen.Messages -> TODO()
+                                is Screen.Profile -> TODO()
+                                is Screen.Recipes -> TODO()
+                                is Screen.Settings -> TODO()
                             }
                         }
                     }
@@ -488,6 +490,7 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                 }
                             )
                         }
+                        is Dialog.None -> {}
                     }
                 }
 

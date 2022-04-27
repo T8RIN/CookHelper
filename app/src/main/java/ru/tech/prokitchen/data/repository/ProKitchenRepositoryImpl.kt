@@ -24,8 +24,8 @@ class ProKitchenRepositoryImpl @Inject constructor(
     override fun getCuisineList(): Flow<Action<List<Recipe>>> = flow {
         emit(Action.Loading())
         try {
-            val remoteCoins = api.getCuisine()
-            emit(Action.Success(remoteCoins.map { it.toRecipe() }))
+            val remoteData = api.getCuisine()
+            emit(Action.Success(remoteData.map { it.toRecipe() }))
         } catch (e: Exception) {
             emit(Action.Error(e.localizedMessage))
         }
