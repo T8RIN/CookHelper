@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "ru.tech.prokitchen",
+  "applicationId": "ru.tech.kastybiy",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 2,
+      "versionName": "1.0.1",
       "outputFile": "app-release.apk"
     }
   ],
