@@ -2,8 +2,8 @@ package ru.tech.prokitchen.data.remote.api
 
 import retrofit2.http.GET
 import retrofit2.http.Path
-import ru.tech.prokitchen.data.remote.dto.RecipeDto
 import ru.tech.prokitchen.data.remote.dto.ProductDto
+import ru.tech.prokitchen.data.remote.dto.RecipeDto
 
 interface ProKitchenApi {
 

@@ -2,8 +2,9 @@ package ru.tech.prokitchen.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.tech.prokitchen.core.Action
-import ru.tech.prokitchen.domain.model.Recipe
 import ru.tech.prokitchen.domain.model.Product
+import ru.tech.prokitchen.domain.model.Recipe
+import ru.tech.prokitchen.domain.model.Setting
 
 interface ProKitchenRepository {
 
@@ -22,5 +23,9 @@ interface ProKitchenRepository {
     suspend fun updateProduct(id: Int, inFridge: Boolean)
 
     fun getAllProducts(): Flow<Action<List<Product>>>
+
+    fun getSettings(): Flow<List<Setting>>
+
+    suspend fun insertSetting(id: Int, option: String)
 
 }

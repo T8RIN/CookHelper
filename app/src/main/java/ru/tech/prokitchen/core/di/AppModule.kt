@@ -40,7 +40,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProKitchenRepository(api: ProKitchenApi, db: ProKitchenDatabase): ProKitchenRepository =
-        ProKitchenRepositoryImpl(api, db.favRecipeDao, db.fridgeDao)
+    fun provideProKitchenRepository(
+        api: ProKitchenApi,
+        db: ProKitchenDatabase
+    ): ProKitchenRepository =
+        ProKitchenRepositoryImpl(api, db.favRecipeDao, db.fridgeDao, db.settingsDao)
 
 }

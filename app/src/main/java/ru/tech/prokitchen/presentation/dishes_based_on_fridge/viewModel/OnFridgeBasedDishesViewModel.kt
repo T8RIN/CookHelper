@@ -11,8 +11,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.tech.prokitchen.core.Action
 import ru.tech.prokitchen.domain.model.Recipe
-import ru.tech.prokitchen.domain.use_case.get_recipes_list.GetRecipeListUseCase
 import ru.tech.prokitchen.domain.use_case.get_fridge_list.GetFridgeListUseCase
+import ru.tech.prokitchen.domain.use_case.get_recipes_list.GetRecipeListUseCase
 import ru.tech.prokitchen.presentation.dishes_based_on_fridge.components.PodborState
 import javax.inject.Inject
 import kotlin.math.roundToInt

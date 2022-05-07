@@ -2,23 +2,29 @@ package ru.tech.prokitchen.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import ru.tech.prokitchen.core.Action
 import ru.tech.prokitchen.data.local.dao.FavRecipeDao
 import ru.tech.prokitchen.data.local.dao.FridgeDao
+import ru.tech.prokitchen.data.local.dao.SettingsDao
 import ru.tech.prokitchen.data.local.entity.FavRecipeEntity
 import ru.tech.prokitchen.data.local.entity.ProductEntity
+import ru.tech.prokitchen.data.local.entity.SettingsEntity
+import ru.tech.prokitchen.data.local.entity.toSetting
 import ru.tech.prokitchen.data.remote.api.ProKitchenApi
-import ru.tech.prokitchen.data.remote.dto.toRecipe
 import ru.tech.prokitchen.data.remote.dto.toProduct
-import ru.tech.prokitchen.domain.model.Recipe
+import ru.tech.prokitchen.data.remote.dto.toRecipe
 import ru.tech.prokitchen.domain.model.Product
+import ru.tech.prokitchen.domain.model.Recipe
+import ru.tech.prokitchen.domain.model.Setting
 import ru.tech.prokitchen.domain.repository.ProKitchenRepository
 import javax.inject.Inject
 
 class ProKitchenRepositoryImpl @Inject constructor(
     private val api: ProKitchenApi,
     private val favRecipeDao: FavRecipeDao,
-    private val fridgeDao: FridgeDao
+    private val fridgeDao: FridgeDao,
+    private val settingsDao: SettingsDao
 ) : ProKitchenRepository {
 
     override fun getCuisineList(): Flow<Action<List<Recipe>>> = flow {
@@ -107,5 +113,14 @@ class ProKitchenRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getSettings(): Flow<List<Setting>> =
+        settingsDao.getSettings()
+            .map { settingsList ->
+                settingsList.map { entity -> entity.toSetting() }
+            }
+
+    override suspend fun insertSetting(id: Int, option: String) {
+        settingsDao.insertSetting(SettingsEntity(id, option))
+    }
 
 }
