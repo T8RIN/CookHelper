@@ -7,11 +7,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.components.ProKitchenApp
 
-@ExperimentalSnapperApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @AndroidEntryPoint

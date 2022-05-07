@@ -111,7 +111,4 @@ dependencies {
     implementation("androidx.room:room-ktx:2.4.2")
     kapt("androidx.room:room-compiler:2.4.2")
 
-    //Snapper
-    implementation("dev.chrisbanes.snapper:snapper:0.2.1")
-
 }

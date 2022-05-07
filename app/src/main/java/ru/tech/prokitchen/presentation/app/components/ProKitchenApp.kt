@@ -47,7 +47,6 @@ import ru.tech.prokitchen.presentation.ui.utils.*
 import ru.tech.prokitchen.presentation.ui.utils.Screen.Favourites.asString
 import ru.tech.prokitchen.presentation.ui.utils.provider.*
 
-@ExperimentalSnapperApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable

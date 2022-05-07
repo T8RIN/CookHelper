@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import ru.tech.prokitchen.BuildConfig
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.components.NightMode
@@ -38,7 +37,6 @@ import ru.tech.prokitchen.presentation.app.components.SettingsState
 import ru.tech.prokitchen.presentation.settings.components.ToggleGroup
 import ru.tech.prokitchen.presentation.ui.theme.colorList
 
-@ExperimentalSnapperApi
 @Composable
 fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit) {
     LazyColumn {
