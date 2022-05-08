@@ -32,7 +32,7 @@ fun ToggleGroup(items: List<Int>, selectedIndex: Int, indexChanged: (Int) -> Uni
                     0 ->
                         Modifier
                             .offset(0.dp, 0.dp)
-                            .zIndex(if (selectedIndex == index) 1f else 0f)
+                            .zIndex(if (selectedIndex == 0) 1f else 0f)
                     else ->
                         Modifier
                             .offset((-1 * index).dp, 0.dp)

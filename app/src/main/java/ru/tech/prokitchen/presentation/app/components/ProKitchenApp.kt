@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FindReplace
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -32,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import kotlinx.coroutines.launch
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.viewModel.MainViewModel
@@ -183,7 +183,7 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             }
                                         },
                                         actions = {
-                                            if (viewModel.selectedItem == 0 && viewModel.searchMode) {
+                                            if (screenController.currentScreen is Screen.Recipes && !viewModel.searchMode) {
                                                 val focus = LocalFocusManager.current
                                                 IconButton(onClick = {
                                                     if (viewModel.searchMode) {
@@ -196,6 +196,10 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                         if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
                                                         null
                                                     )
+                                                }
+                                            } else if (screenController.currentScreen is Screen.Settings) {
+                                                IconButton(onClick = { dialogController.show(Dialog.AboutApp) }) {
+                                                    Icon(Icons.Outlined.HelpOutline, null)
                                                 }
                                             }
                                         },
@@ -413,29 +417,12 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     }
 
                     AnimatedVisibility(visible = dialogController.currentDialog != Dialog.None) {
-                        when (val dialog = dialogController.currentDialog) {
+                        when (dialogController.currentDialog) {
                             is Dialog.Exit -> {
-                                AlertDialog(
-                                    title = { Text(stringResource(R.string.app_closing)) },
-                                    text = {
-                                        Text(
-                                            stringResource(R.string.app_closing_message),
-                                            textAlign = TextAlign.Center
-                                        )
-                                    },
-                                    onDismissRequest = { dialogController.close() },
-                                    icon = { Icon(dialog.icon, null) },
-                                    confirmButton = {
-                                        TextButton(onClick = { dialogController.close() }) {
-                                            Text(stringResource(R.string.stay))
-                                        }
-                                    },
-                                    dismissButton = {
-                                        TextButton(onClick = { activity.finishAffinity() }) {
-                                            Text(stringResource(R.string.close))
-                                        }
-                                    }
-                                )
+                                ExitDialog(activity)
+                            }
+                            is Dialog.AboutApp -> {
+                                AboutAppDialog()
                             }
                             is Dialog.PickProducts -> {
                                 val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.75f
@@ -509,6 +496,7 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                 )
                             }
+                            else -> {}
                         }
                     }
 

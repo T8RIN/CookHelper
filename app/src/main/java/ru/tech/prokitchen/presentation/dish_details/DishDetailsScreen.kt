@@ -21,11 +21,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
+import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.components.Placeholder
 import ru.tech.prokitchen.presentation.dish_details.components.InfoItem
 import ru.tech.prokitchen.presentation.dish_details.viewModel.DishDetailsViewModel
@@ -82,7 +84,7 @@ fun DishDetailsScreen(
                                     )
                                     type = "text/plain"
                                 }
-                                context.startActivity(Intent.createChooser(intent, "Уртаклашу"))
+                                context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
                             }) {
                                 Icon(Icons.Outlined.Share, null)
                             }
@@ -135,7 +137,7 @@ fun DishDetailsScreen(
 
                                 Spacer(modifier = Modifier.height(15.dp))
                                 Text(
-                                    text = "Ашамлык турында",
+                                    text = stringResource(R.string.aboutDish),
                                     color = MaterialTheme.colorScheme.onBackground,
                                     style = MaterialTheme.typography.headlineSmall
                                 )

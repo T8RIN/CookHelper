@@ -36,7 +36,7 @@ object AppModule {
         applicationContext,
         ProKitchenDatabase::class.java,
         "kastybiy_db"
-    ).build()
+    ).fallbackToDestructiveMigration().fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton

@@ -73,6 +73,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                     when (setting) {
                         CART_CONNECTION -> {
                             var checked by remember { mutableStateOf(settingsState.cartConnection) }
+                            Spacer(Modifier.width(8.dp))
                             Switch(checked = checked, onCheckedChange = {
                                 onAction(setting.ordinal, (!checked).toString())
                                 checked = !checked
@@ -81,6 +82,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         }
                         DYNAMIC_COLORS -> {
                             var checked by remember { mutableStateOf(settingsState.dynamicColors) }
+                            Spacer(Modifier.width(8.dp))
                             Switch(checked = checked, onCheckedChange = {
                                 onAction(setting.ordinal, (!checked).toString())
                                 checked = !checked

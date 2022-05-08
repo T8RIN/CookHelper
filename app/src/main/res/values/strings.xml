@@ -35,4 +35,7 @@
     <string name="dark">Темная</string>
     <string name="light">Светлая</string>
     <string name="system">Системная</string>
+    <string name="share">Поделиться</string>
+    <string name="aboutDish">О рецепте</string>
+    <string name="about_app">О приложении</string>
 </resources>

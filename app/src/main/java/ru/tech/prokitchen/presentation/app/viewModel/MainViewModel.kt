@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(
     private val getProductsListUseCase: GetProductsListUseCase,
     private val getFridgeListUseCase: GetFridgeListUseCase,
     private val updateFridgeUseCase: UpdateFridgeUseCase,
-    private val getSettingsListUseCase: GetSettingsListUseCase,
+    getSettingsListUseCase: GetSettingsListUseCase,
     private val insertSettingUseCase: InsertSettingUseCase
 ) : ViewModel() {
 
