@@ -84,7 +84,12 @@ fun DishDetailsScreen(
                                     )
                                     type = "text/plain"
                                 }
-                                context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+                                context.startActivity(
+                                    Intent.createChooser(
+                                        intent,
+                                        context.getString(R.string.share)
+                                    )
+                                )
                             }) {
                                 Icon(Icons.Outlined.Share, null)
                             }
@@ -151,10 +156,20 @@ fun DishDetailsScreen(
                                         .padding(horizontal = 15.dp)
                                 ) {
                                     InfoItem(state.dish.category)
-                                    InfoItem("Әзерләргә ${state.dish.cookTime} мин")
-                                    InfoItem("${state.dish.proteins}г/100г Б")
-                                    InfoItem("${state.dish.fats}г/100г Ж")
-                                    InfoItem("${state.dish.carboh}г/100г У")
+                                    InfoItem(
+                                        stringResource(
+                                            R.string.cook_time_adapt,
+                                            state.dish.cookTime
+                                        )
+                                    )
+                                    InfoItem(
+                                        stringResource(
+                                            R.string.prot_fat_carb,
+                                            state.dish.proteins.s,
+                                            state.dish.fats.s,
+                                            state.dish.carboh.s
+                                        )
+                                    )
                                 }
                                 Spacer(modifier = Modifier.height(10.dp))
                                 Text(
@@ -165,7 +180,7 @@ fun DishDetailsScreen(
                                 )
                                 Spacer(modifier = Modifier.height(30.dp))
                                 Text(
-                                    text = "Әзерләү ысулы",
+                                    text = stringResource(R.string.cooksteps),
                                     color = MaterialTheme.colorScheme.onBackground,
                                     style = MaterialTheme.typography.headlineSmall
                                 )
@@ -195,7 +210,7 @@ fun DishDetailsScreen(
                 } else if (!state.isLoading && state.error.isBlank()) {
                     Placeholder(
                         icon = Icons.TwoTone.Error,
-                        text = "Нәрсәдер начар булып чыккан"
+                        text = stringResource(R.string.something_went_wrong)
                     )
                 }
 
@@ -211,3 +226,8 @@ fun DishDetailsScreen(
     }
 
 }
+
+private val Double.s: String
+    get() {
+        return this.toString()
+    }

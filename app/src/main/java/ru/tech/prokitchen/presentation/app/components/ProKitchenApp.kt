@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -47,6 +48,7 @@ import ru.tech.prokitchen.presentation.ui.utils.*
 import ru.tech.prokitchen.presentation.ui.utils.Screen.Favourites.asString
 import ru.tech.prokitchen.presentation.ui.utils.provider.*
 
+@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
@@ -70,6 +72,10 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 
                 val inNavigationMode by derivedStateOf {
                     screenController.currentScreen !is Screen.RecipeDetails && screenController.currentScreen !is Screen.MatchedRecipes
+                }
+
+                BackHandler {
+                    dialogController.show(Dialog.Exit)
                 }
 
                 Surface(
@@ -183,21 +189,22 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             }
                                         },
                                         actions = {
-                                            if (screenController.currentScreen is Screen.Recipes && !viewModel.searchMode) {
-                                                val focus = LocalFocusManager.current
-                                                IconButton(onClick = {
-                                                    if (viewModel.searchMode) {
-                                                        focus.clearFocus()
-                                                        viewModel.updateSearch("")
-                                                    }
-                                                    viewModel.searchMode = !viewModel.searchMode
-                                                }) {
-                                                    Icon(
-                                                        if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
-                                                        null
-                                                    )
-                                                }
-                                            } else if (screenController.currentScreen is Screen.Settings) {
+//                                            if (viewModel.selectedItem == 0 && screenController.currentScreen == Screen.Home && !viewModel.searchMode) {
+//                                                val focus = LocalFocusManager.current
+//                                                IconButton(onClick = {
+//                                                    if (viewModel.searchMode) {
+//                                                        focus.clearFocus()
+//                                                        viewModel.updateSearch("")
+//                                                    }
+//                                                    viewModel.searchMode = !viewModel.searchMode
+//                                                }) {
+//                                                    Icon(
+//                                                        if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
+//                                                        null
+//                                                    )
+//                                                }
+//                                            } else
+                                            if (screenController.currentScreen is Screen.Settings) {
                                                 IconButton(onClick = { dialogController.show(Dialog.AboutApp) }) {
                                                     Icon(Icons.Outlined.HelpOutline, null)
                                                 }
@@ -498,10 +505,6 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                             }
                             else -> {}
                         }
-                    }
-
-                    BackHandler {
-                        dialogController.show(Dialog.Exit)
                     }
 
                     if (viewModel.searchMode && viewModel.searchString.value.isEmpty()) {

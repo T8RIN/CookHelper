@@ -38,4 +38,8 @@
     <string name="share">Поделиться</string>
     <string name="aboutDish">О рецепте</string>
     <string name="about_app">О приложении</string>
+    <string name="cook_time_adapt">Готовить %d мин</string>
+    <string name="prot_fat_carb">Б/Ж/У - %s/%s/%s</string>
+    <string name="cooksteps">Пошаговый рецепт</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
 </resources>

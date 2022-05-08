@@ -84,7 +84,6 @@ private fun Plank(context: Context, url: String, image: String, text: String) {
                 .clip(CircleShape)
         )
         Spacer(Modifier.weight(1f))
-        Text(text, textAlign = TextAlign.Center)
-        Spacer(Modifier.width(10.dp))
+        Text(text, textAlign = TextAlign.Center, modifier = Modifier.padding(end = 10.dp))
     }
 }

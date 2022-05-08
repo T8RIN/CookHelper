@@ -1,10 +1,10 @@
 package ru.tech.prokitchen.presentation.settings
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,7 @@ import ru.tech.prokitchen.presentation.app.components.SettingsState
 import ru.tech.prokitchen.presentation.settings.components.ToggleGroup
 import ru.tech.prokitchen.presentation.ui.theme.colorList
 
+@ExperimentalFoundationApi
 @Composable
 fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit) {
     LazyColumn {
@@ -46,8 +49,8 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                 Modifier.animateContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var expandedNightMode by remember { mutableStateOf(false) }
-                var expandedColorScheme by remember { mutableStateOf(false) }
+                var expandedNightMode by rememberSaveable { mutableStateOf(false) }
+                var expandedColorScheme by rememberSaveable { mutableStateOf(false) }
 
                 Spacer(Modifier.height(10.dp))
                 Row(
@@ -68,8 +71,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         )
                     }
                     Spacer(Modifier.width(16.dp))
-                    Text(stringResource(setting.title()))
-                    Spacer(Modifier.weight(1f))
+                    Text(stringResource(setting.title()), modifier = Modifier.weight(1f))
                     when (setting) {
                         CART_CONNECTION -> {
                             var checked by remember { mutableStateOf(settingsState.cartConnection) }
@@ -170,6 +172,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
             }
         }
         item {
+            val context = LocalContext.current
             Spacer(Modifier.height(80.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -177,6 +180,11 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         Modifier
                             .size(86.dp)
                             .shadow(1.dp, RoundedCornerShape(20.dp))
+                            .combinedClickable(onLongClick = {
+                                context.startActivity(
+                                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/T8RIN/PROkitchen"))
+                                )
+                            }, onClick = {})
                             .clip(RoundedCornerShape(20.dp))
                             .background(Color.White)
                             .align(Alignment.Center),
