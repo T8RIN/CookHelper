@@ -22,8 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.domain.model.Recipe
 import ru.tech.prokitchen.presentation.app.components.Placeholder
-import ru.tech.prokitchen.presentation.recipes_list.components.CuisineItem
-import ru.tech.prokitchen.presentation.recipes_list.viewModel.CuisineViewModel
+import ru.tech.prokitchen.presentation.recipes_list.components.RecipeItem
+import ru.tech.prokitchen.presentation.recipes_list.viewModel.RecipeListViewModel
 import ru.tech.prokitchen.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.prokitchen.presentation.ui.utils.showSnackbar
 
@@ -32,10 +32,10 @@ fun RecipesList(
     snackState: SnackbarHostState,
     searchString: MutableState<String>,
     onRecipeClick: (id: Int) -> Unit,
-    viewModel: CuisineViewModel = hiltViewModel()
+    viewModel: RecipeListViewModel = hiltViewModel()
 ) {
 
-    val state = viewModel.cuisineState.value
+    val state = viewModel.recipeState.value
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.recipeList != null) {
@@ -56,7 +56,7 @@ fun RecipesList(
             }
             LazyColumn(state = rememberForeverLazyListState(key = "recipes")) {
                 items(data.size) { index ->
-                    CuisineItem(data[index]) {
+                    RecipeItem(data[index]) {
                         onRecipeClick(it)
                     }
                     Spacer(Modifier.height(10.dp))

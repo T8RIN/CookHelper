@@ -14,14 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import ru.tech.prokitchen.R
 import ru.tech.prokitchen.domain.model.Recipe
+import ru.tech.prokitchen.presentation.app.components.Loading
 
 @Composable
-fun CuisineItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
+fun RecipeItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
     Column(
         Modifier
             .clip(RoundedCornerShape(6.dp))
@@ -39,11 +42,7 @@ fun CuisineItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
                     .data(recipe.iconUrl)
                     .crossfade(true)
                     .build(),
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                },
+                loading = { Loading() },
                 error = {
                     Icon(
                         modifier = Modifier.fillMaxSize(),
@@ -82,7 +81,7 @@ fun CuisineItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
                 ) {
                     Icon(Icons.Outlined.AvTimer, null)
                     Spacer(Modifier.size(15.dp))
-                    Text("${recipe.cookTime} мин", textAlign = TextAlign.Center)
+                    Text(stringResource(R.string.cook_time_adapt_short, recipe.cookTime), textAlign = TextAlign.Center)
                 }
                 Spacer(Modifier.size(5.dp))
                 Row(
@@ -96,7 +95,7 @@ fun CuisineItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
                     )
                     Spacer(Modifier.size(15.dp))
                     Text(
-                        "Б ${recipe.proteins}\nЖ ${recipe.fats}\nУ ${recipe.carboh}",
+                        "${recipe.proteins}/${recipe.fats}/${recipe.carboh}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.outline
                     )

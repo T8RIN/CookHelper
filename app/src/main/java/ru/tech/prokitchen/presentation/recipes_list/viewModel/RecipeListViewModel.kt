@@ -9,16 +9,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.tech.prokitchen.core.Action
 import ru.tech.prokitchen.domain.use_case.get_recipes_list.GetRecipeListUseCase
-import ru.tech.prokitchen.presentation.recipes_list.components.CuisineState
+import ru.tech.prokitchen.presentation.recipes_list.components.RecipeState
 import javax.inject.Inject
 
 @HiltViewModel
-class CuisineViewModel @Inject constructor(
+class RecipeListViewModel @Inject constructor(
     private val getRecipeListUseCase: GetRecipeListUseCase
 ) : ViewModel() {
 
-    private val _cuisineState = mutableStateOf(CuisineState())
-    val cuisineState: State<CuisineState> = _cuisineState
+    private val _recipeState = mutableStateOf(RecipeState())
+    val recipeState: State<RecipeState> = _recipeState
 
     init {
         getCuisine()
@@ -28,15 +28,15 @@ class CuisineViewModel @Inject constructor(
         getRecipeListUseCase().onEach { result ->
             when (result) {
                 is Action.Success -> {
-                    _cuisineState.value = CuisineState(recipeList = result.data)
+                    _recipeState.value = RecipeState(recipeList = result.data)
                 }
                 is Action.Error -> {
-                    _cuisineState.value = CuisineState(
+                    _recipeState.value = RecipeState(
                         error = result.message ?: "Нәрсәдер начар булып чыккан"
                     )
                 }
                 is Action.Loading -> {
-                    _cuisineState.value = CuisineState(isLoading = true)
+                    _recipeState.value = RecipeState(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)

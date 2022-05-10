@@ -35,47 +35,58 @@ class OnFridgeBasedDishesViewModel @Inject constructor(
 
     private fun fetch() {
         viewModelScope.launch {
-            var list: List<Int> = emptyList()
             getFridgeListUseCase().collect { result ->
-                if (result is Action.Success) {
-                    list = (result.data ?: emptyList()).map { it.id }
-                }
-                getRecipeListUseCase().collect { result1 ->
-                    when (result1) {
-                        is Action.Success -> {
-                            val tmp = result1.data ?: emptyList()
-                            val lst = arrayListOf<Pair<Recipe, Int>>()
+                when (result) {
+                    is Action.Success, is Action.Empty -> {
+                        val fridgeList: List<Int> = (result.data ?: emptyList()).map { it.id }
 
-                            tmp.forEach { dish ->
-                                var cnt = 0
-                                list.forEach { id ->
-                                    if (dish.productIds.contains(id)) cnt++
+                        getRecipeListUseCase().collect { result1 ->
+                            when (result1) {
+                                is Action.Success -> {
+                                    val availableList = result1.data ?: emptyList()
+                                    val matchedList = fridgeList calcMatchedList availableList
+
+                                    _dishes.value = PodborState(recipeList = matchedList)
                                 }
-                                val coeff =
-                                    (cnt / dish.productIds.size.toFloat() * 100).roundToInt()
-                                if (coeff > 29) {
-                                    lst.add(Pair(dish, coeff))
+                                is Action.Error -> {
+                                    _dishes.value = PodborState(error = result1.message.toString())
+                                }
+                                is Action.Loading -> {
+                                    _dishes.value = PodborState(isLoading = true)
+                                }
+                                else -> {
+                                    _dishes.value = PodborState(recipeList = emptyList())
                                 }
                             }
-
-                            _dishes.value =
-                                PodborState(recipeList = lst.sortedByDescending { it.second })
                         }
-                        is Action.Error -> {
-                            _dishes.value = PodborState(
-                                error = result1.message.toString()
-                            )
-                        }
-                        is Action.Loading -> {
-                            _dishes.value = PodborState(isLoading = true)
-                        }
-                        else -> {
-                            _dishes.value = PodborState()
-                        }
+                    }
+                    is Action.Loading -> {
+                        _dishes.value = PodborState(isLoading = true)
+                    }
+                    is Action.Error -> {
+                        _dishes.value = PodborState(error = result.message ?: "")
                     }
                 }
             }
         }
     }
 
+}
+
+private suspend infix fun List<Int>.calcMatchedList(availableList: List<Recipe>): List<Pair<Recipe, Int>> {
+    val matchedList = arrayListOf<Pair<Recipe, Int>>()
+
+    availableList.forEach { dish ->
+        var cnt = 0
+
+        this.forEach { id -> if (dish.productIds.contains(id)) cnt++ }
+
+        val coeff =
+            (cnt / dish.productIds.size.toFloat() * 100).roundToInt()
+        if (coeff > 29) {
+            matchedList.add(Pair(dish, coeff))
+        }
+    }
+
+    return matchedList.sortedByDescending { it.second }
 }

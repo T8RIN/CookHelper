@@ -42,4 +42,7 @@
     <string name="prot_fat_carb">Б/Ж/У - %s/%s/%s</string>
     <string name="cooksteps">Пошаговый рецепт</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="cook_time_adapt_short">%d мин</string>
+    <string name="matched_recipes">Подходящие блюда</string>
+    <string name="empty_podbor">Не удалось подобрать рецепты, ваш холодильник недостаточно полон или вы заблокировали слишком много продуктов</string>
 </resources>

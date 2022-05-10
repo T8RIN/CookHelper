@@ -20,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.components.Placeholder
 import ru.tech.prokitchen.presentation.favourite_dishes.viewModel.FavouriteListViewModel
-import ru.tech.prokitchen.presentation.recipes_list.components.CuisineItem
+import ru.tech.prokitchen.presentation.recipes_list.components.RecipeItem
 import ru.tech.prokitchen.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.prokitchen.presentation.ui.utils.showSnackbar
 
@@ -37,7 +37,7 @@ fun FavouriteListScreen(
         if (state.recipeList != null) {
             LazyColumn(state = rememberForeverLazyListState(key = "fav")) {
                 items(state.recipeList.size) { index ->
-                    CuisineItem(state.recipeList[index]) {
+                    RecipeItem(state.recipeList[index]) {
                         onRecipeClicked(it)
                     }
                     Spacer(Modifier.height(10.dp))

@@ -5,17 +5,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.twotone.Error
+import androidx.compose.material.icons.twotone.FilterAlt
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.tech.prokitchen.R
+import ru.tech.prokitchen.presentation.app.components.Loading
 import ru.tech.prokitchen.presentation.app.components.Placeholder
 import ru.tech.prokitchen.presentation.dishes_based_on_fridge.viewModel.OnFridgeBasedDishesViewModel
-import ru.tech.prokitchen.presentation.recipes_list.components.CuisineItem
+import ru.tech.prokitchen.presentation.recipes_list.components.RecipeItem
 
 @ExperimentalMaterial3Api
 @Composable
@@ -45,7 +48,7 @@ fun OnFridgeBasedDishes(
                 Surface(color = backgroundColor) {
                     SmallTopAppBar(
                         modifier = Modifier.statusBarsPadding(),
-                        title = { Text("Килешле ашлар") },
+                        title = { Text(stringResource(R.string.matched_recipes)) },
                         navigationIcon = {
                             IconButton(onClick = { goBack() }) {
                                 Icon(Icons.Rounded.ArrowBack, null)
@@ -57,9 +60,13 @@ fun OnFridgeBasedDishes(
                 }
             },
             modifier = Modifier.nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                if (state.recipeList != null && state.recipeList.isNotEmpty()) {
+        ) { padding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
+                if (state.recipeList?.isNotEmpty() == true) {
                     LazyColumn {
                         items(state.recipeList.size) { index ->
                             Row {
@@ -67,13 +74,18 @@ fun OnFridgeBasedDishes(
                                     "${state.recipeList[index].second}%",
                                     modifier = Modifier.padding(top = 10.dp, start = 10.dp)
                                 )
-                                CuisineItem(state.recipeList[index].first) {
+                                RecipeItem(state.recipeList[index].first) {
                                     onRecipeClicked(it)
                                 }
                             }
                             Spacer(Modifier.height(10.dp))
                         }
                     }
+                } else if (!state.isLoading) {
+                    Placeholder(
+                        icon = Icons.TwoTone.FilterAlt,
+                        text = stringResource(R.string.empty_podbor)
+                    )
                 }
 
                 if (state.error.isNotBlank()) {
@@ -81,7 +93,7 @@ fun OnFridgeBasedDishes(
                 }
 
                 if (state.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    Loading()
                 }
             }
         }
