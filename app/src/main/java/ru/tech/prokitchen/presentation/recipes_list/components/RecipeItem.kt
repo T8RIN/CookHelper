@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AvTimer
-import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.LocalFireDepartment
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,11 +20,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
+import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.domain.model.Recipe
-import ru.tech.prokitchen.presentation.app.components.Loading
+import ru.tech.prokitchen.presentation.app.components.shimmer
 
 @Composable
 fun RecipeItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
@@ -32,27 +38,23 @@ fun RecipeItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
                 onClick(recipe.id)
             }) {
         Row(Modifier.padding(10.dp)) {
-            SubcomposeAsyncImage(
-                modifier = Modifier
-                    .height(100.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .weight(1f),
+
+            var shimmerVisible by rememberSaveable { mutableStateOf(true) }
+            AsyncImage(
                 contentScale = ContentScale.Crop,
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(recipe.iconUrl)
                     .crossfade(true)
                     .build(),
-                loading = { Loading() },
-                error = {
-                    Icon(
-                        modifier = Modifier.fillMaxSize(),
-                        imageVector = Icons.Outlined.BrokenImage,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                },
-                contentDescription = null
+                contentDescription = null,
+                modifier = Modifier
+                    .height(100.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .weight(1f)
+                    .shimmer(shimmerVisible),
+                onSuccess = { shimmerVisible = false }
             )
+
             Spacer(Modifier.size(20.dp))
             Column(
                 Modifier
@@ -81,7 +83,10 @@ fun RecipeItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
                 ) {
                     Icon(Icons.Outlined.AvTimer, null)
                     Spacer(Modifier.size(15.dp))
-                    Text(stringResource(R.string.cook_time_adapt_short, recipe.cookTime), textAlign = TextAlign.Center)
+                    Text(
+                        stringResource(R.string.cook_time_adapt_short, recipe.cookTime),
+                        textAlign = TextAlign.Center
+                    )
                 }
                 Spacer(Modifier.size(5.dp))
                 Row(

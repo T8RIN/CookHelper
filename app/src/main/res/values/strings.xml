@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PROKitchen</string>
+    <string name="app_name">CookHelper</string>
     <string name="recipe_bank">Банк рецептов</string>
     <string name="recipes">Рецепты</string>
     <string name="fav_dishes">Любимые блюда</string>

@@ -95,6 +95,7 @@ dependencies {
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.5-alpha")
     implementation("com.google.accompanist:accompanist-flowlayout:0.24.5-alpha")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.24.5-alpha")
 
     //Coil
     implementation("io.coil-kt:coil:2.0.0-rc01")

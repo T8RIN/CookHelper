@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -185,8 +186,8 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                     Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/T8RIN/PROkitchen"))
                                 )
                             }, onClick = {})
+                            .background(Brush.verticalGradient(colors = listOf(Color(0xFF00EBCE), Color(0xFF00ABFF))))
                             .clip(RoundedCornerShape(20.dp))
-                            .background(Color.White)
                             .align(Alignment.Center),
                         content = {}
                     )
