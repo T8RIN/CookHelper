@@ -40,7 +40,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0-alpha06"
+        kotlinCompilerExtensionVersion = "1.2.0-beta01"
     }
     packagingOptions {
         resources {
@@ -54,15 +54,15 @@ dependencies {
     //Android Essentials
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.6.0-beta01")
+    implementation("com.google.android.material:material:1.7.0-alpha01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     implementation("androidx.window:window:1.0.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
     implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
 
     // Coroutine Lifecycle Scopes
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
@@ -82,20 +82,19 @@ dependencies {
 
     //Compose
     implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.compose.ui:ui:1.2.0-alpha07")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-alpha07")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha09")
+    implementation("androidx.compose.ui:ui:1.2.0-beta01")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha11")
     implementation("androidx.compose.material:material-icons-core:1.1.1")
     implementation("androidx.compose.material:material-icons-extended:1.1.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha06")
-    implementation("androidx.navigation:navigation-compose:2.5.0-alpha04")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-beta01")
+    implementation("androidx.navigation:navigation-compose:2.5.0-beta01")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
-    implementation("androidx.compose.foundation:foundation:1.2.0-alpha07")
+    implementation("androidx.compose.foundation:foundation:1.2.0-beta01")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.5-alpha")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.24.5-alpha")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.24.5-alpha")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.8-beta")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.24.8-beta")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.24.8-beta")
 
     //Coil
     implementation("io.coil-kt:coil:2.0.0-rc01")

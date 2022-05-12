@@ -61,8 +61,8 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                     Spacer(Modifier.width(20.dp))
                     Box(
                         Modifier
-                            .size(36.dp)
-                            .clip(RoundedCornerShape(10.dp))
+                            .size(42.dp)
+                            .clip(RoundedCornerShape(13.dp))
                             .background(MaterialTheme.colorScheme.secondaryContainer)
                     ) {
                         Icon(
