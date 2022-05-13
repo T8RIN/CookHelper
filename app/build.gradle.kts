@@ -86,8 +86,8 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.0.0-alpha11")
     implementation("androidx.compose.material:material-icons-core:1.1.1")
     implementation("androidx.compose.material:material-icons-extended:1.1.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-beta01")
-    implementation("androidx.navigation:navigation-compose:2.5.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-rc01")
+    implementation("androidx.navigation:navigation-compose:2.5.0-rc01")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
     implementation("androidx.compose.foundation:foundation:1.2.0-beta01")
 
