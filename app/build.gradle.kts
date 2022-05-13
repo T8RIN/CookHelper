@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "ru.tech.prokitchen"
+    namespace = "ru.tech.cookhelper"
     compileSdk = 32
 
     defaultConfig {
-        applicationId = "ru.tech.prokitchen"
+        applicationId = "ru.tech.cookhelper"
         minSdk = 21
         targetSdk = 32
         versionCode = 1

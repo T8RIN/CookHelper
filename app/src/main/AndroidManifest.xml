@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <queries>
-        <package android:name="android.permission.QUERY_ALL_PACKAGES" />
-    </queries>
 
     <application
         android:name=".core.application.ProKitchenApplication"
@@ -16,12 +13,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ProKitchen.Launcher"
+        android:theme="@style/Theme.CookHelper.Launcher"
         tools:targetApi="31">
         <activity
             android:name=".presentation.app.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.ProKitchen.Launcher">
+            android:theme="@style/Theme.CookHelper.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

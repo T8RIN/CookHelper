@@ -43,6 +43,6 @@
     @com.squareup.moshi.ToJson <methods>;
 }
 
--keepnames @kotlin.Metadata class ru.tech.prokitchen.data.**
--keep class ru.tech.prokitchen.data.** { *; }
--keepclassmembers class ru.tech.prokitchen.data.** { *; }
+-keepnames @kotlin.Metadata class ru.tech.cookhelper.data.**
+-keep class ru.tech.cookhelper.data.** { *; }
+-keepclassmembers class ru.tech.cookhelper.data.** { *; }
