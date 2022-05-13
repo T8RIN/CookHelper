@@ -11,21 +11,21 @@ import ru.tech.cookhelper.data.local.entity.FavRecipeEntity
 import ru.tech.cookhelper.data.local.entity.ProductEntity
 import ru.tech.cookhelper.data.local.entity.SettingsEntity
 import ru.tech.cookhelper.data.local.entity.toSetting
-import ru.tech.cookhelper.data.remote.api.ProKitchenApi
+import ru.tech.cookhelper.data.remote.api.CookHelperApi
 import ru.tech.cookhelper.data.remote.dto.toProduct
 import ru.tech.cookhelper.data.remote.dto.toRecipe
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.Setting
-import ru.tech.cookhelper.domain.repository.ProKitchenRepository
+import ru.tech.cookhelper.domain.repository.CookHelperRepository
 import javax.inject.Inject
 
-class ProKitchenRepositoryImpl @Inject constructor(
-    private val api: ProKitchenApi,
+class CookHelperRepositoryImpl @Inject constructor(
+    private val api: CookHelperApi,
     private val favRecipeDao: FavRecipeDao,
     private val fridgeDao: FridgeDao,
     private val settingsDao: SettingsDao
-) : ProKitchenRepository {
+) : CookHelperRepository {
 
     override fun getCuisineList(): Flow<Action<List<Recipe>>> = flow {
         emit(Action.Loading())

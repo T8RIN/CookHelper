@@ -6,7 +6,7 @@ import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.Setting
 
-interface ProKitchenRepository {
+interface CookHelperRepository {
 
     fun getCuisineList(): Flow<Action<List<Recipe>>>
 

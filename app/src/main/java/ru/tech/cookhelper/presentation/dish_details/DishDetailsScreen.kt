@@ -99,9 +99,11 @@ fun DishDetailsScreen(
             },
             modifier = Modifier.nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
         ) { padding ->
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
                 if (state.dish != null) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),

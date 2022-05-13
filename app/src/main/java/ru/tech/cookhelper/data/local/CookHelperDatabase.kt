@@ -14,7 +14,7 @@ import ru.tech.cookhelper.data.local.entity.SettingsEntity
     exportSchema = false,
     version = 1
 )
-abstract class ProKitchenDatabase : RoomDatabase() {
+abstract class CookHelperDatabase : RoomDatabase() {
     abstract val favRecipeDao: FavRecipeDao
     abstract val fridgeDao: FridgeDao
     abstract val settingsDao: SettingsDao

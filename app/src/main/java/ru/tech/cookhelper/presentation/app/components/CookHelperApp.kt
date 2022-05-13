@@ -45,7 +45,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.*
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
-fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewModel()) {
+fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewModel()) {
     CompositionLocalProvider(
         LocalSettingsProvider provides viewModel.settingsState.value
     ) {

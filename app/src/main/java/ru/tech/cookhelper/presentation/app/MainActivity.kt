@@ -9,7 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.ProKitchenApp
+import ru.tech.cookhelper.presentation.app.components.CookHelperApp
 
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            ProKitchenApp(this)
+            CookHelperApp(this)
         }
     }
 }

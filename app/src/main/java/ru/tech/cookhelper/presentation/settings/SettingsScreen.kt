@@ -193,7 +193,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                 context.startActivity(
                                     Intent(
                                         Intent.ACTION_VIEW,
-                                        Uri.parse("https://github.com/T8RIN/PROkitchen")
+                                        Uri.parse("https://github.com/T8RIN/CookHelper")
                                     )
                                 )
                             }, onClick = {})

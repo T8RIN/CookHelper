@@ -5,7 +5,7 @@ import retrofit2.http.Path
 import ru.tech.cookhelper.data.remote.dto.ProductDto
 import ru.tech.cookhelper.data.remote.dto.RecipeDto
 
-interface ProKitchenApi {
+interface CookHelperApi {
 
     @GET("/api/get/cuisine")
     suspend fun getCuisine(): List<RecipeDto>
