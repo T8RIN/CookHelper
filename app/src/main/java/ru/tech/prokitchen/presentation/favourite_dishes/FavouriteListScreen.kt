@@ -1,9 +1,7 @@
 package ru.tech.prokitchen.presentation.favourite_dishes
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CloudOff
@@ -15,7 +13,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.components.Placeholder
@@ -40,7 +37,6 @@ fun FavouriteListScreen(
                     RecipeItem(state.recipeList[index]) {
                         onRecipeClicked(it)
                     }
-                    Spacer(Modifier.height(10.dp))
                 }
             }
         } else if (!state.isLoading) {

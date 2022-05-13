@@ -78,7 +78,6 @@ fun OnFridgeBasedDishes(
                                     onRecipeClicked(it)
                                 }
                             }
-                            Spacer(Modifier.height(10.dp))
                         }
                     }
                 } else if (!state.isLoading) {

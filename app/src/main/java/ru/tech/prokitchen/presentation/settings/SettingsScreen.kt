@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -23,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -52,11 +52,17 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
             ) {
                 var expandedNightMode by rememberSaveable { mutableStateOf(false) }
                 var expandedColorScheme by rememberSaveable { mutableStateOf(false) }
+                var onClick by remember { mutableStateOf({}) }
 
                 Spacer(Modifier.height(10.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onClick() }
                 ) {
                     Spacer(Modifier.width(20.dp))
                     Box(
@@ -103,6 +109,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                         .size(26.dp)
                                 )
                             }
+                            onClick = { expandedNightMode = !expandedNightMode }
                         }
                         COLOR_SCHEME -> {
                             val rotation: Float by animateFloatAsState(if (expandedColorScheme) 180f else 0f)
@@ -115,6 +122,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                         .size(26.dp)
                                 )
                             }
+                            onClick = { expandedColorScheme = !expandedColorScheme }
                         }
                     }
                 }
@@ -183,10 +191,15 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                             .shadow(1.dp, RoundedCornerShape(20.dp))
                             .combinedClickable(onLongClick = {
                                 context.startActivity(
-                                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/T8RIN/PROkitchen"))
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://github.com/T8RIN/PROkitchen")
+                                    )
                                 )
                             }, onClick = {})
-                            .background(Brush.verticalGradient(colors = listOf(Color(0xFF00EBCE), Color(0xFF00ABFF))))
+                            .background(
+                                MaterialTheme.colorScheme.surfaceVariant
+                            )
                             .clip(RoundedCornerShape(20.dp))
                             .align(Alignment.Center),
                         content = {}

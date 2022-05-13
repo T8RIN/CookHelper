@@ -8,32 +8,25 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FindReplace
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import ru.tech.prokitchen.R
 import ru.tech.prokitchen.presentation.app.viewModel.MainViewModel
@@ -87,14 +80,11 @@ fun ProKitchenApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                             LazyColumn(contentPadding = WindowInsets.systemBars.asPaddingValues()) {
                                 item {
                                     Column {
-                                        AsyncImage(
+                                        Picture(
                                             model = "https://kastybiy.herokuapp.com/static/img/recipe_1.jpg",
-                                            contentDescription = null,
-                                            contentScale = ContentScale.Crop,
                                             modifier = Modifier
                                                 .padding(start = 15.dp, top = 15.dp)
                                                 .size(64.dp)
-                                                .clip(CircleShape)
                                         )
                                         Spacer(Modifier.size(10.dp))
                                         Column(
