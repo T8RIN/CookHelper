@@ -356,12 +356,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                             }
                                                         )
                                                     }
-                                                    is Screen.Fridge -> {
-                                                        FridgeScreen()
-                                                    }
-                                                    is Screen.Forum -> {
-
-                                                    }
+                                                    is Screen.Fridge -> { FridgeScreen() }
+                                                    is Screen.Forum ->  Placeholder(deepScreen.baseIcon, stringResource(deepScreen.title))
                                                     else -> {}
                                                 }
                                             }
@@ -408,6 +404,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             viewModel.insertSetting(id, option)
                                         }
                                     }
+                                    is Screen.BlockList -> Placeholder(screen.baseIcon, stringResource(screen.title))
+                                    is Screen.Cart -> Placeholder(screen.baseIcon, stringResource(screen.title))
+                                    is Screen.Forum -> Placeholder(screen.baseIcon, stringResource(screen.title))
+                                    is Screen.Fridge -> Placeholder(screen.baseIcon, stringResource(screen.title))
+                                    is Screen.Messages -> Placeholder(screen.baseIcon, stringResource(screen.title))
+                                    is Screen.Profile -> Placeholder(screen.baseIcon, stringResource(screen.title))
+                                    is Screen.Recipes -> Placeholder(screen.baseIcon, stringResource(screen.title))
                                 }
                             }
                         }
