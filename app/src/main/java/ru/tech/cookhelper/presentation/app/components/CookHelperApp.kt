@@ -19,7 +19,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -67,9 +66,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     screenController.currentScreen !is Screen.RecipeDetails && screenController.currentScreen !is Screen.MatchedRecipes
                 }
 
-                BackHandler {
-                    dialogController.show(Dialog.Exit)
-                }
+                BackHandler { dialogController.show(Dialog.Exit) }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -155,30 +152,21 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                         Column {
 
                             AnimatedVisibility(visible = inNavigationMode) {
-                                val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
-                                val backgroundColor = backgroundColors.containerColor(
-                                    scrollFraction = viewModel.scrollBehavior.scrollFraction
-                                ).value
-                                val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
-                                    containerColor = Color.Transparent,
-                                    scrolledContainerColor = Color.Transparent
-                                )
-                                Surface(color = backgroundColor) {
-                                    CenterAlignedTopAppBar(
-                                        modifier = Modifier.statusBarsPadding(),
-                                        navigationIcon = {
-                                            IconButton(onClick = {
-                                                scope.launch {
-                                                    drawerState.animateTo(
-                                                        DrawerValue.Open,
-                                                        tween()
-                                                    )
-                                                }
-                                            }) {
-                                                Icon(Icons.Rounded.Menu, null)
+                                TopAppBar(
+                                    size = Size.Centered,
+                                    navigationIcon = {
+                                        IconButton(onClick = {
+                                            scope.launch {
+                                                drawerState.animateTo(
+                                                    DrawerValue.Open,
+                                                    tween()
+                                                )
                                             }
-                                        },
-                                        actions = {
+                                        }) {
+                                            Icon(Icons.Rounded.Menu, null)
+                                        }
+                                    },
+                                    actions = {
 //                                            if (viewModel.selectedItem == 0 && screenController.currentScreen == Screen.Home && !viewModel.searchMode) {
 //                                                val focus = LocalFocusManager.current
 //                                                IconButton(onClick = {
@@ -194,32 +182,30 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 //                                                    )
 //                                                }
 //                                            } else
-                                            if (screenController.currentScreen is Screen.Settings) {
-                                                IconButton(onClick = { dialogController.show(Dialog.AboutApp) }) {
-                                                    Icon(Icons.Outlined.HelpOutline, null)
-                                                }
+                                        if (screenController.currentScreen is Screen.Settings) {
+                                            IconButton(onClick = { dialogController.show(Dialog.AboutApp) }) {
+                                                Icon(Icons.Outlined.HelpOutline, null)
                                             }
-                                        },
-                                        title = {
-                                            Box {
-                                                if (!viewModel.searchMode) {
-                                                    Text(viewModel.title.asString())
-                                                } else {
-                                                    SearchBar(
-                                                        searchString = viewModel.searchString.value,
-                                                        onValueChange = {
-                                                            viewModel.updateSearch(
-                                                                it
-                                                            )
-                                                        }
-                                                    )
-                                                }
+                                        }
+                                    },
+                                    title = {
+                                        Box {
+                                            if (!viewModel.searchMode) {
+                                                Text(viewModel.title.asString())
+                                            } else {
+                                                SearchBar(
+                                                    searchString = viewModel.searchString.value,
+                                                    onValueChange = {
+                                                        viewModel.updateSearch(
+                                                            it
+                                                        )
+                                                    }
+                                                )
                                             }
-                                        },
-                                        scrollBehavior = viewModel.scrollBehavior,
-                                        colors = foregroundColors
-                                    )
-                                }
+                                        }
+                                    },
+                                    scrollBehavior = viewModel.scrollBehavior
+                                )
                             }
 
                             AnimatedContent(
@@ -356,8 +342,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                             }
                                                         )
                                                     }
-                                                    is Screen.Fridge -> { FridgeScreen() }
-                                                    is Screen.Forum ->  Placeholder(deepScreen.baseIcon, stringResource(deepScreen.title))
+                                                    is Screen.Fridge -> {
+                                                        FridgeScreen()
+                                                    }
+                                                    is Screen.Forum -> Placeholder(
+                                                        deepScreen.baseIcon,
+                                                        stringResource(deepScreen.title)
+                                                    )
                                                     else -> {}
                                                 }
                                             }
@@ -404,13 +395,34 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             viewModel.insertSetting(id, option)
                                         }
                                     }
-                                    is Screen.BlockList -> Placeholder(screen.baseIcon, stringResource(screen.title))
-                                    is Screen.Cart -> Placeholder(screen.baseIcon, stringResource(screen.title))
-                                    is Screen.Forum -> Placeholder(screen.baseIcon, stringResource(screen.title))
-                                    is Screen.Fridge -> Placeholder(screen.baseIcon, stringResource(screen.title))
-                                    is Screen.Messages -> Placeholder(screen.baseIcon, stringResource(screen.title))
-                                    is Screen.Profile -> Placeholder(screen.baseIcon, stringResource(screen.title))
-                                    is Screen.Recipes -> Placeholder(screen.baseIcon, stringResource(screen.title))
+                                    is Screen.BlockList -> Placeholder(
+                                        screen.baseIcon,
+                                        stringResource(screen.title)
+                                    )
+                                    is Screen.Cart -> Placeholder(
+                                        screen.baseIcon,
+                                        stringResource(screen.title)
+                                    )
+                                    is Screen.Forum -> Placeholder(
+                                        screen.baseIcon,
+                                        stringResource(screen.title)
+                                    )
+                                    is Screen.Fridge -> Placeholder(
+                                        screen.baseIcon,
+                                        stringResource(screen.title)
+                                    )
+                                    is Screen.Messages -> Placeholder(
+                                        screen.baseIcon,
+                                        stringResource(screen.title)
+                                    )
+                                    is Screen.Profile -> Placeholder(
+                                        screen.baseIcon,
+                                        stringResource(screen.title)
+                                    )
+                                    is Screen.Recipes -> Placeholder(
+                                        screen.baseIcon,
+                                        stringResource(screen.title)
+                                    )
                                 }
                             }
                         }
@@ -501,9 +513,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     }
 
                     if (viewModel.searchMode && viewModel.searchString.value.isEmpty()) {
-                        BackHandler {
-                            viewModel.searchMode = false
-                        }
+                        BackHandler { viewModel.searchMode = false }
                     }
                 }
             }

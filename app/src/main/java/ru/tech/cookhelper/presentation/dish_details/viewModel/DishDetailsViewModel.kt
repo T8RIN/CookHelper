@@ -19,6 +19,7 @@ import ru.tech.cookhelper.domain.use_case.update_favorite.UpdateFavDishUseCase
 import ru.tech.cookhelper.presentation.dish_details.components.DishDetailsState
 import javax.inject.Inject
 
+@ExperimentalMaterial3Api
 @HiltViewModel
 class DishDetailsViewModel @Inject constructor(
     private val getDishByIdUseCase: GetDishByIdUseCase,
@@ -26,8 +27,7 @@ class DishDetailsViewModel @Inject constructor(
     private val updateFavDishUseCase: UpdateFavDishUseCase
 ) : ViewModel() {
 
-    @ExperimentalMaterial3Api
-    val scrollBehavior by mutableStateOf(TopAppBarDefaults.enterAlwaysScrollBehavior())
+    var scrollBehavior by mutableStateOf(TopAppBarDefaults.enterAlwaysScrollBehavior())
 
     private var id by mutableStateOf(-1)
 
@@ -57,10 +57,6 @@ class DishDetailsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    init {
-        if (id != -1) getDishById(id)
-    }
-
     fun processFavorites(id: Int) {
         viewModelScope.launch {
             updateFavDishUseCase(id, _isFavorite.value)
@@ -70,6 +66,7 @@ class DishDetailsViewModel @Inject constructor(
 
     fun load(id: Int) {
         this.id = id
+        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         getDishById(id)
     }
 }

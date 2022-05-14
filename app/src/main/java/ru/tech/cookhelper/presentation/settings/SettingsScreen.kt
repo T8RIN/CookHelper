@@ -188,7 +188,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                     Box(
                         Modifier
                             .size(86.dp)
-                            .shadow(1.dp, RoundedCornerShape(20.dp))
+                            .shadow(4.dp, RoundedCornerShape(20.dp))
                             .combinedClickable(onLongClick = {
                                 context.startActivity(
                                     Intent(
@@ -198,7 +198,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                 )
                             }, onClick = {})
                             .background(
-                                Color(0xFF78d1ff)
+                                MaterialTheme.colorScheme.background
                             )
                             .clip(RoundedCornerShape(20.dp))
                             .align(Alignment.Center),

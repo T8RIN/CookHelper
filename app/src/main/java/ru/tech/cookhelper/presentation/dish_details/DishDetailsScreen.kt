@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Favorite
@@ -16,19 +15,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
+import ru.tech.cookhelper.presentation.app.components.Size
+import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.dish_details.components.InfoItem
 import ru.tech.cookhelper.presentation.dish_details.viewModel.DishDetailsViewModel
 
@@ -37,7 +34,7 @@ import ru.tech.cookhelper.presentation.dish_details.viewModel.DishDetailsViewMod
 fun DishDetailsScreen(
     id: Int,
     goBack: () -> Unit,
-    viewModel: DishDetailsViewModel = hiltViewModel()
+    viewModel: DishDetailsViewModel = viewModel()
 ) {
 
     LaunchedEffect(Unit) {
@@ -54,48 +51,36 @@ fun DishDetailsScreen(
     ) {
         Scaffold(
             topBar = {
-                val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
-                val backgroundColor = backgroundColors.containerColor(
-                    scrollFraction = viewModel.scrollBehavior.scrollFraction
-                ).value
-                val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent,
-                    scrolledContainerColor = Color.Transparent
-                )
-
-                Surface(color = backgroundColor) {
-                    LargeTopAppBar(
-                        modifier = Modifier.statusBarsPadding(),
-                        title = { Text(state.dish?.title ?: "") },
-                        navigationIcon = {
-                            IconButton(onClick = { goBack() }) {
-                                Icon(Icons.Rounded.ArrowBack, null)
-                            }
-                        },
-                        scrollBehavior = viewModel.scrollBehavior,
-                        colors = foregroundColors,
-                        actions = {
-                            IconButton(onClick = {
-                                val intent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    putExtra(
-                                        Intent.EXTRA_TEXT,
-                                        viewModel.dishState.value.dish?.toShareValue()
-                                    )
-                                    type = "text/plain"
-                                }
-                                context.startActivity(
-                                    Intent.createChooser(
-                                        intent,
-                                        context.getString(R.string.share)
-                                    )
-                                )
-                            }) {
-                                Icon(Icons.Outlined.Share, null)
-                            }
+                TopAppBar(
+                    size = Size.Large,
+                    title = { Text(state.dish?.title ?: "") },
+                    navigationIcon = {
+                        IconButton(onClick = { goBack() }) {
+                            Icon(Icons.Rounded.ArrowBack, null)
                         }
-                    )
-                }
+                    },
+                    scrollBehavior = viewModel.scrollBehavior,
+                    actions = {
+                        IconButton(onClick = {
+                            val intent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(
+                                    Intent.EXTRA_TEXT,
+                                    viewModel.dishState.value.dish?.toShareValue()
+                                )
+                                type = "text/plain"
+                            }
+                            context.startActivity(
+                                Intent.createChooser(
+                                    intent,
+                                    context.getString(R.string.share)
+                                )
+                            )
+                        }) {
+                            Icon(Icons.Outlined.Share, null)
+                        }
+                    }
+                )
             },
             modifier = Modifier.nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
         ) { padding ->
@@ -116,31 +101,13 @@ fun DishDetailsScreen(
                     ) {
                         item {
                             Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                                SubcomposeAsyncImage(
+                                Picture(
                                     modifier = Modifier
                                         .height(200.dp)
                                         .fillMaxWidth()
-                                        .padding(horizontal = 10.dp)
-                                        .clip(RoundedCornerShape(24.dp)),
-                                    contentScale = ContentScale.Crop,
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(state.dish.iconUrl)
-                                        .crossfade(true)
-                                        .build(),
-                                    loading = {
-                                        Box(Modifier.fillMaxSize()) {
-                                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                                        }
-                                    },
-                                    error = {
-                                        Icon(
-                                            modifier = Modifier.fillMaxSize(),
-                                            imageVector = Icons.Outlined.BrokenImage,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onBackground
-                                        )
-                                    },
-                                    contentDescription = null
+                                        .padding(horizontal = 10.dp),
+                                    shape = RoundedCornerShape(24.dp),
+                                    model = state.dish.iconUrl,
                                 )
 
                                 Spacer(modifier = Modifier.height(15.dp))

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "ru.tech.prokitchen",
+  "applicationId": "ru.tech.cookhelper",
   "variantName": "release",
   "elements": [
     {
