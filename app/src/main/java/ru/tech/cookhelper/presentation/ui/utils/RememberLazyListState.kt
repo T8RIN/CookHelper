@@ -13,7 +13,10 @@ private data class KeyParams(
     val scrollOffset: Int
 )
 
-fun clearState() = SaveMap.clear()
+fun clearState(key: String = "", all: Boolean = false) {
+    if(!all) SaveMap.remove(key)
+    else SaveMap.clear()
+}
 
 /**
  * Save scroll state on all time.

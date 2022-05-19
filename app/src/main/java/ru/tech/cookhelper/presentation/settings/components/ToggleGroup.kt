@@ -16,7 +16,7 @@ import androidx.compose.ui.zIndex
 
 @Composable
 fun ToggleGroup(items: List<Int>, selectedIndex: Int, indexChanged: (Int) -> Unit) {
-    val cornerRadius = 8.dp
+    val cornerRadius = 24.dp
 
     Row(
         modifier = Modifier

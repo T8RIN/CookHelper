@@ -19,7 +19,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
@@ -28,13 +27,15 @@ import ru.tech.cookhelper.presentation.app.components.Size
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.dish_details.components.InfoItem
 import ru.tech.cookhelper.presentation.dish_details.viewModel.DishDetailsViewModel
+import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
+import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun DishDetailsScreen(
     id: Int,
     goBack: () -> Unit,
-    viewModel: DishDetailsViewModel = viewModel()
+    viewModel: DishDetailsViewModel = scopedViewModel()
 ) {
 
     LaunchedEffect(Unit) {

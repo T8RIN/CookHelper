@@ -85,7 +85,7 @@ sealed class Screen(
         selectedIcon = Icons.Filled.Message
     )
 
-    class RecipeDetails(val id: Int, val previousScreen: Screen) : Screen()
+    class RecipeDetails(val id: Int = 0, val previousScreen: Screen = Home) : Screen()
 
     class MatchedRecipes(val previousScreen: Screen) : Screen()
 

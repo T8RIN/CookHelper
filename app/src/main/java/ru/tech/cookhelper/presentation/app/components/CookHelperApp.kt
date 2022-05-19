@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelClearer.name
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
@@ -78,7 +79,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                 item {
                                     Column {
                                         Picture(
-                                            model = "https://kastybiy.herokuapp.com/static/img/recipe_1.jpg",
+                                            model = "https://sun9-76.userapi.com/s/v1/ig2/lbF4vZbkOi0zdhtU-5iXrF2YPHiwIVVZouCCGvQBb7MV7OKzhhPUg7KW4nyc7vr7SS7HVDDyV_kdPVeoPo7j8RHb.jpg?size=1620x2160&quality=95&type=album",
                                             modifier = Modifier
                                                 .padding(start = 15.dp, top = 15.dp)
                                                 .size(64.dp)
@@ -135,7 +136,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             scope.launch {
                                                 drawerState.animateTo(DrawerValue.Closed, tween())
                                             }
-                                            clearState()
+                                            clearState(all = true)
                                         }
                                     )
                                     if (item is Screen.Home || item is Screen.BlockList) {
@@ -259,7 +260,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                         viewModel.searchMode = false
                                                                         viewModel.updateSearch("")
 
-                                                                        clearState()
+                                                                        clearState(all = true)
                                                                     }
                                                                 }
                                                             )
@@ -377,7 +378,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                     is Screen.MatchedRecipes -> {
                                         val back: () -> Unit =
-                                            { screenController.navigate(screen.previousScreen) }
+                                            { screenController.navigate(screen.previousScreen); clearState(Screen.MatchedRecipes::class.name) }
                                         BackHandler { back() }
                                         OnFridgeBasedDishes(
                                             onRecipeClicked = {

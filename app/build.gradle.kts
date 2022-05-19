@@ -69,13 +69,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
 
     //Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.39.1")
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-service:2.4.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+    implementation("com.google.dagger:hilt-android:2.40.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.40.1")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     //Desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
@@ -97,8 +93,9 @@ dependencies {
     implementation("com.google.accompanist:accompanist-placeholder-material:0.24.8-beta")
 
     //Coil
-    implementation("io.coil-kt:coil:2.0.0-rc01")
-    implementation("io.coil-kt:coil-compose:2.0.0-rc01")
+    implementation("io.coil-kt:coil:2.0.0")
+    implementation("io.coil-kt:coil-compose:2.0.0")
+    implementation("io.coil-kt:coil-gif:2.0.0")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

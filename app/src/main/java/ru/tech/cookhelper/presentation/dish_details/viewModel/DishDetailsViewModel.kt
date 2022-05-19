@@ -66,7 +66,6 @@ class DishDetailsViewModel @Inject constructor(
 
     fun load(id: Int) {
         this.id = id
-        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         getDishById(id)
     }
 }

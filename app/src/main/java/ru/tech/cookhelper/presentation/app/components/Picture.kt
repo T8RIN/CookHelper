@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.runtime.Composable
@@ -16,8 +17,11 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 
 @Composable
@@ -39,11 +43,19 @@ fun Picture(
 ) {
     var shimmerVisible by rememberSaveable { mutableStateOf(true) }
 
+    val imageLoader = ImageLoader.Builder(LocalContext.current).components {
+        if (SDK_INT >= 28) add(ImageDecoderDecoder.Factory())
+        else add(GifDecoder.Factory())
+    }.build()
+
+    val request = manualImageRequest ?: ImageRequest.Builder(LocalContext.current)
+        .data(model)
+        .crossfade(true)
+        .build()
+
     AsyncImage(
-        model = manualImageRequest ?: ImageRequest.Builder(LocalContext.current)
-            .data(model)
-            .crossfade(true)
-            .build(),
+        model = request,
+        imageLoader = imageLoader,
         contentDescription = contentDescription,
         modifier = modifier
             .clip(shape)

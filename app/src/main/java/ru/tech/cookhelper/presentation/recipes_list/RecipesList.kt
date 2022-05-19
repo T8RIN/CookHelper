@@ -15,13 +15,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
 import ru.tech.cookhelper.presentation.recipes_list.viewModel.RecipeListViewModel
 import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
+import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 import ru.tech.cookhelper.presentation.ui.utils.showSnackbar
 
 @Composable
@@ -29,7 +29,7 @@ fun RecipesList(
     snackState: SnackbarHostState,
     searchString: MutableState<String>,
     onRecipeClick: (id: Int) -> Unit,
-    viewModel: RecipeListViewModel = hiltViewModel()
+    viewModel: RecipeListViewModel = scopedViewModel()
 ) {
 
     val state = viewModel.recipeState.value
