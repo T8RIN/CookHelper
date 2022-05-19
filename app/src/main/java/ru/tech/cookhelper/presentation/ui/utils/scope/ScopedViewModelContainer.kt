@@ -3,13 +3,14 @@ package ru.tech.cookhelper.presentation.ui.utils.scope
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModelClearer.clearViewModel
-import androidx.lifecycle.ViewModelClearer.getPrivateProperty
-import androidx.lifecycle.ViewModelClearer.name
-import androidx.lifecycle.ViewModelClearer.setAndReturnPrivateProperty
 import androidx.savedstate.SavedStateRegistry
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.tech.cookhelper.presentation.ui.utils.getPrivateProperty
+import ru.tech.cookhelper.presentation.ui.utils.getPrivatePropertyName
+import ru.tech.cookhelper.presentation.ui.utils.name
+import ru.tech.cookhelper.presentation.ui.utils.setAndReturnPrivateProperty
 import java.util.concurrent.ConcurrentSkipListSet
 
 class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
@@ -88,11 +89,14 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
     @Suppress("UNCHECKED_CAST")
     private fun clearDisposedViewModel(scopedViewModel: ViewModel) {
         val name = scopedViewModel.javaClass.name
-        val mMap = viewModelStore.getPrivateProperty("mMap") as HashMap<String, ViewModel>
+
+        val mapName = viewModelStore.getPrivatePropertyName(HashMap<String, ViewModel>()::class)[0]
+
+        val mMap = viewModelStore.getPrivateProperty(mapName) as HashMap<String, ViewModel>
         val key = "$TAG:$name"
         mMap[key]?.clearViewModel()
         mMap.remove(key)
-        viewModelStore.setAndReturnPrivateProperty("mMap", mMap)
+        viewModelStore.setAndReturnPrivateProperty(mapName, mMap)
         savedStateRegistry?.unregisterSavedStateProvider(name)
     }
 
