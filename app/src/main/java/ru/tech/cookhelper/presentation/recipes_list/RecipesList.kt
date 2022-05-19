@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material.icons.twotone.FindInPage
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -20,18 +19,18 @@ import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
 import ru.tech.cookhelper.presentation.recipes_list.viewModel.RecipeListViewModel
+import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
 import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 import ru.tech.cookhelper.presentation.ui.utils.showSnackbar
 
 @Composable
 fun RecipesList(
-    snackState: SnackbarHostState,
     searchString: MutableState<String>,
     onRecipeClick: (id: Int) -> Unit,
-    viewModel: RecipeListViewModel = scopedViewModel()
+    viewModel: RecipeListViewModel = scopedViewModel(ignoreDisposing = listOf(Screen.RecipeDetails::class))
 ) {
-
     val state = viewModel.recipeState.value
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -65,7 +64,7 @@ fun RecipesList(
         if (state.error.isNotBlank()) {
             showSnackbar(
                 rememberCoroutineScope(),
-                snackState,
+                LocalSnackbarHost.current,
                 state.error,
                 stringResource(R.string.again)
             ) {

@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +14,7 @@ import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.twotone.HourglassEmpty
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,18 +46,25 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.*
 @ExperimentalMaterial3Api
 @Composable
 fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewModel()) {
+    val icon = remember { mutableStateOf(Icons.TwoTone.HourglassEmpty) }
+    val text = remember { mutableStateOf("") }
+    val changed = remember { mutableStateOf(false) }
+    val length = remember { mutableStateOf(0) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
     CompositionLocalProvider(
         LocalSettingsProvider provides viewModel.settingsState.value
     ) {
         ProKitchenTheme {
-            val snackbarHostState = remember { SnackbarHostState() }
-            val scope = rememberCoroutineScope()
-            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
             CompositionLocalProvider(
                 values = arrayOf(
                     LocalScreenController provides viewModel.currentScreen,
-                    LocalDialogController provides viewModel.currentDialog
+                    LocalDialogController provides viewModel.currentDialog,
+                    LocalSnackbarHost provides snackbarHostState,
+                    LocalToastHost provides FancyToastValues(icon, text, changed, length)
                 )
             ) {
                 val screenController = LocalScreenController.current
@@ -106,6 +113,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                 }
                                 itemsIndexed(drawerList) { _, item ->
                                     val selected = screenController.currentScreen == item
+                                    val toast = LocalToastHost.current
+
 
                                     NavigationDrawerItem(
                                         icon = {
@@ -132,10 +141,12 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                 viewModel.selectedItem = 0
                                                 viewModel.navDestination = Screen.Recipes
                                             }
-
-                                            scope.launch {
-                                                drawerState.animateTo(DrawerValue.Closed, tween())
-                                            }
+                                            toast.sendToast(
+                                                item.baseIcon,
+                                                item.title.toString(),
+                                                listOf(0, 1).shuffled()[0]
+                                            )
+                                            scope.launch { drawerState.close() }
                                             clearState(all = true)
                                         }
                                     )
@@ -157,12 +168,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     size = Size.Centered,
                                     navigationIcon = {
                                         IconButton(onClick = {
-                                            scope.launch {
-                                                drawerState.animateTo(
-                                                    DrawerValue.Open,
-                                                    tween()
-                                                )
-                                            }
+                                            scope.launch { drawerState.open() }
                                         }) {
                                             Icon(Icons.Rounded.Menu, null)
                                         }
@@ -331,7 +337,6 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                 when (deepScreen) {
                                                     is Screen.Recipes -> {
                                                         RecipesList(
-                                                            snackbarHostState,
                                                             viewModel.searchString,
                                                             onRecipeClick = {
                                                                 screenController.navigate(
@@ -358,7 +363,6 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                     is Screen.Favourites -> {
                                         FavouriteListScreen(
-                                            snackState = snackbarHostState,
                                             onRecipeClicked = {
                                                 screenController.navigate(
                                                     Screen.RecipeDetails(
@@ -378,7 +382,11 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                     is Screen.MatchedRecipes -> {
                                         val back: () -> Unit =
-                                            { screenController.navigate(screen.previousScreen); clearState(Screen.MatchedRecipes::class.name) }
+                                            {
+                                                screenController.navigate(screen.previousScreen); clearState(
+                                                Screen.MatchedRecipes::class.name
+                                            )
+                                            }
                                         BackHandler { back() }
                                         OnFridgeBasedDishes(
                                             onRecipeClicked = {
@@ -516,6 +524,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     if (viewModel.searchMode && viewModel.searchString.value.isEmpty()) {
                         BackHandler { viewModel.searchMode = false }
                     }
+
+                    FancyToast(
+                        icon = icon.value,
+                        message = text.value,
+                        changed = changed,
+                        length = length.value
+                    )
                 }
             }
         }
