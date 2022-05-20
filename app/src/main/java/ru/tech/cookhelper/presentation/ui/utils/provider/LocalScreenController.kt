@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.ui.utils.provider
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
@@ -12,3 +13,6 @@ fun MutableState<Screen>.navigate(screen: Screen) {
 }
 
 val MutableState<Screen>.currentScreen: Screen get() = this.value
+
+@Composable
+fun Screen.isCurrentScreen(): Boolean = LocalScreenController.current.currentScreen == this

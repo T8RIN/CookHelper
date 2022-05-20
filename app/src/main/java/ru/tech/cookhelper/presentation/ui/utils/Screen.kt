@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.ui.utils
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -92,6 +93,10 @@ sealed class Screen(
     @Composable
     fun Int.asString(): String {
         return stringResource(id = this)
+    }
+
+    fun Int.asString(context: Context, vararg formatArgs: Any = emptyArray()): String {
+        return context.getString(this, formatArgs)
     }
 }
 

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -111,8 +112,9 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                 }
                                 itemsIndexed(drawerList) { _, item ->
-                                    val selected = screenController.currentScreen == item
+                                    val selected = item.isCurrentScreen()
                                     val toast = LocalToastHost.current
+                                    val context = LocalContext.current
 
 
                                     NavigationDrawerItem(
@@ -142,7 +144,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             }
                                             toast.sendToast(
                                                 item.baseIcon,
-                                                item.title.toString() * 50,
+                                                item.title.asString(context),
                                                 listOf(0, 1).shuffled()[0]
                                             )
                                             scope.launch { drawerState.close() }
