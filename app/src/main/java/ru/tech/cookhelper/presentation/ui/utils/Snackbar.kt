@@ -9,8 +9,8 @@ fun showSnackbar(
     scope: CoroutineScope,
     host: SnackbarHostState,
     message: String,
-    action: String,
-    result: (SnackbarResult) -> Unit
+    action: String = "",
+    result: (SnackbarResult) -> Unit = {}
 ) {
     scope.launch {
         result(
@@ -21,3 +21,13 @@ fun showSnackbar(
         )
     }
 }
+
+val SnackbarResult.clicked: Boolean
+    get() {
+        return this == SnackbarResult.ActionPerformed
+    }
+
+val SnackbarResult.dismissed: Boolean
+    get() {
+        return this == SnackbarResult.Dismissed
+    }

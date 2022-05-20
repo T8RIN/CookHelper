@@ -2,7 +2,7 @@ package ru.tech.cookhelper.presentation.ui.utils
 
 import kotlin.reflect.KClass
 
-fun <T : Any?> T.getPrivateProperty(variableName: String): Any? {
+inline fun <reified T : Any?> T.getPrivateProperty(variableName: String): Any? {
     if (this == null) return null
 
     return javaClass.getDeclaredField(variableName).let { field ->
@@ -11,7 +11,7 @@ fun <T : Any?> T.getPrivateProperty(variableName: String): Any? {
     }
 }
 
-fun <T : Any?> T.setAndReturnPrivateProperty(variableName: String, data: Any): Any? {
+inline fun <reified T : Any?> T.setAndReturnPrivateProperty(variableName: String, data: Any): Any? {
     if (this == null) return null
 
     return javaClass.getDeclaredField(variableName).let { field ->

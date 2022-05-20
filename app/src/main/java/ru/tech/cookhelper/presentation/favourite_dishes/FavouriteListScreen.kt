@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CloudOff
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -17,6 +16,7 @@ import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.favourite_dishes.viewModel.FavouriteListViewModel
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
 import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.clicked
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
 import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
@@ -50,9 +50,7 @@ fun FavouriteListScreen(
                 state.error,
                 stringResource(R.string.again)
             ) {
-                if (it == SnackbarResult.ActionPerformed) {
-                    viewModel.reload()
-                }
+                if (it.clicked) viewModel.reload()
             }
         }
 

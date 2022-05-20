@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.app.components
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -14,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
@@ -49,19 +49,22 @@ fun FancyToast(
         AnimatedVisibility(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = sizeMax * 0.2f),
+                .padding(bottom = sizeMax * 0.2f)
+                .then(
+                    if (showToast.isIdle) Modifier.shadow(4.dp, RoundedCornerShape(24.dp))
+                    else Modifier
+                ),
             visibleState = showToast,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()
         ) {
             Card(
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiaryContainer),
                 colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onTertiaryContainer),
                 modifier = Modifier
                     .alpha(0.98f)
                     .heightIn(48.dp)
                     .widthIn(0.dp, (sizeMin * 0.7f)),
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(24.dp),
             ) {
                 Row(
                     Modifier.padding(15.dp),
@@ -69,13 +72,15 @@ fun FancyToast(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(icon, null)
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(
-                        style = MaterialTheme.typography.bodySmall,
-                        text = message,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(end = 5.dp)
-                    )
+                    if (message != "") {
+                        Spacer(modifier = Modifier.size(8.dp))
+                        Text(
+                            style = MaterialTheme.typography.bodySmall,
+                            text = message,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(end = 5.dp)
+                        )
+                    }
                 }
             }
         }

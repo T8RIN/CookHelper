@@ -142,7 +142,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             }
                                             toast.sendToast(
                                                 item.baseIcon,
-                                                item.title.toString(),
+                                                item.title.toString() * 50,
                                                 listOf(0, 1).shuffled()[0]
                                             )
                                             scope.launch { drawerState.close() }
@@ -289,7 +289,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                         viewModel.productsList.value.error,
                                                                         "Яхшы"
                                                                     ) {
-                                                                        if (it == SnackbarResult.ActionPerformed) viewModel.reload()
+                                                                        if (it.clicked) viewModel.reload()
                                                                     }
                                                                 } else if (viewModel.productsList.value.list?.isNotEmpty() == true) {
                                                                     dialogController.show(Dialog.PickProducts)
@@ -297,9 +297,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                     showSnackbar(
                                                                         scope,
                                                                         snackbarHostState,
-                                                                        "Суыткыч тулысынча тулы",
-                                                                        ""
-                                                                    ) {}
+                                                                        "Я не знаю, че не так"
+                                                                    )
                                                                 }
                                                             },
                                                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
@@ -322,7 +321,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                     Icons.Outlined.FindReplace,
                                                                     null
                                                                 )
-                                                            })
+                                                            }
+                                                        )
                                                     }
                                                 }
                                             },

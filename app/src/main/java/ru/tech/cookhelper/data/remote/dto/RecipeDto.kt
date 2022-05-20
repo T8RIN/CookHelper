@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.data.remote.dto
 
-import ru.tech.cookhelper.core.constants.Constants.DELIMETER
-import ru.tech.cookhelper.core.constants.Constants.IMG_URL
+import ru.tech.cookhelper.core.constants.Constants.DELIMITER
+import ru.tech.cookhelper.core.constants.Constants.recipeImageFor
 import ru.tech.cookhelper.domain.model.Recipe
 
 data class RecipeDto(
@@ -22,8 +22,8 @@ data class RecipeDto(
 fun RecipeDto.toRecipe(): Recipe =
     Recipe(
         id,
-        products.removePrefix(DELIMETER).split(DELIMETER),
-        itogProducts.split(DELIMETER).map { it.toInt() },
+        products.removePrefix(DELIMITER).split(DELIMITER),
+        itogProducts.split(DELIMITER).map { it.toInt() },
         calories,
         carboh,
         category,
@@ -33,5 +33,5 @@ fun RecipeDto.toRecipe(): Recipe =
         proteins,
         source,
         title,
-        IMG_URL.replace(DELIMETER, id.toString())
+        recipeImageFor(id)
     )

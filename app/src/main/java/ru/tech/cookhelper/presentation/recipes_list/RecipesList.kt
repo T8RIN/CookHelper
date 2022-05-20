@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material.icons.twotone.FindInPage
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,6 +19,7 @@ import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
 import ru.tech.cookhelper.presentation.recipes_list.viewModel.RecipeListViewModel
 import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.clicked
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
 import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
@@ -68,9 +68,7 @@ fun RecipesList(
                 state.error,
                 stringResource(R.string.again)
             ) {
-                if (it == SnackbarResult.ActionPerformed) {
-                    viewModel.reload()
-                }
+                if (it.clicked) viewModel.reload()
             }
         }
 
