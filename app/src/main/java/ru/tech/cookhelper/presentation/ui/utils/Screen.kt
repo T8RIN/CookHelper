@@ -90,13 +90,15 @@ sealed class Screen(
 
     class MatchedRecipes(val previousScreen: Screen) : Screen()
 
-    @Composable
-    fun Int.asString(): String {
-        return stringResource(id = this)
-    }
+    companion object {
+        @Composable
+        fun Int.asString(): String {
+            return stringResource(id = this)
+        }
 
-    fun Int.asString(context: Context, vararg formatArgs: Any = emptyArray()): String {
-        return context.getString(this, formatArgs)
+        fun Int.asString(context: Context, vararg formatArgs: Any = emptyArray()): String {
+            return context.getString(this, formatArgs)
+        }
     }
 }
 

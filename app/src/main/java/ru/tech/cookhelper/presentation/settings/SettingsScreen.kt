@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.settings
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
@@ -37,8 +38,11 @@ import ru.tech.cookhelper.presentation.app.components.NightMode
 import ru.tech.cookhelper.presentation.app.components.Settings
 import ru.tech.cookhelper.presentation.app.components.Settings.*
 import ru.tech.cookhelper.presentation.app.components.SettingsState
+import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
 import ru.tech.cookhelper.presentation.ui.theme.colorList
+import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.asString
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @ExperimentalFoundationApi
 @Composable
@@ -78,7 +82,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         )
                     }
                     Spacer(Modifier.width(16.dp))
-                    Text(stringResource(setting.title()), modifier = Modifier.weight(1f))
+                    Text(stringResource(setting.title), modifier = Modifier.weight(1f))
                     when (setting) {
                         CART_CONNECTION -> {
                             var checked by remember { mutableStateOf(settingsState.cartConnection) }
@@ -132,7 +136,8 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         selectedIndex = settingsState.nightMode.ordinal,
                         indexChanged = {
                             onAction(setting.ordinal, it.toString())
-                        })
+                        }
+                    )
                 }
                 if (expandedColorScheme) {
                     Spacer(Modifier.height(10.dp))
@@ -167,10 +172,10 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         }
                     }
                 }
-                setting.subtitle()?.also { subtitle ->
+                setting.subtitle?.apply {
                     Spacer(Modifier.height(10.dp))
                     Text(
-                        stringResource(subtitle),
+                        stringResource(this),
                         fontSize = 12.sp,
                         color = Color.Gray,
                         modifier = Modifier.padding(horizontal = 20.dp)
@@ -182,6 +187,8 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
         }
         item {
             val context = LocalContext.current
+            val toastHost = LocalToastHost.current
+
             Spacer(Modifier.height(80.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -189,14 +196,22 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         Modifier
                             .size(86.dp)
                             .shadow(4.dp, RoundedCornerShape(20.dp))
-                            .combinedClickable(onLongClick = {
-                                context.startActivity(
-                                    Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://github.com/T8RIN/CookHelper")
+                            .combinedClickable(
+                                onLongClick = {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("https://github.com/T8RIN/CookHelper")
+                                        )
                                     )
-                                )
-                            }, onClick = {})
+                                },
+                                onClick = {
+                                    toastHost.sendToast(
+                                        Icons.Outlined.GetApp,
+                                        (R.string.long_click_to_go).asString(context),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                })
                             .background(
                                 MaterialTheme.colorScheme.background
                             )
@@ -237,20 +252,22 @@ fun Settings.getIcon(nightMode: NightMode): ImageVector {
     }
 }
 
-fun Settings.title(): Int {
-    return when (this) {
-        NIGHT_MODE -> R.string.nightMode
-        DYNAMIC_COLORS -> R.string.dynamicColors
-        COLOR_SCHEME -> R.string.colorScheme
-        CART_CONNECTION -> R.string.cartConnection
+val Settings.title: Int
+    get() {
+        return when (this) {
+            NIGHT_MODE -> R.string.nightMode
+            DYNAMIC_COLORS -> R.string.dynamicColors
+            COLOR_SCHEME -> R.string.colorScheme
+            CART_CONNECTION -> R.string.cartConnection
+        }
     }
-}
 
-fun Settings.subtitle(): Int? {
-    return when (this) {
-        NIGHT_MODE -> null
-        DYNAMIC_COLORS -> R.string.dynamicColorsSubtitle
-        COLOR_SCHEME -> null
-        CART_CONNECTION -> R.string.cartConnectionSubtitle
+val Settings.subtitle: Int?
+    get() {
+        return when (this) {
+            NIGHT_MODE -> null
+            DYNAMIC_COLORS -> R.string.dynamicColorsSubtitle
+            COLOR_SCHEME -> null
+            CART_CONNECTION -> R.string.cartConnectionSubtitle
+        }
     }
-}

@@ -45,4 +45,5 @@
     <string name="cook_time_adapt_short">%d мин</string>
     <string name="matched_recipes">Подходящие блюда</string>
     <string name="empty_podbor">Не удалось подобрать рецепты, ваш холодильник недостаточно полон или вы заблокировали слишком много продуктов</string>
+    <string name="long_click_to_go">Зажмите, чтобы увидеть исходный код</string>
 </resources>

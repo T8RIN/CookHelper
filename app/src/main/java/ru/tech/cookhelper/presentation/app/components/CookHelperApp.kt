@@ -38,7 +38,7 @@ import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.utils.*
-import ru.tech.cookhelper.presentation.ui.utils.Screen.Favourites.asString
+import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.asString
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @ExperimentalFoundationApi
@@ -142,11 +142,6 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                 viewModel.selectedItem = 0
                                                 viewModel.navDestination = Screen.Recipes
                                             }
-                                            toast.sendToast(
-                                                item.baseIcon,
-                                                item.title.asString(context),
-                                                listOf(0, 1).shuffled()[0]
-                                            )
                                             scope.launch { drawerState.close() }
                                             clearState(all = true)
                                         }
