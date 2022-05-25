@@ -9,9 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.outlined.FindReplace
 import androidx.compose.material.icons.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.twotone.HourglassEmpty
@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,7 +37,9 @@ import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.utils.*
+import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.alternateIcon
 import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.asString
+import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @ExperimentalFoundationApi
@@ -112,18 +113,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                 }
                                 itemsIndexed(drawerList) { _, item ->
-                                    val selected = item.isCurrentScreen()
-                                    val toast = LocalToastHost.current
-                                    val context = LocalContext.current
-
+                                    val selected = item.isCurrentScreen
 
                                     NavigationDrawerItem(
-                                        icon = {
-                                            Icon(
-                                                if (selected) item.selectedIcon else item.baseIcon,
-                                                null
-                                            )
-                                        },
+                                        icon = { Icon(item iconWith selected, null) },
                                         shape = RoundedCornerShape(
                                             topStart = 0.0.dp,
                                             topEnd = 36.0.dp,
@@ -234,15 +227,18 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 
                                                             NavigationBarItem(
                                                                 icon = {
-                                                                    if (screen.baseIcon != Icons.Outlined.PhoneAndroid) {
+                                                                    if (screen.baseIcon != Icons.Default.PhoneAndroid) {
                                                                         Icon(
-                                                                            if (viewModel.selectedItem == index) screen.selectedIcon else screen.baseIcon,
+                                                                            screen iconWith (viewModel.selectedItem == index),
                                                                             null
                                                                         )
                                                                     } else {
                                                                         Icon(
-                                                                            painterResource(if (viewModel.selectedItem == index) R.drawable.fridge else R.drawable.fridge_outline),
-                                                                            null
+                                                                            painterResource(
+                                                                                screen.alternateIcon(
+                                                                                    viewModel.selectedItem == index
+                                                                                )
+                                                                            ), null
                                                                         )
                                                                     }
                                                                 },
@@ -255,10 +251,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                             screen.title
                                                                         viewModel.selectedItem =
                                                                             index
-
                                                                         viewModel.navDestination =
                                                                             screen
-
                                                                         viewModel.searchMode = false
                                                                         viewModel.updateSearch("")
 
@@ -377,12 +371,11 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         DishDetailsScreen(id, goBack = { back() })
                                     }
                                     is Screen.MatchedRecipes -> {
-                                        val back: () -> Unit =
-                                            {
-                                                screenController.navigate(screen.previousScreen); clearState(
-                                                Screen.MatchedRecipes::class.name
-                                            )
-                                            }
+                                        val back: () -> Unit = {
+                                            screenController.navigate(screen.previousScreen); clearState(
+                                            Screen.MatchedRecipes::class.name
+                                        )
+                                        }
                                         BackHandler { back() }
                                         OnFridgeBasedDishes(
                                             onRecipeClicked = {
@@ -393,7 +386,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                     )
                                                 )
                                             },
-                                            goBack = { back() })
+                                            goBack = { back() }
+                                        )
                                     }
                                     is Screen.Settings -> {
                                         SettingsScreen(viewModel.settingsState.value) { id, option ->
@@ -452,7 +446,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             viewModel.processToFridge()
                                             dialogController.close()
                                         }) {
-                                            Text(stringResource(R.string.okk))
+                                            Text(stringResource(R.string.okay))
                                         }
                                     },
                                     dismissButton = {

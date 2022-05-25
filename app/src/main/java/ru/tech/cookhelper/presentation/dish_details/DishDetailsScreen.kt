@@ -27,7 +27,6 @@ import ru.tech.cookhelper.presentation.app.components.Size
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.dish_details.components.InfoItem
 import ru.tech.cookhelper.presentation.dish_details.viewModel.DishDetailsViewModel
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @ExperimentalMaterial3Api
@@ -113,7 +112,7 @@ fun DishDetailsScreen(
 
                                 Spacer(modifier = Modifier.height(15.dp))
                                 Text(
-                                    text = stringResource(R.string.aboutDish),
+                                    text = stringResource(R.string.about_dish),
                                     color = MaterialTheme.colorScheme.onBackground,
                                     style = MaterialTheme.typography.headlineSmall
                                 )
@@ -151,7 +150,7 @@ fun DishDetailsScreen(
                                 )
                                 Spacer(modifier = Modifier.height(30.dp))
                                 Text(
-                                    text = stringResource(R.string.cooksteps),
+                                    text = stringResource(R.string.cook_steps),
                                     color = MaterialTheme.colorScheme.onBackground,
                                     style = MaterialTheme.typography.headlineSmall
                                 )

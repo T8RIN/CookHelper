@@ -51,7 +51,7 @@ fun AboutAppDialog() {
         icon = { Icon(dialogController.currentDialog.icon, null) },
         confirmButton = {
             TextButton(onClick = { dialogController.close() }) {
-                Text(stringResource(R.string.okk))
+                Text(stringResource(R.string.okay))
             }
         },
     )

@@ -80,7 +80,7 @@ fun OnFridgeBasedDishes(
                 } else if (!state.isLoading) {
                     Placeholder(
                         icon = Icons.TwoTone.FilterAlt,
-                        text = stringResource(R.string.empty_podbor)
+                        text = stringResource(R.string.empty_matched_recipes)
                     )
                 }
 

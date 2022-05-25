@@ -211,7 +211,8 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                         (R.string.long_click_to_go).asString(context),
                                         Toast.LENGTH_SHORT
                                     )
-                                })
+                                }
+                            )
                             .background(
                                 MaterialTheme.colorScheme.background
                             )
@@ -255,10 +256,10 @@ fun Settings.getIcon(nightMode: NightMode): ImageVector {
 val Settings.title: Int
     get() {
         return when (this) {
-            NIGHT_MODE -> R.string.nightMode
-            DYNAMIC_COLORS -> R.string.dynamicColors
-            COLOR_SCHEME -> R.string.colorScheme
-            CART_CONNECTION -> R.string.cartConnection
+            NIGHT_MODE -> R.string.night_mode
+            DYNAMIC_COLORS -> R.string.dynamic_сolors
+            COLOR_SCHEME -> R.string.color_scheme
+            CART_CONNECTION -> R.string.cart_connection
         }
     }
 
@@ -266,8 +267,8 @@ val Settings.subtitle: Int?
     get() {
         return when (this) {
             NIGHT_MODE -> null
-            DYNAMIC_COLORS -> R.string.dynamicColorsSubtitle
+            DYNAMIC_COLORS -> R.string.dynamic_colors_subtitle
             COLOR_SCHEME -> null
-            CART_CONNECTION -> R.string.cartConnectionSubtitle
+            CART_CONNECTION -> R.string.cart_connection_subtitle
         }
     }

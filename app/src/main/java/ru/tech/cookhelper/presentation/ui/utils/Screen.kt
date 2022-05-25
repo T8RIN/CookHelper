@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -14,8 +13,8 @@ import ru.tech.cookhelper.R
 sealed class Screen(
     @StringRes val title: Int = R.string.app_name,
     @StringRes val shortTitle: Int = R.string.app_name,
-    val baseIcon: ImageVector = Icons.Outlined.PhoneAndroid,
-    val selectedIcon: ImageVector = Icons.Rounded.PhoneAndroid
+    val baseIcon: ImageVector = Icons.Default.PhoneAndroid,
+    val selectedIcon: ImageVector = Icons.Default.PhoneAndroid
 ) {
 
     object Forum : Screen(
@@ -33,8 +32,8 @@ sealed class Screen(
     )
 
     object Favourites : Screen(
-        title = R.string.fav_dishes,
-        shortTitle = R.string.fav,
+        title = R.string.favourite_dishes,
+        shortTitle = R.string.favourites,
         baseIcon = Icons.Outlined.FavoriteBorder,
         selectedIcon = Icons.Filled.Favorite
     )
@@ -52,8 +51,8 @@ sealed class Screen(
     )
 
     object BlockList : Screen(
-        title = R.string.blockList,
-        shortTitle = R.string.blockList,
+        title = R.string.block_list,
+        shortTitle = R.string.block_list,
         baseIcon = Icons.Outlined.Report,
         selectedIcon = Icons.Filled.Report
     )
@@ -99,8 +98,24 @@ sealed class Screen(
         fun Int.asString(context: Context, vararg formatArgs: Any = emptyArray()): String {
             return context.getString(this, formatArgs)
         }
+
+        infix fun Screen.iconWith(selected: Boolean): ImageVector =
+            if (selected) this.selectedIcon else this.baseIcon
+
+        fun Screen.alternateIcon(selected: Boolean): Int {
+            alternateIconsMap[this::class.name]?.apply { return if (selected) this.selectedIcon else this.defaultIcon }
+            throw IllegalArgumentException("illegal screen to calculate alternate icon")
+        }
     }
 }
+
+
+private data class Icon(val defaultIcon: Int, val selectedIcon: Int)
+
+private val alternateIconsMap: Map<String, Icon> = mutableMapOf(
+    Screen.Fridge::class.name to Icon(R.drawable.fridge_outline, R.drawable.fridge)
+)
+
 
 val drawerList = listOf(
     Screen.Home,

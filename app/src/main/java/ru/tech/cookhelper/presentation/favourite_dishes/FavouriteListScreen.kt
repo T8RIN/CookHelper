@@ -40,7 +40,10 @@ fun FavouriteListScreen(
                 }
             }
         } else if (!state.isLoading) {
-            Placeholder(icon = Icons.TwoTone.CloudOff, text = stringResource(R.string.no_favs))
+            Placeholder(
+                icon = Icons.TwoTone.CloudOff,
+                text = stringResource(R.string.no_favourite_dishes)
+            )
         }
 
         if (state.error.isNotBlank()) {

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Recipe
+import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
 import ru.tech.cookhelper.presentation.recipes_list.viewModel.RecipeListViewModel
@@ -73,7 +74,7 @@ fun RecipesList(
         }
 
         if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            Loading()
         }
     }
 
