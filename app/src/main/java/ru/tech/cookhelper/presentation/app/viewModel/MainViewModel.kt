@@ -74,15 +74,13 @@ class MainViewModel @Inject constructor(
                     }
                     Settings.CART_CONNECTION.ordinal -> {
                         locState = locState.copy(
-                            cartConnection = setting.option.toBooleanStrictOrNull() ?: false
+                            cartConnection = setting.option.toBoolean()
                         )
                     }
                 }
             }
             _settingsState.value = locState
         }.launchIn(viewModelScope)
-
-
     }
 
     fun reload() {
@@ -137,3 +135,5 @@ class MainViewModel @Inject constructor(
         }
     }
 }
+
+fun String.toBoolean() : Boolean = this.toBooleanStrictOrNull() ?: false

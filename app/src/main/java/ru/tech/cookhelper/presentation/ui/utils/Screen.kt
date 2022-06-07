@@ -1,13 +1,10 @@
 package ru.tech.cookhelper.presentation.ui.utils
 
-import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import ru.tech.cookhelper.R
 
 sealed class Screen(
@@ -89,33 +86,8 @@ sealed class Screen(
 
     class MatchedRecipes(val previousScreen: Screen) : Screen()
 
-    companion object {
-        @Composable
-        fun Int.asString(): String {
-            return stringResource(id = this)
-        }
-
-        fun Int.asString(context: Context, vararg formatArgs: Any = emptyArray()): String {
-            return context.getString(this, formatArgs)
-        }
-
-        infix fun Screen.iconWith(selected: Boolean): ImageVector =
-            if (selected) this.selectedIcon else this.baseIcon
-
-        fun Screen.alternateIcon(selected: Boolean): Int {
-            alternateIconsMap[this::class.name]?.apply { return if (selected) this.selectedIcon else this.defaultIcon }
-            throw IllegalArgumentException("illegal screen to calculate alternate icon")
-        }
-    }
+    object Authentication : Screen()
 }
-
-
-private data class Icon(val defaultIcon: Int, val selectedIcon: Int)
-
-private val alternateIconsMap: Map<String, Icon> = mutableMapOf(
-    Screen.Fridge::class.name to Icon(R.drawable.fridge_outline, R.drawable.fridge)
-)
-
 
 val drawerList = listOf(
     Screen.Home,
@@ -125,6 +97,12 @@ val drawerList = listOf(
     Screen.Favourites,
     Screen.BlockList,
     Screen.Settings
+)
+
+val showTopBarList = listOf(
+    Screen.MatchedRecipes::class.name,
+    Screen.RecipeDetails::class.name,
+    Screen.Authentication::class.name
 )
 
 val navBarList = listOf(

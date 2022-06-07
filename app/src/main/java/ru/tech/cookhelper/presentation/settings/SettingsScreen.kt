@@ -41,7 +41,7 @@ import ru.tech.cookhelper.presentation.app.components.SettingsState
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
 import ru.tech.cookhelper.presentation.ui.theme.colorList
-import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.asString
+import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @ExperimentalFoundationApi

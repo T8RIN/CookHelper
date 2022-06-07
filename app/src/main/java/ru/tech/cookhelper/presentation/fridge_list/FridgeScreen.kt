@@ -31,7 +31,7 @@ fun FridgeScreen(viewModel: FridgeViewModel = scopedViewModel(ignoreDisposing = 
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            state.products[index].name.replaceFirstChar { it.uppercase() },
+                            state.products[index].name.uppercase(),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(Modifier.weight(1f))

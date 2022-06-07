@@ -27,7 +27,7 @@ import coil.request.ImageRequest
 @Composable
 fun Picture(
     modifier: Modifier = Modifier,
-    model: Any? = null,
+    model: Any?,
     manualImageRequest: ImageRequest? = null,
     contentDescription: String? = null,
     shape: CornerBasedShape = CircleShape,

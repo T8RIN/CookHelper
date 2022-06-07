@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
+import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
 import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
 import ru.tech.cookhelper.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
 import ru.tech.cookhelper.presentation.favourite_dishes.FavouriteListScreen
@@ -37,9 +38,9 @@ import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.utils.*
-import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.alternateIcon
-import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.asString
-import ru.tech.cookhelper.presentation.ui.utils.Screen.Companion.iconWith
+import ru.tech.cookhelper.presentation.ui.utils.ResUtils.alternateIcon
+import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
+import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @ExperimentalFoundationApi
@@ -71,9 +72,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                 val screenController = LocalScreenController.current
                 val dialogController = LocalDialogController.current
 
-                val inNavigationMode by derivedStateOf {
-                    screenController.currentScreen !is Screen.RecipeDetails && screenController.currentScreen !is Screen.MatchedRecipes
-                }
+                val inNavigationMode by derivedStateOf { screenController.currentScreen::class.name !in showTopBarList }
 
                 BackHandler { dialogController.show(Dialog.Exit) }
 
@@ -192,9 +191,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                 SearchBar(
                                                     searchString = viewModel.searchString.value,
                                                     onValueChange = {
-                                                        viewModel.updateSearch(
-                                                            it
-                                                        )
+                                                        viewModel.updateSearch(it)
                                                     }
                                                 )
                                             }
@@ -235,9 +232,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                     } else {
                                                                         Icon(
                                                                             painterResource(
-                                                                                screen.alternateIcon(
-                                                                                    viewModel.selectedItem == index
-                                                                                )
+                                                                                screen.alternateIcon(viewModel.selectedItem == index)
                                                                             ), null
                                                                         )
                                                                     }
@@ -247,15 +242,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                 selected = viewModel.selectedItem == index,
                                                                 onClick = {
                                                                     if (viewModel.selectedItem != index) {
-                                                                        viewModel.title =
-                                                                            screen.title
-                                                                        viewModel.selectedItem =
-                                                                            index
-                                                                        viewModel.navDestination =
-                                                                            screen
-                                                                        viewModel.searchMode = false
-                                                                        viewModel.updateSearch("")
-
+                                                                        viewModel.apply {
+                                                                            title = screen.title
+                                                                            selectedItem = index
+                                                                            navDestination = screen
+                                                                            searchMode = false
+                                                                            updateSearch("")
+                                                                        }
                                                                         clearState(all = true)
                                                                     }
                                                                 }
@@ -341,10 +334,12 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                     is Screen.Fridge -> {
                                                         FridgeScreen()
                                                     }
-                                                    is Screen.Forum -> Placeholder(
-                                                        deepScreen.baseIcon,
-                                                        stringResource(deepScreen.title)
-                                                    )
+                                                    is Screen.Forum -> {
+                                                        Placeholder(
+                                                            deepScreen.baseIcon,
+                                                            stringResource(deepScreen.title)
+                                                        )
+                                                    }
                                                     else -> {}
                                                 }
                                             }
@@ -372,18 +367,14 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                     is Screen.MatchedRecipes -> {
                                         val back: () -> Unit = {
-                                            screenController.navigate(screen.previousScreen); clearState(
-                                            Screen.MatchedRecipes::class.name
-                                        )
+                                            screenController.navigate(screen.previousScreen)
+                                            clearState(Screen.MatchedRecipes::class.name)
                                         }
                                         BackHandler { back() }
                                         OnFridgeBasedDishes(
                                             onRecipeClicked = {
                                                 screenController.navigate(
-                                                    Screen.RecipeDetails(
-                                                        it,
-                                                        screen
-                                                    )
+                                                    Screen.RecipeDetails(it, screen)
                                                 )
                                             },
                                             goBack = { back() }
@@ -422,6 +413,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         screen.baseIcon,
                                         stringResource(screen.title)
                                     )
+                                    is Screen.Authentication -> AuthenticationScreen()
                                 }
                             }
                         }
@@ -469,12 +461,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                             verticalAlignment = Alignment.CenterVertically
                                                         ) {
                                                             Text(
-                                                                state.list[index].name.replaceFirstChar { it.uppercase() },
+                                                                state.list[index].name.uppercase(),
                                                                 textAlign = TextAlign.Start,
                                                                 style = MaterialTheme.typography.bodyLarge,
-                                                                modifier = Modifier.padding(
-                                                                    horizontal = 10.dp
-                                                                )
+                                                                modifier = Modifier.padding(horizontal = 10.dp)
                                                             )
                                                             Spacer(Modifier.weight(1f))
                                                             Checkbox(
@@ -498,9 +488,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 
                                             if (state.isLoading) {
                                                 CircularProgressIndicator(
-                                                    modifier = Modifier.align(
-                                                        Alignment.Center
-                                                    )
+                                                    modifier = Modifier.align(Alignment.Center)
                                                 )
                                             }
                                         }
@@ -513,6 +501,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 
                     if (viewModel.searchMode && viewModel.searchString.value.isEmpty()) {
                         BackHandler { viewModel.searchMode = false }
+                    }
+
+                    SideEffect {
+                        screenController.navigate(Screen.Authentication)
                     }
 
                     FancyToast(
