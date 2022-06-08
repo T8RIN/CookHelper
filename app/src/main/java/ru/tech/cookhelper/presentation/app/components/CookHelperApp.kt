@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
@@ -186,7 +187,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     title = {
                                         Box {
                                             if (!viewModel.searchMode) {
-                                                Text(viewModel.title.asString())
+                                                Text(viewModel.title.asString(activity))
                                             } else {
                                                 SearchBar(
                                                     searchString = viewModel.searchString.value,
@@ -238,7 +239,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                     }
                                                                 },
                                                                 alwaysShowLabel = false,
-                                                                label = { Text(screen.shortTitle.asString()) },
+                                                                label = { Text(screen.shortTitle.asString(activity)) },
                                                                 selected = viewModel.selectedItem == index,
                                                                 onClick = {
                                                                     if (viewModel.selectedItem != index) {
@@ -503,7 +504,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                         BackHandler { viewModel.searchMode = false }
                     }
 
-                    SideEffect {
+                    LaunchedEffect(Unit) {
                         screenController.navigate(Screen.Authentication)
                     }
 

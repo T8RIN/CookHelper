@@ -1,59 +1,102 @@
 package ru.tech.cookhelper.presentation.authentication
 
 import android.content.pm.ActivityInfo
-import androidx.compose.foundation.background
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.LockScreenOrientation
+import ru.tech.cookhelper.presentation.authentication.components.AuthState
+import ru.tech.cookhelper.presentation.authentication.components.ConfirmEmailField
+import ru.tech.cookhelper.presentation.authentication.components.LoginField
+import ru.tech.cookhelper.presentation.authentication.components.RegistrationField
+import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
+@ExperimentalFoundationApi
+@ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
-fun AuthenticationScreen() {
+fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
-    Surface(
+    val height = LocalConfiguration.current.screenHeightDp
+
+    val mod: Float = when {
+        height >= 850 -> 1.5f
+        height >= 600 -> 1f
+        height >= 450 -> 0.5f
+        else -> 0.1f
+    }
+
+    val localFocusManager = LocalFocusManager.current
+
+    LazyColumn(
+        contentPadding = WindowInsets.systemBars.asPaddingValues(),
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .systemBarsPadding()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    localFocusManager.clearFocus()
+                })
+            },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Welcome", style = MaterialTheme.typography.headlineLarge)
-            Spacer(Modifier.size(8.dp))
-            Text("Login to your account", style = MaterialTheme.typography.bodyLarge)
-            Spacer(Modifier.size(64.dp))
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Email") },
-                singleLine = true
-            )
-            Spacer(Modifier.size(8.dp))
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Password") },
-                singleLine = true
-            )
-            Spacer(Modifier.size(48.dp))
-            Button(onClick = {}, modifier = Modifier
-                .defaultMinSize(
-                    minWidth = TextFieldDefaults.MinWidth
-                ), content = { Text("Log in") })
-            Spacer(Modifier.size(64.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Create account?", style = MaterialTheme.typography.bodyMedium)
-                Spacer(Modifier.size(12.dp))
-                TextButton(onClick = {}, content = { Text("Sign up") })
+        item {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.size(8.dp * mod))
+                Image(
+                    painterResource(id = R.drawable.ic_logo_144),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
+                AnimatedContent(
+                    targetState = viewModel.authState.value,
+                    modifier = Modifier.fillMaxSize(),
+                    transitionSpec = {
+                        fadeIn(animationSpec = tween(350, delayMillis = 150)) with fadeOut(
+                            animationSpec = tween(150)
+                        )
+                    }
+                ) { authState ->
+                    Column(
+                        Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(Modifier.size(20.dp * mod))
+
+                        when (authState) {
+                            AuthState.Login -> {
+                                LoginField(mod = mod, viewModel = viewModel)
+                            }
+                            AuthState.Registration -> {
+                                RegistrationField(mod = mod, viewModel = viewModel)
+                            }
+                            AuthState.RestorePassword -> TODO()
+                            AuthState.ConfirmEmail -> {
+                                ConfirmEmailField(mod = mod, viewModel = viewModel)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

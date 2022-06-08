@@ -46,4 +46,25 @@
     <string name="matched_recipes">Подходящие блюда</string>
     <string name="empty_matched_recipes">Не удалось подобрать рецепты, ваш холодильник недостаточно полон или вы заблокировали слишком много продуктов</string>
     <string name="long_click_to_go">Зажмите, чтобы увидеть исходный код</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="login_to_your_account">Войдите в свой аккаунт</string>
+    <string name="email_or_nick">Почта/Никнейм</string>
+    <string name="password">Пароль</string>
+    <string name="forgot">Забыли?</string>
+    <string name="log_in">Войти</string>
+    <string name="need_account">Нужен аккаунт?</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="create_your_new_account">Создайте свой новый аккаунт</string>
+    <string name="register">Зарегистрируйтесь</string>
+    <string name="nick">Никнейм</string>
+    <string name="email">Почта</string>
+    <string name="have_account">Есть аккаунт?</string>
+    <string name="log_in_have_acc">Войдите</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="last_step">%s,\nпоследний шаг</string>
+    <string name="code_sent_to_your_email">Введите код, отправленный на\n%s</string>
+    <string name="get_code_again">Повтор через %d с</string>
+    <string name="get_code">Запросить</string>
+    <string name="mistaken">Ошиблись?</string>
+
 </resources>
