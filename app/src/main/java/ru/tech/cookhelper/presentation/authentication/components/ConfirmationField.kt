@@ -57,7 +57,8 @@ fun ConfirmationField(
 
             OutlinedTextField(
                 modifier = Modifier
-                    .size(size)
+                    .width(size)
+                    .height(56.dp)
                     .focusRequester(focusRequester = focusRequesters[index]),
                 singleLine = true,
                 value = tfv,

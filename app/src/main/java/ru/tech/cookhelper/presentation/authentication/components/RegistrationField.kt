@@ -44,7 +44,10 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
 
     Text(stringResource(R.string.register), style = MaterialTheme.typography.headlineLarge)
     Spacer(Modifier.size(8.dp * mod))
-    Text(stringResource(R.string.create_your_new_account), style = MaterialTheme.typography.bodyLarge)
+    Text(
+        stringResource(R.string.create_your_new_account),
+        style = MaterialTheme.typography.bodyLarge
+    )
     Spacer(Modifier.size(32.dp * mod))
     OutlinedTextField(
         value = nick,
@@ -56,6 +59,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next
         ),
+        modifier = Modifier.width(TextFieldDefaults.MinWidth),
         trailingIcon = {
             if (nick.isNotBlank())
                 IconButton(onClick = { nick = "" }) {
@@ -74,6 +78,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next
         ),
+        modifier = Modifier.width(TextFieldDefaults.MinWidth),
         trailingIcon = {
             if (email.isNotBlank())
                 IconButton(onClick = { email = "" }) {
@@ -92,6 +97,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Next
         ),
+        modifier = Modifier.width(TextFieldDefaults.MinWidth),
         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = {
@@ -115,6 +121,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done
         ),
+        modifier = Modifier.width(TextFieldDefaults.MinWidth),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
             if (isFormValid) viewModel.registerWith(nick, email, password)
@@ -149,7 +156,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
         )
         Spacer(Modifier.size(12.dp))
         TextButton(
-            onClick = { viewModel.logIn() },
+            onClick = { viewModel.openLogin() },
             content = { Text(stringResource(R.string.log_in_have_acc)) })
     }
     Spacer(Modifier.size(8.dp * mod))

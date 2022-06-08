@@ -1,5 +1,7 @@
 package ru.tech.cookhelper.presentation.ui.utils.scope
 
+import android.annotation.SuppressLint
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModelClearer.clearViewModel
@@ -18,6 +20,9 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
     private var viewModelStore: ViewModelStore? = null
 
     private var savedStateRegistry: SavedStateRegistry? = null
+
+    @SuppressLint("StaticFieldLeak")
+    private var activity: ComponentActivity? = null
 
     private var isInForeground = true
 
@@ -45,10 +50,12 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
     fun onDisposedFromComposition(
         key: String,
         viewModelStore: ViewModelStore,
-        savedStateRegistry: SavedStateRegistry
+        savedStateRegistry: SavedStateRegistry,
+        activity: ComponentActivity
     ) {
         this.viewModelStore = viewModelStore
         this.savedStateRegistry = savedStateRegistry
+        this.activity = activity
         markedForDisposal.add(key)
         scheduleToDisposeBeforeGoingToBackground(key)
     }
@@ -88,16 +95,19 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
 
     @Suppress("UNCHECKED_CAST")
     private fun clearDisposedViewModel(scopedViewModel: ViewModel) {
-        val name = scopedViewModel.javaClass.name
+        if(activity?.isFinishing == false) {
+            val name = scopedViewModel.javaClass.name
 
-        val mapName = viewModelStore.getPrivatePropertyName(HashMap<String, ViewModel>()::class)[0]
+            val mapName = viewModelStore.getPrivatePropertyName(HashMap<String, ViewModel>()::class)
+                .getOrNull(0) ?: ""
 
-        val mMap = viewModelStore.getPrivateProperty(mapName) as HashMap<String, ViewModel>
-        val key = "$TAG:$name"
-        mMap[key]?.clearViewModel()
-        mMap.remove(key)
-        viewModelStore.setAndReturnPrivateProperty(mapName, mMap)
-        savedStateRegistry?.unregisterSavedStateProvider(name)
+            val mMap = viewModelStore.getPrivateProperty(mapName) as HashMap<String, ViewModel>
+            val key = "$TAG:$name"
+            mMap[key]?.clearViewModel()
+            mMap.remove(key)
+            viewModelStore.setAndReturnPrivateProperty(mapName, mMap)
+            savedStateRegistry?.unregisterSavedStateProvider(name)
+        }
     }
 
     private fun cancelDisposal(key: String) {

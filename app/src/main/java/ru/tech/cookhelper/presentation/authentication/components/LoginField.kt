@@ -53,6 +53,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next
         ),
+        modifier = Modifier.width(TextFieldDefaults.MinWidth),
         trailingIcon = {
             if (login.isNotBlank())
                 IconButton(onClick = { login = "" }) {
@@ -75,6 +76,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
             focusManager.clearFocus()
             if (isFormValid) viewModel.logInWith(login, password)
         }),
+        modifier = Modifier.width(TextFieldDefaults.MinWidth),
         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = {
@@ -95,7 +97,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
         horizontalArrangement = Arrangement.End
     ) {
         TextButton(
-            onClick = { viewModel.forgotPassword() },
+            onClick = { viewModel.openPasswordRestore() },
             content = { Text(stringResource(R.string.forgot), color = Color.Gray) })
     }
     Spacer(Modifier.size(48.dp * mod))
@@ -115,7 +117,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
         )
         Spacer(Modifier.size(12.dp))
         TextButton(
-            onClick = { viewModel.signUp() },
+            onClick = { viewModel.openRegistration() },
             content = { Text(stringResource(R.string.sign_up)) })
     }
     Spacer(Modifier.size(8.dp * mod))

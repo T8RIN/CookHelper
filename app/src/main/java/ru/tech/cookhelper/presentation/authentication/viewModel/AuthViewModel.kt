@@ -27,7 +27,7 @@ class AuthViewModel @Inject constructor(
     private val _codeState = mutableStateOf(CodeState())
     val codeState: State<CodeState> = _codeState
 
-    fun forgotPassword() {
+    fun openPasswordRestore() {
         _authState.value = AuthState.RestorePassword
     }
 
@@ -35,11 +35,11 @@ class AuthViewModel @Inject constructor(
         //TODO: logic
     }
 
-    fun signUp() {
+    fun openRegistration() {
         _authState.value = AuthState.Registration
     }
 
-    fun logIn() {
+    fun openLogin() {
         _authState.value = AuthState.Login
     }
 
@@ -48,6 +48,12 @@ class AuthViewModel @Inject constructor(
         currentNick = nick
 
         _authState.value = AuthState.ConfirmEmail
+
+        reloadTimer()
+    }
+
+    private fun reloadTimer() {
+        codeTimeout = 60
 
         job?.cancel()
         job = viewModelScope.launch {
@@ -62,12 +68,12 @@ class AuthViewModel @Inject constructor(
     fun checkCode(code: String) {
         //TODO: logic
 
-        _authState.value = AuthState.Login
+        openLogin()
     }
 
     fun askForCode() {
 
-        codeTimeout = 60
+        reloadTimer()
     }
 
     private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)

@@ -48,7 +48,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
     Spacer(Modifier.size(16.dp * mod))
     Row(
         modifier = Modifier.defaultMinSize(
-            minWidth = (size * 6 + 16 * 5).dp
+            minWidth = (size * 6 + 16 * 3).dp
         ),
         horizontalArrangement = Arrangement.End
     ) {
@@ -74,7 +74,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
         )
         Spacer(Modifier.size(12.dp))
         TextButton(
-            onClick = { viewModel.signUp() },
+            onClick = { viewModel.openRegistration() },
             content = { Text(stringResource(R.string.sign_up)) })
     }
     Spacer(Modifier.size(8.dp * mod))

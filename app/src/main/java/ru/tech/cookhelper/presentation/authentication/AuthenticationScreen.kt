@@ -37,7 +37,7 @@ fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
 
     val mod: Float = when {
         height >= 850 -> 1.5f
-        height >= 600 -> 1f
+        height >= 650 -> 1f
         height >= 450 -> 0.5f
         else -> 0.1f
     }
