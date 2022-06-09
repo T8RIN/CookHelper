@@ -4,7 +4,7 @@ object Constants {
 
     const val DELIMITER = "*"
 
-    const val BASE_URL = "https://kastybiy.herokuapp.com/"
+    const val BASE_URL = "https://cook-helper-itl.herokuapp.com/"
 
     private const val IMG_URL = "https://kastybiy.herokuapp.com/static/img/recipe_${DELIMITER}.jpg"
 

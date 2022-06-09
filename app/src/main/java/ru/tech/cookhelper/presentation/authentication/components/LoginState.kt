@@ -1,0 +1,10 @@
+package ru.tech.cookhelper.presentation.authentication.components
+
+import ru.tech.cookhelper.data.remote.api.auth.User
+import ru.tech.cookhelper.presentation.ui.utils.UIText
+
+data class LoginState(
+    val isLoading: Boolean = false,
+    val error: UIText = UIText.DynamicString(""),
+    val user: User? = null
+)

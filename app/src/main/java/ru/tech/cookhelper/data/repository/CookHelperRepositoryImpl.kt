@@ -28,13 +28,13 @@ class CookHelperRepositoryImpl @Inject constructor(
 ) : CookHelperRepository {
 
     override fun getCuisineList(): Flow<Action<List<Recipe>>> = flow {
-        emit(Action.Loading())
-        try {
-            val remoteCoins = api.getCuisine()
-            emit(Action.Success(remoteCoins.map { it.toRecipe() }))
-        } catch (e: Exception) {
-            emit(Action.Error(e.localizedMessage))
-        }
+//        emit(Action.Loading())
+//        try {
+//            val remoteCoins = api.getCuisine()
+//            emit(Action.Success(remoteCoins.map { it.toRecipe() }))
+//        } catch (e: Exception) {
+//            emit(Action.Error(e.localizedMessage))
+//        }
     }
 
     override fun getDishById(id: Int): Flow<Action<Recipe>> = flow {

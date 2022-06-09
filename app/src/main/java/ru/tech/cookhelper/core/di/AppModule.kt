@@ -12,6 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.tech.cookhelper.core.constants.Constants.BASE_URL
 import ru.tech.cookhelper.data.local.CookHelperDatabase
 import ru.tech.cookhelper.data.remote.api.CookHelperApi
+import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.repository.CookHelperRepositoryImpl
 import ru.tech.cookhelper.domain.repository.CookHelperRepository
 import javax.inject.Singleton
@@ -27,6 +28,14 @@ object AppModule {
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
         .create(CookHelperApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAuthService(): AuthService = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build()
+        .create(AuthService::class.java)
 
     @Provides
     @Singleton

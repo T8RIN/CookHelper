@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
 import android.util.Patterns
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +28,8 @@ import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 @Composable
 fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
 
+    var name by rememberSaveable { mutableStateOf("") }
+    var surname by rememberSaveable { mutableStateOf("") }
     var nick by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -36,7 +39,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
         mutableStateOf(false)
     }
     val isFormValid by derivedStateOf {
-        nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password
+        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password
     }
 
     val focusManager = LocalFocusManager.current
@@ -50,99 +53,155 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
     )
     Spacer(Modifier.size(32.dp * mod))
     OutlinedTextField(
-        value = nick,
-        onValueChange = { nick = it },
-        label = { Text(stringResource(R.string.nick)) },
+        value = name,
+        onValueChange = { name = it },
+        label = { Text(stringResource(R.string.name)) },
         singleLine = true,
-        isError = nick.isEmpty(),
+        isError = name.isEmpty(),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next
         ),
         modifier = Modifier.width(TextFieldDefaults.MinWidth),
         trailingIcon = {
-            if (nick.isNotBlank())
-                IconButton(onClick = { nick = "" }) {
+            if (name.isNotBlank())
+                IconButton(onClick = { name = "" }) {
                     Icon(Icons.Filled.Clear, null)
                 }
         }
     )
     Spacer(Modifier.size(8.dp * mod))
     OutlinedTextField(
-        value = email,
-        onValueChange = { email = it },
-        label = { Text(stringResource(R.string.email)) },
+        value = surname,
+        onValueChange = { surname = it },
+        label = { Text(stringResource(R.string.surname)) },
         singleLine = true,
-        isError = email.isEmpty() || email.isNotValid(),
+        isError = surname.isEmpty(),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next
         ),
         modifier = Modifier.width(TextFieldDefaults.MinWidth),
         trailingIcon = {
-            if (email.isNotBlank())
-                IconButton(onClick = { email = "" }) {
+            if (surname.isNotBlank())
+                IconButton(onClick = { surname = "" }) {
                     Icon(Icons.Filled.Clear, null)
                 }
         }
     )
-    Spacer(Modifier.size(8.dp * mod))
-    OutlinedTextField(
-        value = password,
-        onValueChange = { password = it },
-        label = { Text(stringResource(R.string.password)) },
-        singleLine = true,
-        isError = password.isEmpty() || passwordRepeat != password,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Next
-        ),
-        modifier = Modifier.width(TextFieldDefaults.MinWidth),
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = {
-            IconButton(onClick = {
-                isPasswordVisible = !isPasswordVisible
-            }) {
-                Icon(
-                    if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                    null
-                )
-            }
+    Spacer(Modifier.size(16.dp * mod))
+    AnimatedVisibility(visible = name.isNotEmpty() && surname.isNotEmpty(), enter = slideInVertically() + fadeIn(), exit = slideOutVertically() + fadeOut()) {
+        Column {
+            OutlinedTextField(
+                value = nick,
+                onValueChange = { nick = it },
+                label = { Text(stringResource(R.string.nick)) },
+                singleLine = true,
+                isError = nick.isEmpty(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier.width(TextFieldDefaults.MinWidth),
+                trailingIcon = {
+                    if (nick.isNotBlank())
+                        IconButton(onClick = { nick = "" }) {
+                            Icon(Icons.Filled.Clear, null)
+                        }
+                }
+            )
+            Spacer(Modifier.size(8.dp * mod))
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text(stringResource(R.string.email)) },
+                singleLine = true,
+                isError = email.isEmpty() || email.isNotValid(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier.width(TextFieldDefaults.MinWidth),
+                trailingIcon = {
+                    if (email.isNotBlank())
+                        IconButton(onClick = { email = "" }) {
+                            Icon(Icons.Filled.Clear, null)
+                        }
+                }
+            )
         }
-    )
-    Spacer(Modifier.size(8.dp * mod))
-    OutlinedTextField(
-        value = passwordRepeat,
-        onValueChange = { passwordRepeat = it },
-        label = { Text(stringResource(R.string.repeat_password)) },
-        singleLine = true,
-        isError = passwordRepeat.isEmpty() || passwordRepeat != password,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done
-        ),
-        modifier = Modifier.width(TextFieldDefaults.MinWidth),
-        keyboardActions = KeyboardActions(onDone = {
-            focusManager.clearFocus()
-            if (isFormValid) viewModel.registerWith(nick, email, password)
-        }),
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = {
-            IconButton(onClick = {
-                isPasswordVisible = !isPasswordVisible
-            }) {
-                Icon(
-                    if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                    null
-                )
-            }
+    }
+    Spacer(Modifier.size(16.dp * mod))
+    AnimatedVisibility(visible = nick.isNotEmpty() && email.isNotEmpty(), enter = slideInVertically() + fadeIn(), exit = slideOutVertically() + fadeOut()) {
+        Column {
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text(stringResource(R.string.password)) },
+                singleLine = true,
+                isError = password.isEmpty() || passwordRepeat != password,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier.width(TextFieldDefaults.MinWidth),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        isPasswordVisible = !isPasswordVisible
+                    }) {
+                        Icon(
+                            if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            null
+                        )
+                    }
+                }
+            )
+            Spacer(Modifier.size(8.dp * mod))
+            OutlinedTextField(
+                value = passwordRepeat,
+                onValueChange = { passwordRepeat = it },
+                label = { Text(stringResource(R.string.repeat_password)) },
+                singleLine = true,
+                isError = passwordRepeat.isEmpty() || passwordRepeat != password,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
+                modifier = Modifier.width(TextFieldDefaults.MinWidth),
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                    if (isFormValid) viewModel.registerWith(
+                        name.capitalize(),
+                        surname.capitalize(),
+                        nick, email, password
+                    )
+                }),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        isPasswordVisible = !isPasswordVisible
+                    }) {
+                        Icon(
+                            if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            null
+                        )
+                    }
+                }
+            )
         }
-    )
+    }
 
     Spacer(Modifier.size(32.dp * mod))
     Button(
         enabled = isFormValid,
-        onClick = { viewModel.registerWith(nick, email, password) },
+        onClick = {
+            viewModel.registerWith(
+                name.capitalize(),
+                surname.capitalize(),
+                nick, email, password
+            )
+        },
         modifier = Modifier.defaultMinSize(
             minWidth = TextFieldDefaults.MinWidth
         ), content = { Text(stringResource(R.string.sign_up)) }
@@ -162,5 +221,6 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
     Spacer(Modifier.size(8.dp * mod))
 }
 
+fun String.capitalize() = lowercase().replaceFirstChar { it.titlecase() }
 fun String.isValid(): Boolean = Patterns.EMAIL_ADDRESS.matcher(this).matches()
 fun String.isNotValid() = !isValid()

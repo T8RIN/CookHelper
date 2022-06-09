@@ -71,5 +71,9 @@
     <string name="type_your_email">Мы вышлем инструкции на вышу почту</string>
     <string name="password_restore">Восстановление пароля</string>
     <string name="send_email">Отправить письмо</string>
+    <string name="check_email_to_restore">Проверьте почту и следуйте инструкциям, чтобы восстановть пароль</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="wrong_password_or_nick">Неверный пароль и/или почта/никнейм</string>
 
 </resources>
