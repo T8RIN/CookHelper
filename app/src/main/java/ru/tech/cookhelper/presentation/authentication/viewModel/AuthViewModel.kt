@@ -7,9 +7,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.use_case.get_favourites.GetFavouriteDishesUseCase
 import ru.tech.cookhelper.presentation.authentication.components.AuthState
 import ru.tech.cookhelper.presentation.authentication.components.CodeState
+import ru.tech.cookhelper.presentation.ui.utils.UIText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,7 +19,8 @@ class AuthViewModel @Inject constructor(
     private val useCase: GetFavouriteDishesUseCase
 ) : ViewModel() {
 
-    var job: Job? = null
+    private var timerJob: Job? = null
+    private var codeCheckingJob: Job? = null
 
     var codeTimeout by mutableStateOf(60)
 
@@ -55,20 +58,34 @@ class AuthViewModel @Inject constructor(
     private fun reloadTimer() {
         codeTimeout = 60
 
-        job?.cancel()
-        job = viewModelScope.launch {
-            while(codeTimeout != 0) {
+        timerJob?.cancel()
+        timerJob = viewModelScope.launch {
+            while (codeTimeout != 0) {
                 delay(1000)
                 codeTimeout--
             }
-            job?.cancel()
+            timerJob?.cancel()
         }
     }
 
     fun checkCode(code: String) {
         //TODO: logic
 
-        openLogin()
+
+        _codeState.value = CodeState(isLoading = true)
+
+        codeCheckingJob?.cancel()
+        codeCheckingJob = viewModelScope.launch {
+            delay(2000)
+            _codeState.value = listOf(
+                CodeState(error = UIText.StringResource(R.string.wrong_code)),
+                CodeState(matched = true)
+            ).shuffled()[0]
+
+            if (_codeState.value.matched) openLogin()
+
+            codeCheckingJob?.cancel()
+        }
     }
 
     fun askForCode() {
@@ -76,8 +93,12 @@ class AuthViewModel @Inject constructor(
         reloadTimer()
     }
 
+    fun restorePasswordBy(email: String) {
+
+        openLogin()
+    }
+
     private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)
     val authState: State<AuthState> = _authState
-
 
 }

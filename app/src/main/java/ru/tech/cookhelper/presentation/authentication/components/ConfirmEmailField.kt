@@ -1,26 +1,38 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.DoneOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.util.*
 
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
 @Composable
 fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
 
+    val toastHost = LocalToastHost.current
     val width = LocalConfiguration.current.screenWidthDp
+    val context = LocalContext.current
 
     val size = when {
         width >= 16 * 5 + 50 * 6 -> 50
@@ -39,9 +51,10 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center
     )
+
     Spacer(Modifier.size(64.dp * mod))
 
-    ConfirmationField(6, viewModel.codeState.value) {
+    OTPField(6, viewModel.codeState.value) {
         viewModel.checkCode(it)
     }
 
@@ -78,4 +91,13 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
             content = { Text(stringResource(R.string.sign_up)) })
     }
     Spacer(Modifier.size(8.dp * mod))
+
+    if (viewModel.codeState.value.matched) {
+        LaunchedEffect(viewModel.codeState.value.matched) {
+            toastHost.sendToast(
+                Icons.Rounded.DoneOutline,
+                context.getString(R.string.welcome_user, viewModel.currentNick)
+            )
+        }
+    }
 }

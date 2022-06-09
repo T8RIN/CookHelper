@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
@@ -19,13 +20,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.LockScreenOrientation
-import ru.tech.cookhelper.presentation.authentication.components.AuthState
-import ru.tech.cookhelper.presentation.authentication.components.ConfirmEmailField
-import ru.tech.cookhelper.presentation.authentication.components.LoginField
-import ru.tech.cookhelper.presentation.authentication.components.RegistrationField
+import ru.tech.cookhelper.presentation.authentication.components.*
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
+@ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
@@ -90,7 +89,9 @@ fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
                             AuthState.Registration -> {
                                 RegistrationField(mod = mod, viewModel = viewModel)
                             }
-                            AuthState.RestorePassword -> TODO()
+                            AuthState.RestorePassword -> {
+                                RestorePasswordField(mod = mod, viewModel = viewModel)
+                            }
                             AuthState.ConfirmEmail -> {
                                 ConfirmEmailField(mod = mod, viewModel = viewModel)
                             }

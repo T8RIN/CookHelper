@@ -1,18 +1,25 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateOffset
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -22,9 +29,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.app.components.shimmer
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
 @Composable
-fun ConfirmationField(
+fun OTPField(
     length: Int,
     codeState: CodeState,
     onFilled: (code: String) -> Unit
@@ -46,10 +59,22 @@ fun ConfirmationField(
 
     val localFocusManager = LocalFocusManager.current
 
-    Row(horizontalArrangement = Arrangement.Center) {
 
+    var otpPos by remember { mutableStateOf(OtpPos.Center) }
+    val transition = updateTransition(targetState = otpPos, label = "shake")
+    val offset by transition.animateOffset(label = "shake") { state ->
+        when (state) {
+            OtpPos.Left -> Offset(-10F, 0F)
+            OtpPos.Center -> Offset(0F, 0F)
+            OtpPos.Right -> Offset(10F, 0F)
+        }
+    }
+
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.offset(offset.x.dp, offset.y.dp)
+    ) {
         Spacer(modifier = Modifier.width(8.dp))
-
         repeat(length) { index ->
             var tfv = TextFieldValue(code.getOrNull(index = index)?.takeIf {
                 it.isDigit()
@@ -59,8 +84,22 @@ fun ConfirmationField(
                 modifier = Modifier
                     .width(size)
                     .height(56.dp)
-                    .focusRequester(focusRequester = focusRequesters[index]),
+                    .focusRequester(focusRequester = focusRequesters[index])
+                    .onKeyEvent { event: KeyEvent ->
+                        if (event.type == KeyEventType.KeyUp && event.key == Key.Backspace && tfv.text.isEmpty()) {
+                            focusRequesters
+                                .getOrNull(index - 1)
+                                ?.requestFocus()
+                                ?: focusRequesters
+                                    .lastOrNull()
+                                    ?.requestFocus()
+                            return@onKeyEvent true
+                        }
+                        false
+                    }
+                    .shimmer(codeState.isLoading),
                 singleLine = true,
+                readOnly = codeState.isLoading,
                 value = tfv,
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Center,
@@ -118,4 +157,33 @@ fun ConfirmationField(
             Spacer(modifier = Modifier.width(8.dp))
         }
     }
+
+    if (codeState.error.isNotEmpty()) {
+        val toastHost = LocalToastHost.current
+        val context = LocalContext.current
+
+        LaunchedEffect(codeState.error) {
+            toastHost.sendToast(Icons.Outlined.ErrorOutline, codeState.error.asString(context))
+            otpPos = OtpPos.Right
+            delay(75)
+            otpPos = OtpPos.Left
+            delay(75)
+            otpPos = OtpPos.Right
+            delay(75)
+            otpPos = OtpPos.Left
+            delay(75)
+            otpPos = OtpPos.Center
+
+            code.asReversed().forEachIndexed { index, _ ->
+                code[index] = ' '
+                delay(100)
+            }
+            code.clear()
+        }
+    }
+
+}
+
+private enum class OtpPos {
+    Left, Center, Right
 }

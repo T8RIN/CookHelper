@@ -25,4 +25,13 @@ sealed class UIText {
             is StringResource -> context.getString(resId, *args)
         }
     }
+
+    fun isEmpty(): Boolean {
+        return when (this) {
+            is DynamicString -> value.isEmpty()
+            is StringResource -> false
+        }
+    }
+
+    fun isNotEmpty(): Boolean = !isEmpty()
 }
