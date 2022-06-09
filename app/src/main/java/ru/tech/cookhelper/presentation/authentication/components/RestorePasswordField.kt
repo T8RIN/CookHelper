@@ -56,6 +56,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         ), content = { Text(stringResource(R.string.send_email)) }
     )
     Spacer(Modifier.size(64.dp * mod))
+
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             stringResource(R.string.have_account),
