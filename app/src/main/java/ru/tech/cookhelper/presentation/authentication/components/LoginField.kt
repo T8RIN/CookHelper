@@ -121,7 +121,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(48.dp * mod))
     Button(
-        enabled = isFormValid,
+        enabled = if(!viewModel.loginState.value.isLoading) isFormValid else false,
         onClick = { viewModel.logInWith(login, password) },
         modifier = Modifier.defaultMinSize(
             minWidth = TextFieldDefaults.MinWidth

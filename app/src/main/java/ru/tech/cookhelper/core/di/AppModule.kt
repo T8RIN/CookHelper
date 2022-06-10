@@ -14,7 +14,9 @@ import ru.tech.cookhelper.data.local.CookHelperDatabase
 import ru.tech.cookhelper.data.remote.api.CookHelperApi
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.repository.CookHelperRepositoryImpl
+import ru.tech.cookhelper.data.repository.UserRepositoryImpl
 import ru.tech.cookhelper.domain.repository.CookHelperRepository
+import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Singleton
 
 @Module
@@ -55,4 +57,9 @@ object AppModule {
     ): CookHelperRepository =
         CookHelperRepositoryImpl(api, db.favRecipeDao, db.fridgeDao, db.settingsDao)
 
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        authService: AuthService
+    ): UserRepository = UserRepositoryImpl(authService)
 }
