@@ -52,8 +52,8 @@ android {
 dependencies {
 
     //Android Essentials
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.appcompat:appcompat:1.4.2")
     implementation("com.google.android.material:material:1.7.0-alpha02")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     implementation("androidx.window:window:1.0.0")
@@ -78,14 +78,14 @@ dependencies {
 
     //Compose
     implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.compose.ui:ui:1.2.0-beta02")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha12")
+    implementation("androidx.compose.ui:ui:1.2.0-beta03")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha13")
     implementation("androidx.compose.material:material-icons-core:1.1.1")
     implementation("androidx.compose.material:material-icons-extended:1.1.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-rc01")
     implementation("androidx.navigation:navigation-compose:2.5.0-rc01")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.compose.foundation:foundation:1.2.0-beta02")
+    implementation("androidx.compose.foundation:foundation:1.2.0-beta03")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.8-beta")
