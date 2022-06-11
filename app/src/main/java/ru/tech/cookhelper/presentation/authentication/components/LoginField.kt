@@ -155,7 +155,8 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
     val user = viewModel.loginState.value.user
     if (user != null && user.verified) {
         val message = stringResource(R.string.welcome_user, user.name)
-        LaunchedEffect(user) { toastHost.sendToast(Icons.Outlined.Face, message) }
+        toastHost.sendToast(Icons.Outlined.Face, message)
+        viewModel.resetState()
     }
 
 }

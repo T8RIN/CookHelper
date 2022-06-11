@@ -103,12 +103,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                 .padding(start = 15.dp)
                                         ) {
                                             Text(
-                                                "Малик Мухаметзянов",
+                                                viewModel.userState.value.user?.let { "${it.name} ${it.surname}" }
+                                                    .toString(),
                                                 style = MaterialTheme.typography.headlineSmall
                                             )
                                             Spacer(Modifier.weight(1f))
                                             Text(
-                                                "@t8rin",
+                                                "@${viewModel.userState.value.user?.nickname}",
                                                 style = MaterialTheme.typography.bodyMedium,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
@@ -506,10 +507,6 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 
                     if (viewModel.searchMode && viewModel.searchString.value.isEmpty()) {
                         BackHandler { viewModel.searchMode = false }
-                    }
-
-                    LaunchedEffect(Unit) {
-                        screenController.navigate(Screen.Authentication)
                     }
 
                     FancyToast(

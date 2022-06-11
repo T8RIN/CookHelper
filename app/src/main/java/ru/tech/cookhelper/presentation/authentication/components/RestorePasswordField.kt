@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -43,8 +44,15 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         isError = !email.isValid(),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next
+            imeAction = ImeAction.Done
         ),
+        keyboardActions = KeyboardActions(onDone = {
+            toastHost.sendToast(
+                Icons.Outlined.Email,
+                context.getString(R.string.check_email_to_restore)
+            )
+            if (email.isValid()) viewModel.restorePasswordBy(email)
+        }),
         modifier = Modifier.width(TextFieldDefaults.MinWidth),
         trailingIcon = {
             if (email.isNotBlank())
@@ -57,7 +65,10 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
     Button(
         enabled = email.isValid(),
         onClick = {
-            toastHost.sendToast(Icons.Outlined.Email, context.getString(R.string.check_email_to_restore))
+            toastHost.sendToast(
+                Icons.Outlined.Email,
+                context.getString(R.string.check_email_to_restore)
+            )
             viewModel.restorePasswordBy(email)
         },
         modifier = Modifier.defaultMinSize(

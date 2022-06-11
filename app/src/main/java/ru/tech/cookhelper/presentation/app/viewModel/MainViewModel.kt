@@ -1,7 +1,5 @@
 package ru.tech.cookhelper.presentation.app.viewModel
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +12,7 @@ import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.use_case.get_fridge_list.GetFridgeListUseCase
 import ru.tech.cookhelper.domain.use_case.get_prod_list.GetProductsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
+import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.insert_setting.InsertSettingUseCase
 import ru.tech.cookhelper.domain.use_case.update_fridge.UpdateFridgeUseCase
 import ru.tech.cookhelper.presentation.app.components.*
@@ -27,6 +26,7 @@ class MainViewModel @Inject constructor(
     private val getFridgeListUseCase: GetFridgeListUseCase,
     private val updateFridgeUseCase: UpdateFridgeUseCase,
     getSettingsListUseCase: GetSettingsListUseCase,
+    getUserUseCase: GetUserUseCase,
     private val insertSettingUseCase: InsertSettingUseCase
 ) : ViewModel() {
 
@@ -49,6 +49,9 @@ class MainViewModel @Inject constructor(
 
     private val _settingsState: MutableState<SettingsState> = mutableStateOf(SettingsState())
     val settingsState: State<SettingsState> = _settingsState
+
+    private val _userState: MutableState<UserState> = mutableStateOf(UserState())
+    val userState: State<UserState> = _userState
 
     init {
         fetchList()
@@ -77,6 +80,14 @@ class MainViewModel @Inject constructor(
                 }
             }
             _settingsState.value = locState
+        }.launchIn(viewModelScope)
+
+        getUserUseCase().onEach {
+            if (it == null) currentScreen.value = Screen.Authentication
+            else {
+                if (currentScreen.value == Screen.Authentication) currentScreen.value = Screen.Home
+                _userState.value = UserState(it, it.token)
+            }
         }.launchIn(viewModelScope)
     }
 
@@ -133,4 +144,4 @@ class MainViewModel @Inject constructor(
     }
 }
 
-fun String.toBoolean() : Boolean = this.toBooleanStrictOrNull() ?: false
+fun String.toBoolean(): Boolean = this.toBooleanStrictOrNull() ?: false

@@ -11,10 +11,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.Action
-import ru.tech.cookhelper.data.remote.api.auth.User
+import ru.tech.cookhelper.data.remote.api.auth.toUser
+import ru.tech.cookhelper.domain.model.User
+import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.check_code.CheckCodeUseCase
 import ru.tech.cookhelper.domain.use_case.login.LoginUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
+import ru.tech.cookhelper.domain.use_case.request_code.RequestCodeUseCase
 import ru.tech.cookhelper.presentation.authentication.components.AuthState
 import ru.tech.cookhelper.presentation.authentication.components.CodeState
 import ru.tech.cookhelper.presentation.authentication.components.LoginState
@@ -26,7 +29,9 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val registrationUseCase: RegistrationUseCase,
-    private val checkCodeUseCase: CheckCodeUseCase
+    private val checkCodeUseCase: CheckCodeUseCase,
+    private val requestCodeUseCase: RequestCodeUseCase,
+    private val cacheUserUseCase: CacheUserUseCase
 ) : ViewModel() {
 
     private var timerJob: Job? = null
@@ -64,8 +69,9 @@ class AuthViewModel @Inject constructor(
                         currentNick = it.nickname
                         currentToken = it.token
                         if (!it.verified) openEmailConfirmation()
+                        else cacheUser(it.toUser())
                     }
-                    _loginState.value = LoginState(user = result.data?.user)
+                    _loginState.value = LoginState(user = result.data?.user?.toUser())
                 }
             }
         }.launchIn(viewModelScope)
@@ -104,7 +110,7 @@ class AuthViewModel @Inject constructor(
                         currentToken = it.token
                         if (!it.verified) openEmailConfirmation()
                     }
-                    _registrationState.value = RegistrationState(user = result.data?.user)
+                    _registrationState.value = RegistrationState(user = result.data?.user?.toUser())
                 }
                 else -> {}
             }
@@ -128,19 +134,26 @@ class AuthViewModel @Inject constructor(
         checkCodeUseCase(code, currentToken).onEach { result ->
             when (result) {
                 is Action.Loading -> _codeState.value = CodeState(isLoading = true)
-                is Action.Error -> _codeState.value = CodeState(error = UIText.DynamicString(result.message.toString()))
+                is Action.Error -> _codeState.value =
+                    CodeState(error = UIText.DynamicString(result.message.toString()))
                 is Action.Success -> {
                     result.data?.user?.let {
                         _codeState.value = CodeState(matched = true)
+                        cacheUser(it.toUser())
                     }
                 }
-                else -> {}
+                is Action.Empty -> _codeState.value =
+                    CodeState(error = UIText.StringResource(R.string.wrong_code))
             }
         }.launchIn(viewModelScope)
     }
 
-    fun askForCode() {
+    private fun cacheUser(user: User) {
+        viewModelScope.launch { cacheUserUseCase(user) }
+    }
 
+    fun askForCode() {
+        viewModelScope.launch { requestCodeUseCase(currentToken) }
         reloadTimer()
     }
 
@@ -158,7 +171,7 @@ class AuthViewModel @Inject constructor(
     fun resetState() {
         _codeState.value = _codeState.value.copy(matched = false)
         _registrationState.value = _registrationState.value.copy(error = UIText.DynamicString(""))
-        _loginState.value = _loginState.value.copy(error = UIText.DynamicString(""))
+        _loginState.value = LoginState()
     }
 
     private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)

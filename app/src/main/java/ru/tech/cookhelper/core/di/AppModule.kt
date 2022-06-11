@@ -63,6 +63,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideUserRepository(
-        authService: AuthService
-    ): UserRepository = UserRepositoryImpl(authService)
+        authService: AuthService,
+        db: CookHelperDatabase
+    ): UserRepository = UserRepositoryImpl(authService, db.userDao)
 }
