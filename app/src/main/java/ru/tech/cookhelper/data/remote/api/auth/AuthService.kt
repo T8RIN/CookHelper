@@ -3,15 +3,34 @@ package ru.tech.cookhelper.data.remote.api.auth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.*
-import ru.tech.cookhelper.data.remote.body.LoginBody
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface AuthService {
 
-    @Headers("Content-Type: application/json")
+    @Multipart
     @POST("api/user/post/auth/")
     fun loginWith(
-        @Body loginBody: LoginBody
+        @Part("login") login: String,
+        @Part("password") password: String
+    ): Call<AuthInfo>
+
+    @Multipart
+    @POST("api/user/post/reg/")
+    fun registerWith(
+        @Part("name") name: String,
+        @Part("surname") surname: String,
+        @Part("nickname") nickname: String,
+        @Part("email") email: String,
+        @Part("password") password: String
+    ): Call<AuthInfo>
+
+    @Multipart
+    @POST("api/user/post/verify/")
+    fun verifyEmail(
+        @Part("code") code: String,
+        @Part("token") token: String
     ): Call<AuthInfo>
 
 }

@@ -13,6 +13,7 @@ data class User(
     val starredIngredients: String,
     val starredRecipes: String,
     val status: Int,
+    val verified: Boolean,
     val surname: String,
     val token: String
 )

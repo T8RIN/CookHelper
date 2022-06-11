@@ -90,14 +90,13 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
             onClick = { viewModel.openRegistration() },
             content = { Text(stringResource(R.string.sign_up)) })
     }
-    Spacer(Modifier.size(8.dp * mod))
+    Spacer(Modifier.size(16.dp * mod))
 
     if (viewModel.codeState.value.matched) {
-        LaunchedEffect(viewModel.codeState.value.matched) {
-            toastHost.sendToast(
-                Icons.Rounded.DoneOutline,
-                context.getString(R.string.welcome_user, viewModel.currentNick)
-            )
-        }
+        toastHost.sendToast(
+            Icons.Rounded.DoneOutline,
+            context.getString(R.string.welcome_user, viewModel.currentNick)
+        )
+        viewModel.resetState()
     }
 }

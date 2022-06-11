@@ -66,7 +66,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
                     singleLine = true,
                     isError = login.isEmpty(),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
+                        keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
@@ -121,7 +121,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(48.dp * mod))
     Button(
-        enabled = if(!viewModel.loginState.value.isLoading) isFormValid else false,
+        enabled = if (!viewModel.loginState.value.isLoading) isFormValid else false,
         onClick = { viewModel.logInWith(login, password) },
         modifier = Modifier.defaultMinSize(
             minWidth = TextFieldDefaults.MinWidth
@@ -140,25 +140,22 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
             content = { Text(stringResource(R.string.sign_up)) }
         )
     }
-    Spacer(Modifier.size(8.dp * mod))
+    Spacer(Modifier.size(16.dp * mod))
 
     viewModel.loginState.value.error.let { errorMessage ->
-        if(errorMessage.isNotEmpty()) {
-            LaunchedEffect(errorMessage) {
-                toastHost.sendToast(
-                    Icons.Outlined.ErrorOutline,
-                    errorMessage.asString(context)
-                )
-            }
+        if (errorMessage.isNotEmpty()) {
+            toastHost.sendToast(
+                Icons.Outlined.ErrorOutline,
+                errorMessage.asString(context)
+            )
+            viewModel.resetState()
         }
     }
 
     val user = viewModel.loginState.value.user
-    if(user != null) {
+    if (user != null && user.verified) {
         val message = stringResource(R.string.welcome_user, user.name)
-        SideEffect {
-            toastHost.sendToast(Icons.Outlined.Face, message)
-        }
+        LaunchedEffect(user) { toastHost.sendToast(Icons.Outlined.Face, message) }
     }
 
 }

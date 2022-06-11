@@ -77,5 +77,5 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
             onClick = { viewModel.openLogin() },
             content = { Text(stringResource(R.string.log_in_have_acc)) })
     }
-    Spacer(Modifier.size(8.dp * mod))
+    Spacer(Modifier.size(16.dp * mod))
 }

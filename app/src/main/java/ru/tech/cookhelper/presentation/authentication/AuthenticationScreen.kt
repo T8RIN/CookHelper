@@ -60,12 +60,13 @@ fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(Modifier.size(8.dp * mod))
+                Spacer(Modifier.size(16.dp * mod))
                 Image(
                     painterResource(id = R.drawable.ic_logo_144),
                     contentDescription = null,
                     modifier = Modifier.size(100.dp)
                 )
+                Spacer(Modifier.size(20.dp * mod))
                 AnimatedContent(
                     targetState = viewModel.authState.value,
                     modifier = Modifier.fillMaxSize(),
@@ -80,8 +81,6 @@ fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Spacer(Modifier.size(20.dp * mod))
-
                         when (authState) {
                             AuthState.Login -> {
                                 LoginField(mod = mod, viewModel = viewModel)

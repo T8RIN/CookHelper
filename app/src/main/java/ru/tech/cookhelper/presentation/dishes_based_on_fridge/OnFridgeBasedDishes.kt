@@ -11,6 +11,9 @@ import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material.icons.twotone.FilterAlt
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -37,6 +40,9 @@ fun OnFridgeBasedDishes(
 
     val state = viewModel.dishes.value
 
+    val topAppBarScrollState = rememberTopAppBarScrollState()
+    val scrollBehavior by remember { mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior(topAppBarScrollState)) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -51,10 +57,10 @@ fun OnFridgeBasedDishes(
                             Icon(Icons.Rounded.ArrowBack, null)
                         }
                     },
-                    scrollBehavior = viewModel.scrollBehavior
+                    scrollBehavior = scrollBehavior
                 )
             },
-            modifier = Modifier.nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
             Box(
                 modifier = Modifier

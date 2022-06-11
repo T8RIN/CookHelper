@@ -41,9 +41,6 @@ class MainViewModel @Inject constructor(
     var title by mutableStateOf(Screen.Recipes.title)
     val searchString = mutableStateOf("")
 
-    @ExperimentalMaterial3Api
-    val scrollBehavior by mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
-
     private val default: ArrayList<Product> = arrayListOf()
     private val _productsList = mutableStateOf(ProductsListState())
     val productsList: State<ProductsListState> = _productsList

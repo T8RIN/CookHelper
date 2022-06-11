@@ -27,8 +27,6 @@ class DishDetailsViewModel @Inject constructor(
     private val updateFavDishUseCase: UpdateFavDishUseCase
 ) : ViewModel() {
 
-    var scrollBehavior by mutableStateOf(TopAppBarDefaults.enterAlwaysScrollBehavior())
-
     private var id by mutableStateOf(-1)
 
     private val _dishState = mutableStateOf(DishDetailsState())

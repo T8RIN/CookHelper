@@ -59,6 +59,9 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
+    val topAppBarScrollState = rememberTopAppBarScrollState()
+    val scrollBehavior by remember { mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior(topAppBarScrollState)) }
+
     CompositionLocalProvider(
         LocalSettingsProvider provides viewModel.settingsState.value
     ) {
@@ -199,13 +202,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             }
                                         }
                                     },
-                                    scrollBehavior = viewModel.scrollBehavior
+                                    scrollBehavior = scrollBehavior
                                 )
                             }
 
                             AnimatedContent(
                                 targetState = screenController.currentScreen, modifier = Modifier
-                                    .nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
+                                    .nestedScroll(scrollBehavior.nestedScrollConnection)
                             ) { screen ->
                                 when (screen) {
                                     is Screen.Home -> {

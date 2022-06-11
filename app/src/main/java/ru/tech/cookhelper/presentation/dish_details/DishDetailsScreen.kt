@@ -11,8 +11,7 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -45,6 +44,9 @@ fun DishDetailsScreen(
 
     val context = LocalContext.current
 
+    val topAppBarScrollState = rememberTopAppBarScrollState()
+    val scrollBehavior by remember { mutableStateOf(TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarScrollState)) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -59,7 +61,7 @@ fun DishDetailsScreen(
                             Icon(Icons.Rounded.ArrowBack, null)
                         }
                     },
-                    scrollBehavior = viewModel.scrollBehavior,
+                    scrollBehavior = scrollBehavior,
                     actions = {
                         IconButton(onClick = {
                             val intent = Intent().apply {
@@ -82,7 +84,7 @@ fun DishDetailsScreen(
                     }
                 )
             },
-            modifier = Modifier.nestedScroll(viewModel.scrollBehavior.nestedScrollConnection)
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
             Box(
                 modifier = Modifier

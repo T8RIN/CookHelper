@@ -20,7 +20,7 @@ interface UserRepository {
 
     fun requestCode(): Flow<Action<*>>
 
-    fun checkCode(code: String): Flow<Action<Boolean>>
+    fun checkCode(code: String, token: String): Flow<Action<AuthInfo>>
 
 
 }

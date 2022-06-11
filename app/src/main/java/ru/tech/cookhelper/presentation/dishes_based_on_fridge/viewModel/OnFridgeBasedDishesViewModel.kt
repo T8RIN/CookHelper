@@ -23,9 +23,6 @@ class OnFridgeBasedDishesViewModel @Inject constructor(
     private val getRecipeListUseCase: GetRecipeListUseCase
 ) : ViewModel() {
 
-    @ExperimentalMaterial3Api
-    val scrollBehavior by mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
-
     private val _dishes = mutableStateOf(PodborState())
     val dishes: State<PodborState> = _dishes
 
