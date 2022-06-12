@@ -41,7 +41,13 @@ fun OnFridgeBasedDishes(
     val state = viewModel.dishes.value
 
     val topAppBarScrollState = rememberTopAppBarScrollState()
-    val scrollBehavior by remember { mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior(topAppBarScrollState)) }
+    val scrollBehavior by remember {
+        mutableStateOf(
+            TopAppBarDefaults.pinnedScrollBehavior(
+                topAppBarScrollState
+            )
+        )
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),

@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.domain.use_case.login
 
-import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Inject
 

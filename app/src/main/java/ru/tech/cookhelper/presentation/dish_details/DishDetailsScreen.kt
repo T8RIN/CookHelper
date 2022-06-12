@@ -45,7 +45,13 @@ fun DishDetailsScreen(
     val context = LocalContext.current
 
     val topAppBarScrollState = rememberTopAppBarScrollState()
-    val scrollBehavior by remember { mutableStateOf(TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarScrollState)) }
+    val scrollBehavior by remember {
+        mutableStateOf(
+            TopAppBarDefaults.enterAlwaysScrollBehavior(
+                topAppBarScrollState
+            )
+        )
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),

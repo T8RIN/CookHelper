@@ -95,7 +95,7 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
 
     @Suppress("UNCHECKED_CAST")
     private fun clearDisposedViewModel(scopedViewModel: ViewModel) {
-        if(activity?.isFinishing == false) {
+        if (activity?.isFinishing == false) {
             val name = scopedViewModel.javaClass.name
 
             val mapName = viewModelStore.getPrivatePropertyName(HashMap<String, ViewModel>()::class)

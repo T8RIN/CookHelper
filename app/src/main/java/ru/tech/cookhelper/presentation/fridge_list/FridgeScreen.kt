@@ -24,7 +24,10 @@ fun FridgeScreen(viewModel: FridgeViewModel = scopedViewModel(ignoreDisposing = 
     Box(modifier = Modifier.fillMaxSize()) {
 
         if (state.products != null) {
-            LazyColumn(contentPadding = PaddingValues(bottom = 200.dp, top = 10.dp), state = rememberForeverLazyListState(key = "fridge")) {
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 200.dp, top = 10.dp),
+                state = rememberForeverLazyListState(key = "fridge")
+            ) {
                 items(state.products.size) { index ->
                     Row(
                         Modifier.padding(start = 10.dp, end = 6.dp),

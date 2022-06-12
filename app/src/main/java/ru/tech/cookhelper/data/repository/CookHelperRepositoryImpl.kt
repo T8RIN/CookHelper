@@ -7,13 +7,9 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.data.local.dao.FavRecipeDao
 import ru.tech.cookhelper.data.local.dao.FridgeDao
 import ru.tech.cookhelper.data.local.dao.SettingsDao
-import ru.tech.cookhelper.data.local.entity.FavRecipeEntity
-import ru.tech.cookhelper.data.local.entity.ProductEntity
 import ru.tech.cookhelper.data.local.entity.SettingsEntity
 import ru.tech.cookhelper.data.local.entity.toSetting
 import ru.tech.cookhelper.data.remote.api.CookHelperApi
-import ru.tech.cookhelper.data.remote.dto.toProduct
-import ru.tech.cookhelper.data.remote.dto.toRecipe
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.Setting

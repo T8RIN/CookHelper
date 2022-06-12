@@ -14,7 +14,7 @@ private data class KeyParams(
 )
 
 fun clearState(key: String = "", all: Boolean = false) {
-    if(!all) SaveMap.remove(key)
+    if (!all) SaveMap.remove(key)
     else SaveMap.clear()
 }
 

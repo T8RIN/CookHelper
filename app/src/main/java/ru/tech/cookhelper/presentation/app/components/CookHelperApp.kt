@@ -60,7 +60,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     val topAppBarScrollState = rememberTopAppBarScrollState()
-    val scrollBehavior by remember { mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior(topAppBarScrollState)) }
+    val scrollBehavior by remember {
+        mutableStateOf(
+            TopAppBarDefaults.pinnedScrollBehavior(
+                topAppBarScrollState
+            )
+        )
+    }
 
     CompositionLocalProvider(
         LocalSettingsProvider provides viewModel.settingsState.value
@@ -238,13 +244,21 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                     } else {
                                                                         Icon(
                                                                             painterResource(
-                                                                                screen.alternateIcon(viewModel.selectedItem == index)
+                                                                                screen.alternateIcon(
+                                                                                    viewModel.selectedItem == index
+                                                                                )
                                                                             ), null
                                                                         )
                                                                     }
                                                                 },
                                                                 alwaysShowLabel = false,
-                                                                label = { Text(screen.shortTitle.asString(activity)) },
+                                                                label = {
+                                                                    Text(
+                                                                        screen.shortTitle.asString(
+                                                                            activity
+                                                                        )
+                                                                    )
+                                                                },
                                                                 selected = viewModel.selectedItem == index,
                                                                 onClick = {
                                                                     if (viewModel.selectedItem != index) {
@@ -470,7 +484,9 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                 state.list[index].name.uppercase(),
                                                                 textAlign = TextAlign.Start,
                                                                 style = MaterialTheme.typography.bodyLarge,
-                                                                modifier = Modifier.padding(horizontal = 10.dp)
+                                                                modifier = Modifier.padding(
+                                                                    horizontal = 10.dp
+                                                                )
                                                             )
                                                             Spacer(Modifier.weight(1f))
                                                             Checkbox(

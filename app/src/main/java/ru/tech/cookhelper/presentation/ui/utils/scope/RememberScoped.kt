@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.ui.utils.scope
 
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
