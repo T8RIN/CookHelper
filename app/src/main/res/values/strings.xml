@@ -75,5 +75,9 @@
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="wrong_password_or_nick">Неверный пароль и/или почта/никнейм</string>
+    <string name="type_new_password_and_code">Введите новый пароль и код</string>
+    <string name="wrong_credentials_question">Неправильные данные?</string>
+    <string name="go_back">Вернуться</string>
+    <string name="restore">Восстановить</string>
 
 </resources>

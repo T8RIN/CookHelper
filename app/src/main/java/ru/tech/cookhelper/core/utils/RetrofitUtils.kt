@@ -5,16 +5,29 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
+
 object RetrofitUtils {
 
     fun Retrofit.Builder.addLogger(
         level: HttpLoggingInterceptor.Level = HttpLoggingInterceptor.Level.BODY
     ): Retrofit.Builder {
-        val httpClient = OkHttpClient.Builder().callTimeout(10, TimeUnit.SECONDS)
+        val httpClient = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
         val logging = HttpLoggingInterceptor()
         logging.setLevel(level)
 
         return client(httpClient.addInterceptor(logging).build())
     }
+
+    fun Retrofit.Builder.setTimeout(
+        timeout: Long = 60,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): Retrofit.Builder = client(
+        OkHttpClient.Builder()
+            .readTimeout(timeout, timeUnit)
+            .connectTimeout(timeout, timeUnit)
+            .build()
+    )
 
 }

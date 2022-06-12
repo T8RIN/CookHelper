@@ -61,7 +61,10 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
     )
     Spacer(Modifier.size(32.dp * mod))
     AnimatedContent(viewModel.registrationState.value.isLoading) { isLoading ->
-        Column {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             if (isLoading) Loading(Modifier.fillMaxWidth())
             else {
                 OutlinedTextField(

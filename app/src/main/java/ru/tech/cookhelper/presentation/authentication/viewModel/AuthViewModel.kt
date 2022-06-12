@@ -18,10 +18,9 @@ import ru.tech.cookhelper.domain.use_case.check_code.CheckCodeUseCase
 import ru.tech.cookhelper.domain.use_case.login.LoginUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
 import ru.tech.cookhelper.domain.use_case.request_code.RequestCodeUseCase
-import ru.tech.cookhelper.presentation.authentication.components.AuthState
-import ru.tech.cookhelper.presentation.authentication.components.CodeState
-import ru.tech.cookhelper.presentation.authentication.components.LoginState
-import ru.tech.cookhelper.presentation.authentication.components.RegistrationState
+import ru.tech.cookhelper.domain.use_case.restore_password.ApplyPasswordByCodeUseCase
+import ru.tech.cookhelper.domain.use_case.restore_password.SendRestoreCodeUseCase
+import ru.tech.cookhelper.presentation.authentication.components.*
 import ru.tech.cookhelper.presentation.ui.utils.UIText
 import javax.inject.Inject
 
@@ -31,7 +30,9 @@ class AuthViewModel @Inject constructor(
     private val registrationUseCase: RegistrationUseCase,
     private val checkCodeUseCase: CheckCodeUseCase,
     private val requestCodeUseCase: RequestCodeUseCase,
-    private val cacheUserUseCase: CacheUserUseCase
+    private val cacheUserUseCase: CacheUserUseCase,
+    private val sendRestoreCodeUseCase: SendRestoreCodeUseCase,
+    private val applyPasswordByCodeUseCase: ApplyPasswordByCodeUseCase
 ) : ViewModel() {
 
     private var timerJob: Job? = null
@@ -39,7 +40,7 @@ class AuthViewModel @Inject constructor(
     var codeTimeout by mutableStateOf(60)
 
     var currentEmail = ""
-    var currentNick = ""
+    var currentName = ""
     var currentToken = ""
 
     private val _codeState = mutableStateOf(CodeState())
@@ -51,7 +52,11 @@ class AuthViewModel @Inject constructor(
     private val _registrationState = mutableStateOf(RegistrationState())
     val registrationState: State<RegistrationState> = _registrationState
 
+    private val _restorePasswordState = mutableStateOf(RestorePasswordState())
+    val restorePasswordState: State<RestorePasswordState> = _restorePasswordState
+
     fun openPasswordRestore() {
+        _restorePasswordState.value = RestorePasswordState(state = RestoreState.Email)
         _authState.value = AuthState.RestorePassword
     }
 
@@ -66,7 +71,7 @@ class AuthViewModel @Inject constructor(
                 is Action.Success -> {
                     result.data?.user?.let {
                         currentEmail = it.email
-                        currentNick = it.nickname
+                        currentName = it.name
                         currentToken = it.token
                         if (!it.verified) openEmailConfirmation()
                         else cacheUser(it.toUser())
@@ -106,7 +111,7 @@ class AuthViewModel @Inject constructor(
                 is Action.Success -> {
                     result.data?.user?.let {
                         currentEmail = it.email
-                        currentNick = it.nickname
+                        currentName = it.name
                         currentToken = it.token
                         if (!it.verified) openEmailConfirmation()
                     }
@@ -153,16 +158,29 @@ class AuthViewModel @Inject constructor(
     }
 
     fun askForCode() {
-        viewModelScope.launch { requestCodeUseCase(currentToken) }
-        reloadTimer()
+        viewModelScope.launch {
+            val result = requestCodeUseCase(currentToken)
+            if (result.isFailure) {
+                _codeState.value = _codeState.value.copy(
+                    error = UIText.DynamicString(result.exceptionOrNull()?.message.toString())
+                )
+            } else reloadTimer()
+        }
     }
 
-    fun restorePasswordBy(email: String) {
-
-        openLogin()
+    fun restorePasswordBy(login: String) {
+        viewModelScope.launch {
+            _restorePasswordState.value = _restorePasswordState.value.copy(isLoading = true)
+            val result = sendRestoreCodeUseCase(login)
+            if (result.isFailure) {
+                _restorePasswordState.value = RestorePasswordState(
+                    error = UIText.DynamicString(result.exceptionOrNull()?.message.toString())
+                )
+            } else _restorePasswordState.value = RestorePasswordState(state = RestoreState.Password)
+        }
     }
 
-    fun openEmailConfirmation() {
+    private fun openEmailConfirmation() {
         resetCodeState()
         _authState.value = AuthState.ConfirmEmail
         reloadTimer()
@@ -172,6 +190,42 @@ class AuthViewModel @Inject constructor(
         _codeState.value = _codeState.value.copy(matched = false)
         _registrationState.value = _registrationState.value.copy(error = UIText.DynamicString(""))
         _loginState.value = LoginState()
+        _restorePasswordState.value =
+            _restorePasswordState.value.copy(found = false, error = UIText.DynamicString(""))
+    }
+
+    fun applyPasswordByCode(code: String, password: String) {
+        applyPasswordByCodeUseCase(code, password).onEach { result ->
+            when (result) {
+                is Action.Loading -> _restorePasswordState.value =
+                    RestorePasswordState(
+                        isLoading = true,
+                        codeState = CodeState(isLoading = true),
+                        state = RestoreState.Password
+                    )
+                is Action.Error -> _restorePasswordState.value =
+                    RestorePasswordState(
+                        error = UIText.DynamicString(result.message.toString()),
+                        codeState = CodeState(error = UIText.DynamicString(result.message.toString())),
+                        state = RestoreState.Password
+                    )
+                is Action.Success -> {
+                    result.data?.user?.let {
+                        _restorePasswordState.value = RestorePasswordState(
+                            user = it.toUser(),
+                            state = RestoreState.Password,
+                            codeState = CodeState(matched = true)
+                        )
+                        openLogin()
+                    }
+                }
+                is Action.Empty -> _restorePasswordState.value = RestorePasswordState(
+                    error = UIText.StringResource(R.string.wrong_code),
+                    codeState = CodeState(error = UIText.StringResource(R.string.wrong_code)),
+                    state = RestoreState.Password
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 
     private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)

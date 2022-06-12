@@ -24,12 +24,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun loginWith(login: String, password: String): Flow<Action<AuthInfo>> = flow {
         emit(Action.Loading())
-        val response = withContext(Dispatchers.IO) {
-            authService.loginWith(login, password).execute()
-        }
+        val response = io { authService.loginWith(login, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
-        if (body.status == -1) emit(Action.Empty())
+        if (body.status == 102) emit(Action.Empty())
         else emit(Action.Success(data = body))
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
@@ -41,36 +39,58 @@ class UserRepositoryImpl @Inject constructor(
         password: String
     ): Flow<Action<AuthInfo>> = flow {
         emit(Action.Loading())
-        val response = withContext(Dispatchers.IO) {
-            authService.registerWith(name, surname, nickname, email, password).execute()
-        }
+        val response =
+            io { authService.registerWith(name, surname, nickname, email, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         if (body.status == -1) emit(Action.Error(message = body.message))
         else emit(Action.Success(data = body))
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
-    override fun restorePasswordFor(email: String): Flow<Action<*>> {
-        TODO("Not yet implemented")
+    override suspend fun requestCode(
+        token: String
+    ): Result<AuthInfo> = runCatching {
+        authService.requestCode(token)
     }
-
-    override suspend fun requestCode(token: String): AuthInfo = authService.requestCode(token)
 
     override fun checkCode(code: String, token: String): Flow<Action<AuthInfo>> = flow {
         emit(Action.Loading())
-        val response = withContext(Dispatchers.IO) {
-            authService.verifyEmail(code, token).execute()
-        }
+        val response = io { authService.verifyEmail(code, token).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
-            -1 -> emit(Action.Empty())
-            0 -> emit(Action.Error(message = body.message))
-            else -> emit(Action.Success(data = body))
+            102 -> emit(Action.Empty())
+            100 -> emit(Action.Success(data = body))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
     override suspend fun cacheUser(user: User) = userDao.cacheUser(user.toEntity())
 
     override fun getUser(): Flow<User?> = userDao.getUser().map { it?.toUser() }
+
+    override suspend fun requestPasswordRestoreCode(
+        login: String
+    ): Result<AuthInfo> = runCatching {
+        authService.requestPasswordRestoreCode(login)
+    }
+
+
+    override fun restorePasswordBy(
+        code: String,
+        newPassword: String
+    ): Flow<Action<AuthInfo>> = flow {
+        emit(Action.Loading())
+        val response = io { authService.restorePasswordBy(code, newPassword).execute() }
+        val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
+
+        when (body.status) {
+            102 -> emit(Action.Empty())
+            100 -> emit(Action.Success(data = body))
+        }
+    }.catch { t -> emit(Action.Error(message = t.message.toString())) }
+
 }
+
+private suspend fun <T> io(
+    function: suspend () -> T
+): T = withContext(Dispatchers.IO) { function() }

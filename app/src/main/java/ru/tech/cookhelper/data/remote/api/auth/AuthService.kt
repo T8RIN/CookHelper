@@ -34,4 +34,16 @@ interface AuthService {
         @Query("token") token: String
     ): AuthInfo
 
+    @GET("api/user/get/recover-password/")
+    suspend fun requestPasswordRestoreCode(
+        @Query("login") login: String
+    ): AuthInfo
+
+    @Multipart
+    @POST("api/user/post/recover-password/")
+    fun restorePasswordBy(
+        @Part("code") code: String,
+        @Part("password") password: String
+    ): Call<AuthInfo>
+
 }

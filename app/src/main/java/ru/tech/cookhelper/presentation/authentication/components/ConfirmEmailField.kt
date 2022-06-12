@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -41,7 +40,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
 
     Text(
         stringResource(R.string.last_step,
-            viewModel.currentNick.replaceFirstChar { it.titlecase(Locale.getDefault()) }),
+            viewModel.currentName.replaceFirstChar { it.titlecase(Locale.getDefault()) }),
         style = MaterialTheme.typography.headlineLarge,
         textAlign = TextAlign.Center
     )
@@ -95,7 +94,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
     if (viewModel.codeState.value.matched) {
         toastHost.sendToast(
             Icons.Rounded.DoneOutline,
-            context.getString(R.string.welcome_user, viewModel.currentNick)
+            context.getString(R.string.welcome_user, viewModel.currentName)
         )
         viewModel.resetState()
     }
