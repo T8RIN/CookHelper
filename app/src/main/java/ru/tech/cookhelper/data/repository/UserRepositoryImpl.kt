@@ -27,8 +27,11 @@ class UserRepositoryImpl @Inject constructor(
         val response = io { authService.loginWith(login, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
-        if (body.status == 102) emit(Action.Empty())
-        else emit(Action.Success(data = body))
+        when (body.status) {
+            102 -> emit(Action.Empty())
+            100 -> emit(Action.Success(data = body))
+            else -> emit(Action.Error(message = body.message))
+        }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
     override fun registerWith(
@@ -43,8 +46,9 @@ class UserRepositoryImpl @Inject constructor(
             io { authService.registerWith(name, surname, nickname, email, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
-        if (body.status == -1) emit(Action.Error(message = body.message))
-        else emit(Action.Success(data = body))
+        if (body.status == 100) emit(Action.Success(data = body))
+        else emit(Action.Error(message = body.message))
+
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
     override suspend fun requestCode(
@@ -61,6 +65,7 @@ class UserRepositoryImpl @Inject constructor(
         when (body.status) {
             102 -> emit(Action.Empty())
             100 -> emit(Action.Success(data = body))
+            else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
@@ -86,6 +91,7 @@ class UserRepositoryImpl @Inject constructor(
         when (body.status) {
             102 -> emit(Action.Empty())
             100 -> emit(Action.Success(data = body))
+            else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
