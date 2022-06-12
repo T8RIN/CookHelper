@@ -1,7 +1,9 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
 import android.util.Patterns
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -123,13 +125,9 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                             }
                     }
                 )
-                Spacer(Modifier.size(8.dp * mod))
-                AnimatedVisibility(
-                    visible = name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty(),
-                    enter = slideInVertically() + fadeIn(),
-                    exit = slideOutVertically() + fadeOut()
-                ) {
+                AnimatedVisibility(name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty()) {
                     Column {
+                        Spacer(Modifier.size(8.dp * mod))
                         OutlinedTextField(
                             value = email,
                             onValueChange = { email = it },

@@ -41,7 +41,10 @@ class AuthViewModel @Inject constructor(
 
     var currentEmail = ""
     var currentName = ""
-    var currentToken = ""
+    private var currentToken = ""
+
+    private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)
+    val authState: State<AuthState> = _authState
 
     private val _codeState = mutableStateOf(CodeState())
     val codeState: State<CodeState> = _codeState
@@ -55,8 +58,11 @@ class AuthViewModel @Inject constructor(
     private val _restorePasswordState = mutableStateOf(RestorePasswordState())
     val restorePasswordState: State<RestorePasswordState> = _restorePasswordState
 
+    private val _restorePasswordCodeState = mutableStateOf(CodeState())
+    val restorePasswordCodeState: State<CodeState> = _restorePasswordCodeState
+
     fun openPasswordRestore() {
-        _restorePasswordState.value = RestorePasswordState(state = RestoreState.Email)
+        _restorePasswordState.value = RestorePasswordState(state = RestoreState.Login)
         _authState.value = AuthState.RestorePassword
     }
 
@@ -84,7 +90,6 @@ class AuthViewModel @Inject constructor(
 
     fun openRegistration() {
         _authState.value = AuthState.Registration
-
         resetCodeState()
     }
 
@@ -135,7 +140,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun checkCode(code: String) {
+    fun checkVerificationCode(code: String) {
         checkCodeUseCase(code, currentToken).onEach { result ->
             when (result) {
                 is Action.Loading -> _codeState.value = CodeState(isLoading = true)
@@ -157,7 +162,7 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch { cacheUserUseCase(user) }
     }
 
-    fun askForCode() {
+    fun askForVerificationCode() {
         viewModelScope.launch {
             val result = requestCodeUseCase(currentToken)
             if (result.isFailure) {
@@ -173,9 +178,10 @@ class AuthViewModel @Inject constructor(
             _restorePasswordState.value = _restorePasswordState.value.copy(isLoading = true)
             val result = sendRestoreCodeUseCase(login)
             if (result.isFailure) {
-                _restorePasswordState.value = RestorePasswordState(
-                    error = UIText.DynamicString(result.exceptionOrNull()?.message.toString())
-                )
+//                _restorePasswordState.value = RestorePasswordState(
+//                    error = UIText.DynamicString(result.exceptionOrNull()?.message.toString())
+//                )
+                _restorePasswordState.value = RestorePasswordState(state = RestoreState.Password)
             } else _restorePasswordState.value = RestorePasswordState(state = RestoreState.Password)
         }
     }
@@ -192,6 +198,7 @@ class AuthViewModel @Inject constructor(
         _loginState.value = LoginState()
         _restorePasswordState.value =
             _restorePasswordState.value.copy(found = false, error = UIText.DynamicString(""))
+        viewModelScope.launch { delay(800); _restorePasswordCodeState.value = CodeState() }
     }
 
     fun applyPasswordByCode(code: String, password: String) {
@@ -200,35 +207,37 @@ class AuthViewModel @Inject constructor(
                 is Action.Loading -> _restorePasswordState.value =
                     RestorePasswordState(
                         isLoading = true,
-                        codeState = CodeState(isLoading = true),
                         state = RestoreState.Password
                     )
-                is Action.Error -> _restorePasswordState.value =
-                    RestorePasswordState(
-                        error = UIText.DynamicString(result.message.toString()),
-                        codeState = CodeState(error = UIText.DynamicString(result.message.toString())),
-                        state = RestoreState.Password
-                    )
+                is Action.Error -> {
+                    _restorePasswordState.value =
+                        RestorePasswordState(
+                            error = UIText.DynamicString(result.message.toString()),
+                            state = RestoreState.Password
+                        )
+                    _restorePasswordCodeState.value =
+                        CodeState(error = UIText.DynamicString(result.message.toString()))
+                }
                 is Action.Success -> {
                     result.data?.user?.let {
                         _restorePasswordState.value = RestorePasswordState(
                             user = it.toUser(),
-                            state = RestoreState.Password,
-                            codeState = CodeState(matched = true)
+                            state = RestoreState.Password
                         )
+                        _restorePasswordCodeState.value = CodeState(matched = true)
                         openLogin()
                     }
                 }
-                is Action.Empty -> _restorePasswordState.value = RestorePasswordState(
-                    error = UIText.StringResource(R.string.wrong_code),
-                    codeState = CodeState(error = UIText.StringResource(R.string.wrong_code)),
-                    state = RestoreState.Password
-                )
+                is Action.Empty -> {
+                    _restorePasswordState.value = RestorePasswordState(
+                        error = UIText.StringResource(R.string.wrong_code),
+                        state = RestoreState.Password
+                    )
+                    _restorePasswordCodeState.value =
+                        CodeState(error = UIText.StringResource(R.string.wrong_code))
+                }
             }
         }.launchIn(viewModelScope)
     }
-
-    private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)
-    val authState: State<AuthState> = _authState
 
 }

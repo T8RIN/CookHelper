@@ -40,7 +40,8 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 fun OTPField(
     length: Int,
     codeState: CodeState,
-    onFilled: (code: String) -> Unit
+    onFilled: (code: String) -> Unit = {},
+    onChange: (code: String) -> Unit = {}
 ) {
     val code = remember { mutableStateListOf<Char>() }
 
@@ -145,6 +146,7 @@ fun OTPField(
                                 }
                             }
                         }
+                        onChange(code.joinToString(""))
                     }
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(cursorColor = Color.Transparent),
@@ -158,11 +160,11 @@ fun OTPField(
         }
     }
 
-    if (codeState.error.isNotEmpty()) {
-        val toastHost = LocalToastHost.current
-        val context = LocalContext.current
+    val toastHost = LocalToastHost.current
+    val context = LocalContext.current
 
-        LaunchedEffect(codeState.error) {
+    LaunchedEffect(codeState.error) {
+        if (codeState.error.isNotEmpty()) {
             toastHost.sendToast(Icons.Outlined.ErrorOutline, codeState.error.asString(context))
             otpPos = OtpPos.Right
             delay(75)
@@ -173,6 +175,8 @@ fun OTPField(
             otpPos = OtpPos.Left
             delay(75)
             otpPos = OtpPos.Center
+
+            onChange("")
 
             code.asReversed().forEachIndexed { index, _ ->
                 code[index] = ' '

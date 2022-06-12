@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -42,6 +43,8 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
     val context = LocalContext.current
     val focus = LocalFocusManager.current
 
+    var code by rememberSaveable { mutableStateOf("") }
+
     var password by rememberSaveable { mutableStateOf("") }
     var passwordRepeat by rememberSaveable { mutableStateOf("") }
 
@@ -62,14 +65,14 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                stringResource(if (state.state == RestoreState.Email) R.string.type_your_email else R.string.type_new_password_and_code),
+                stringResource(if (state.state == RestoreState.Login) R.string.type_your_email else R.string.type_new_password_and_code),
                 style = MaterialTheme.typography.bodyLarge
             )
             Spacer(Modifier.size(64.dp * mod))
 
             if (state.isLoading) Loading(Modifier.fillMaxWidth())
             else when (state.state) {
-                RestoreState.Email -> {
+                RestoreState.Login -> {
                     OutlinedTextField(
                         value = login,
                         onValueChange = { login = it },
@@ -93,17 +96,6 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                                     Icon(Icons.Filled.Clear, null)
                                 }
                         }
-                    )
-                    Spacer(Modifier.size(48.dp * mod))
-                    Button(
-                        enabled = login.isNotEmpty(),
-                        onClick = {
-                            viewModel.restorePasswordBy(login)
-                            focus.clearFocus()
-                        },
-                        modifier = Modifier.defaultMinSize(
-                            minWidth = TextFieldDefaults.MinWidth
-                        ), content = { Text(stringResource(R.string.send_email)) }
                     )
                 }
                 RestoreState.Password -> {
@@ -154,37 +146,47 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                             }
                         }
                     )
-                    if (isFormValid) {
-                        Spacer(Modifier.size(32.dp * mod))
-                        OTPField(
-                            length = 5,
-                            codeState = viewModel.restorePasswordState.value.codeState,
-                            onFilled = { code ->
-                                viewModel.applyPasswordByCode(code, password)
-                            }
-                        )
+                    AnimatedVisibility(isFormValid) {
+                        Column {
+                            Spacer(Modifier.size(32.dp * mod))
+                            OTPField(
+                                length = 5,
+                                codeState = viewModel.restorePasswordCodeState.value,
+                                onChange = { localCode -> code = localCode }
+                            )
+                        }
                     }
                 }
             }
+            Spacer(Modifier.size(48.dp * mod))
+            Button(
+                enabled = if (state.state == RestoreState.Login) {
+                    if (!state.isLoading) login.isNotEmpty() else false
+                } else isFormValid && code.length == 5,
+                onClick = {
+                    if (state.state == RestoreState.Login) viewModel.restorePasswordBy(login) else viewModel.applyPasswordByCode(
+                        code,
+                        password
+                    )
+                    focus.clearFocus()
+                },
+                modifier = Modifier.defaultMinSize(
+                    minWidth = TextFieldDefaults.MinWidth
+                ),
+                content = { Text(stringResource(if (state.state == RestoreState.Login) R.string.send_email else R.string.save)) }
+            )
             Spacer(Modifier.size(64.dp * mod))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    stringResource(if (state.state == RestoreState.Email) R.string.have_account else R.string.wrong_credentials_question),
+                    stringResource(if (state.state == RestoreState.Login) R.string.have_account else R.string.wrong_credentials_question),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
                 Spacer(Modifier.size(12.dp))
-                if (state.state == RestoreState.Email) {
-                    TextButton(
-                        onClick = { viewModel.openLogin() },
-                        content = { Text(stringResource(R.string.log_in_have_acc)) }
-                    )
-                } else {
-                    TextButton(
-                        onClick = { viewModel.openPasswordRestore() },
-                        content = { Text(stringResource(R.string.go_back)) }
-                    )
-                }
+                TextButton(
+                    onClick = { viewModel.apply { if (state.state == RestoreState.Login) openLogin() else openPasswordRestore() } },
+                    content = { Text(stringResource(if (state.state == RestoreState.Login) R.string.log_in_have_acc else R.string.go_back)) }
+                )
             }
             Spacer(Modifier.size(16.dp * mod))
         }

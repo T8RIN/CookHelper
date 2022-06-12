@@ -79,5 +79,6 @@
     <string name="wrong_credentials_question">Неправильные данные?</string>
     <string name="go_back">Вернуться</string>
     <string name="restore">Восстановить</string>
+    <string name="save">Сохранить</string>
 
 </resources>

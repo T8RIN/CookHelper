@@ -53,9 +53,9 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
 
     Spacer(Modifier.size(64.dp * mod))
 
-    OTPField(6, viewModel.codeState.value) {
-        viewModel.checkCode(it)
-    }
+    OTPField(length = 6, codeState = viewModel.codeState.value, onFilled = {
+        viewModel.checkVerificationCode(it)
+    })
 
     Spacer(Modifier.size(16.dp * mod))
     Row(
@@ -66,7 +66,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
     ) {
         Button(
             enabled = viewModel.codeTimeout == 0,
-            onClick = { viewModel.askForCode() },
+            onClick = { viewModel.askForVerificationCode() },
             content = {
                 Text(
                     if (viewModel.codeTimeout != 0) stringResource(

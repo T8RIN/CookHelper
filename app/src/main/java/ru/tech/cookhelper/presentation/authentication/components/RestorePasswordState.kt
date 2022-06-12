@@ -7,7 +7,6 @@ data class RestorePasswordState(
     val isLoading: Boolean = false,
     val found: Boolean = false,
     val error: UIText = UIText.DynamicString(""),
-    val state: RestoreState = RestoreState.Email,
-    val codeState: CodeState = CodeState(),
+    val state: RestoreState = RestoreState.Login,
     val user: User? = null
 )
