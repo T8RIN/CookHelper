@@ -163,8 +163,10 @@ fun OTPField(
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
 
-    LaunchedEffect(codeState.error) {
-        if (codeState.error.isNotEmpty()) {
+    if (codeState.error.isNotEmpty()) {
+        LaunchedEffect(codeState.error) {
+            onChange("")
+
             toastHost.sendToast(Icons.Outlined.ErrorOutline, codeState.error.asString(context))
             otpPos = OtpPos.Right
             delay(75)
@@ -175,8 +177,6 @@ fun OTPField(
             otpPos = OtpPos.Left
             delay(75)
             otpPos = OtpPos.Center
-
-            onChange("")
 
             code.asReversed().forEachIndexed { index, _ ->
                 code[index] = ' '
