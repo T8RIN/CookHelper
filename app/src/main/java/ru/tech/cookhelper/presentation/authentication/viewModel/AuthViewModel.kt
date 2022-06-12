@@ -178,10 +178,9 @@ class AuthViewModel @Inject constructor(
             _restorePasswordState.value = _restorePasswordState.value.copy(isLoading = true)
             val result = sendRestoreCodeUseCase(login)
             if (result.isFailure) {
-//                _restorePasswordState.value = RestorePasswordState(
-//                    error = UIText.DynamicString(result.exceptionOrNull()?.message.toString())
-//                )
-                _restorePasswordState.value = RestorePasswordState(state = RestoreState.Password)
+                _restorePasswordState.value = RestorePasswordState(
+                    error = UIText.DynamicString(result.exceptionOrNull()?.message.toString())
+                )
             } else _restorePasswordState.value = RestorePasswordState(state = RestoreState.Password)
         }
     }
