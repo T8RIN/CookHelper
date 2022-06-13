@@ -9,7 +9,7 @@ data class User(
     val fridge: String?,
     val name: String,
     val nickname: String,
-    val ownRecipes: List<Any>?,
+    val ownRecipes: String?,
     val starredIngredients: String?,
     val starredRecipes: String?,
     val status: String?,

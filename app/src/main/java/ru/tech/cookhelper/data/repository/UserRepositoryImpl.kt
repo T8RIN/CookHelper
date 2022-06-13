@@ -81,11 +81,12 @@ class UserRepositoryImpl @Inject constructor(
 
 
     override fun restorePasswordBy(
+        login: String,
         code: String,
         newPassword: String
     ): Flow<Action<AuthInfo>> = flow {
         emit(Action.Loading())
-        val response = io { authService.restorePasswordBy(code, newPassword).execute() }
+        val response = io { authService.restorePasswordBy(login, code, newPassword).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {

@@ -41,6 +41,7 @@ class AuthViewModel @Inject constructor(
 
     var currentEmail = ""
     var currentName = ""
+    private var restoreLogin = ""
     private var currentToken = ""
 
     private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)
@@ -181,7 +182,21 @@ class AuthViewModel @Inject constructor(
                 _restorePasswordState.value = RestorePasswordState(
                     error = UIText.DynamicString(result.exceptionOrNull()?.message.toString())
                 )
-            } else _restorePasswordState.value = RestorePasswordState(state = RestoreState.Password)
+            } else {
+                result.getOrNull()?.let {
+                    when (it.status) {
+                        100 -> {
+                            _restorePasswordState.value =
+                                RestorePasswordState(state = RestoreState.Password)
+                            restoreLogin = login
+                        }
+                        101 -> _restorePasswordState.value =
+                            RestorePasswordState(error = UIText.StringResource(R.string.user_not_found))
+                        else -> _restorePasswordState.value =
+                            RestorePasswordState(error = UIText.DynamicString("${it.status} ${it.message}"))
+                    }
+                }
+            }
         }
     }
 
@@ -201,7 +216,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun applyPasswordByCode(code: String, password: String) {
-        applyPasswordByCodeUseCase(code, password).onEach { result ->
+        applyPasswordByCodeUseCase(restoreLogin, code, password).onEach { result ->
             when (result) {
                 is Action.Loading -> _restorePasswordState.value =
                     RestorePasswordState(

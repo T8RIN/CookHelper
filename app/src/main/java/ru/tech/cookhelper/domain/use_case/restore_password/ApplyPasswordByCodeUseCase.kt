@@ -7,7 +7,8 @@ class ApplyPasswordByCodeUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     operator fun invoke(
+        login: String,
         code: String,
         newPassword: String
-    ) = userRepository.restorePasswordBy(code, newPassword)
+    ) = userRepository.restorePasswordBy(login, code, newPassword)
 }

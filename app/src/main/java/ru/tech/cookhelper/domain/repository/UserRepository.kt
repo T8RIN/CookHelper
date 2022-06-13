@@ -19,7 +19,7 @@ interface UserRepository {
 
     suspend fun requestPasswordRestoreCode(login: String): Result<AuthInfo>
 
-    fun restorePasswordBy(code: String, newPassword: String): Flow<Action<AuthInfo>>
+    fun restorePasswordBy(login: String, code: String, newPassword: String): Flow<Action<AuthInfo>>
 
     suspend fun requestCode(token: String): Result<AuthInfo>
 

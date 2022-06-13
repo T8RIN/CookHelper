@@ -42,6 +42,7 @@ interface AuthService {
     @Multipart
     @POST("api/user/post/recover-password/")
     fun restorePasswordBy(
+        @Part("login") login: String,
         @Part("code") code: String,
         @Part("password") password: String
     ): Call<AuthInfo>
