@@ -247,8 +247,7 @@ class AuthViewModel @Inject constructor(
                         error = UIText.StringResource(R.string.wrong_code),
                         state = RestoreState.Password
                     )
-                    _restorePasswordCodeState.value =
-                        CodeState(error = UIText.StringResource(R.string.wrong_code))
+                    _restorePasswordCodeState.value = CodeState(error = UIText.StringResource(R.string.wrong_code))
                 }
             }
         }.launchIn(viewModelScope)
