@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
+import ru.tech.cookhelper.presentation.app.components.StrokeTextField
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
@@ -107,12 +108,13 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                     }
                 )
                 Spacer(Modifier.size(8.dp * mod))
-                OutlinedTextField(
+                StrokeTextField(
                     value = nick,
-                    onValueChange = { nick = it },
+                    onValueChange = { nick = it; viewModel.checkLoginForAvailability(it) },
                     label = { Text(stringResource(R.string.nick)) },
                     singleLine = true,
-                    isError = nick.isEmpty(),
+                    isError = nick.isEmpty() || viewModel.checkLoginState.value.error.isNotEmpty(),
+                    error = { Text(stringResource(R.string.nickname_rejected), color = MaterialTheme.colorScheme.error) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next

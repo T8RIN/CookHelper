@@ -34,4 +34,9 @@ sealed class UIText {
     }
 
     fun isNotEmpty(): Boolean = !isEmpty()
+
+    companion object {
+        fun empty() = DynamicString("")
+    }
+
 }

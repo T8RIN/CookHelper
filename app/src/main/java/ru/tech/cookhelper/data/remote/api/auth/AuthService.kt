@@ -47,4 +47,9 @@ interface AuthService {
         @Part("password") password: String
     ): Call<AuthInfo>
 
+    @GET("api/user/get/login-availability/")
+    suspend fun checkLoginForAvailability(
+        @Query("login") login: String
+    ): AuthInfo
+
 }

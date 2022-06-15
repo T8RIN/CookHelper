@@ -29,4 +29,6 @@ interface UserRepository {
 
     fun getUser(): Flow<User?>
 
+    suspend fun checkLoginForAvailability(login: String): Action<AuthInfo>
+
 }
