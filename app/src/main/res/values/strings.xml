@@ -81,5 +81,6 @@
     <string name="restore">Восстановить</string>
     <string name="save">Сохранить</string>
     <string name="user_not_found">Пользователь не найден</string>
+    <string name="unexpected_error">Непредвиденная ошибка</string>
 
 </resources>

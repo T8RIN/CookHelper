@@ -28,7 +28,7 @@ class UserRepositoryImpl @Inject constructor(
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
-            102 -> emit(Action.Empty())
+            101, 102 -> emit(Action.Empty(body.status))
             100 -> emit(Action.Success(data = body))
             else -> emit(Action.Error(message = body.message))
         }

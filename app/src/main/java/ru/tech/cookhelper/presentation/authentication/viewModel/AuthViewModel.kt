@@ -72,7 +72,7 @@ class AuthViewModel @Inject constructor(
             when (result) {
                 is Action.Loading -> _loginState.value = LoginState(isLoading = true)
                 is Action.Empty -> _loginState.value =
-                    LoginState(error = UIText.StringResource(R.string.wrong_password_or_nick))
+                    LoginState(error = UIText.StringResource(result.status.getMessage()))
                 is Action.Error -> _loginState.value =
                     LoginState(error = UIText.DynamicString(result.message.toString()))
                 is Action.Success -> {
@@ -253,4 +253,21 @@ class AuthViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+}
+
+private fun Int?.getMessage(): Int {
+    if(this == null) return R.string.unexpected_error
+
+    return when(this) {
+        101 -> R.string.user_not_found
+        102 -> R.string.wrong_password_or_nick
+        103 -> TODO()
+        104 -> TODO()
+        105 -> TODO()
+        106 -> TODO()
+        107 -> TODO()
+        108 -> TODO()
+        109 -> TODO()
+        else -> R.string.unexpected_error
+    }
 }
