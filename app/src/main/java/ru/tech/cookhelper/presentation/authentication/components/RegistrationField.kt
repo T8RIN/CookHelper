@@ -121,10 +121,11 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                     ),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
                     trailingIcon = {
-                        if (nick.isNotBlank())
+                        if (nick.isNotBlank()){
                             IconButton(onClick = { nick = "" }) {
                                 Icon(Icons.Filled.Clear, null)
                             }
+                        }
                     }
                 )
                 AnimatedVisibility(name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty()) {
