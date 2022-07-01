@@ -29,6 +29,6 @@ interface UserRepository {
 
     fun getUser(): Flow<User?>
 
-    suspend fun checkLoginForAvailability(login: String): Action<AuthInfo>
+    suspend fun checkLoginOrEmailForAvailability(query: String): Action<AuthInfo>
 
 }

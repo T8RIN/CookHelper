@@ -73,11 +73,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun getUser(): Flow<User?> = userDao.getUser().map { it?.toUser() }
 
-    override suspend fun checkLoginForAvailability(
-        login: String
+    override suspend fun checkLoginOrEmailForAvailability(
+        query: String
     ): Action<AuthInfo> = try {
-
-        val response = authService.checkLoginForAvailability(login)
+        val response = authService.checkLoginOrEmailForAvailability(query)
         if (response.status == 100) Action.Success(data = response)
         else Action.Error(message = response.message)
     } catch (t: Throwable) {

@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -73,6 +74,8 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
             if (state.isLoading) Loading(Modifier.fillMaxWidth())
             else when (state.state) {
                 RestoreState.Login -> {
+                    BackHandler { viewModel.goBack() }
+
                     OutlinedTextField(
                         value = login,
                         onValueChange = { login = it },
@@ -99,6 +102,8 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                     )
                 }
                 RestoreState.Password -> {
+                    BackHandler { viewModel.goBackPasswordRestore() }
+
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },

@@ -83,5 +83,8 @@
     <string name="user_not_found">Пользователь не найден</string>
     <string name="unexpected_error">Непредвиденная ошибка</string>
     <string name="nickname_rejected">Никнейм занят</string>
+    <string name="email_rejected">Почта занята</string>
+    <string name="password_too_short">Пароль слишком короткий</string>
+    <string name="password_must_contain_one_number">Пароль должен содержать хотя бы одну цифру</string>
 
 </resources>

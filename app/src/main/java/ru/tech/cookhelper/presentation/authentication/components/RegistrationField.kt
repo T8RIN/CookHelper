@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
 import android.util.Patterns
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.StrokeTextField
@@ -50,11 +52,17 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
+    val isPasswordValid by derivedStateOf {
+        password.length > 7 && password.toCharArray().any { it.isDigit() }
+    }
+
     val isFormValid by derivedStateOf {
-        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password
+        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password && viewModel.checkLoginState.value.error.isEmpty() && isPasswordValid
     }
 
     val focusManager = LocalFocusManager.current
+
+    BackHandler { viewModel.goBack() }
 
     Text(stringResource(R.string.register), style = MaterialTheme.typography.headlineLarge)
     Spacer(Modifier.size(8.dp * mod))
@@ -110,18 +118,25 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                 Spacer(Modifier.size(8.dp * mod))
                 StrokeTextField(
                     value = nick,
+                    loading = viewModel.checkLoginState.value.isLoading,
                     onValueChange = { nick = it; viewModel.checkLoginForAvailability(it) },
                     label = { Text(stringResource(R.string.nick)) },
                     singleLine = true,
                     isError = nick.isEmpty() || viewModel.checkLoginState.value.error.isNotEmpty(),
-                    error = { Text(stringResource(R.string.nickname_rejected), color = MaterialTheme.colorScheme.error) },
+                    error = {
+                        if (nick.isNotEmpty()) Text(
+                            stringResource(R.string.nickname_rejected),
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = 12.sp
+                        )
+                    },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
                     trailingIcon = {
-                        if (nick.isNotBlank()){
+                        if (nick.isNotBlank()) {
                             IconButton(onClick = { nick = "" }) {
                                 Icon(Icons.Filled.Clear, null)
                             }
@@ -131,31 +146,52 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                 AnimatedVisibility(name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty()) {
                     Column {
                         Spacer(Modifier.size(8.dp * mod))
-                        OutlinedTextField(
+                        StrokeTextField(
                             value = email,
-                            onValueChange = { email = it },
+                            loading = viewModel.checkEmailState.value.isLoading,
+                            onValueChange = {
+                                email =
+                                    it; if (email.isValid()) viewModel.checkEmailForAvailability(it)
+                            },
                             label = { Text(stringResource(R.string.email)) },
                             singleLine = true,
-                            isError = email.isEmpty() || email.isNotValid(),
+                            isError = email.isEmpty() || email.isNotValid() || viewModel.checkEmailState.value.error.isNotEmpty(),
+                            error = {
+                                if (email.isNotEmpty() && email.isValid()) Text(
+                                    stringResource(
+                                        R.string.email_rejected
+                                    ), color = MaterialTheme.colorScheme.error, fontSize = 12.sp
+                                )
+                            },
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Next
                             ),
                             modifier = Modifier.width(TextFieldDefaults.MinWidth),
                             trailingIcon = {
-                                if (email.isNotBlank())
+                                if (email.isNotBlank()) {
                                     IconButton(onClick = { email = "" }) {
                                         Icon(Icons.Filled.Clear, null)
                                     }
+                                }
                             }
                         )
                         Spacer(Modifier.size(8.dp))
-                        OutlinedTextField(
+                        StrokeTextField(
                             value = password,
                             onValueChange = { password = it },
                             label = { Text(stringResource(R.string.password)) },
                             singleLine = true,
-                            isError = password.isEmpty() || passwordRepeat != password,
+                            isError = !isPasswordValid,
+                            error = {
+                                if (password.isNotEmpty()) {
+                                    Text(
+                                        stringResource(if (password.length < 7) R.string.password_too_short else R.string.password_must_contain_one_number),
+                                        color = MaterialTheme.colorScheme.error,
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            },
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Next

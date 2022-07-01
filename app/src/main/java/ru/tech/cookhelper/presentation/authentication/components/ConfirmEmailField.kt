@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.authentication.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -37,6 +38,8 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
         width >= 16 * 5 + 50 * 6 -> 50
         else -> ((width - 16 * 5) / 6)
     }
+
+    BackHandler { viewModel.goBack() }
 
     Text(
         stringResource(R.string.last_step,

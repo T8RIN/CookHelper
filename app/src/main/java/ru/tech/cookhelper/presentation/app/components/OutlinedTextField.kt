@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun StrokeTextField(
     value: String,
+    loading: Boolean = false,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -45,7 +46,7 @@ fun StrokeTextField(
         androidx.compose.material3.OutlinedTextField(
             value = value,
             onValueChange,
-            modifier,
+            modifier.shimmer(loading),
             enabled,
             readOnly,
             textStyle,
@@ -62,9 +63,9 @@ fun StrokeTextField(
             interactionSource,
             colors = colors
         )
-        if (isError) {
-            Spacer(Modifier.height(10.dp))
-            Row { Spacer(modifier = Modifier.width(20.dp)); error?.invoke() }
+        if (isError && !loading) {
+            Spacer(Modifier.height(6.dp))
+            Row { Spacer(modifier = Modifier.width(15.dp)); error?.invoke() }
         }
     }
 }

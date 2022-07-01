@@ -15,7 +15,7 @@ import ru.tech.cookhelper.data.remote.api.auth.toUser
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.check_code.CheckCodeUseCase
-import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginForAvailabilityUseCase
+import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginOrEmailForAvailability
 import ru.tech.cookhelper.domain.use_case.login.LoginUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
 import ru.tech.cookhelper.domain.use_case.request_code.RequestCodeUseCase
@@ -34,11 +34,12 @@ class AuthViewModel @Inject constructor(
     private val cacheUserUseCase: CacheUserUseCase,
     private val sendRestoreCodeUseCase: SendRestoreCodeUseCase,
     private val applyPasswordByCodeUseCase: ApplyPasswordByCodeUseCase,
-    private val checkLoginForAvailabilityUseCase: CheckLoginForAvailabilityUseCase
+    private val checkLoginOrEmailForAvailability: CheckLoginOrEmailForAvailability
 ) : ViewModel() {
 
     private var timerJob: Job? = null
     private var checkLoginJob: Job? = null
+    private var checkEmailJob: Job? = null
 
     var codeTimeout by mutableStateOf(60)
 
@@ -46,6 +47,8 @@ class AuthViewModel @Inject constructor(
     var currentName = ""
     private var restoreLogin = ""
     private var currentToken = ""
+
+    private var previousState by mutableStateOf(AuthState.Login)
 
     private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)
     val authState: State<AuthState> = _authState
@@ -65,11 +68,15 @@ class AuthViewModel @Inject constructor(
     private val _restorePasswordCodeState = mutableStateOf(CodeState())
     val restorePasswordCodeState: State<CodeState> = _restorePasswordCodeState
 
-    private val _checkLoginState = mutableStateOf(CheckLoginState())
-    val checkLoginState: State<CheckLoginState> = _checkLoginState
+    private val _checkLoginState = mutableStateOf(CheckLoginOrEmailState())
+    val checkLoginState: State<CheckLoginOrEmailState> = _checkLoginState
+
+    private val _checkEmailState = mutableStateOf(CheckLoginOrEmailState())
+    val checkEmailState: State<CheckLoginOrEmailState> = _checkEmailState
 
     fun openPasswordRestore() {
         _restorePasswordState.value = RestorePasswordState(state = RestoreState.Login)
+        previousState = _authState.value
         _authState.value = AuthState.RestorePassword
     }
 
@@ -96,11 +103,13 @@ class AuthViewModel @Inject constructor(
     }
 
     fun openRegistration() {
+        previousState = _authState.value
         _authState.value = AuthState.Registration
         resetCodeState()
     }
 
     fun openLogin() {
+        previousState = _authState.value
         _authState.value = AuthState.Login
     }
 
@@ -208,6 +217,7 @@ class AuthViewModel @Inject constructor(
 
     private fun openEmailConfirmation() {
         resetCodeState()
+        previousState = _authState.value
         _authState.value = AuthState.ConfirmEmail
         reloadTimer()
     }
@@ -264,17 +274,44 @@ class AuthViewModel @Inject constructor(
         checkLoginJob?.cancel()
         checkLoginJob = viewModelScope.launch {
             delay(500)
-            when (val result = checkLoginForAvailabilityUseCase(login)) {
+            _checkLoginState.value = CheckLoginOrEmailState(isLoading = true)
+            when (val result = checkLoginOrEmailForAvailability(login)) {
                 is Action.Empty -> _checkLoginState.value =
-                    CheckLoginState(error = UIText.StringResource(result.status.getMessage()))
+                    CheckLoginOrEmailState(error = UIText.StringResource(result.status.getMessage()))
                 is Action.Error -> _checkLoginState.value =
-                    CheckLoginState(error = UIText.DynamicString(result.message.toString()))
+                    CheckLoginOrEmailState(error = UIText.DynamicString(result.message.toString()))
                 is Action.Success -> {
-                    _checkLoginState.value = CheckLoginState(error = UIText.empty())
+                    _checkLoginState.value = CheckLoginOrEmailState(error = UIText.empty())
                 }
                 else -> {}
             }
         }
+    }
+
+    fun checkEmailForAvailability(email: String) {
+        checkEmailJob?.cancel()
+        checkEmailJob = viewModelScope.launch {
+            delay(500)
+            _checkEmailState.value = CheckLoginOrEmailState(isLoading = true)
+            when (val result = checkLoginOrEmailForAvailability(email)) {
+                is Action.Empty -> _checkEmailState.value =
+                    CheckLoginOrEmailState(error = UIText.StringResource(result.status.getMessage()))
+                is Action.Error -> _checkEmailState.value =
+                    CheckLoginOrEmailState(error = UIText.DynamicString(result.message.toString()))
+                is Action.Success -> {
+                    _checkEmailState.value = CheckLoginOrEmailState(error = UIText.empty())
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun goBack() {
+        _authState.value = previousState
+    }
+
+    fun goBackPasswordRestore() {
+        _restorePasswordState.value = _restorePasswordState.value.copy(state = RestoreState.Login)
     }
 
 }

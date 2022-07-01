@@ -48,8 +48,8 @@ interface AuthService {
     ): Call<AuthInfo>
 
     @GET("api/user/get/login-availability/")
-    suspend fun checkLoginForAvailability(
-        @Query("login") login: String
+    suspend fun checkLoginOrEmailForAvailability(
+        @Query("login") query: String
     ): AuthInfo
 
 }
