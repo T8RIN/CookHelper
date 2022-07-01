@@ -38,6 +38,7 @@ class RecipeListViewModel @Inject constructor(
                 is Action.Loading -> {
                     _recipeState.value = RecipeState(isLoading = true)
                 }
+                is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
     }

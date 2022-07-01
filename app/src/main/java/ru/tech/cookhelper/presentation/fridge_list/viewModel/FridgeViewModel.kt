@@ -41,6 +41,7 @@ class FridgeViewModel @Inject constructor(
                 is Action.Loading -> {
                     _listState.value = FridgeListState(isLoading = true)
                 }
+                is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
     }

@@ -48,9 +48,9 @@ fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    localFocusManager.clearFocus()
-                })
+                detectTapGestures(
+                    onTap = { localFocusManager.clearFocus() }
+                )
             },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -50,6 +50,7 @@ class DishDetailsViewModel @Inject constructor(
                 is Action.Loading -> {
                     _dishState.value = DishDetailsState(isLoading = true)
                 }
+                is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
     }

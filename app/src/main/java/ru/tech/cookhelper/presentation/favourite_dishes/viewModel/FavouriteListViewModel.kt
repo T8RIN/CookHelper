@@ -38,6 +38,7 @@ class FavouriteListViewModel @Inject constructor(
                 is Action.Loading -> {
                     _favState.value = RecipeState(isLoading = true)
                 }
+                is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
     }
