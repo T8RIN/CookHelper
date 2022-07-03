@@ -83,6 +83,8 @@ class UserRepositoryImpl @Inject constructor(
         Action.Error(message = t.message.toString())
     }
 
+    override suspend fun logOut() = userDao.clearUser()
+
     override suspend fun requestPasswordRestoreCode(
         login: String
     ): Result<AuthInfo> = runCatching {

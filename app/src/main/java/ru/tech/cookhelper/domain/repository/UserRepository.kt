@@ -31,4 +31,6 @@ interface UserRepository {
 
     suspend fun checkLoginOrEmailForAvailability(query: String): Action<AuthInfo>
 
+    suspend fun logOut()
+
 }

@@ -6,8 +6,6 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.outlined.FindReplace
@@ -35,6 +33,7 @@ import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
 import ru.tech.cookhelper.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
 import ru.tech.cookhelper.presentation.favourite_dishes.FavouriteListScreen
 import ru.tech.cookhelper.presentation.fridge_list.FridgeScreen
+import ru.tech.cookhelper.presentation.profile.ProfileScreen
 import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
@@ -92,72 +91,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ModalNavigationDrawer(
-                        drawerContent = {
-                            LazyColumn(contentPadding = WindowInsets.systemBars.asPaddingValues()) {
-                                item {
-                                    Column {
-                                        Picture(
-                                            model = "https://sun9-76.userapi.com/s/v1/ig2/lbF4vZbkOi0zdhtU-5iXrF2YPHiwIVVZouCCGvQBb7MV7OKzhhPUg7KW4nyc7vr7SS7HVDDyV_kdPVeoPo7j8RHb.jpg?size=1620x2160&quality=95&type=album",
-                                            modifier = Modifier
-                                                .padding(start = 15.dp, top = 15.dp)
-                                                .size(64.dp)
-                                        )
-                                        Spacer(Modifier.size(10.dp))
-                                        Column(
-                                            Modifier
-                                                .height(52.dp)
-                                                .padding(start = 15.dp)
-                                        ) {
-                                            Text(
-                                                viewModel.userState.value.user?.let { "${it.name} ${it.surname}" }
-                                                    .toString(),
-                                                style = MaterialTheme.typography.headlineSmall
-                                            )
-                                            Spacer(Modifier.weight(1f))
-                                            Text(
-                                                "@${viewModel.userState.value.user?.nickname}",
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
-                                        }
-                                        Spacer(Modifier.size(30.dp))
-                                    }
-                                }
-                                itemsIndexed(drawerList) { _, item ->
-                                    val selected = item.isCurrentScreen
-
-                                    NavigationDrawerItem(
-                                        icon = { Icon(item iconWith selected, null) },
-                                        shape = RoundedCornerShape(
-                                            topStart = 0.0.dp,
-                                            topEnd = 36.0.dp,
-                                            bottomEnd = 36.0.dp,
-                                            bottomStart = 0.0.dp
-                                        ),
-                                        modifier = Modifier.padding(end = 12.dp),
-                                        label = { Text(stringResource(item.title)) },
-                                        selected = selected,
-                                        onClick = {
-                                            viewModel.title = item.title
-                                            screenController.navigate(item)
-
-                                            if (item is Screen.Home) {
-                                                viewModel.title = Screen.Recipes.title
-                                                viewModel.selectedItem = 0
-                                                viewModel.navDestination = Screen.Recipes
-                                            }
-                                            scope.launch { drawerState.close() }
-                                            clearState(all = true)
-                                        }
-                                    )
-                                    if (item is Screen.Home || item is Screen.BlockList) {
-                                        Spacer(Modifier.size(10.dp))
-                                        Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                        Spacer(Modifier.size(10.dp))
-                                    }
-                                }
-                            }
-                        },
+                        drawerContent = { MainModalDrawerContent(viewModel, drawerState) },
                         drawerState = drawerState,
                         gesturesEnabled = inNavigationMode
                     ) {
@@ -405,6 +339,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             viewModel.insertSetting(id, option)
                                         }
                                     }
+                                    is Screen.Profile -> ProfileScreen()
                                     is Screen.BlockList -> Placeholder(
                                         screen.baseIcon,
                                         stringResource(screen.title)
@@ -422,10 +357,6 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         stringResource(screen.title)
                                     )
                                     is Screen.Messages -> Placeholder(
-                                        screen.baseIcon,
-                                        stringResource(screen.title)
-                                    )
-                                    is Screen.Profile -> Placeholder(
                                         screen.baseIcon,
                                         stringResource(screen.title)
                                     )
