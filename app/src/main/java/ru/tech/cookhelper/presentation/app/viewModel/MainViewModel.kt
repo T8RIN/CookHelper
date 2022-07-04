@@ -14,10 +14,12 @@ import ru.tech.cookhelper.domain.use_case.get_prod_list.GetProductsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.insert_setting.InsertSettingUseCase
+import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.domain.use_case.update_fridge.UpdateFridgeUseCase
 import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.ui.utils.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.UIText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +29,8 @@ class MainViewModel @Inject constructor(
     private val updateFridgeUseCase: UpdateFridgeUseCase,
     getSettingsListUseCase: GetSettingsListUseCase,
     getUserUseCase: GetUserUseCase,
-    private val insertSettingUseCase: InsertSettingUseCase
+    private val insertSettingUseCase: InsertSettingUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
 
     var searchMode by mutableStateOf(false)
@@ -38,7 +41,7 @@ class MainViewModel @Inject constructor(
     var navDestination by mutableStateOf<Screen>(Screen.Recipes)
     var selectedItem by mutableStateOf(0)
 
-    var title by mutableStateOf(Screen.Recipes.title)
+    var title by mutableStateOf<UIText>(UIText.StringResource(Screen.Recipes.title))
     val searchString = mutableStateOf("")
 
     private val default: ArrayList<Product> = arrayListOf()
@@ -141,6 +144,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             insertSettingUseCase(id, option)
         }
+    }
+
+    fun logOut() {
+        viewModelScope.launch { logoutUseCase() }
     }
 }
 

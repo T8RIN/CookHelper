@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
@@ -57,7 +58,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         password.isNotEmpty() && passwordRepeat == password
     }
 
-    Text(stringResource(R.string.password_restore), style = MaterialTheme.typography.headlineLarge)
+    Text(stringResource(R.string.password_restore), style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center)
     Spacer(Modifier.size(8.dp * mod))
 
     AnimatedContent(viewModel.restorePasswordState.value) { state ->
@@ -67,7 +68,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         ) {
             Text(
                 stringResource(if (state.state == RestoreState.Login) R.string.type_your_email else R.string.type_new_password_and_code),
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center
             )
             Spacer(Modifier.size(64.dp * mod))
 

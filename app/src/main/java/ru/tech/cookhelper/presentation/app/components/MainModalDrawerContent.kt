@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.UIText
 import ru.tech.cookhelper.presentation.ui.utils.clearState
 import ru.tech.cookhelper.presentation.ui.utils.drawerList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
@@ -31,7 +32,6 @@ fun MainModalDrawerContent(viewModel: MainViewModel, drawerState: DrawerState) {
             MainModalDrawerHeader(
                 userState = viewModel.userState.value,
                 onClick = {
-                    viewModel.title = Screen.Profile.title
                     screenController.navigate(Screen.Profile)
                     scope.launch { drawerState.close() }
                     clearState(all = true)
@@ -54,11 +54,11 @@ fun MainModalDrawerContent(viewModel: MainViewModel, drawerState: DrawerState) {
                 label = { Text(stringResource(item.title)) },
                 selected = selected,
                 onClick = {
-                    viewModel.title = item.title
+                    viewModel.title = UIText.StringResource(item.title)
                     screenController.navigate(item)
 
                     if (item is Screen.Home) {
-                        viewModel.title = Screen.Recipes.title
+                        viewModel.title = UIText.StringResource(Screen.Profile.title)
                         viewModel.selectedItem = 0
                         viewModel.navDestination = Screen.Recipes
                     }

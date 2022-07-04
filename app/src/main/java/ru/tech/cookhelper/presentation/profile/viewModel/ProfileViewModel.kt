@@ -16,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    getUserUseCase: GetUserUseCase,
-    private val logoutUseCase: LogoutUseCase
+    getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
     private val _userState: MutableState<UserState> = mutableStateOf(UserState())
@@ -27,10 +26,6 @@ class ProfileViewModel @Inject constructor(
         getUserUseCase().onEach { user ->
             user?.let { _userState.value = UserState(it, it.token) }
         }.launchIn(viewModelScope)
-    }
-
-    fun logOut() {
-        viewModelScope.launch { logoutUseCase() }
     }
 
 }

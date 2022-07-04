@@ -18,8 +18,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.ImageLoader
-import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageScope
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
@@ -32,6 +33,9 @@ fun Picture(
     contentDescription: String? = null,
     shape: CornerBasedShape = CircleShape,
     contentScale: ContentScale = ContentScale.Crop,
+    loading: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Loading) -> Unit)? = null,
+    success: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Success) -> Unit)? = null,
+    error: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Error) -> Unit)? = null,
     onLoading: ((AsyncImagePainter.State.Loading) -> Unit)? = null,
     onSuccess: ((AsyncImagePainter.State.Success) -> Unit)? = null,
     onError: ((AsyncImagePainter.State.Error) -> Unit)? = null,
@@ -53,7 +57,7 @@ fun Picture(
         .crossfade(true)
         .build()
 
-    AsyncImage(
+    SubcomposeAsyncImage(
         model = request,
         imageLoader = imageLoader,
         contentDescription = contentDescription,
@@ -61,9 +65,12 @@ fun Picture(
             .clip(shape)
             .shimmer(shimmerVisible),
         contentScale = contentScale,
+        loading = loading,
+        success = success,
+        error = error,
         onSuccess = { shimmerVisible = false; onSuccess?.invoke(it); onState?.invoke(it) },
         onLoading = { onLoading?.invoke(it); onState?.invoke(it) },
-        onError = { onError?.invoke(it); onState?.invoke(it) },
+        onError = { shimmerVisible = false; onError?.invoke(it); onState?.invoke(it) },
         alignment = alignment,
         alpha = alpha,
         colorFilter = colorFilter,

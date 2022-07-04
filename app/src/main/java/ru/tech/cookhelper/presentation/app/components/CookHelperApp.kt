@@ -10,6 +10,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.outlined.FindReplace
 import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.twotone.HourglassEmpty
@@ -22,11 +24,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
 import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
@@ -108,31 +112,31 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         }
                                     },
                                     actions = {
-//                                            if (viewModel.selectedItem == 0 && screenController.currentScreen == Screen.Home && !viewModel.searchMode) {
-//                                                val focus = LocalFocusManager.current
-//                                                IconButton(onClick = {
-//                                                    if (viewModel.searchMode) {
-//                                                        focus.clearFocus()
-//                                                        viewModel.updateSearch("")
-//                                                    }
-//                                                    viewModel.searchMode = !viewModel.searchMode
-//                                                }) {
-//                                                    Icon(
-//                                                        if (!viewModel.searchMode) Icons.Rounded.Search else Icons.Rounded.ArrowBack,
-//                                                        null
-//                                                    )
-//                                                }
-//                                            } else
-                                        if (screenController.currentScreen is Screen.Settings) {
-                                            IconButton(onClick = { dialogController.show(Dialog.AboutApp) }) {
-                                                Icon(Icons.Outlined.HelpOutline, null)
+                                        when (screenController.currentScreen) {
+                                            is Screen.Settings -> {
+                                                IconButton(
+                                                    onClick = { dialogController.show(Dialog.AboutApp) },
+                                                    content = {
+                                                        Icon(
+                                                            Icons.Outlined.HelpOutline,
+                                                            null
+                                                        )
+                                                    }
+                                                )
                                             }
+                                            is Screen.Profile -> {
+                                                IconButton(
+                                                    onClick = { dialogController.show(Dialog.Logout) },
+                                                    content = { Icon(Icons.Outlined.Logout, null) }
+                                                )
+                                            }
+                                            else -> {}
                                         }
                                     },
                                     title = {
                                         Box {
                                             if (!viewModel.searchMode) {
-                                                Text(viewModel.title.asString(activity))
+                                                Text(viewModel.title.asString(activity), fontWeight = FontWeight.Medium)
                                             } else {
                                                 SearchBar(
                                                     searchString = viewModel.searchString.value,
@@ -197,7 +201,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                 onClick = {
                                                                     if (viewModel.selectedItem != index) {
                                                                         viewModel.apply {
-                                                                            title = screen.title
+                                                                            title =
+                                                                                UIText.StringResource(
+                                                                                    screen.title
+                                                                                )
                                                                             selectedItem = index
                                                                             navDestination = screen
                                                                             searchMode = false
@@ -339,7 +346,11 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             viewModel.insertSetting(id, option)
                                         }
                                     }
-                                    is Screen.Profile -> ProfileScreen()
+                                    is Screen.Profile -> {
+                                        ProfileScreen(updateTitle = { newTitle ->
+                                            viewModel.title = UIText.DynamicString(newTitle)
+                                        })
+                                    }
                                     is Screen.BlockList -> Placeholder(
                                         screen.baseIcon,
                                         stringResource(screen.title)
@@ -373,10 +384,22 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     AnimatedVisibility(visible = dialogController.currentDialog != Dialog.None) {
                         when (dialogController.currentDialog) {
                             is Dialog.Exit -> {
-                                ExitDialog(activity)
+                                ExitDialog(onExit = { activity.finishAffinity() })
                             }
                             is Dialog.AboutApp -> {
                                 AboutAppDialog()
+                            }
+                            is Dialog.Logout -> {
+                                val toastHost = LocalToastHost.current
+                                LogoutDialog(onLogout = {
+                                    if (activity.isOnline()) {
+                                        viewModel.logOut()
+                                    } else toastHost.sendToast(
+                                        Icons.Outlined.SignalWifiConnectedNoInternet4,
+                                        text = activity.getString(R.string.no_connection)
+                                    )
+                                    dialogController.close()
+                                })
                             }
                             is Dialog.PickProducts -> {
                                 val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.75f

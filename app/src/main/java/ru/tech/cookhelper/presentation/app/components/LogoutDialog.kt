@@ -13,14 +13,14 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDialog
 
 @Composable
-fun ExitDialog(onExit: () -> Unit) {
+fun LogoutDialog(onLogout: () -> Unit) {
     val dialogController = LocalDialogController.current
 
     AlertDialog(
-        title = { Text(stringResource(R.string.app_closing)) },
+        title = { Text(stringResource(R.string.account_log_out)) },
         text = {
             Text(
-                stringResource(R.string.app_closing_message),
+                stringResource(R.string.log_out_message),
                 textAlign = TextAlign.Center
             )
         },
@@ -32,7 +32,7 @@ fun ExitDialog(onExit: () -> Unit) {
             }
         },
         dismissButton = {
-            TextButton(onClick = { onExit() }) {
+            TextButton(onClick = { onLogout() }) {
                 Text(stringResource(R.string.close))
             }
         }

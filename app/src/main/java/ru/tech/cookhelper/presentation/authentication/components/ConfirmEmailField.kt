@@ -4,7 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DoneOutline
+import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -96,7 +96,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
 
     if (viewModel.codeState.value.matched) {
         toastHost.sendToast(
-            Icons.Rounded.DoneOutline,
+            Icons.Rounded.Face,
             context.getString(R.string.welcome_user, viewModel.currentName)
         )
         viewModel.resetState()

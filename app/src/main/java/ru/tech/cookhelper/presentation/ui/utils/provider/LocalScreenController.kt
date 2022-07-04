@@ -5,6 +5,7 @@ import ru.tech.cookhelper.presentation.ui.utils.Screen
 
 val LocalScreenController = compositionLocalOf { mutableStateOf<Screen>(Screen.Home) }
 
+
 fun MutableState<Screen>.navigate(screen: Screen) {
     this.value = screen
 }

@@ -27,8 +27,7 @@ fun MainModalDrawerHeader(userState: UserState, onClick: () -> Unit) {
         Spacer(Modifier.size(10.dp))
         Column(
             Modifier
-                .height(52.dp)
-                .padding(start = 15.dp)
+                .padding(horizontal = 15.dp)
         ) {
             Text(
                 userState.user?.let { "${it.name} ${it.surname}" }.toString(),

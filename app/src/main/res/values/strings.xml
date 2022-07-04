@@ -86,5 +86,11 @@
     <string name="email_rejected">Почта занята</string>
     <string name="password_too_short">Пароль слишком короткий</string>
     <string name="password_must_contain_one_number">Пароль должен содержать хотя бы одну цифру</string>
+    <string name="account_log_out">Выход из аккаунта</string>
+    <string name="log_out_message">Вы выйдите из аккаунта, но все ваши данные будут сохранены в облаке</string>
+    <string name="no_connection">Нет интернет соединения</string>
+    <string name="set_status">Установить статус</string>
+    <string name="add">Добавить</string>
+    <string name="photos">Фотографии</string>
 
 </resources>

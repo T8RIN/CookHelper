@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
@@ -53,7 +54,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
         mutableStateOf(false)
     }
     val isPasswordValid by derivedStateOf {
-        password.length > 7 && password.toCharArray().any { it.isDigit() }
+        password.length >= 8 && password.toCharArray().any { it.isDigit() }
     }
 
     val isFormValid by derivedStateOf {
@@ -64,11 +65,11 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
 
     BackHandler { viewModel.goBack() }
 
-    Text(stringResource(R.string.register), style = MaterialTheme.typography.headlineLarge)
+    Text(stringResource(R.string.register), style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center)
     Spacer(Modifier.size(8.dp * mod))
     Text(
         stringResource(R.string.create_your_new_account),
-        style = MaterialTheme.typography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center
     )
     Spacer(Modifier.size(32.dp * mod))
     AnimatedContent(viewModel.registrationState.value.isLoading) { isLoading ->
@@ -186,7 +187,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                             error = {
                                 if (password.isNotEmpty()) {
                                     Text(
-                                        stringResource(if (password.length < 7) R.string.password_too_short else R.string.password_must_contain_one_number),
+                                        stringResource(if (password.length < 8) R.string.password_too_short else R.string.password_must_contain_one_number),
                                         color = MaterialTheme.colorScheme.error,
                                         fontSize = 12.sp
                                     )
