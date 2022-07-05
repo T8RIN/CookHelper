@@ -93,5 +93,6 @@
     <string name="add">Добавить</string>
     <string name="photos">Фотографии</string>
     <string name="edit">Редактировать</string>
+    <string name="count_of_all">%d из %d</string>
 
 </resources>

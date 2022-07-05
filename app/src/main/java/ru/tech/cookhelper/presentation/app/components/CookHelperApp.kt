@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.twotone.HourglassEmpty
 import androidx.compose.material.icons.twotone.SignalWifiConnectedNoInternet4
@@ -22,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
@@ -361,25 +364,60 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         val pagerState =
                                             rememberPagerState(screen.images.indexOfFirst { it.id == screen.id })
 
-                                        HorizontalPager(
-                                            modifier = Modifier.fillMaxSize(),
-                                            count = screen.images.size,
-                                            state = pagerState
-                                        ) { page ->
-                                            Picture(
-                                                zoomEnabled = true,
-                                                shimmerEnabled = false,
-                                                model = screen.images[page].link,
-                                                modifier = Modifier.fillMaxWidth(),
-                                                shape = RoundedCornerShape(0.dp),
-                                                contentScale = ContentScale.Fit,
-                                                loading = { Loading() },
-                                                error = {
-                                                    Placeholder(
-                                                        icon = Icons.TwoTone.SignalWifiConnectedNoInternet4,
-                                                        text = stringResource(R.string.no_connection)
+                                        Box(Modifier.fillMaxSize()) {
+                                            HorizontalPager(
+                                                modifier = Modifier.fillMaxSize(),
+                                                count = screen.images.size,
+                                                state = pagerState
+                                            ) { page ->
+                                                Picture(
+                                                    zoomEnabled = true,
+                                                    shimmerEnabled = false,
+                                                    model = screen.images[page].link,
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    shape = RoundedCornerShape(0.dp),
+                                                    contentScale = ContentScale.Fit,
+                                                    loading = { Loading() },
+                                                    error = {
+                                                        Placeholder(
+                                                            icon = Icons.TwoTone.SignalWifiConnectedNoInternet4,
+                                                            text = stringResource(R.string.no_connection)
+                                                        )
+                                                    }
+                                                )
+                                            }
+                                            TopAppBar(
+                                                modifier = Modifier.systemBarsPadding(),
+                                                background = Color.Black.copy(alpha = 0.5f),
+                                                title = {
+                                                    Text(
+                                                        stringResource(
+                                                            R.string.count_of_all,
+                                                            pagerState.currentPage + 1,
+                                                            pagerState.pageCount
+                                                        ),
+                                                        color = Color.White,
+                                                        fontWeight = FontWeight.SemiBold
                                                     )
+                                                },
+                                                navigationIcon = {
+                                                    IconButton(onClick = { back() }) {
+                                                        Icon(
+                                                            Icons.Rounded.ArrowBack,
+                                                            null,
+                                                            tint = Color.White
+                                                        )
+                                                    }
                                                 }
+                                            )
+                                            HorizontalPagerIndicator(
+                                                pagerState = pagerState,
+                                                modifier = Modifier
+                                                    .align(Alignment.BottomCenter)
+                                                    .padding(16.dp)
+                                                    .systemBarsPadding(),
+                                                activeColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                                inactiveColor = MaterialTheme.colorScheme.secondaryContainer
                                             )
                                         }
 

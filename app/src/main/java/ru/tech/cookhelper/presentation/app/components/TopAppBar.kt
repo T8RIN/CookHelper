@@ -14,12 +14,12 @@ fun TopAppBar(
     title: @Composable () -> Unit,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    colors: TopAppBarColors? = null,
+    background: Color? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
 
-    val backgroundColor = backgroundColors.containerColor(
+    val backgroundColor = background ?: backgroundColors.containerColor(
         scrollFraction = scrollBehavior?.scrollFraction ?: 0f
     ).value
 
@@ -27,8 +27,6 @@ fun TopAppBar(
         containerColor = Color.Transparent,
         scrolledContainerColor = Color.Transparent
     )
-
-    val finalColors = colors ?: foregroundColors
 
     Surface(color = backgroundColor) {
         when (size) {
@@ -38,7 +36,7 @@ fun TopAppBar(
                     modifier.statusBarsPadding(),
                     navigationIcon,
                     actions,
-                    finalColors,
+                    foregroundColors,
                     scrollBehavior
                 )
             }
@@ -48,7 +46,7 @@ fun TopAppBar(
                     modifier.statusBarsPadding(),
                     navigationIcon,
                     actions,
-                    finalColors,
+                    foregroundColors,
                     scrollBehavior
                 )
             }
@@ -58,7 +56,7 @@ fun TopAppBar(
                     modifier.statusBarsPadding(),
                     navigationIcon,
                     actions,
-                    finalColors,
+                    foregroundColors,
                     scrollBehavior
                 )
             }
@@ -68,7 +66,7 @@ fun TopAppBar(
                     modifier.statusBarsPadding(),
                     navigationIcon,
                     actions,
-                    finalColors,
+                    foregroundColors,
                     scrollBehavior
                 )
             }

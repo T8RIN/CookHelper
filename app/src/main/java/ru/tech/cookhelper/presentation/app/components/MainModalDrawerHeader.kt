@@ -19,7 +19,7 @@ fun MainModalDrawerHeader(userState: UserState, onClick: () -> Unit) {
         )
     ) {
         Picture(
-            model = "https://sun9-76.userapi.com/s/v1/ig2/lbF4vZbkOi0zdhtU-5iXrF2YPHiwIVVZouCCGvQBb7MV7OKzhhPUg7KW4nyc7vr7SS7HVDDyV_kdPVeoPo7j8RHb.jpg?size=1620x2160&quality=95&type=album",
+            model = "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
             modifier = Modifier
                 .padding(start = 15.dp, top = 15.dp)
                 .size(64.dp)

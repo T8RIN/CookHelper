@@ -92,6 +92,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-flowlayout:0.24.13-rc")
     implementation("com.google.accompanist:accompanist-placeholder-material:0.24.13-rc")
     implementation("com.google.accompanist:accompanist-pager:0.24.13-rc")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.24.13-rc")
 
     //Coil
     implementation("io.coil-kt:coil:2.1.0")

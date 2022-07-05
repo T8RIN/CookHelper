@@ -140,15 +140,15 @@ fun ProfileScreen(
                 screenController.apply {
                     navigate(
                         Screen.FullscreenImage(
-                            id,
-                            testList,
-                            currentScreen
+                            id = id,
+                            images = testList,
+                            previousScreen = currentScreen
                         )
                     )
                 }
             },
             onAddImageClick = {
-
+                //TODO: Add Image Feature
             }
         )
     }
@@ -156,6 +156,9 @@ fun ProfileScreen(
 }
 
 private val testList = listOf(
+    Image("https://sun9-76.userapi.com/s/v1/ig2/lbF4vZbkOi0zdhtU-5iXrF2YPHiwIVVZouCCGvQBb7MV7OKzhhPUg7KW4nyc7vr7SS7HVDDyV_kdPVeoPo7j8RHb.jpg?size=1620x2160&quality=95&type=album", 3),
+    Image("https://sun1-19.userapi.com/impg/0_BW3-31ZjfwZyHV0B0-YfVUjWiBOFL2SpH0HQ/kKuUGarykVA.jpg?size=2160x1440&quality=96&sign=7843f461f7570a9b792b3bdaea627753&type=album", 4),
+    Image("https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album", 5),
     Image("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", 1),
     Image("https://www.journaldev.com/wp-content/uploads/2018/06/android-instant-app-module-dependencies.png.webp", 2)
 )

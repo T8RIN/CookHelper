@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.ui.utils.zooomable
 
+import android.content.res.Configuration
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
@@ -21,9 +22,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun Zoomable(
@@ -33,6 +38,8 @@ fun Zoomable(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    val conf = LocalConfiguration.current
+    val density = LocalDensity.current
 
     BoxWithConstraints(
         modifier = modifier,
@@ -59,7 +66,10 @@ fun Zoomable(
                     onDoubleTap = {
                         scope.launch {
                             if (state.scale == state.maxScale) state.animateScaleTo(state.minScale)
-                            else state.animateScaleTo(state.scale + (state.maxScale - state.minScale) / 2)
+                            else {
+                                state.animateScaleTo(state.scale + (state.maxScale - state.minScale) / 2)
+                                state.setTapOffset(it, conf, density)
+                            }
                         }
                     }
                 )
@@ -247,10 +257,10 @@ class ZoomableState(
 
     internal suspend fun drag(dragDistance: Offset) = coroutineScope {
         launch {
-            _translateY.snapTo((_translateY.value + dragDistance.y))
+            _translateY.snapTo(_translateY.value + dragDistance.y)
         }
         launch {
-            _translateX.snapTo((_translateX.value + dragDistance.x))
+            _translateX.snapTo(_translateX.value + dragDistance.x)
         }
     }
 
@@ -270,9 +280,7 @@ class ZoomableState(
         velocityTracker.addPosition(timeMillis = timeMillis, position = position)
     }
 
-    internal fun resetTracking() {
-        velocityTracker.resetTracking()
-    }
+    internal fun resetTracking() = velocityTracker.resetTracking()
 
     override fun toString(): String = "ZoomableState(" +
             "minScale=$minScale, " +
@@ -281,6 +289,34 @@ class ZoomableState(
             "translateX=$translateX" +
             "scale=$scale" +
             ")"
+
+    suspend fun setTapOffset(tapOffset: Offset, configuration: Configuration, density: Density) =
+        coroutineScope {
+            val targetOffset: Offset = calcTargetOffset(tapOffset, configuration, density)
+            launch {
+                _translateX.animateTo(_translateX.value + targetOffset.x)
+            }
+            launch {
+                _translateY.animateTo(_translateY.value + targetOffset.y)
+            }
+        }
+
+    private fun calcTargetOffset(
+        tapOffset: Offset,
+        configuration: Configuration,
+        density: Density
+    ): Offset {
+        val width = configuration.screenWidthDp.dp.toPx(density)
+        val height = configuration.screenHeightDp.dp.toPx(density)
+
+        val halfWidth = width / 2
+        val halfHeight = height / 2
+
+        val x = halfWidth - tapOffset.x
+        val y = halfHeight - tapOffset.y
+
+        return Offset(x, y)
+    }
 
     companion object {
         /**
@@ -307,4 +343,8 @@ class ZoomableState(
             }
         )
     }
+}
+
+private fun Dp.toPx(density: Density): Float {
+    return with(density) { toPx() }
 }
