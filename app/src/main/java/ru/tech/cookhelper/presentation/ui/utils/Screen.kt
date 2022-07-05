@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.domain.model.Image
 
 sealed class Screen(
     @StringRes val title: Int = R.string.app_name,
@@ -87,6 +88,9 @@ sealed class Screen(
     class MatchedRecipes(val previousScreen: Screen) : Screen()
 
     object Authentication : Screen()
+
+    class FullscreenImage(val id: Int, val images: List<Image>, val previousScreen: Screen = Home) :
+        Screen()
 }
 
 val drawerList = listOf(
@@ -99,7 +103,8 @@ val drawerList = listOf(
     Screen.Settings
 )
 
-val showTopBarList = listOf(
+val hideTopBarList = listOf(
+    Screen.FullscreenImage::class.name,
     Screen.MatchedRecipes::class.name,
     Screen.RecipeDetails::class.name,
     Screen.Authentication::class.name

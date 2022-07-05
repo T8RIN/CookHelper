@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.rounded.ArrowRightAlt
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +32,11 @@ fun ImageCarousel(data: List<Image>, onImageClick: (id: Int) -> Unit, onAddImage
                 .padding(horizontal = 15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(R.string.photos).uppercase(), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            Text(
+                stringResource(R.string.photos).uppercase(),
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp
+            )
             Spacer(Modifier.size(5.dp))
             Text(data.size.toString(), color = Color.DarkGray, fontSize = 14.sp)
             Spacer(Modifier.weight(1f))
@@ -40,7 +44,10 @@ fun ImageCarousel(data: List<Image>, onImageClick: (id: Int) -> Unit, onAddImage
                 Icon(Icons.Rounded.KeyboardArrowRight, null)
             }
         }
-        LazyRow(contentPadding = PaddingValues(horizontal = 15.dp)) {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 15.dp),
+            state = rememberForeverLazyListState(key = "image_carousel")
+        ) {
             itemsIndexed(data) { _, item ->
                 OutlinedCard(
                     onClick = { onImageClick(item.id) },

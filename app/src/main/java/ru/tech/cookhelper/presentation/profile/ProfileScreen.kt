@@ -28,6 +28,10 @@ import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.profile.components.ImageCarousel
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
+import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.currentScreen
+import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,6 +41,8 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = scopedViewModel(),
     updateTitle: (title: String) -> Unit
 ) {
+    val screenController = LocalScreenController.current
+
     val userState = viewModel.userState.value
     val nick = userState.user?.nickname
     if (nick != null) LaunchedEffect(Unit) { updateTitle(nick) }
@@ -124,14 +130,22 @@ fun ProfileScreen(
             }
             Spacer(Modifier.height(10.dp))
             FilledTonalButton(modifier = Modifier.fillMaxWidth(), onClick = { /*TODO*/ }) {
-                Text("Редактировать")
+                Text(stringResource(R.string.edit))
             }
         }
         Spacer(Modifier.height(20.dp))
         ImageCarousel(
             data = testList,
             onImageClick = { id ->
-
+                screenController.apply {
+                    navigate(
+                        Screen.FullscreenImage(
+                            id,
+                            testList,
+                            currentScreen
+                        )
+                    )
+                }
             },
             onAddImageClick = {
 

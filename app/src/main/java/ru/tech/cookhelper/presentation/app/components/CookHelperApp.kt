@@ -6,6 +6,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.outlined.FindReplace
@@ -15,12 +16,14 @@ import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.twotone.HourglassEmpty
+import androidx.compose.material.icons.twotone.SignalWifiConnectedNoInternet4
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
@@ -47,6 +53,7 @@ import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
+@OptIn(ExperimentalPagerApi::class)
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
@@ -86,7 +93,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                 val screenController = LocalScreenController.current
                 val dialogController = LocalDialogController.current
 
-                val inNavigationMode by derivedStateOf { screenController.currentScreen::class.name !in showTopBarList }
+                val inNavigationMode by derivedStateOf { screenController.currentScreen::class.name !in hideTopBarList }
 
                 BackHandler { dialogController.show(Dialog.Exit) }
 
@@ -136,7 +143,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     title = {
                                         Box {
                                             if (!viewModel.searchMode) {
-                                                Text(viewModel.title.asString(activity), fontWeight = FontWeight.Medium)
+                                                Text(
+                                                    viewModel.title.asString(activity),
+                                                    fontWeight = FontWeight.Medium
+                                                )
                                             } else {
                                                 SearchBar(
                                                     searchString = viewModel.searchString.value,
@@ -340,6 +350,48 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             },
                                             goBack = { back() }
                                         )
+                                    }
+                                    is Screen.FullscreenImage -> {
+                                        val back: () -> Unit = {
+                                            screenController.navigate(screen.previousScreen)
+                                            clearState(Screen.MatchedRecipes::class.name)
+                                        }
+                                        BackHandler { back() }
+
+                                        val pagerState =
+                                            rememberPagerState(screen.images.indexOfFirst { it.id == screen.id })
+
+                                        HorizontalPager(
+                                            modifier = Modifier.fillMaxSize(),
+                                            count = screen.images.size,
+                                            state = pagerState
+                                        ) { page ->
+                                            Picture(
+                                                zoomEnabled = true,
+                                                shimmerEnabled = false,
+                                                model = screen.images[page].link,
+                                                modifier = Modifier.fillMaxWidth(),
+                                                shape = RoundedCornerShape(0.dp),
+                                                contentScale = ContentScale.Fit,
+                                                loading = { Loading() },
+                                                error = {
+                                                    Placeholder(
+                                                        icon = Icons.TwoTone.SignalWifiConnectedNoInternet4,
+                                                        text = stringResource(R.string.no_connection)
+                                                    )
+                                                }
+                                            )
+                                        }
+
+
+//                                        OnFridgeBasedDishes(
+//                                            onRecipeClicked = {
+//                                                screenController.navigate(
+//                                                    Screen.RecipeDetails(it, screen)
+//                                                )
+//                                            },
+//                                            goBack = { back() }
+//                                        )
                                     }
                                     is Screen.Settings -> {
                                         SettingsScreen(viewModel.settingsState.value) { id, option ->

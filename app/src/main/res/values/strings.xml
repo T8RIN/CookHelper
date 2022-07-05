@@ -92,5 +92,6 @@
     <string name="set_status">Установить статус</string>
     <string name="add">Добавить</string>
     <string name="photos">Фотографии</string>
+    <string name="edit">Редактировать</string>
 
 </resources>
