@@ -21,6 +21,8 @@ import coil.compose.SubcomposeAsyncImageScope
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
+import ru.tech.cookhelper.presentation.app.MainActivity
+import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.Zoomable
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.rememberZoomableState
 
@@ -43,11 +45,11 @@ fun Picture(
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
-    zoomEnabled: Boolean = false,
-    minZoomScale: Float = 1f,
-    maxZoomScale: Float = 4f,
+    zoomParams: ZoomParams = ZoomParams(),
     shimmerEnabled: Boolean = true
 ) {
+    val activity = LocalContext.current as MainActivity
+
     var errorOccurred by rememberSaveable { mutableStateOf(false) }
 
     var shimmerVisible by rememberSaveable { mutableStateOf(true) }
@@ -96,12 +98,18 @@ fun Picture(
         )
     }
 
-    if (zoomEnabled) {
+    if (zoomParams.zoomEnabled) {
         Zoomable(
             state = rememberZoomableState(
-                minScale = minZoomScale,
-                maxScale = maxZoomScale
+                minScale = zoomParams.minZoomScale,
+                maxScale = zoomParams.maxZoomScale
             ),
+            onTap = {
+                if (zoomParams.hideBarsOnTap) {
+                    activity.apply { if (isSystemBarsHidden) showSystemBars() else hideSystemBars() }
+                    zoomParams.onTap(it)
+                }
+            },
             content = { image() }
         )
     } else image()

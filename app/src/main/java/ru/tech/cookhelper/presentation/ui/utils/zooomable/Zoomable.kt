@@ -35,6 +35,7 @@ fun Zoomable(
     state: ZoomableState,
     modifier: Modifier = Modifier,
     enable: Boolean = true,
+    onTap: (Offset) -> Unit = { },
     content: @Composable BoxScope.() -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -71,7 +72,8 @@ fun Zoomable(
                                 state.setTapOffset(it, conf, density)
                             }
                         }
-                    }
+                    },
+                    onTap = onTap
                 )
             }
         } else Modifier
