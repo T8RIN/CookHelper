@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import android.app.Activity
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.*
@@ -21,7 +22,9 @@ import coil.compose.SubcomposeAsyncImageScope
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
-import ru.tech.cookhelper.presentation.app.MainActivity
+import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.hideSystemBars
+import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.isSystemBarsHidden
+import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.Zoomable
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.rememberZoomableState
@@ -48,7 +51,7 @@ fun Picture(
     zoomParams: ZoomParams = ZoomParams(),
     shimmerEnabled: Boolean = true
 ) {
-    val activity = LocalContext.current as MainActivity
+    val activity = LocalContext.current as Activity
 
     var errorOccurred by rememberSaveable { mutableStateOf(false) }
 

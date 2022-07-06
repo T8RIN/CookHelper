@@ -8,8 +8,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.CookHelperApp
@@ -31,31 +29,5 @@ class MainActivity : ComponentActivity() {
         setContent {
             CookHelperApp(this)
         }
-    }
-
-    val isSystemBarsHidden: Boolean
-        get() {
-            return _isSystemBarsHidden
-        }
-
-    fun hideSystemBars() = WindowInsetsControllerCompat(
-        window,
-        window.decorView
-    ).let { controller ->
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        controller.hide(WindowInsetsCompat.Type.systemBars())
-        _isSystemBarsHidden = true
-    }
-
-    fun showSystemBars() = WindowInsetsControllerCompat(
-        window,
-        window.decorView
-    ).show(WindowInsetsCompat.Type.systemBars()).also {
-        _isSystemBarsHidden = false
-    }
-
-    companion object {
-        private var _isSystemBarsHidden = false
     }
 }

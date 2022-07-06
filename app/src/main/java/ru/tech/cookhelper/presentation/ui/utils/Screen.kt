@@ -83,14 +83,28 @@ sealed class Screen(
         selectedIcon = Icons.Filled.Message
     )
 
-    class RecipeDetails(val id: Int = 0, val previousScreen: Screen = Home) : Screen()
+    class RecipeDetails(
+        val id: Int = 0,
+        val previousScreen: Screen = Home
+    ) : Screen()
 
-    class MatchedRecipes(val previousScreen: Screen) : Screen()
+    class MatchedRecipes(
+        val previousScreen: Screen
+    ) : Screen()
 
     object Authentication : Screen()
 
-    class FullscreenImage(val id: Int, val images: List<Image>, val previousScreen: Screen = Home) :
-        Screen()
+    class FullscreenImage(
+        val id: Int = 0,
+        val images: List<Image> = emptyList(),
+        val previousScreen: Screen = Home
+    ) : Screen()
+
+    class AllImages(
+        val images: List<Image> = emptyList(),
+        val previousScreen: Screen = Home,
+        val canAddImages: Boolean = false
+    ) : Screen()
 }
 
 val drawerList = listOf(
@@ -104,6 +118,7 @@ val drawerList = listOf(
 )
 
 val hideTopBarList = listOf(
+    Screen.AllImages::class.name,
     Screen.FullscreenImage::class.name,
     Screen.MatchedRecipes::class.name,
     Screen.RecipeDetails::class.name,

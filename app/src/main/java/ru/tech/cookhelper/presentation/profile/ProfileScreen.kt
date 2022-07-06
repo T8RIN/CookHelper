@@ -157,7 +157,7 @@ fun ProfileScreen(
                     //TODO: Add Image Feature
                 },
                 onExpand = {
-                    
+                    screenController.navigate(Screen.AllImages(testList, Screen.Profile, true))
                 }
             )
         }

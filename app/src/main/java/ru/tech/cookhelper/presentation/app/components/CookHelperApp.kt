@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
+import ru.tech.cookhelper.presentation.all_images.AllImagesScreen
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
 import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
@@ -46,6 +47,7 @@ import ru.tech.cookhelper.presentation.ui.utils.*
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.alternateIcon
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
+import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @ExperimentalComposeUiApi
@@ -87,7 +89,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                 val screenController = LocalScreenController.current
                 val dialogController = LocalDialogController.current
 
-                val inNavigationMode by derivedStateOf { screenController.currentScreen::class.name !in hideTopBarList }
+                val showTopBar by derivedStateOf { screenController.currentScreen::class.name !in hideTopBarList }
 
                 BackHandler { dialogController.show(Dialog.Exit) }
 
@@ -98,11 +100,11 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     ModalNavigationDrawer(
                         drawerContent = { MainModalDrawerContent(viewModel, drawerState) },
                         drawerState = drawerState,
-                        gesturesEnabled = inNavigationMode
+                        gesturesEnabled = showTopBar
                     ) {
                         Column {
 
-                            AnimatedVisibility(visible = inNavigationMode) {
+                            AnimatedVisibility(visible = showTopBar) {
                                 TopAppBar(
                                     size = Size.Centered,
                                     navigationIcon = {
@@ -348,6 +350,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     is Screen.FullscreenImage -> {
                                         val back: () -> Unit = {
                                             screenController.navigate(screen.previousScreen)
+                                            activity.showSystemBars()
                                         }
                                         BackHandler { back() }
 
@@ -372,6 +375,18 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         ProfileScreen(updateTitle = { newTitle ->
                                             viewModel.title = UIText.DynamicString(newTitle)
                                         })
+                                    }
+                                    is Screen.AllImages -> {
+                                        val back: () -> Unit = {
+                                            screenController.navigate(screen.previousScreen)
+                                        }
+                                        BackHandler { back() }
+
+                                        AllImagesScreen(
+                                            images = screen.images,
+                                            canAddImages = screen.canAddImages,
+                                            goBack = { back() }
+                                        )
                                     }
                                     is Screen.BlockList -> Placeholder(
                                         screen.baseIcon,
