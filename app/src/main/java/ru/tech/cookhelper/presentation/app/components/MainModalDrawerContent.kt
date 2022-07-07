@@ -2,7 +2,7 @@ package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -39,7 +39,7 @@ fun MainModalDrawerContent(viewModel: MainViewModel, drawerState: DrawerState) {
             )
         }
 
-        itemsIndexed(drawerList) { _, item ->
+        items(drawerList) { item ->
             val selected = item.isCurrentScreen
 
             NavigationDrawerItem(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,7 +50,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit) {
     LazyColumn {
         item { Spacer(Modifier.height(20.dp)) }
-        itemsIndexed(values()) { _, setting ->
+        items(Settings.values()) { setting ->
             Column(
                 Modifier.animateContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally

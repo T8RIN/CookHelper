@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.fridge_list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.twotone.CloudOff
@@ -28,17 +29,17 @@ fun FridgeScreen(viewModel: FridgeViewModel = scopedViewModel(ignoreDisposing = 
                 contentPadding = PaddingValues(bottom = 200.dp, top = 10.dp),
                 state = rememberForeverLazyListState(key = "fridge")
             ) {
-                items(state.products.size) { index ->
+                items(state.products) { item ->
                     Row(
                         Modifier.padding(start = 10.dp, end = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            state.products[index].name.uppercase(),
+                            item.name.uppercase(),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(Modifier.weight(1f))
-                        IconButton(onClick = { viewModel.remove(state.products[index].id) }) {
+                        IconButton(onClick = { viewModel.remove(item.id) }) {
                             Icon(Icons.Outlined.DeleteOutline, null)
                         }
                     }

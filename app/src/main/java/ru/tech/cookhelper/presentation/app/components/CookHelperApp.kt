@@ -6,6 +6,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.outlined.FindReplace
@@ -385,7 +386,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         AllImagesScreen(
                                             images = screen.images,
                                             canAddImages = screen.canAddImages,
-                                            goBack = { back() }
+                                            goBack = { back() },
+                                            onAddImage = {}
                                         )
                                     }
                                     is Screen.BlockList -> Placeholder(
@@ -466,13 +468,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         Box(Modifier.fillMaxWidth()) {
                                             if (state.list != null && !state.isLoading) {
                                                 LazyColumn {
-                                                    items(state.list.size) { index ->
+                                                    items(state.list) { item ->
                                                         Row(
                                                             Modifier.fillMaxWidth(),
                                                             verticalAlignment = Alignment.CenterVertically
                                                         ) {
                                                             Text(
-                                                                state.list[index].name.uppercase(),
+                                                                item.name.uppercase(),
                                                                 textAlign = TextAlign.Start,
                                                                 style = MaterialTheme.typography.bodyLarge,
                                                                 modifier = Modifier.padding(
@@ -482,14 +484,14 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                             Spacer(Modifier.weight(1f))
                                                             Checkbox(
                                                                 checked = viewModel.tempList.contains(
-                                                                    state.list[index].id
+                                                                    item.id
                                                                 ),
                                                                 onCheckedChange = {
                                                                     if (it) viewModel.tempList.add(
-                                                                        state.list[index].id
+                                                                        item.id
                                                                     )
                                                                     else viewModel.tempList.remove(
-                                                                        state.list[index].id
+                                                                        item.id
                                                                     )
                                                                 }
                                                             )

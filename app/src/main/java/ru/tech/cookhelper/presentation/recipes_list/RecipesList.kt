@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.recipes_list
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material.icons.twotone.FindInPage
@@ -50,10 +51,8 @@ fun RecipesList(
                 }
             }
             LazyColumn(state = rememberForeverLazyListState(key = "recipes")) {
-                items(data.size) { index ->
-                    RecipeItem(data[index]) {
-                        onRecipeClick(it)
-                    }
+                items(data) { item ->
+                    RecipeItem(recipe = item, onClick = { onRecipeClick(it) })
                 }
             }
         } else if (!state.isLoading) {

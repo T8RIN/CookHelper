@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.favourite_dishes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CloudOff
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,10 +34,8 @@ fun FavouriteListScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.recipeList != null) {
             LazyColumn(state = rememberForeverLazyListState(key = "fav")) {
-                items(state.recipeList.size) { index ->
-                    RecipeItem(state.recipeList[index]) {
-                        onRecipeClicked(it)
-                    }
+                items(state.recipeList) { item ->
+                    RecipeItem(recipe = item, onClick = { onRecipeClicked(it) })
                 }
             }
         } else if (!state.isLoading) {

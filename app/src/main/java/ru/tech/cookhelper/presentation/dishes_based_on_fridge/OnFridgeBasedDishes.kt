@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.twotone.Error
@@ -77,13 +78,13 @@ fun OnFridgeBasedDishes(
                     LazyColumn(
                         state = rememberForeverLazyListState(Screen.MatchedRecipes::class.name)
                     ) {
-                        items(state.recipeList.size) { index ->
+                        items(state.recipeList) { item ->
                             Row {
                                 Text(
-                                    "${state.recipeList[index].second}%",
+                                    "${item.second}%",
                                     modifier = Modifier.padding(top = 10.dp, start = 10.dp)
                                 )
-                                RecipeItem(state.recipeList[index].first) {
+                                RecipeItem(item.first) {
                                     onRecipeClicked(it)
                                 }
                             }

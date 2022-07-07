@@ -44,7 +44,7 @@ fun ImageCarousel(
                 fontSize = 14.sp
             )
             Spacer(Modifier.size(5.dp))
-            Text(data.size.toString(), color = Color.DarkGray, fontSize = 14.sp)
+            Text(data.size.toString(), color = Color.Gray, fontSize = 14.sp)
             Spacer(Modifier.weight(1f))
             IconButton(onClick = onExpand) {
                 Icon(Icons.Rounded.KeyboardArrowRight, null)

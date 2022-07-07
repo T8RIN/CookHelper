@@ -122,18 +122,25 @@ fun ProfileScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(start = 5.dp)
                         ) {
-                            Icon(Icons.Rounded.PhoneAndroid, null, modifier = Modifier.size(12.dp))
+                            Icon(
+                                Icons.Rounded.PhoneAndroid,
+                                null,
+                                modifier = Modifier.size(12.dp),
+                                tint = Color.Gray
+                            )
                             Spacer(Modifier.width(3.dp))
                             Text(
                                 text = lastSeen,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Color.DarkGray
+                                color = Color.Gray
                             )
                         }
                     }
                 }
                 Spacer(Modifier.height(10.dp))
-                FilledTonalButton(modifier = Modifier.fillMaxWidth(), onClick = { /*TODO*/ }) {
+                FilledTonalButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { /*TODO: Edit Profile*/ }) {
                     Text(stringResource(R.string.edit))
                 }
             }
