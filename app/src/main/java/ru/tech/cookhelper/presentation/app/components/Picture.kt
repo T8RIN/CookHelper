@@ -21,6 +21,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageScope
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.hideSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.isSystemBarsHidden
@@ -60,6 +61,7 @@ fun Picture(
     val imageLoader = ImageLoader.Builder(LocalContext.current).components {
         if (SDK_INT >= 28) add(ImageDecoderDecoder.Factory())
         else add(GifDecoder.Factory())
+        add(SvgDecoder.Factory())
     }.build()
 
     val request = manualImageRequest ?: ImageRequest.Builder(LocalContext.current)
