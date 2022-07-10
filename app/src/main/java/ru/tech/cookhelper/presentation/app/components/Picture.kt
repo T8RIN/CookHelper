@@ -52,7 +52,7 @@ fun Picture(
     zoomParams: ZoomParams = ZoomParams(),
     shimmerEnabled: Boolean = true
 ) {
-    val activity = LocalContext.current as Activity
+    val activity = if (zoomParams.zoomEnabled) LocalContext.current as Activity else null
 
     var errorOccurred by rememberSaveable { mutableStateOf(false) }
 
@@ -113,7 +113,7 @@ fun Picture(
             ),
             onTap = {
                 if (zoomParams.hideBarsOnTap) {
-                    activity.apply { if (isSystemBarsHidden) showSystemBars() else hideSystemBars() }
+                    activity?.apply { if (isSystemBarsHidden) showSystemBars() else hideSystemBars() }
                     zoomParams.onTap(it)
                 }
             },

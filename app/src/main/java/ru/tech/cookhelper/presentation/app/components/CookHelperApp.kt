@@ -361,9 +361,6 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             goBack = { back() }
                                         )
                                     }
-                                    is Screen.FullscreenImage -> {
-
-                                    }
                                     is Screen.Settings -> {
                                         SettingsScreen(
                                             settingsState = viewModel.settingsState.value,

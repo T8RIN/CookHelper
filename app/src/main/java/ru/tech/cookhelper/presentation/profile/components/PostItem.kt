@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.profile.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -7,16 +8,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChatBubbleOutline
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -107,10 +112,11 @@ fun PostItem(
                 model = image.link,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .animateContentSize()
+                    .heightIn(min = 300.dp)
                     .clickable {
                         onImageClick(image.id)
                     },
-                contentScale = ContentScale.Fit,
                 shape = RectangleShape
             )
             Spacer(Modifier.size(4.dp))
@@ -122,7 +128,9 @@ fun PostItem(
                 icon = if (post.liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
                 text = post.likeCount.toString(),
                 contentColor = if (post.liked) LikeColor else Color.Gray,
-                containerColor = (if (post.liked) LikeColor else MaterialTheme.colorScheme.secondaryContainer).copy(alpha = 0.25f)
+                containerColor = (if (post.liked) LikeColor else MaterialTheme.colorScheme.secondaryContainer).copy(
+                    alpha = 0.25f
+                )
             )
             Spacer(Modifier.size(8.dp))
             PostActionButton(
