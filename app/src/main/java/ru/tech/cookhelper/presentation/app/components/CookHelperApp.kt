@@ -348,7 +348,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             goBack = { back() }
                                         )
                                     }
-                                    is Screen.FullscreenImage -> {
+                                    is Screen.FullscreenImagePager -> {
                                         val back: () -> Unit = {
                                             screenController.navigate(screen.previousScreen)
                                             activity.showSystemBars()
@@ -360,6 +360,9 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             initialId = screen.id,
                                             goBack = { back() }
                                         )
+                                    }
+                                    is Screen.FullscreenImage -> {
+
                                     }
                                     is Screen.Settings -> {
                                         SettingsScreen(

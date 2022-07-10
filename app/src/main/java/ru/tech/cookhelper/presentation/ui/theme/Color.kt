@@ -509,3 +509,5 @@ abstract class Colors {
 }
 
 val colorList: List<Colors> = listOf(Blue, Mint, Green, Yellow, Orange, Red, Pink, Violet)
+
+val LikeColor = Color(0xFFff4e3a)

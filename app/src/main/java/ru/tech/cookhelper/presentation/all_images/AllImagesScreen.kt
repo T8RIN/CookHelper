@@ -74,7 +74,7 @@ fun AllImagesScreen(
             images,
             onImageClick = {
                 screenController.navigate(
-                    Screen.FullscreenImage(
+                    Screen.FullscreenImagePager(
                         id = it,
                         images = images,
                         previousScreen = screenController.currentScreen

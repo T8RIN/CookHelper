@@ -2,7 +2,7 @@ package ru.tech.cookhelper.presentation.profile.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
@@ -26,8 +27,9 @@ import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageCarousel(
+    imageSize: Dp = 100.dp,
     data: List<Image>,
-    onImageClick: (id: Int) -> Unit,
+    onImageClick: (id: String) -> Unit,
     onAddImageClick: () -> Unit,
     onExpand: () -> Unit
 ) {
@@ -54,7 +56,7 @@ fun ImageCarousel(
             contentPadding = PaddingValues(horizontal = 15.dp),
             state = rememberForeverLazyListState(key = IMAGE_CAROUSEL_KEY)
         ) {
-            itemsIndexed(data) { _, item ->
+            items(data) { item ->
                 OutlinedCard(
                     onClick = { onImageClick(item.id) },
                     modifier = Modifier.size(100.dp)
@@ -68,7 +70,7 @@ fun ImageCarousel(
                 Spacer(Modifier.width(5.dp))
             }
             item {
-                Card(onClick = onAddImageClick, modifier = Modifier.size(100.dp)) {
+                Card(onClick = onAddImageClick, modifier = Modifier.size(imageSize)) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()

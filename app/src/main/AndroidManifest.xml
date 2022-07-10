@@ -17,6 +17,7 @@
         android:theme="@style/Theme.CookHelper.Launcher"
         tools:targetApi="31">
         <activity
+            android:windowSoftInputMode="adjustResize"
             android:name=".presentation.app.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.CookHelper.Launcher">

@@ -94,9 +94,14 @@ sealed class Screen(
 
     object Authentication : Screen()
 
-    class FullscreenImage(
-        val id: Int = 0,
+    class FullscreenImagePager(
+        val id: String = "0",
         val images: List<Image> = emptyList(),
+        val previousScreen: Screen = Home
+    ) : Screen()
+
+    class FullscreenImage(
+        val id: String = "0",
         val previousScreen: Screen = Home
     ) : Screen()
 
@@ -119,7 +124,7 @@ val drawerList = listOf(
 
 val hideTopBarList = listOf(
     Screen.AllImages::class.name,
-    Screen.FullscreenImage::class.name,
+    Screen.FullscreenImagePager::class.name,
     Screen.MatchedRecipes::class.name,
     Screen.RecipeDetails::class.name,
     Screen.Authentication::class.name

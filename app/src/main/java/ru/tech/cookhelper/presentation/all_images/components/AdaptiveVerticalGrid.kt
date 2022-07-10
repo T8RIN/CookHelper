@@ -14,7 +14,7 @@ import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
 
 @Composable
-fun AdaptiveVerticalGrid(images: List<Image>, onImageClick: (id: Int) -> Unit) {
+fun AdaptiveVerticalGrid(images: List<Image>, onImageClick: (id: String) -> Unit) {
     val configuration = LocalConfiguration.current
 
     val portrait = configuration.screenWidthDp < configuration.screenHeightDp

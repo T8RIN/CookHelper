@@ -58,7 +58,9 @@ fun Picture(
 
     var shimmerVisible by rememberSaveable { mutableStateOf(true) }
 
-    val imageLoader = ImageLoader.Builder(LocalContext.current).components {
+    val imageLoader = ImageLoader.Builder(
+        LocalContext.current
+    ).components {
         if (SDK_INT >= 28) add(ImageDecoderDecoder.Factory())
         else add(GifDecoder.Factory())
         add(SvgDecoder.Factory())

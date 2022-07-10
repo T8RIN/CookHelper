@@ -94,5 +94,9 @@
     <string name="photos">Фотографии</string>
     <string name="edit">Редактировать</string>
     <string name="count_of_all">%d из %d</string>
+    <string name="recipe">Рецепт</string>
+    <string name="post">Запись</string>
+    <string name="create">Создать</string>
+    <string name="all_posts">Все записи</string>
 
 </resources>

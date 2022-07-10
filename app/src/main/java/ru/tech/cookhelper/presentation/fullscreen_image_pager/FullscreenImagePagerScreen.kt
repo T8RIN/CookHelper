@@ -37,7 +37,7 @@ import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun FullScreenPagerScreen(images: List<Image>, initialId: Int, goBack: () -> Unit) {
+fun FullScreenPagerScreen(images: List<Image>, initialId: String, goBack: () -> Unit) {
     val pagerState =
         rememberPagerState(images.indexOfFirst { it.id == initialId })
 
