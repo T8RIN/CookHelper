@@ -97,6 +97,6 @@
     <string name="recipe">Рецепт</string>
     <string name="post">Запись</string>
     <string name="create">Создать</string>
-    <string name="all_posts">Все записи</string>
+    <string name="posts">Записи</string>
 
 </resources>

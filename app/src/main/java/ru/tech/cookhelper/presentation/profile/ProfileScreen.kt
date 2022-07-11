@@ -233,7 +233,7 @@ fun ProfileScreen(
         item { Spacer(Modifier.height(10.dp)) }
         item {
             val tabs =
-                listOf(stringResource(R.string.all_posts), stringResource(R.string.recipes))
+                listOf(stringResource(R.string.posts), stringResource(R.string.recipes))
             Column {
                 FlexibleTabRow(
                     selectedTabIndex = selectedTabIndex,
@@ -246,7 +246,7 @@ fun ProfileScreen(
 
             }
         }
-        item { Spacer(Modifier.height(30.dp)) }
+        item { Spacer(Modifier.height(20.dp)) }
         if (selectedTabIndex.toTab() == SelectedTab.Posts) {
             val posts = listOf(
                 Post(
