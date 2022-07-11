@@ -65,7 +65,11 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
 
     BackHandler { viewModel.goBack() }
 
-    Text(stringResource(R.string.register), style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center)
+    Text(
+        stringResource(R.string.register),
+        style = MaterialTheme.typography.headlineLarge,
+        textAlign = TextAlign.Center
+    )
     Spacer(Modifier.size(8.dp * mod))
     Text(
         stringResource(R.string.create_your_new_account),

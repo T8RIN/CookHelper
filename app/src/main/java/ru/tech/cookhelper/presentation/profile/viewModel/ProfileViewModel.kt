@@ -8,9 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
-import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
 import javax.inject.Inject
 

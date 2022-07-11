@@ -83,9 +83,18 @@ fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
                     ) {
                         when (authState) {
                             AuthState.Login -> LoginField(mod = mod, viewModel = viewModel)
-                            AuthState.Registration -> RegistrationField(mod = mod, viewModel = viewModel)
-                            AuthState.RestorePassword -> RestorePasswordField(mod = mod, viewModel = viewModel)
-                            AuthState.ConfirmEmail -> ConfirmEmailField(mod = mod, viewModel = viewModel)
+                            AuthState.Registration -> RegistrationField(
+                                mod = mod,
+                                viewModel = viewModel
+                            )
+                            AuthState.RestorePassword -> RestorePasswordField(
+                                mod = mod,
+                                viewModel = viewModel
+                            )
+                            AuthState.ConfirmEmail -> ConfirmEmailField(
+                                mod = mod,
+                                viewModel = viewModel
+                            )
                         }
                     }
                 }

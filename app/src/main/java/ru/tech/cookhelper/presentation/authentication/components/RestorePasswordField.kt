@@ -58,7 +58,11 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         password.isNotEmpty() && passwordRepeat == password
     }
 
-    Text(stringResource(R.string.password_restore), style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center)
+    Text(
+        stringResource(R.string.password_restore),
+        style = MaterialTheme.typography.headlineLarge,
+        textAlign = TextAlign.Center
+    )
     Spacer(Modifier.size(8.dp * mod))
 
     AnimatedContent(viewModel.restorePasswordState.value) { state ->

@@ -52,9 +52,17 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
     val focusManager = LocalFocusManager.current
 
 
-    Text(stringResource(R.string.welcome), style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center)
+    Text(
+        stringResource(R.string.welcome),
+        style = MaterialTheme.typography.headlineLarge,
+        textAlign = TextAlign.Center
+    )
     Spacer(Modifier.size(8.dp * mod))
-    Text(stringResource(R.string.login_to_your_account), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+    Text(
+        stringResource(R.string.login_to_your_account),
+        style = MaterialTheme.typography.bodyLarge,
+        textAlign = TextAlign.Center
+    )
     Spacer(Modifier.size(64.dp * mod))
     AnimatedContent(viewModel.loginState.value.isLoading) { isLoading ->
         Column {

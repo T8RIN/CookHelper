@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".core.application.CookHelperApplication"
@@ -17,10 +17,10 @@
         android:theme="@style/Theme.CookHelper.Launcher"
         tools:targetApi="31">
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name=".presentation.app.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.CookHelper.Launcher">
+            android:theme="@style/Theme.CookHelper.Launcher"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

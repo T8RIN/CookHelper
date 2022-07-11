@@ -7,7 +7,6 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
-import ru.tech.cookhelper.domain.model.Post
 
 sealed class Screen(
     @StringRes val title: Int = R.string.app_name,
@@ -100,7 +99,6 @@ sealed class Screen(
         val images: List<Image> = emptyList(),
         val previousScreen: Screen = Home
     ) : Screen()
-
 
 
     class AllImages(
