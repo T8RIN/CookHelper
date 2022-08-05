@@ -195,7 +195,7 @@ fun ProfileScreen(
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                             contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                         ),
-                        modifier = Modifier.weight(2f),
+                        modifier = Modifier.weight(1f),
                         onClick = { /*TODO: Recipe creation*/ }) {
                         Text(stringResource(R.string.recipe))
                     }
@@ -243,7 +243,6 @@ fun ProfileScreen(
                         selectedTabIndex = tabIndex
                     }
                 )
-
             }
         }
         item { Spacer(Modifier.height(20.dp)) }
@@ -270,7 +269,7 @@ fun ProfileScreen(
                     likeCount = 233,
                     commentsCount = 1535,
                     image = Image(
-                        "https://sun1-19.userapi.com/impg/0_BW3-31ZjfwZyHV0B0-YfVUjWiBOFL2SpH0HQ/kKuUGarykVA.jpg?size=2160x1440&quality=96&sign=7843f461f7570a9b792b3bdaea627753&type=album",
+                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
                         "6"
                     )
                 ),
@@ -298,7 +297,7 @@ fun ProfileScreen(
                     likeCount = 233,
                     commentsCount = 1535,
                     image = Image(
-                        "https://sun1-19.userapi.com/impg/0_BW3-31ZjfwZyHV0B0-YfVUjWiBOFL2SpH0HQ/kKuUGarykVA.jpg?size=2160x1440&quality=96&sign=7843f461f7570a9b792b3bdaea627753&type=album",
+                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
                         "6"
                     )
                 ),
@@ -312,7 +311,7 @@ fun ProfileScreen(
                     likeCount = 233,
                     commentsCount = 1535,
                     image = Image(
-                        "https://sun1-19.userapi.com/impg/0_BW3-31ZjfwZyHV0B0-YfVUjWiBOFL2SpH0HQ/kKuUGarykVA.jpg?size=2160x1440&quality=96&sign=7843f461f7570a9b792b3bdaea627753&type=album",
+                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
                         "6"
                     )
                 ),
@@ -326,7 +325,7 @@ fun ProfileScreen(
                     likeCount = 233,
                     commentsCount = 1535,
                     image = Image(
-                        "https://sun1-19.userapi.com/impg/0_BW3-31ZjfwZyHV0B0-YfVUjWiBOFL2SpH0HQ/kKuUGarykVA.jpg?size=2160x1440&quality=96&sign=7843f461f7570a9b792b3bdaea627753&type=album",
+                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
                         "6"
                     )
                 ),
@@ -340,7 +339,7 @@ fun ProfileScreen(
                     likeCount = 233,
                     commentsCount = 1535,
                     image = Image(
-                        "https://sun1-19.userapi.com/impg/0_BW3-31ZjfwZyHV0B0-YfVUjWiBOFL2SpH0HQ/kKuUGarykVA.jpg?size=2160x1440&quality=96&sign=7843f461f7570a9b792b3bdaea627753&type=album",
+                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
                         "6"
                     )
                 ),
@@ -392,21 +391,18 @@ fun ProfileScreen(
 }
 
 private val testList = listOf(
-    Image(
-        "https://sun9-76.userapi.com/s/v1/ig2/lbF4vZbkOi0zdhtU-5iXrF2YPHiwIVVZouCCGvQBb7MV7OKzhhPUg7KW4nyc7vr7SS7HVDDyV_kdPVeoPo7j8RHb.jpg?size=1620x2160&quality=95&type=album",
-        "3"
-    ),
-    Image(
-        "https://sun1-19.userapi.com/impg/0_BW3-31ZjfwZyHV0B0-YfVUjWiBOFL2SpH0HQ/kKuUGarykVA.jpg?size=2160x1440&quality=96&sign=7843f461f7570a9b792b3bdaea627753&type=album",
-        "4"
-    ),
-    Image(
-        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-        "5"
-    ),
     Image("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "1"),
     Image(
         "https://www.journaldev.com/wp-content/uploads/2018/06/android-instant-app-module-dependencies.png.webp",
         "2"
+    ),
+    Image(
+        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
+        "3"
+    ),
+    Image("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "4"),
+    Image(
+        "https://www.journaldev.com/wp-content/uploads/2018/06/android-instant-app-module-dependencies.png.webp",
+        "5"
     )
 )
