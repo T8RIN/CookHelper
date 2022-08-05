@@ -35,8 +35,10 @@ fun PostActionButton(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(icon, null)
-                Spacer(Modifier.size(8.dp))
-                Text(text)
+                if (text != "") {
+                    Spacer(Modifier.size(8.dp))
+                    Text(text)
+                }
             }
         }
     }

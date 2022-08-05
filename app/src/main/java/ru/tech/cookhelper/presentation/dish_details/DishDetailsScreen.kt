@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.dish_details
 
-import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +25,7 @@ import ru.tech.cookhelper.presentation.app.components.Size
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.dish_details.components.InfoItem
 import ru.tech.cookhelper.presentation.dish_details.viewModel.DishDetailsViewModel
+import ru.tech.cookhelper.presentation.ui.utils.ShareUtils.shareWith
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @ExperimentalMaterial3Api
@@ -70,20 +70,7 @@ fun DishDetailsScreen(
                     scrollBehavior = scrollBehavior,
                     actions = {
                         IconButton(onClick = {
-                            val intent = Intent().apply {
-                                action = Intent.ACTION_SEND
-                                putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    viewModel.dishState.value.dish?.toShareValue()
-                                )
-                                type = "text/plain"
-                            }
-                            context.startActivity(
-                                Intent.createChooser(
-                                    intent,
-                                    context.getString(R.string.share)
-                                )
-                            )
+                            context.shareWith(viewModel.dishState.value.dish?.toShareValue())
                         }) {
                             Icon(Icons.Outlined.Share, null)
                         }

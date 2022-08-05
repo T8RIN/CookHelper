@@ -392,7 +392,24 @@ fun ProfileScreen(
                         "", "", 0L, nextBoolean(), 29, 12,
                         Recipe(
                             0,
-                            emptyList(),
+                            listOf(
+                                "cucumber",
+                                "apple",
+                                "pineapple",
+                                "vinegar",
+                                "pepper",
+                                "salt",
+                                "jalapeno",
+                                "meat",
+                                "cucumber",
+                                "apple",
+                                "pineapple",
+                                "vinegar",
+                                "pepper",
+                                "salt",
+                                "jalapeno",
+                                "meat"
+                            ),
                             emptyList(),
                             0.0,
                             0.0,
@@ -402,10 +419,13 @@ fun ProfileScreen(
                             0.0,
                             0.0,
                             "",
-                            "Big and hard to cook recipe",
+                            "Big and hard to cook recipe with very very very long label",
                             "https://koelov.ru/wp-content/uploads/2013/10/kabachkovyj-tort-recept-prigotovleniya.jpg"
                         )
-                    )
+                    ),
+                    onRecipeClick = {
+
+                    }
                 )
             }
         }
