@@ -28,12 +28,7 @@ import kotlin.math.min
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
-fun FancyToast(
-    icon: ImageVector,
-    message: String = "",
-    changed: MutableState<Boolean>,
-    length: Int = Toast.LENGTH_LONG
-) {
+fun FancyToast(fancyToastValues: FancyToastValues) {
     val showToast = remember {
         MutableTransitionState(false).apply {
             targetState = false
@@ -43,84 +38,82 @@ fun FancyToast(
     val sizeMin = min(conf.screenWidthDp, conf.screenHeightDp).dp
     val sizeMax = max(conf.screenWidthDp, conf.screenHeightDp).dp
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        AnimatedVisibility(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = sizeMax * 0.2f)
-                .then(
-                    if (showToast.isIdle) Modifier.shadow(4.dp, RoundedCornerShape(24.dp))
-                    else Modifier
-                ),
-            visibleState = showToast,
-            enter = fadeIn() + scaleIn(),
-            exit = fadeOut() + scaleOut()
+    fancyToastValues.apply {
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Card(
-                colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onTertiaryContainer),
+            AnimatedVisibility(
                 modifier = Modifier
-                    .alpha(0.98f)
-                    .heightIn(48.dp)
-                    .widthIn(0.dp, (sizeMin * 0.7f)),
-                shape = RoundedCornerShape(24.dp),
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = sizeMax * 0.2f)
+                    .then(
+                        if (showToast.isIdle) Modifier.shadow(4.dp, RoundedCornerShape(24.dp))
+                        else Modifier
+                    ),
+                visibleState = showToast,
+                enter = fadeIn() + scaleIn(),
+                exit = fadeOut() + scaleOut()
             ) {
-                Row(
-                    Modifier.padding(15.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                Card(
+                    colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onTertiaryContainer),
+                    modifier = Modifier
+                        .alpha(0.98f)
+                        .heightIn(48.dp)
+                        .widthIn(0.dp, (sizeMin * 0.7f)),
+                    shape = RoundedCornerShape(24.dp),
                 ) {
-                    Icon(icon, null)
-                    if (message != "") {
-                        Spacer(modifier = Modifier.size(8.dp))
-                        Text(
-                            style = MaterialTheme.typography.bodySmall,
-                            text = message,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(end = 5.dp)
-                        )
+                    Row(
+                        Modifier.padding(15.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        icon?.let { Icon(it, null) }
+                        if (message != "") {
+                            Spacer(modifier = Modifier.size(8.dp))
+                            Text(
+                                style = MaterialTheme.typography.bodySmall,
+                                text = message,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(end = 5.dp)
+                            )
+                        }
                     }
                 }
             }
         }
-    }
-
-    LaunchedEffect(changed.value) {
-        changed.value = false
-        if (message != "") {
-            if (showToast.currentState) {
+        LaunchedEffect(fancyToastValues) {
+            if (message != "") {
+                if (showToast.currentState) {
+                    showToast.targetState = false
+                    delay(200L)
+                }
+                showToast.targetState = true
+                delay(if (length == Toast.LENGTH_LONG) 5000L else 2500L)
                 showToast.targetState = false
-                delay(200L)
             }
-            showToast.targetState = true
-            delay(if (length == Toast.LENGTH_LONG) 5000L else 2500L)
-            showToast.targetState = false
         }
     }
-
 }
 
-fun FancyToastValues.sendToast(icon: ImageVector, text: String, length: Int = Toast.LENGTH_LONG) {
+fun MutableState<FancyToastValues>.sendToast(
+    icon: ImageVector,
+    message: String,
+    length: Int = Toast.LENGTH_LONG
+) {
+    var fancyToastValues = FancyToastValues(icon, message, length)
+    if (value == fancyToastValues) fancyToastValues = value.copy(message = value.message + " ")
+
     CoroutineScope(Dispatchers.Main).launch {
         delay(200L)
-        this@sendToast.text?.value = text
-        this@sendToast.icon?.value = icon
+        this@sendToast.apply {
+            value = value.copy(message = message, icon = icon)
+        }
     }
-    this.text?.value = " ${this.text?.value} "
-    this.length?.value = length
-    this.changed?.value = true
-}
-
-operator fun String.times(size: Int): String {
-    var s = ""
-    for (i in 0 until size) s += this
-    return s
+    value = fancyToastValues
 }
 
 data class FancyToastValues(
-    val icon: MutableState<ImageVector>? = null,
-    val text: MutableState<String>? = null,
-    val changed: MutableState<Boolean>? = null,
-    val length: MutableState<Int>? = null
+    val icon: ImageVector? = null,
+    val message: String = "",
+    val length: Int = Toast.LENGTH_LONG
 )

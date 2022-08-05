@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.domain.model.Post
+import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.profile.components.*
@@ -154,9 +155,7 @@ fun ProfileScreen(
                 }
             }
         }
-        item {
-            Spacer(Modifier.height(20.dp))
-        }
+        item { Spacer(Modifier.height(20.dp)) }
         item {
             ImageCarousel(
                 data = testList,
@@ -387,6 +386,26 @@ fun ProfileScreen(
                         thickness = 8.dp
                     )
                 }
+            }
+        } else {
+            items(6) {
+                ProfileRecipeItem(
+                    Recipe(
+                        0,
+                        emptyList(),
+                        emptyList(),
+                        0.0,
+                        0.0,
+                        "",
+                        emptyList(),
+                        100,
+                        0.0,
+                        0.0,
+                        "",
+                        "Big and hard to cook recipe",
+                        "https://koelov.ru/wp-content/uploads/2013/10/kabachkovyj-tort-recept-prigotovleniya.jpg"
+                    )
+                )
             }
         }
     }

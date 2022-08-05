@@ -15,7 +15,6 @@ import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material.icons.twotone.HourglassEmpty
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -58,11 +57,8 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.*
 @ExperimentalMaterial3Api
 @Composable
 fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewModel()) {
-    val icon = remember { mutableStateOf(Icons.TwoTone.HourglassEmpty) }
-    val text = remember { mutableStateOf("") }
-    val changed = remember { mutableStateOf(false) }
-    val length = remember { mutableStateOf(0) }
 
+    val fancyToastValues = remember { mutableStateOf(FancyToastValues()) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -85,7 +81,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     LocalScreenController provides viewModel.currentScreen,
                     LocalDialogController provides viewModel.currentDialog,
                     LocalSnackbarHost provides snackbarHostState,
-                    LocalToastHost provides FancyToastValues(icon, text, changed, length)
+                    LocalToastHost provides fancyToastValues
                 )
             ) {
                 val screenController = LocalScreenController.current
@@ -436,7 +432,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         viewModel.logOut()
                                     } else toastHost.sendToast(
                                         Icons.Outlined.SignalWifiConnectedNoInternet4,
-                                        text = activity.getString(R.string.no_connection)
+                                        message = activity.getString(R.string.no_connection)
                                     )
                                     dialogController.close()
                                 })
@@ -519,12 +515,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                         BackHandler { viewModel.searchMode = false }
                     }
 
-                    FancyToast(
-                        icon = icon.value,
-                        message = text.value,
-                        changed = changed,
-                        length = length.value
-                    )
+                    FancyToast(fancyToastValues.value)
                 }
             }
         }
