@@ -44,11 +44,11 @@ fun DishDetailsScreen(
 
     val context = LocalContext.current
 
-    val topAppBarScrollState = rememberTopAppBarScrollState()
+    val topAppBarState = rememberTopAppBarState()
     val scrollBehavior by remember {
         mutableStateOf(
             TopAppBarDefaults.enterAlwaysScrollBehavior(
-                topAppBarScrollState
+                topAppBarState
             )
         )
     }

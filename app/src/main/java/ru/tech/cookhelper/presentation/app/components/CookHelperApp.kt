@@ -48,6 +48,7 @@ import ru.tech.cookhelper.presentation.ui.utils.*
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.alternateIcon
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
+import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
@@ -66,11 +67,11 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val topAppBarScrollState = rememberTopAppBarScrollState()
+    val topAppBarState = rememberTopAppBarState()
     val scrollBehavior by remember {
         mutableStateOf(
             TopAppBarDefaults.pinnedScrollBehavior(
-                topAppBarScrollState
+                topAppBarState
             )
         )
     }
@@ -90,7 +91,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                 val screenController = LocalScreenController.current
                 val dialogController = LocalDialogController.current
 
-                val showTopBar by derivedStateOf { screenController.currentScreen::class.name !in hideTopBarList }
+                val showTopBar by computedStateOf { screenController.currentScreen::class.name !in hideTopBarList }
 
                 BackHandler { dialogController.show(Dialog.Exit) }
 

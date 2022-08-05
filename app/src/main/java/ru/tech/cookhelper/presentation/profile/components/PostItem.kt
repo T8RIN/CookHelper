@@ -11,7 +11,6 @@ import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +24,7 @@ import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
+import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,17 +40,14 @@ fun PostItem(
 ) {
     val author = authorLoader(post.authorId)
 
-    val timestamp by derivedStateOf {
+    val timestamp by computedStateOf {
         val df =
-            if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat("yyyy").format(
-                    post.timestamp
-                )
+            if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat("yyyy", Locale.getDefault())
+                    .format(post.timestamp)
                     .toInt()
             ) {
                 SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-            } else {
-                SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
-            }
+            } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
         df.format(post.timestamp)
     }
 

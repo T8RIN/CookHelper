@@ -33,8 +33,10 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
+@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
@@ -54,7 +56,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         mutableStateOf(false)
     }
 
-    val isFormValid by derivedStateOf {
+    val isFormValid by computedStateOf {
         password.isNotEmpty() && passwordRepeat == password
     }
 

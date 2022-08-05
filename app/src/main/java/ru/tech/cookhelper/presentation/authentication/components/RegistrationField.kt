@@ -34,8 +34,10 @@ import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.StrokeTextField
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
+@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
 @Composable
 fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
@@ -53,11 +55,11 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
-    val isPasswordValid by derivedStateOf {
+    val isPasswordValid by computedStateOf {
         password.length >= 8 && password.toCharArray().any { it.isDigit() }
     }
 
-    val isFormValid by derivedStateOf {
+    val isFormValid by computedStateOf {
         name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password && viewModel.checkLoginState.value.error.isEmpty() && isPasswordValid
     }
 

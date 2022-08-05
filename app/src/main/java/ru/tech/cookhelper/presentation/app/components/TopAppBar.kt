@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
@@ -20,8 +21,10 @@ fun TopAppBar(
     val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
 
     val backgroundColor = background ?: backgroundColors.containerColor(
-        scrollFraction = scrollBehavior?.scrollFraction ?: 0f
+        colorTransitionFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
     ).value
+
+    val paddingModifier = modifier.statusBarsPadding()
 
     val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
         containerColor = Color.Transparent,
@@ -33,7 +36,7 @@ fun TopAppBar(
             Size.Small -> {
                 SmallTopAppBar(
                     title,
-                    modifier.statusBarsPadding(),
+                    paddingModifier,
                     navigationIcon,
                     actions,
                     foregroundColors,
@@ -43,7 +46,7 @@ fun TopAppBar(
             Size.Centered -> {
                 CenterAlignedTopAppBar(
                     title,
-                    modifier.statusBarsPadding(),
+                    paddingModifier,
                     navigationIcon,
                     actions,
                     foregroundColors,
@@ -53,7 +56,7 @@ fun TopAppBar(
             Size.Medium -> {
                 MediumTopAppBar(
                     title,
-                    modifier.statusBarsPadding(),
+                    paddingModifier,
                     navigationIcon,
                     actions,
                     foregroundColors,
@@ -63,7 +66,7 @@ fun TopAppBar(
             Size.Large -> {
                 LargeTopAppBar(
                     title,
-                    modifier.statusBarsPadding(),
+                    paddingModifier,
                     navigationIcon,
                     actions,
                     foregroundColors,

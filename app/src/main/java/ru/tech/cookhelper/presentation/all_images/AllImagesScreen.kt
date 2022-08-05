@@ -34,11 +34,11 @@ fun AllImagesScreen(
 ) {
     val screenController = LocalScreenController.current
 
-    val topAppBarScrollState = rememberTopAppBarScrollState()
+    val topAppBarState = rememberTopAppBarState()
     val scrollBehavior by remember {
         mutableStateOf(
             TopAppBarDefaults.pinnedScrollBehavior(
-                topAppBarScrollState
+                topAppBarState
             )
         )
     }

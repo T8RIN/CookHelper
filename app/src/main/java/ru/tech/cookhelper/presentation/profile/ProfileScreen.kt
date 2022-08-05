@@ -31,6 +31,7 @@ import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentScreen
@@ -56,16 +57,14 @@ fun ProfileScreen(
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     val status = userState.user?.status
-    val lastSeen by derivedStateOf {
+    val lastSeen by computedStateOf {
         val lastSeen = userState.user?.lastSeen ?: 0L
-        val df =
-            if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat("yyyy").format(lastSeen)
-                    .toInt()
+        val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat("yyyy", Locale.getDefault())
+                .format(lastSeen)
+                .toInt()
             ) {
                 SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-            } else {
-                SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
-            }
+            } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
         df.format(lastSeen)
     }
 
