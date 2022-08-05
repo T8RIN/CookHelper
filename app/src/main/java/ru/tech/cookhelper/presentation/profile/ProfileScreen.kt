@@ -57,14 +57,17 @@ fun ProfileScreen(
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     val status = userState.user?.status
-    val lastSeen by computedStateOf {
+    val lastSeen by computedStateOf(userState) {
         val lastSeen = userState.user?.lastSeen ?: 0L
-        val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat("yyyy", Locale.getDefault())
+        val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
+                "yyyy",
+                Locale.getDefault()
+            )
                 .format(lastSeen)
                 .toInt()
-            ) {
-                SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-            } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
+        ) {
+            SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
+        } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
         df.format(lastSeen)
     }
 

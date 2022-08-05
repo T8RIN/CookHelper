@@ -8,6 +8,12 @@ import androidx.compose.runtime.remember
 object StateUtils {
     @Composable
     fun <T> computedStateOf(
+        vararg keys: Any,
+        calculation: () -> T
+    ): State<T> = remember(keys) { derivedStateOf(calculation) }
+
+    @Composable
+    fun <T> computedStateOf(
         calculation: () -> T
     ): State<T> = remember { derivedStateOf(calculation) }
 }
