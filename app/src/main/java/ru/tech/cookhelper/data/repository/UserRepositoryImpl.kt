@@ -29,7 +29,7 @@ class UserRepositoryImpl @Inject constructor(
 
         when (body.status) {
             101, 102 -> emit(Action.Empty(body.status))
-            100 -> emit(Action.Success(data = body))
+            100, 103 -> emit(Action.Success(data = body))
             else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }

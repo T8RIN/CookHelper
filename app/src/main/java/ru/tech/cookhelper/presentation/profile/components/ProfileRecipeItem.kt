@@ -1,7 +1,6 @@
 package ru.tech.cookhelper.presentation.profile.components
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -60,33 +58,12 @@ fun ProfileRecipeItem(
         shape = RoundedCornerShape(24.dp),
         onClick = { onRecipeClick(recipePost.postId) }
     ) {
-        Row(
-            Modifier
-                .padding(top = 12.dp, start = 12.dp)
-                .clip(CircleShape)
-                .clickable { onAuthorClick(recipePost.authorId) },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Picture(
-                model = author.avatar,
-                modifier = Modifier.size(54.dp)
-            )
-            Spacer(Modifier.size(8.dp))
-            Column {
-                Text(
-                    text = "${author.name} ${author.surname}",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp
-                )
-                Spacer(Modifier.size(5.dp))
-                Text(
-                    text = timestamp,
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-            }
-            Spacer(Modifier.size(8.dp))
-        }
+        AuthorBubble(
+            modifier = Modifier.padding(top = 12.dp, start = 12.dp),
+            author = author,
+            timestamp = timestamp,
+            onClick = { onAuthorClick(recipePost.authorId) }
+        )
         Spacer(Modifier.size(16.dp))
         Picture(
             model = recipePost.recipe.iconUrl,

@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.profile.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChatBubbleOutline
 import androidx.compose.material.icons.rounded.Favorite
@@ -12,9 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +39,10 @@ fun PostItem(
 
     val timestamp by computedStateOf {
         val df =
-            if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat("yyyy", Locale.getDefault())
+            if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
+                    "yyyy",
+                    Locale.getDefault()
+                )
                     .format(post.timestamp)
                     .toInt()
             ) {
@@ -54,35 +54,15 @@ fun PostItem(
     Column(
         Modifier
             .fillMaxWidth()
-            .clickable { onPostClick(post.postId) }) {
+            .clickable { onPostClick(post.postId) }
+    ) {
         Spacer(Modifier.size(15.dp))
-        Row(
-            Modifier
-                .padding(start = 20.dp)
-                .clip(CircleShape)
-                .clickable { onAuthorClick(post.authorId) },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Picture(
-                model = author.avatar,
-                modifier = Modifier.size(54.dp)
-            )
-            Spacer(Modifier.size(8.dp))
-            Column {
-                Text(
-                    text = "${author.name} ${author.surname}",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp
-                )
-                Spacer(Modifier.size(5.dp))
-                Text(
-                    text = timestamp,
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-            }
-            Spacer(Modifier.size(8.dp))
-        }
+        AuthorBubble(
+            modifier = Modifier.padding(start = 20.dp),
+            author = author,
+            timestamp = timestamp,
+            onClick = { onAuthorClick(post.authorId) }
+        )
         Spacer(Modifier.size(16.dp))
 
         post.title?.let { title ->
