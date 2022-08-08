@@ -1,5 +1,7 @@
 package ru.tech.cookhelper.presentation.profile
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.*
@@ -26,12 +29,14 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.*
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentScreen
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
@@ -49,11 +54,28 @@ fun ProfileScreen(
 
     val screenController = LocalScreenController.current
 
+    val toastHost = LocalToastHost.current
+    val imageNotPicked = stringResource(R.string.image_not_picked)
+
     val userState = viewModel.userState.value
     val nick = userState.user?.nickname
     if (nick != null) LaunchedEffect(Unit) { updateTitle(nick) }
 
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
+
+    val resultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            if (uri == null) {
+                toastHost.sendToast(
+                    icon = Icons.Outlined.BrokenImage,
+                    message = imageNotPicked
+                )
+                return@rememberLauncherForActivityResult
+            }
+            screenController.apply { navigate(Screen.PostCreation(currentScreen, uri.toString())) }
+        }
+    )
 
     val status = userState.user?.status
     val lastSeen by computedStateOf(userState) {
@@ -61,9 +83,7 @@ fun ProfileScreen(
         val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
                 "yyyy",
                 Locale.getDefault()
-            )
-                .format(lastSeen)
-                .toInt()
+            ).format(lastSeen).toInt()
         ) {
             SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
         } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
@@ -207,11 +227,7 @@ fun ProfileScreen(
                         modifier = Modifier.weight(1f),
                         onClick = {
                             screenController.apply {
-                                navigate(
-                                    Screen.PostCreation(
-                                        currentScreen
-                                    )
-                                )
+                                navigate(Screen.PostCreation(currentScreen))
                             }
                         }
                     ) {
@@ -224,7 +240,7 @@ fun ProfileScreen(
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.tertiaryContainer)
                             .clickable(
-                                onClick = { /*TODO: Add image to post instantly*/ },
+                                onClick = { resultLauncher.launch("image/*") },
                                 role = Role.Button
                             ),
                         contentAlignment = Alignment.Center

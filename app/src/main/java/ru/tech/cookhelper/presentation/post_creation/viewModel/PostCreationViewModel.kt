@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.post_creation.components
+package ru.tech.cookhelper.presentation.post_creation.viewModel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State

@@ -101,5 +101,6 @@
     <string name="add_image">Прикрепить изображение</string>
     <string name="whats_new">Что у вас нового?</string>
     <string name="enter_headline">Заголовок (Не обязательно)</string>
+    <string name="image_not_picked">Изображение не выбрано</string>
 
 </resources>

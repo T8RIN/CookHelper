@@ -40,7 +40,6 @@ import ru.tech.cookhelper.presentation.favourite_dishes.FavouriteListScreen
 import ru.tech.cookhelper.presentation.fridge_list.FridgeScreen
 import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScreen
 import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
-import ru.tech.cookhelper.presentation.post_creation.components.PostType
 import ru.tech.cookhelper.presentation.profile.ProfileScreen
 import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
@@ -419,7 +418,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             goBack = {
                                                 screenController.navigate(screen.previousScreen)
                                             },
-                                            type = PostType.Common
+                                            initialImageUri = screen.imageUri
                                         )
                                     }
                                 }

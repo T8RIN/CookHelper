@@ -108,7 +108,8 @@ sealed class Screen(
     ) : Screen()
 
     class PostCreation(
-        val previousScreen: Screen = Home
+        val previousScreen: Screen = Home,
+        val imageUri: String = ""
     ) : Screen()
 }
 
