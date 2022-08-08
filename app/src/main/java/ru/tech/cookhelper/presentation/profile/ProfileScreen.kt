@@ -2,7 +2,6 @@ package ru.tech.cookhelper.presentation.profile
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -45,6 +43,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random.Default.nextBoolean
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = scopedViewModel(ignoreDisposing = listOf(Screen.FullscreenImagePager::class)),
@@ -215,7 +214,12 @@ fun ProfileScreen(
                             contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                         ),
                         modifier = Modifier.weight(1f),
-                        onClick = { /*TODO: Recipe creation*/ }) {
+                        onClick = {
+                            screenController.apply {
+                                navigate(Screen.RecipePostCreation(currentScreen))
+                            }
+                        }
+                    ) {
                         Text(stringResource(R.string.recipe))
                     }
                     Spacer(Modifier.size(5.dp))
@@ -234,22 +238,15 @@ fun ProfileScreen(
                         Text(stringResource(R.string.post))
                     }
                     Spacer(Modifier.size(5.dp))
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.tertiaryContainer)
-                            .clickable(
-                                onClick = { resultLauncher.launch("image/*") },
-                                role = Role.Button
-                            ),
-                        contentAlignment = Alignment.Center
+                    FilledIconButton(
+                        modifier = Modifier.size(40.dp),
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        ),
+                        onClick = { resultLauncher.launch("image/*") }
                     ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Image,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onTertiaryContainer
-                        )
+                        Icon(Icons.Outlined.Image, null)
                     }
                 }
             }
@@ -475,7 +472,7 @@ fun ProfileScreen(
 private val testList = listOf(
     Image("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "1"),
     Image(
-        "https://www.journaldev.com/wp-content/uploads/2018/06/android-instant-app-module-dependencies.png.webp",
+        "https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg",
         "2"
     ),
     Image(
@@ -484,7 +481,7 @@ private val testList = listOf(
     ),
     Image("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "4"),
     Image(
-        "https://www.journaldev.com/wp-content/uploads/2018/06/android-instant-app-module-dependencies.png.webp",
+        "https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg",
         "5"
     )
 )

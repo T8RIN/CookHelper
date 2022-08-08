@@ -41,6 +41,7 @@ import ru.tech.cookhelper.presentation.fridge_list.FridgeScreen
 import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScreen
 import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
 import ru.tech.cookhelper.presentation.profile.ProfileScreen
+import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
 import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
@@ -419,6 +420,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                 screenController.navigate(screen.previousScreen)
                                             },
                                             initialImageUri = screen.imageUri
+                                        )
+                                    }
+                                    is Screen.RecipePostCreation -> {
+                                        RecipePostCreationScreen(
+                                            goBack = {
+                                                screenController.navigate(screen.previousScreen)
+                                            }
                                         )
                                     }
                                 }

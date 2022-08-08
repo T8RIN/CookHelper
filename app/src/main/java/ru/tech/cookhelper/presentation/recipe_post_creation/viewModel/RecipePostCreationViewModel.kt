@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.post_creation.viewModel
+package ru.tech.cookhelper.presentation.recipe_post_creation.viewModel
 
 import android.net.Uri
 import androidx.compose.runtime.MutableState
@@ -14,7 +14,7 @@ import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class PostCreationViewModel @Inject constructor(
+class RecipePostCreationViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
@@ -25,10 +25,6 @@ class PostCreationViewModel @Inject constructor(
         getUserUseCase()
             .onEach { _user.value = it }
             .launchIn(viewModelScope)
-    }
-
-    fun createPost(content: String, label: String, imageUri: Uri) {
-        TODO("Not yet implemented")
     }
 
 }
