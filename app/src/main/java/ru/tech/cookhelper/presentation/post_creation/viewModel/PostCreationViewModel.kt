@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.post_creation.viewModel
 
+import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +17,10 @@ import javax.inject.Inject
 class PostCreationViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase
 ) : ViewModel() {
+
+    fun createPost(content: String, label: String, imageUri: Uri) {
+        TODO("Not yet implemented")
+    }
 
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: State<User?> = _user

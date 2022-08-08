@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
@@ -33,8 +34,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
@@ -50,6 +53,10 @@ fun PostCreationScreen(
 ) {
     val focus = LocalFocusManager.current
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
+
+    var content by rememberSaveable { mutableStateOf("") }
+    var label by rememberSaveable { mutableStateOf("") }
+    var imageUri by rememberSaveable { mutableStateOf(initialImageUri) }
 
     val user = viewModel.user.value
 
@@ -90,8 +97,7 @@ fun PostCreationScreen(
             actions = {
                 IconButton(
                     onClick = {
-                        /*TODO: Done*/
-                        goBack()
+                        viewModel.createPost(content, label, imageUri.toUri())
                     },
                     enabled = doneEnabled,
                     colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
@@ -103,10 +109,6 @@ fun PostCreationScreen(
 
         val shape = RoundedCornerShape(4.dp)
         val paddingValues = PaddingValues(start = 8.dp, end = 8.dp, bottom = 16.dp)
-
-        var postText by rememberSaveable { mutableStateOf("") }
-        var postLabel by rememberSaveable { mutableStateOf("") }
-        var imageUri by rememberSaveable { mutableStateOf(initialImageUri) }
 
         val resultLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent(),
@@ -124,9 +126,9 @@ fun PostCreationScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
-                value = postLabel,
+                value = label,
                 onValueChange = {
-                    postLabel = it
+                    label = it
                 },
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp, top = 16.dp)
@@ -138,16 +140,19 @@ fun PostCreationScreen(
                 ),
                 shape = shape,
                 label = {
-                    Text(stringResource(R.string.enter_headline))
+                    Text(
+                        stringResource(R.string.enter_headline),
+                        modifier = Modifier.offset(y = 4.dp)
+                    )
                 },
                 textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold),
-                singleLine = true
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
 
             TextField(
-                value = postText,
+                value = content,
                 onValueChange = {
-                    postText = it
+                    content = it
                 },
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 32.dp)
@@ -215,8 +220,8 @@ fun PostCreationScreen(
             }
         }
 
-        LaunchedEffect(imageUri, postText) {
-            doneEnabled = imageUri.isNotEmpty() || postText.isNotEmpty()
+        LaunchedEffect(imageUri, content) {
+            doneEnabled = imageUri.isNotEmpty() || content.isNotEmpty()
         }
 
     }
