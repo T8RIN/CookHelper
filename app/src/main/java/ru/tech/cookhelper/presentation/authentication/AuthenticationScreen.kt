@@ -51,7 +51,8 @@ fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
                 detectTapGestures(
                     onTap = { localFocusManager.clearFocus() }
                 )
-            },
+            }
+            .imePadding(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

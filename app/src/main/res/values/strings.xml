@@ -26,7 +26,7 @@
     <string name="app_closing_message">Приложение будет закрыто, все данные будут сохранены в облаке, продолжить?</string>
     <string name="stay">Отстаться</string>
     <string name="close">Выйти</string>
-    <string name="night_mode">Ночной режим</string>
+    <string name="app_theme_mode">Тема приложения</string>
     <string name="dynamic_сolors">Динамечские цвета</string>
     <string name="cart_connection">Связь корзины и холодильника</string>
     <string name="color_scheme">Цветовая палитра</string>
@@ -98,5 +98,8 @@
     <string name="post">Запись</string>
     <string name="create">Создать</string>
     <string name="posts">Записи</string>
+    <string name="add_image">Прикрепить изображение</string>
+    <string name="whats_new">Что у вас нового?</string>
+    <string name="enter_headline">Заголовок (Не обязательно)</string>
 
 </resources>

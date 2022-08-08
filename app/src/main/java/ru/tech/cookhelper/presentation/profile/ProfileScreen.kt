@@ -205,7 +205,16 @@ fun ProfileScreen(
                             contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                         ),
                         modifier = Modifier.weight(1f),
-                        onClick = { /*TODO: Post creation*/ }) {
+                        onClick = {
+                            screenController.apply {
+                                navigate(
+                                    Screen.PostCreation(
+                                        currentScreen
+                                    )
+                                )
+                            }
+                        }
+                    ) {
                         Text(stringResource(R.string.post))
                     }
                     Spacer(Modifier.size(5.dp))

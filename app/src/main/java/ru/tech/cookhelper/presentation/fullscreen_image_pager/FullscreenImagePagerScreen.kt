@@ -32,9 +32,7 @@ import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalAnimationApi::class
-)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FullScreenPagerScreen(images: List<Image>, initialId: String, goBack: () -> Unit) {
     val pagerState =
@@ -74,7 +72,6 @@ fun FullScreenPagerScreen(images: List<Image>, initialId: String, goBack: () -> 
             exit = slideOutVertically() + fadeOut()
         ) {
             TopAppBar(
-                modifier = Modifier.statusBarsPadding(),
                 background = Color.Black.copy(alpha = 0.5f),
                 title = {
                     Text(

@@ -257,7 +257,7 @@ fun Settings.getIcon(nightMode: NightMode): ImageVector {
 val Settings.title: Int
     get() {
         return when (this) {
-            NIGHT_MODE -> R.string.night_mode
+            NIGHT_MODE -> R.string.app_theme_mode
             DYNAMIC_COLORS -> R.string.dynamic_сolors
             COLOR_SCHEME -> R.string.color_scheme
             CART_CONNECTION -> R.string.cart_connection

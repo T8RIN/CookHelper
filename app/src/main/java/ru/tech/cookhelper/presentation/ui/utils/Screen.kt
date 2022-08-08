@@ -106,6 +106,10 @@ sealed class Screen(
         val previousScreen: Screen = Home,
         val canAddImages: Boolean = false
     ) : Screen()
+
+    class PostCreation(
+        val previousScreen: Screen = Home
+    ) : Screen()
 }
 
 val drawerList = listOf(
@@ -121,6 +125,7 @@ val drawerList = listOf(
 val hideTopBarList = listOf(
     Screen.AllImages::class.name,
     Screen.FullscreenImagePager::class.name,
+    Screen.PostCreation::class.name,
     Screen.MatchedRecipes::class.name,
     Screen.RecipeDetails::class.name,
     Screen.Authentication::class.name
