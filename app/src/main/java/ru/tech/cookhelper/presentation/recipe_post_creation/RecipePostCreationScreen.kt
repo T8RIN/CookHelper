@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.EggAlt
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.LazyTextField
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
@@ -47,63 +49,125 @@ fun RecipePostCreationScreen(
         }
     )
 
-    Column(
+    Box(
         Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectTapGestures(onTap = { focus.clearFocus() })
             }
     ) {
-        TopAppBar(
-            background = TopAppBarDefaults
-                .smallTopAppBarColors()
-                .containerColor(1f)
-                .value,
-            title = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .fillMaxWidth()
-                ) {
-                    Picture(model = user?.avatar, modifier = Modifier.size(40.dp))
-                    Spacer(Modifier.width(12.dp))
-                    Text(
-                        text = "${user?.name?.trim()} ${user?.surname?.trim()}",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
+        Column {
+            TopAppBar(
+                background = TopAppBarDefaults
+                    .smallTopAppBarColors()
+                    .containerColor(1f)
+                    .value,
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Picture(model = user?.avatar, modifier = Modifier.size(40.dp))
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            text = "${user?.name?.trim()} ${user?.surname?.trim()}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = { goBack() }) {
+                        Icon(Icons.Rounded.Close, null)
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            /*TODO: Post saving */
+                        },
+                        enabled = doneEnabled,
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                    ) {
+                        Icon(Icons.Rounded.Done, null)
+                    }
+                }
+            )
+
+            Column(
+                Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyTextField(
+                    onValueChange = {},
+                    label = "Название рецепта",
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = false
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row {
+                    LazyTextField(
+                        onValueChange = {},
+                        label = "Время",
+                        modifier = Modifier.weight(1f)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    LazyTextField(
+                        onValueChange = {},
+                        label = "Калории",
+                        modifier = Modifier.weight(1f)
                     )
                 }
-            },
-            navigationIcon = {
-                IconButton(onClick = { goBack() }) {
-                    Icon(Icons.Rounded.Close, null)
+                Spacer(modifier = Modifier.height(8.dp))
+                Row {
+                    LazyTextField(
+                        onValueChange = {},
+                        label = "Белки",
+                        modifier = Modifier.weight(1f)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    LazyTextField(
+                        onValueChange = {},
+                        label = "Жиры",
+                        modifier = Modifier.weight(1f)
+                    )
                 }
-            },
-            actions = {
-                IconButton(
-                    onClick = {
-                        /*TODO: Post saving */
-                    },
-                    enabled = doneEnabled,
-                    colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
-                ) {
-                    Icon(Icons.Rounded.Done, null)
-                }
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyTextField(
+                    onValueChange = {},
+                    label = "Углеводы",
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = false
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyTextField(
+                    onValueChange = {},
+                    label = "Категория",
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyTextField(
+                    onValueChange = {},
+                    label = "Пошаговый рецепт",
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = false
+                )
             }
-        )
-
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
         }
 
-
+        ExtendedFloatingActionButton(
+            modifier = Modifier.padding(16.dp).navigationBarsPadding().align(Alignment.BottomEnd),
+            onClick = { /*TODO*/ },
+            text = { Text("Добавить продукты") },
+            icon = { Icon(Icons.Outlined.EggAlt, null) }
+        )
 
         LaunchedEffect(imageUri) {
             doneEnabled = imageUri.isNotEmpty()
