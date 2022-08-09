@@ -3,8 +3,12 @@ package ru.tech.cookhelper.presentation.recipe_post_creation
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -13,12 +17,17 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.icons.rounded.Autorenew
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -29,6 +38,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
@@ -36,7 +47,9 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.LazyTextF
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
+)
 @Composable
 fun RecipePostCreationScreen(
     viewModel: RecipePostCreationViewModel = scopedViewModel(),
@@ -133,7 +146,11 @@ fun RecipePostCreationScreen(
                     label = "Название рецепта",
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = false,
-                    textStyle = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = LocalTextStyle.current.fontSize)
+                    shape = RoundedCornerShape(24.dp),
+                    textStyle = TextStyle(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = LocalTextStyle.current.fontSize
+                    )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Card(
@@ -191,6 +208,12 @@ fun RecipePostCreationScreen(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Number
                         ),
+                        shape = RoundedCornerShape(
+                            topStart = 24.dp,
+                            topEnd = 4.dp,
+                            bottomStart = 4.dp,
+                            bottomEnd = 4.dp
+                        ),
                         formatText = {
                             filter { it.isDigit() }
                         }
@@ -204,6 +227,12 @@ fun RecipePostCreationScreen(
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Number
+                        ),
+                        shape = RoundedCornerShape(
+                            topStart = 4.dp,
+                            topEnd = 24.dp,
+                            bottomStart = 4.dp,
+                            bottomEnd = 4.dp
                         ),
                         formatText = { stripToDouble() },
                         onLoseFocusTransformation = { removeSuffix(".") }
@@ -252,13 +281,71 @@ fun RecipePostCreationScreen(
                     onLoseFocusTransformation = { removeSuffix(".") }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                LazyTextField(
-                    startIcon = Icons.Outlined.Category,
-                    onValueChange = {},
-                    label = "Категория",
-                    modifier = Modifier.fillMaxWidth()
-                )
+
+                var expanded by remember { mutableStateOf(false) }
+                val suggestions = listOf("Item1", "Item2", "Item3")
+                var selectedText by remember { mutableStateOf("") }
+
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = {
+                        expanded = !expanded
+                    }
+                ) {
+                    val color = remember { Animatable(initialValue = Color.Transparent) }
+                    val colorScheme = MaterialTheme.colorScheme
+                    val scope = rememberCoroutineScope()
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 2.dp,
+                                color = color.value,
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .onFocusChanged {
+                                scope.launch {
+                                    if (it.isFocused) color.animateTo(colorScheme.primary)
+                                    else color.animateTo(Color.Transparent)
+                                    cancel()
+                                }
+                            }
+                            .animateContentSize(),
+                        value = selectedText,
+                        onValueChange = {},
+                        colors = TextFieldDefaults.textFieldColors(
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent
+                        ),
+                        readOnly = true,
+                        shape = RoundedCornerShape(4.dp),
+                        label = { Text("Категория", modifier = Modifier.offset(4.dp)) },
+                        leadingIcon = { Icon(Icons.Outlined.Category, null) },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        }
+                    )
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.exposedDropdownSize()
+                    ) {
+                        suggestions.forEach { label ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedText = label
+                                    expanded = false
+                                }, text = {
+                                    Text(text = label)
+                                }
+                            )
+                        }
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
+
                 LazyTextField(
                     startIcon = Icons.Outlined.Notes,
                     onValueChange = {},
@@ -266,6 +353,12 @@ fun RecipePostCreationScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 88.dp),
+                    shape = RoundedCornerShape(
+                        topStart = 4.dp,
+                        topEnd = 4.dp,
+                        bottomStart = 24.dp,
+                        bottomEnd = 24.dp
+                    ),
                     singleLine = false,
                     keyboardOptions = KeyboardOptions.Default
                 )
@@ -296,8 +389,8 @@ fun String.stripToDouble(): String {
     var text = this
     split(".").apply {
         var tmp = getOrElse(0) { "" }
-        if(tmp.isNotEmpty() && size > 1) {
-            tmp+=("." + get(1))
+        if (tmp.isNotEmpty() && size > 1) {
+            tmp += ("." + get(1))
         }
         text = tmp
     }

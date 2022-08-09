@@ -12,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -25,12 +26,13 @@ fun LazyTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     label: String,
+    shape: Shape = RoundedCornerShape(4.dp),
     startIcon: ImageVector,
     formatText: String.() -> String = { this },
     textStyle: TextStyle = LocalTextStyle.current,
     onLoseFocusTransformation: String.() -> String = { this },
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-    singleLine: Boolean = true,
+    singleLine: Boolean = true
 ) {
     var value by rememberSaveable { mutableStateOf("") }
     val color = remember { Animatable(initialValue = Color.Transparent) }
@@ -42,7 +44,7 @@ fun LazyTextField(
             .border(
                 width = 2.dp,
                 color = color.value,
-                shape = RoundedCornerShape(4.dp)
+                shape = shape
             )
             .onFocusChanged {
                 scope.launch {
@@ -64,7 +66,7 @@ fun LazyTextField(
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(4.dp),
+        shape = shape,
         label = { Text(label, modifier = if (singleLine) Modifier else Modifier.offset(4.dp)) },
         singleLine = singleLine,
         keyboardOptions = keyboardOptions,
