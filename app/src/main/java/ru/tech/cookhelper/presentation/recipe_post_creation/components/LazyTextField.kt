@@ -1,18 +1,23 @@
 package ru.tech.cookhelper.presentation.recipe_post_creation.components
 
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,25 +25,53 @@ fun LazyTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     label: String,
-    startIcon: ImageVector? = null,
+    startIcon: ImageVector,
+    formatText: String.() -> String = { this },
+    textStyle: TextStyle = LocalTextStyle.current,
+    onLoseFocusTransformation: String.() -> String = { this },
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     singleLine: Boolean = true,
 ) {
     var value by rememberSaveable { mutableStateOf("") }
+    val color = remember { Animatable(initialValue = Color.Transparent) }
+    val colorScheme = MaterialTheme.colorScheme
+    val scope = rememberCoroutineScope()
+
     TextField(
-        modifier = modifier,
+        modifier = modifier
+            .border(
+                width = 2.dp,
+                color = color.value,
+                shape = RoundedCornerShape(4.dp)
+            )
+            .onFocusChanged {
+                scope.launch {
+                    if (it.isFocused) color.animateTo(colorScheme.primary)
+                    else {
+                        color.animateTo(Color.Transparent)
+                        value = value.onLoseFocusTransformation()
+                    }
+                    cancel()
+                }
+            }
+            .animateContentSize(),
         value = value,
+        textStyle = textStyle,
         onValueChange = {
-            onValueChange(it)
-            value = it
+            value = it.formatText()
         },
-        label = { Text(label) },
+        colors = TextFieldDefaults.textFieldColors(
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent
+        ),
+        shape = RoundedCornerShape(4.dp),
+        label = { Text(label, modifier = if (singleLine) Modifier else Modifier.offset(4.dp)) },
         singleLine = singleLine,
         keyboardOptions = keyboardOptions,
-        leadingIcon = {
-            startIcon?.let {
-                Icon(startIcon, null)
-            }
-        }
+        leadingIcon = { Icon(startIcon, null) }
     )
+
+    LaunchedEffect(value) {
+        onValueChange(value)
+    }
 }
