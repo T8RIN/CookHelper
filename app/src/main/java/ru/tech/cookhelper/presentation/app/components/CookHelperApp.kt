@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
+import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.presentation.all_images.AllImagesScreen
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
@@ -42,6 +43,7 @@ import ru.tech.cookhelper.presentation.profile.ProfileScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategorySelectionDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.PickProductsWithMeasuresDialog
 import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
@@ -527,6 +529,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     title = dialog.title,
                                     message = dialog.message,
                                     onLeave = dialog.onLeave
+                                )
+                            }
+                            is Dialog.PickProductsWithMeasures -> {
+                                PickProductsWithMeasuresDialog(
+                                    products = dialog.products,
+                                    allProducts = dialog.allProducts,
+                                    onProductsPicked = dialog.onProductsPicked
                                 )
                             }
                             else -> {}

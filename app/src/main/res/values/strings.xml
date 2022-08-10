@@ -111,12 +111,15 @@
     <string name="carbohydrates">Углеводы</string>
     <string name="category">Категория</string>
     <string name="step_by_step_recipe">Пошаговый рецепт</string>
-    <string name="change_products">Изменить продукты</string>
+    <string name="change_ingredients">Изменить ингредиенты</string>
     <string name="recipe_creation_started">Создание рецепта начато</string>
     <string name="recipe_creation_started_leave_message">Создание рецепта началось, осталось совсем чуть-чуть, чтобы поделиться им со всем миром, если вы выйдете сейчас, то утратите несохраненные данные</string>
     <string name="leave_without_saving">Выйти без сохранения</string>
     <string name="post_creation_started">Создание записи начато</string>
     <string name="post_creation_started_leave_message">Создание записи началось, осталось совсем чуть-чуть, чтобы завершить ее, если вы выйдете сейчас, то утратите несохраненные данные</string>
-
+    <string name="ingredients">Ингредиенты</string>
+    <string name="no_ingredients_picked">Ингредиенты не выбраны, добавьте их, нажав на кнопку</string>
+    <string name="apply">Применить</string>
+    <string name="search_here">Ищите тут</string>
 
 </resources>

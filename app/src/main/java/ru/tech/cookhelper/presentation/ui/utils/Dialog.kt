@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
+import ru.tech.cookhelper.domain.model.Product
 
 sealed class Dialog(val icon: ImageVector = Icons.Default.Android) {
 
@@ -21,7 +22,7 @@ sealed class Dialog(val icon: ImageVector = Icons.Default.Android) {
     class CategorySelection(
         val categories: List<String>,
         val selectedCategory: String,
-        val onCategorySelected: (String) -> Unit
+        val onCategorySelected: (category: String) -> Unit
     ) : Dialog(icon = Icons.Outlined.Category)
 
     class LeaveUnsavedData(
@@ -29,4 +30,10 @@ sealed class Dialog(val icon: ImageVector = Icons.Default.Android) {
         @StringRes val message: Int,
         val onLeave: () -> Unit
     ) : Dialog(icon = Icons.Outlined.Save)
+
+    class PickProductsWithMeasures(
+        val products: List<Product>,
+        val allProducts: List<Product>,
+        val onProductsPicked: (newProducts: List<Product>) -> Unit
+    ) : Dialog()
 }

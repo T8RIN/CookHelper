@@ -136,6 +136,7 @@ fun PostCreationScreen(
             Modifier
                 .fillMaxSize()
                 .imePadding()
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

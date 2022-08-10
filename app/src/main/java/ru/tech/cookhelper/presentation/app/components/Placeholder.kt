@@ -17,10 +17,9 @@ import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 
 @Composable
-fun Placeholder(icon: ImageVector, text: String) {
+fun Placeholder(icon: ImageVector, text: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = if(modifier == Modifier) Modifier.fillMaxSize() else modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
