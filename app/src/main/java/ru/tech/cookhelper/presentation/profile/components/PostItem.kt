@@ -1,8 +1,9 @@
 package ru.tech.cookhelper.presentation.profile.components
 
-import androidx.compose.animation.animateContentSize
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChatBubbleOutline
 import androidx.compose.material.icons.rounded.Favorite
@@ -11,9 +12,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -81,17 +84,19 @@ fun PostItem(
         }
 
         post.image?.let { image ->
-            Picture(
-                model = image.link,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateContentSize()
-                    .heightIn(min = 300.dp)
-                    .clickable {
-                        onImageClick(image.id)
-                    },
-                shape = RectangleShape
-            )
+            val shape = RoundedCornerShape(4.dp)
+            Box(Modifier.fillMaxWidth()) {
+                Picture(
+                    model = image.link,
+                    modifier = Modifier
+                        .squareSize()
+                        .align(Alignment.Center)
+                        .clickable {
+                            onImageClick(image.id)
+                        },
+                    shape = shape
+                )
+            }
             Spacer(Modifier.size(4.dp))
         }
 
@@ -115,4 +120,15 @@ fun PostItem(
         Spacer(Modifier.size(15.dp))
     }
 
+}
+
+private fun Modifier.squareSize(): Modifier = composed {
+    val modifier: Modifier
+    LocalConfiguration.current.apply {
+        val minSize = kotlin.math.min(screenWidthDp, screenHeightDp).dp
+        modifier = if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Modifier.size(minSize)
+        } else Modifier.size(minSize)
+    }
+    modifier
 }

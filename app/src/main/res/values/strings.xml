@@ -102,5 +102,15 @@
     <string name="whats_new">Что у вас нового?</string>
     <string name="enter_headline">Заголовок (Не обязательно)</string>
     <string name="image_not_picked">Изображение не выбрано</string>
+    <string name="choose_category">Выберите категорию</string>
+    <string name="recipe_headline">Название рецепта</string>
+    <string name="time">Время</string>
+    <string name="calories">Калории</string>
+    <string name="proteins">Белки</string>
+    <string name="fats">Жиры</string>
+    <string name="carbohydrates">Углеводы</string>
+    <string name="category">Категория</string>
+    <string name="step_by_step_recipe">Пошаговый рецепт</string>
+    <string name="change_products">Изменить продукты</string>
 
 </resources>

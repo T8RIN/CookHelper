@@ -53,7 +53,7 @@ fun AboutAppDialog() {
             TextButton(onClick = { dialogController.close() }) {
                 Text(stringResource(R.string.okay))
             }
-        },
+        }
     )
 }
 

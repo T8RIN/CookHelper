@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.outlined.FindReplace
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Logout
@@ -22,7 +21,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,11 +40,11 @@ import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScr
 import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
 import ru.tech.cookhelper.presentation.profile.ProfileScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategorySelectionDialog
 import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.utils.*
-import ru.tech.cookhelper.presentation.ui.utils.ResUtils.alternateIcon
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
@@ -180,20 +178,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 
                                                             NavigationBarItem(
                                                                 icon = {
-                                                                    if (screen.baseIcon != Icons.Default.PhoneAndroid) {
-                                                                        Icon(
-                                                                            screen iconWith (viewModel.selectedItem == index),
-                                                                            null
-                                                                        )
-                                                                    } else {
-                                                                        Icon(
-                                                                            painterResource(
-                                                                                screen.alternateIcon(
-                                                                                    viewModel.selectedItem == index
-                                                                                )
-                                                                            ), null
-                                                                        )
-                                                                    }
+                                                                    Icon(
+                                                                        screen iconWith (viewModel.selectedItem == index),
+                                                                        null
+                                                                    )
                                                                 },
                                                                 alwaysShowLabel = false,
                                                                 label = {
@@ -435,7 +423,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     }
 
                     AnimatedVisibility(visible = dialogController.currentDialog != Dialog.None) {
-                        when (dialogController.currentDialog) {
+                        when (val dialog = dialogController.currentDialog) {
                             is Dialog.Exit -> {
                                 ExitDialog(onExit = { activity.finishAffinity() })
                             }
@@ -444,15 +432,17 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                             }
                             is Dialog.Logout -> {
                                 val toastHost = LocalToastHost.current
-                                LogoutDialog(onLogout = {
-                                    if (activity.isOnline()) {
-                                        viewModel.logOut()
-                                    } else toastHost.sendToast(
-                                        Icons.Outlined.SignalWifiConnectedNoInternet4,
-                                        message = activity.getString(R.string.no_connection)
-                                    )
-                                    dialogController.close()
-                                })
+                                LogoutDialog(
+                                    onLogout = {
+                                        if (activity.isOnline()) {
+                                            viewModel.logOut()
+                                        } else toastHost.sendToast(
+                                            Icons.Outlined.SignalWifiConnectedNoInternet4,
+                                            message = activity.getString(R.string.no_connection)
+                                        )
+                                        dialogController.close()
+                                    }
+                                )
                             }
                             is Dialog.PickProducts -> {
                                 val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.75f
@@ -522,6 +512,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             }
                                         }
                                     }
+                                )
+                            }
+                            is Dialog.CategorySelection -> {
+                                CategorySelectionDialog(
+                                    categories = dialog.categories,
+                                    selectedCategory = dialog.selectedCategory,
+                                    onCategorySelected = dialog.onCategorySelected
                                 )
                             }
                             else -> {}
