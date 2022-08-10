@@ -53,7 +53,7 @@ fun PickProductsWithMeasuresDialog(
     onProductsPicked: (newProducts: List<Product>) -> Unit
 ) {
     var localProducts by rememberSaveable(saver = ProductsSaver) { mutableStateOf(products) }
-    var localAmounts = rememberSaveable(saver = MapListSaver) { mutableStateMapOf() }
+    val localAmounts = rememberSaveable(saver = MapListSaver) { mutableStateMapOf() }
 
     val dialogController = LocalDialogController.current
 
@@ -71,7 +71,7 @@ fun PickProductsWithMeasuresDialog(
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = Modifier.fillMaxWidth(0.85f),
+        modifier = Modifier.fillMaxWidth(0.85f).padding(vertical = 16.dp),
         title = {
             AnimatedContent(
                 targetState = addingProducts
@@ -154,7 +154,7 @@ fun PickProductsWithMeasuresDialog(
                                                 onValueChange = { str ->
                                                     localAmounts[it.id] = str.stripToDouble()
                                                 },
-                                                value = localAmounts[it.id].toString(),
+                                                value = localAmounts[it.id] ?: "",
                                                 textStyle = LocalTextStyle.current.copy(
                                                     fontSize = 16.sp,
                                                     fontWeight = FontWeight.Bold
@@ -169,7 +169,7 @@ fun PickProductsWithMeasuresDialog(
                                                     .width(TextFieldDefaults.MinHeight * 1.5f)
                                                     .padding(bottom = 8.dp)
                                                     .onFocusChanged { f ->
-                                                        if (!f.isFocused) localAmounts[it.id] = localAmounts[it.id].toString().removeSuffix(".")
+                                                        if (!f.isFocused) localAmounts[it.id] = (localAmounts[it.id] ?: "").removeSuffix(".")
                                                     }
                                             )
                                             Spacer(Modifier.width(12.dp))
@@ -276,7 +276,14 @@ fun PickProductsWithMeasuresDialog(
             TextButton(onClick = {
                 if (!addingProducts) {
                     dialogController.close()
-                    onProductsPicked(localProducts)
+                    onProductsPicked(
+                        localProducts.map {
+                            val amount = localAmounts[it.id]
+                            it.copy(
+                                amount = amount?.toFloatOrNull() ?: amount?.toIntOrNull()?.toFloat() ?: 0f
+                            )
+                        }
+                    )
                 } else {
                     localProducts = localProducts + allProducts.mapNotNull {
                         if (selectedProducts.contains(it.id) && !localProducts.any { p -> p.id == it.id }) it
