@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.rounded.AddCircleOutline
@@ -14,19 +15,25 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Product
+import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
@@ -35,7 +42,10 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(
+    ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun PickProductsWithMeasuresDialog(
     products: List<Product>,
@@ -43,6 +53,8 @@ fun PickProductsWithMeasuresDialog(
     onProductsPicked: (newProducts: List<Product>) -> Unit
 ) {
     var localProducts by rememberSaveable(saver = ProductsSaver) { mutableStateOf(products) }
+    var localAmounts = rememberSaveable(saver = MapListSaver) { mutableStateMapOf() }
+
     val dialogController = LocalDialogController.current
 
     var addingProducts by rememberSaveable { mutableStateOf(false) }
@@ -111,23 +123,57 @@ fun PickProductsWithMeasuresDialog(
                             Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                             LazyColumn(
                                 modifier = lazyColumnModifier,
+                                contentPadding = PaddingValues(vertical = 4.dp),
                                 state = rememberForeverLazyListState(Dialog.PickProductsWithMeasures::class.name)
                             ) {
                                 items(localProducts) {
-                                    Row(
+                                    Card(
                                         modifier = Modifier
-                                            .padding(vertical = 4.dp)
-                                            .fillMaxWidth()
-                                            .clip(RoundedCornerShape(4.dp)),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = "${it.name}..${it.amount} ${it.mimeType}",
-                                            fontSize = 16.sp,
-                                            modifier = Modifier
-                                                .padding(12.dp)
-                                                .weight(1f)
+                                            .padding(vertical = 4.dp),
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
+                                                alpha = 0.5f
+                                            )
                                         )
+                                    ) {
+                                        Row(
+                                            modifier = Modifier
+                                                .padding(vertical = 12.dp)
+                                                .fillMaxWidth()
+                                                .clip(RoundedCornerShape(4.dp)),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = it.name,
+                                                fontSize = 16.sp,
+                                                modifier = Modifier
+                                                    .padding(12.dp)
+                                                    .weight(1f)
+                                            )
+                                            OutlinedTextField(
+                                                onValueChange = { str ->
+                                                    localAmounts[it.id] = str.stripToDouble()
+                                                },
+                                                value = localAmounts[it.id].toString(),
+                                                textStyle = LocalTextStyle.current.copy(
+                                                    fontSize = 16.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                ),
+                                                keyboardOptions = KeyboardOptions.Default.copy(
+                                                    keyboardType = KeyboardType.Number,
+                                                    imeAction = ImeAction.Next
+                                                ),
+                                                singleLine = true,
+                                                label = { Text(it.mimeType) },
+                                                modifier = Modifier
+                                                    .width(TextFieldDefaults.MinHeight * 1.5f)
+                                                    .padding(bottom = 8.dp)
+                                                    .onFocusChanged { f ->
+                                                        if (!f.isFocused) localAmounts[it.id] = localAmounts[it.id].toString().removeSuffix(".")
+                                                    }
+                                            )
+                                            Spacer(Modifier.width(12.dp))
+                                        }
                                     }
                                 }
                             }
@@ -162,7 +208,10 @@ fun PickProductsWithMeasuresDialog(
                     if (list.isNotEmpty()) {
                         Column {
                             Divider(color = MaterialTheme.colorScheme.surfaceVariant)
-                            LazyColumn(modifier = lazyColumnModifier) {
+                            LazyColumn(
+                                modifier = lazyColumnModifier,
+                                contentPadding = PaddingValues(vertical = 4.dp),
+                            ) {
                                 items(list) {
                                     Row(
                                         modifier = Modifier
@@ -260,5 +309,23 @@ private val ProductsSaver = Saver<MutableState<List<Product>>, String>(
                 }
             }
         )
+    }
+)
+
+private val MapListSaver = Saver<SnapshotStateMap<Int, String>, String>(
+    save = { it.entries.joinToString("#") { p -> "${p.key} ${p.value}" } },
+    restore = {
+        val map = mutableStateMapOf<Int, String>()
+        it.split("#").mapNotNull { str ->
+            val data = str.split(" ")
+            try {
+                val key = data[0].toIntOrNull() ?: 0
+                val value = data[1]
+                map[key] = value
+            } catch (e: Exception) {
+                null
+            }
+        }
+        map
     }
 )

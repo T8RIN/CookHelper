@@ -422,6 +422,7 @@ fun RecipePostCreationScreen(
     DisposableEffect(Unit) {
         onDispose {
             clearState(key = Dialog.CategorySelection::class.name)
+            clearState(key = Dialog.PickProductsWithMeasures::class.name)
         }
     }
 }
