@@ -51,7 +51,7 @@ import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 @Composable
 fun RecipePostCreationScreen(
     viewModel: RecipePostCreationViewModel = scopedViewModel(),
-    goBack: () -> Unit
+    onBack: () -> Unit
 ) {
     val focus = LocalFocusManager.current
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
@@ -74,7 +74,18 @@ fun RecipePostCreationScreen(
     val user = viewModel.user.value
 
     var imageUri by rememberSaveable { mutableStateOf("") }
-    var categoryText by remember { mutableStateOf("") }
+    var category by rememberSaveable { mutableStateOf("") }
+    var label by rememberSaveable { mutableStateOf("") }
+    var time by rememberSaveable { mutableStateOf("") }
+    var calories by rememberSaveable { mutableStateOf("") }
+    var proteins by rememberSaveable { mutableStateOf("") }
+    var fats by rememberSaveable { mutableStateOf("") }
+    var carbohydrates by rememberSaveable { mutableStateOf("") }
+    var steps by rememberSaveable { mutableStateOf("") }
+
+    val dataList = listOf(
+        label, imageUri, time, calories, proteins, fats, carbohydrates, category, steps
+    )
 
     val resultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -84,6 +95,19 @@ fun RecipePostCreationScreen(
             }
         }
     )
+
+    val goBack = {
+        if(dataList.any { it != "" }) {
+            dialogController.show(
+                Dialog.LeaveUnsavedData(
+                    title = R.string.recipe_creation_started,
+                    message = R.string.recipe_creation_started_leave_message,
+                    onLeave = { onBack() }
+                )
+            )
+        }
+        else onBack()
+    }
 
     Box(
         Modifier
@@ -123,7 +147,9 @@ fun RecipePostCreationScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            /*TODO: Post saving */
+                            viewModel.sendRecipePost(
+                                label, imageUri, time, calories, proteins, fats, carbohydrates, category, steps
+                            )
                         },
                         enabled = doneEnabled,
                         colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
@@ -146,7 +172,7 @@ fun RecipePostCreationScreen(
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     LazyTextField(
-                        onValueChange = {},
+                        onValueChange = { label = it },
                         startIcon = Icons.Outlined.FontDownload,
                         label = stringResource(R.string.recipe_headline),
                         modifier = Modifier.fillMaxWidth(),
@@ -210,7 +236,7 @@ fun RecipePostCreationScreen(
                     Row {
                         LazyTextField(
                             startIcon = Icons.Outlined.AvTimer,
-                            onValueChange = {},
+                            onValueChange = { time = it },
                             label = stringResource(R.string.time),
                             modifier = Modifier.weight(1f),
                             keyboardOptions = KeyboardOptions(
@@ -230,7 +256,7 @@ fun RecipePostCreationScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         LazyTextField(
                             startIcon = Icons.Outlined.Restaurant,
-                            onValueChange = {},
+                            onValueChange = { calories = it },
                             label = stringResource(R.string.calories),
                             modifier = Modifier.weight(1f),
                             keyboardOptions = KeyboardOptions(
@@ -251,7 +277,7 @@ fun RecipePostCreationScreen(
                     Row {
                         LazyTextField(
                             startIcon = Icons.Outlined.Egg,
-                            onValueChange = {},
+                            onValueChange = { proteins = it },
                             label = stringResource(R.string.proteins),
                             modifier = Modifier.weight(1f),
                             keyboardOptions = KeyboardOptions(
@@ -264,7 +290,7 @@ fun RecipePostCreationScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         LazyTextField(
                             startIcon = Icons.Outlined.OilBarrel,
-                            onValueChange = {},
+                            onValueChange = { fats = it },
                             label = stringResource(R.string.fats),
                             modifier = Modifier.weight(1f),
                             keyboardOptions = KeyboardOptions(
@@ -278,7 +304,7 @@ fun RecipePostCreationScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     LazyTextField(
                         startIcon = Icons.Outlined.Cake,
-                        onValueChange = {},
+                        onValueChange = { carbohydrates = it },
                         label = stringResource(R.string.carbohydrates),
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = false,
@@ -298,7 +324,7 @@ fun RecipePostCreationScreen(
                                 focus.clearFocus()
                             }
                             .animateContentSize(),
-                        value = categoryText,
+                        value = category,
                         onValueChange = {},
                         colors = TextFieldDefaults.textFieldColors(
                             unfocusedIndicatorColor = Color.Transparent,
@@ -314,9 +340,9 @@ fun RecipePostCreationScreen(
                                     Dialog.CategorySelection(
                                         categories = viewModel.categories.value,
                                         onCategorySelected = {
-                                            categoryText = it
+                                            category = it
                                         },
-                                        selectedCategory = categoryText
+                                        selectedCategory = category
                                     )
                                 )
                             }) {
@@ -329,7 +355,7 @@ fun RecipePostCreationScreen(
 
                     LazyTextField(
                         startIcon = Icons.Outlined.Notes,
-                        onValueChange = {},
+                        onValueChange = { steps = it },
                         label = stringResource(R.string.step_by_step_recipe),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -360,7 +386,7 @@ fun RecipePostCreationScreen(
         )
 
         LaunchedEffect(imageUri) {
-            doneEnabled = imageUri.isNotEmpty()
+            doneEnabled = !dataList.contains("")
         }
 
     }

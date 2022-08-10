@@ -37,6 +37,9 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
+import ru.tech.cookhelper.presentation.ui.utils.Dialog
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
+import ru.tech.cookhelper.presentation.ui.utils.provider.show
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -44,7 +47,7 @@ import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 fun PostCreationScreen(
     viewModel: PostCreationViewModel = scopedViewModel(),
     initialImageUri: String = "",
-    goBack: () -> Unit
+    onBack: () -> Unit
 ) {
     val focus = LocalFocusManager.current
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
@@ -54,6 +57,21 @@ fun PostCreationScreen(
     var imageUri by rememberSaveable { mutableStateOf(initialImageUri) }
 
     val user = viewModel.user.value
+
+    val dialogController = LocalDialogController.current
+
+    val goBack = {
+        if(imageUri.isNotEmpty() || content.isNotEmpty() || label.isNotEmpty()) {
+            dialogController.show(
+                Dialog.LeaveUnsavedData(
+                    title = R.string.post_creation_started,
+                    message = R.string.post_creation_started_leave_message,
+                    onLeave = { onBack() }
+                )
+            )
+        }
+        else onBack()
+    }
 
     Column(
         Modifier

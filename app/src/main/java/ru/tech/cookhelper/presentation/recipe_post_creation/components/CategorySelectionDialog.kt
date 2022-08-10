@@ -56,10 +56,9 @@ fun CategorySelectionDialog(
                             Text(
                                 text = it,
                                 fontSize = 16.sp,
-                                modifier = Modifier.padding(12.dp)
+                                modifier = Modifier.padding(12.dp).weight(1f)
                             )
                             if (selectedCategory == it) {
-                                Spacer(Modifier.weight(1f))
                                 Icon(
                                     Icons.Rounded.Done,
                                     null,

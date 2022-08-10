@@ -41,6 +41,7 @@ import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
 import ru.tech.cookhelper.presentation.profile.ProfileScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategorySelectionDialog
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
 import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
@@ -404,7 +405,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     is Screen.Authentication -> AuthenticationScreen()
                                     is Screen.PostCreation -> {
                                         PostCreationScreen(
-                                            goBack = {
+                                            onBack = {
                                                 screenController.navigate(screen.previousScreen)
                                             },
                                             initialImageUri = screen.imageUri
@@ -412,7 +413,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     }
                                     is Screen.RecipePostCreation -> {
                                         RecipePostCreationScreen(
-                                            goBack = {
+                                            onBack = {
                                                 screenController.navigate(screen.previousScreen)
                                             }
                                         )
@@ -519,6 +520,13 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     categories = dialog.categories,
                                     selectedCategory = dialog.selectedCategory,
                                     onCategorySelected = dialog.onCategorySelected
+                                )
+                            }
+                            is Dialog.LeaveUnsavedData -> {
+                                LeaveUnsavedDataDialog(
+                                    title = dialog.title,
+                                    message = dialog.message,
+                                    onLeave = dialog.onLeave
                                 )
                             }
                             else -> {}

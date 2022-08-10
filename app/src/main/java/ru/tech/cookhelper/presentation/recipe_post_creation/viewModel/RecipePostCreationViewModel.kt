@@ -17,6 +17,20 @@ class RecipePostCreationViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
+    fun sendRecipePost(
+        label: String,
+        imageUri: String,
+        time: String,
+        calories: String,
+        proteins: String,
+        fats: String,
+        carbohydrates: String,
+        category: String,
+        steps: String
+    ) {
+        TODO()
+    }
+
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: State<User?> = _user
 
@@ -28,7 +42,7 @@ class RecipePostCreationViewModel @Inject constructor(
             .onEach { _user.value = it }
             .launchIn(viewModelScope)
 
-        _categories.value = List(15) { "Item $it" }
+        _categories.value = List(15) { "Категория блюда с порядковым номером $it" }
     }
 
 }
