@@ -52,8 +52,15 @@ fun PickProductsWithMeasuresDialog(
     allProducts: List<Product>,
     onProductsPicked: (newProducts: List<Product>) -> Unit
 ) {
+    //TODO: Delete ingred feature
     var localProducts by rememberSaveable(saver = ProductsSaver) { mutableStateOf(products) }
     val localAmounts = rememberSaveable(saver = MapListSaver) { mutableStateMapOf() }
+
+    LaunchedEffect(Unit) {
+        products.forEach {
+            localAmounts[it.id] = it.amount.toString()
+        }
+    }
 
     val dialogController = LocalDialogController.current
 
@@ -71,7 +78,9 @@ fun PickProductsWithMeasuresDialog(
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = Modifier.fillMaxWidth(0.85f).padding(vertical = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth(0.85f)
+            .padding(vertical = 16.dp),
         title = {
             AnimatedContent(
                 targetState = addingProducts
@@ -96,6 +105,7 @@ fun PickProductsWithMeasuresDialog(
                     }
                 } else {
                     LazyTextField(
+                        modifier = Modifier.fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 16.sp),
                         onValueChange = { allProductsSearch = it },
                         hint = stringResource(R.string.search_here),
@@ -169,7 +179,9 @@ fun PickProductsWithMeasuresDialog(
                                                     .width(TextFieldDefaults.MinHeight * 1.5f)
                                                     .padding(bottom = 8.dp)
                                                     .onFocusChanged { f ->
-                                                        if (!f.isFocused) localAmounts[it.id] = (localAmounts[it.id] ?: "").removeSuffix(".")
+                                                        if (!f.isFocused) localAmounts[it.id] =
+                                                            (localAmounts[it.id]
+                                                                ?: "").removeSuffix(".")
                                                     }
                                             )
                                             Spacer(Modifier.width(12.dp))
@@ -299,11 +311,11 @@ fun PickProductsWithMeasuresDialog(
 }
 
 private val ProductsSaver = Saver<MutableState<List<Product>>, String>(
-    save = { it.value.joinToString("@") { p -> "${p.id} ${p.name} ${p.amount} ${p.mimeType}" } },
+    save = { it.value.joinToString("@") { p -> "${p.id}-${p.name}-${p.amount}-${p.mimeType}" } },
     restore = {
         mutableStateOf(
             it.split("@").mapNotNull { str ->
-                val data = str.split(" ")
+                val data = str.split("-")
                 try {
                     Product(
                         id = data[0].toIntOrNull() ?: 0,
@@ -320,11 +332,11 @@ private val ProductsSaver = Saver<MutableState<List<Product>>, String>(
 )
 
 private val MapListSaver = Saver<SnapshotStateMap<Int, String>, String>(
-    save = { it.entries.joinToString("#") { p -> "${p.key} ${p.value}" } },
+    save = { it.entries.joinToString("#") { p -> "${p.key}-${p.value}" } },
     restore = {
         val map = mutableStateMapOf<Int, String>()
         it.split("#").mapNotNull { str ->
-            val data = str.split(" ")
+            val data = str.split("-")
             try {
                 val key = data[0].toIntOrNull() ?: 0
                 val value = data[1]
