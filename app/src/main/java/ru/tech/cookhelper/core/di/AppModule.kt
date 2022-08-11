@@ -10,13 +10,15 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.tech.cookhelper.core.constants.Constants.BASE_URL
-import ru.tech.cookhelper.core.utils.RetrofitUtils.addLogger
+import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import ru.tech.cookhelper.data.local.CookHelperDatabase
 import ru.tech.cookhelper.data.remote.api.CookHelperApi
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.repository.CookHelperRepositoryImpl
+import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
 import ru.tech.cookhelper.domain.repository.CookHelperRepository
+import ru.tech.cookhelper.domain.repository.MessageRepository
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Singleton
 
@@ -30,6 +32,7 @@ object AppModule {
     fun provideCookHelperApi(): CookHelperApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create())
+        .setTimeout()
         .build()
         .create(CookHelperApi::class.java)
 
@@ -38,7 +41,7 @@ object AppModule {
     fun provideAuthService(): AuthService = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create())
-        .addLogger()
+        .setTimeout()
         .build()
         .create(AuthService::class.java)
 
@@ -66,4 +69,8 @@ object AppModule {
         authService: AuthService,
         db: CookHelperDatabase
     ): UserRepository = UserRepositoryImpl(authService, db.userDao)
+
+    @Provides
+    @Singleton
+    fun provideMessageRepository(): MessageRepository = MessageRepositoryImpl()
 }

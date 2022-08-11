@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".core.application.CookHelperApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

@@ -25,9 +25,14 @@ object RetrofitUtils {
         timeUnit: TimeUnit = TimeUnit.SECONDS
     ): Retrofit.Builder = client(
         OkHttpClient.Builder()
-            .readTimeout(timeout, timeUnit)
-            .connectTimeout(timeout, timeUnit)
+            .setTimeout(timeout, timeUnit)
             .build()
     )
+
+    fun OkHttpClient.Builder.setTimeout(
+        timeout: Long = 60,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): OkHttpClient.Builder = readTimeout(timeout, timeUnit)
+        .connectTimeout(timeout, timeUnit)
 
 }
