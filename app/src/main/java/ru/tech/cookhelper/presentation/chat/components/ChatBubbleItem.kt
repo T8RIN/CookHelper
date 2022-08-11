@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.chat.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun ChatBubbleItem(user: User?, message: Message) {
+fun ChatBubbleItem(user: User?, message: Message, cutTopCorner: Boolean) {
     val myMessage = (user?.id ?: 0) == message.userId
 
     val horizontalArrangement =
@@ -28,11 +29,16 @@ fun ChatBubbleItem(user: User?, message: Message) {
 
     val shape = if (myMessage) RoundedCornerShape(
         topStart = 16.dp,
-        topEnd = 4.dp,
+        topEnd = if (cutTopCorner) 16.dp else 4.dp,
         bottomEnd = 4.dp,
         bottomStart = 16.dp
     )
-    else RoundedCornerShape(topStart = 4.dp, topEnd = 16.dp, bottomEnd = 16.dp, bottomStart = 4.dp)
+    else RoundedCornerShape(
+        topStart = if (cutTopCorner) 16.dp else 4.dp,
+        topEnd = 16.dp,
+        bottomEnd = 16.dp,
+        bottomStart = 4.dp
+    )
 
     val bubblePadding = if (myMessage) PaddingValues(end = 12.dp, bottom = 4.dp) else PaddingValues(
         start = 12.dp,

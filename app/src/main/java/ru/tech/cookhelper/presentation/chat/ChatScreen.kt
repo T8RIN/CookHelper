@@ -3,7 +3,7 @@ package ru.tech.cookhelper.presentation.chat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -35,8 +35,13 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
             state = state,
             contentPadding = PaddingValues(vertical = 12.dp)
         ) {
-            items(viewModel.messages) {
-                ChatBubbleItem(user = viewModel.user.value?.copy(id = 1), message = it)
+            itemsIndexed(viewModel.messages) { index, message ->
+                val cutTopCorner = viewModel.messages.getOrNull(index - 1)?.userId != message.userId
+                ChatBubbleItem(
+                    user = viewModel.user.value?.copy(id = 1),
+                    message = message,
+                    cutTopCorner = cutTopCorner
+                )
             }
         }
         Row(
