@@ -21,13 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
@@ -83,7 +85,7 @@ fun RecipePostCreationScreen(
     var steps by rememberSaveable { mutableStateOf("") }
 
     val dataList = listOf(
-        label, imageUri, time, calories, proteins, fats, carbohydrates, category, steps
+        label, imageUri, time, calories, proteins, fats, carbohydrates, category, steps, viewModel.products.value.joinToString()
     )
 
     val resultLauncher = rememberLauncherForActivityResult(
@@ -218,7 +220,8 @@ fun RecipePostCreationScreen(
                                     Spacer(Modifier.height(8.dp))
                                     Text(
                                         stringResource(R.string.add_image),
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
                                     )
                                 }
                             } else {
@@ -258,12 +261,14 @@ fun RecipePostCreationScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Row {
+                        var timeHeight by remember { mutableStateOf(56.dp) }
+                        val density = LocalDensity.current
                         LazyTextField(
                             value = time,
                             startIcon = Icons.Outlined.AvTimer,
                             onValueChange = { time = it },
                             label = stringResource(R.string.time),
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(1f).height(timeHeight),
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number
@@ -284,7 +289,10 @@ fun RecipePostCreationScreen(
                             startIcon = Icons.Outlined.Restaurant,
                             onValueChange = { calories = it },
                             label = stringResource(R.string.calories),
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(1f)
+                                .onSizeChanged {
+                                    timeHeight = with(density) { it.height.toDp() }
+                                },
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number

@@ -23,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
@@ -52,7 +53,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
         item { Spacer(Modifier.height(20.dp)) }
         items(Settings.values()) { setting ->
             Column(
-                Modifier.animateContentSize(),
+                modifier = Modifier.animateContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 var expandedNightMode by rememberSaveable { mutableStateOf(false) }
@@ -65,16 +66,24 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(
+                            enabled = if (setting == COLOR_SCHEME) !settingsState.dynamicColors else true,
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onClick() }
                 ) {
                     Spacer(Modifier.width(20.dp))
+                    val alphaModifier = Modifier.alpha(
+                        if (setting == COLOR_SCHEME) {
+                            if (!settingsState.dynamicColors) 1f
+                            else 0.5f
+                        } else 1f
+                    )
                     Box(
                         Modifier
                             .size(42.dp)
                             .clip(RoundedCornerShape(13.dp))
                             .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .then(alphaModifier)
                     ) {
                         Icon(
                             setting.getIcon(settingsState.nightMode),
@@ -83,7 +92,12 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         )
                     }
                     Spacer(Modifier.width(16.dp))
-                    Text(stringResource(setting.title), modifier = Modifier.weight(1f))
+                    Text(
+                        stringResource(setting.title),
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(alphaModifier)
+                    )
                     when (setting) {
                         CART_CONNECTION -> {
                             var checked by remember { mutableStateOf(settingsState.cartConnection) }
@@ -120,7 +134,8 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                             val rotation: Float by animateFloatAsState(if (expandedColorScheme) 180f else 0f)
                             IconButton(
                                 onClick = { expandedColorScheme = !expandedColorScheme },
-                                modifier = Modifier.rotate(rotation)
+                                modifier = Modifier.rotate(rotation),
+                                enabled = !settingsState.dynamicColors
                             ) {
                                 Icon(
                                     Icons.Rounded.KeyboardArrowDown, null, modifier = Modifier
@@ -140,7 +155,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         }
                     )
                 }
-                if (expandedColorScheme) {
+                if (expandedColorScheme && !settingsState.dynamicColors) {
                     Spacer(Modifier.height(10.dp))
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 30.dp)
