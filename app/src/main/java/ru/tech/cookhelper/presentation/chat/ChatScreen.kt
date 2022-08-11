@@ -1,6 +1,9 @@
 package ru.tech.cookhelper.presentation.chat
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -12,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.presentation.chat.components.ChatBubbleItem
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
@@ -24,11 +28,15 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
         Modifier
             .fillMaxSize()
             .imePadding(),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        LazyColumn(Modifier.weight(1f), state = state) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            state = state,
+            contentPadding = PaddingValues(vertical = 12.dp)
+        ) {
             items(viewModel.messages) {
-                Text(it.text)
-                Spacer(Modifier.size(10.dp))
+                ChatBubbleItem(user = viewModel.user.value?.copy(id = 1), message = it)
             }
         }
         TextField(value = value, onValueChange = { value = it })

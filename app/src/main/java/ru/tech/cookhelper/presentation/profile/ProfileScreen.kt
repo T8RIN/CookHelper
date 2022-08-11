@@ -371,6 +371,7 @@ fun ProfileScreen(
                     post = post,
                     authorLoader = {
                         User(
+                            id = 1,
                             avatar = "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
                             name = "Малик",
                             surname = "Мухаметзянов",
@@ -453,6 +454,7 @@ fun ProfileScreen(
                     },
                     authorLoader = {
                         User(
+                            id = 1,
                             avatar = "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
                             name = "Малик",
                             surname = "Мухаметзянов",

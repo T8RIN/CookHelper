@@ -3,6 +3,7 @@ package ru.tech.cookhelper.data.remote.api.auth
 import ru.tech.cookhelper.domain.model.User
 
 data class UserDto(
+    val id: Long,
     val avatar: String?,
     val bannedIngredients: String?,
     val bannedRecipes: String?,
@@ -22,6 +23,7 @@ data class UserDto(
 )
 
 fun UserDto.toUser() = User(
+    id,
     avatar,
     bannedIngredients,
     bannedRecipes,

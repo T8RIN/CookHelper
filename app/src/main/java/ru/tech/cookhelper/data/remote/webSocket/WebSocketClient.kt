@@ -6,6 +6,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import okhttp3.*
 import ru.tech.cookhelper.data.remote.webSocket.message.WebSocketEvent
+import ru.tech.cookhelper.presentation.ui.utils.name
 
 abstract class WebSocketClient : WebSocketListener() {
     protected abstract val okHttpClient: OkHttpClient
@@ -143,9 +144,7 @@ abstract class WebSocketClient : WebSocketListener() {
         Log.d(SOCKET_TAG, "received: $text")
     }
 
-    companion object {
-        private const val CLOSE_REASON: String = "Normal closure"
-        private const val CLOSE_CODE: Int = 100
-        private val SOCKET_TAG: String = "WEB_SOCKET_CLIENT - ${this::class}"
-    }
+    private val CLOSE_REASON: String = "Normal closure"
+    private val CLOSE_CODE: Int = 1000
+    private val SOCKET_TAG: String = "WEB_SOCKET_CLIENT - ${this::class.name}"
 }

@@ -1,6 +1,9 @@
 package ru.tech.cookhelper.presentation.chat.viewModel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,19 +26,21 @@ class ChatViewModel @Inject constructor(
         repository.sendMessage(message)
     }
 
-    private var user: User? = null
+    private val _user: MutableState<User?> = mutableStateOf(null)
+    val user: State<User?> = _user
+
 
     val messages = mutableStateListOf<Message>()
 
     init {
         getUserUseCase().onEach {
-            user = it
+            _user.value = it
         }.launchIn(viewModelScope)
 
-        repository.awaitNewMessages(chatId = "1", token = user?.token ?: "").onEach { action ->
+        repository.awaitNewMessages(chatId = "1", token = user.value?.token ?: "").onEach { action ->
             when (action) {
                 is Action.Empty -> TODO()
-                is Action.Error -> messages.add(Message(action.message ?: ""))
+                is Action.Error -> {  }
                 is Action.Loading -> TODO()
                 is Action.Success -> action.data?.let { messages.add(it) }
             }

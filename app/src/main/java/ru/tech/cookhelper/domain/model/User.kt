@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.domain.model
 
 data class User(
+    val id: Long,
     val avatar: String? = null,
     val bannedIngredients: String? = null,
     val bannedRecipes: String? = null,

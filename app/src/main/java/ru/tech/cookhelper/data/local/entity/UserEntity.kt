@@ -6,7 +6,7 @@ import ru.tech.cookhelper.domain.model.User
 
 @Entity
 data class UserEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Long,
     val avatar: String?,
     val bannedIngredients: String?,
     val bannedRecipes: String?,
@@ -26,6 +26,7 @@ data class UserEntity(
 )
 
 fun UserEntity.toUser() = User(
+    id,
     avatar,
     bannedIngredients,
     bannedRecipes,
@@ -45,7 +46,7 @@ fun UserEntity.toUser() = User(
 )
 
 fun User.toEntity() = UserEntity(
-    1,
+    id,
     avatar,
     bannedIngredients,
     bannedRecipes,

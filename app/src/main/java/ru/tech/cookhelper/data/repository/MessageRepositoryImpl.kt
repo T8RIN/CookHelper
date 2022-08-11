@@ -1,15 +1,19 @@
 package ru.tech.cookhelper.data.repository
 
+import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
 import ru.tech.cookhelper.data.remote.webSocket.message.WebSocketEvent
+import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.repository.MessageRepository
+import javax.inject.Inject
 
-class MessageRepositoryImpl(
-    private val messageService: MessageService = MessageService()
+class MessageRepositoryImpl @Inject constructor(
+    private val messageService: MessageService = MessageService(),
+    private val jsonParser: JsonParser
 ) : MessageRepository {
 
     override fun getAllMessages(chatId: String, message: String): Flow<Action<List<Message>>> {
@@ -22,7 +26,7 @@ class MessageRepositoryImpl(
             .collect { event ->
                 when (event) {
                     is WebSocketEvent.Error -> emit(Action.Error(message = event.message))
-                    is WebSocketEvent.Message -> emit(Action.Success(data = Message(event.text)))
+                    is WebSocketEvent.Message -> jsonParser.fromJson<Message>(event.text, Message::class.java)?.let { emit(Action.Success(data = it)) }
                 }
             }
     }

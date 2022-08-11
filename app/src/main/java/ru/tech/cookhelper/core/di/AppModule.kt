@@ -2,6 +2,7 @@ package ru.tech.cookhelper.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +18,7 @@ import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.repository.CookHelperRepositoryImpl
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
+import ru.tech.cookhelper.data.utils.MoshiParser
 import ru.tech.cookhelper.domain.repository.CookHelperRepository
 import ru.tech.cookhelper.domain.repository.MessageRepository
 import ru.tech.cookhelper.domain.repository.UserRepository
@@ -72,5 +74,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMessageRepository(): MessageRepository = MessageRepositoryImpl()
+    fun provideMessageRepository(): MessageRepository =
+        MessageRepositoryImpl(jsonParser = MoshiParser(Moshi.Builder().build()))
 }
