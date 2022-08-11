@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.rounded.AddCircleOutline
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.RemoveCircleOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
@@ -52,7 +53,6 @@ fun PickProductsWithMeasuresDialog(
     allProducts: List<Product>,
     onProductsPicked: (newProducts: List<Product>) -> Unit
 ) {
-    //TODO: Delete ingred feature
     var localProducts by rememberSaveable(saver = ProductsSaver) { mutableStateOf(products) }
     val localAmounts = rememberSaveable(saver = MapListSaver) { mutableStateMapOf() }
 
@@ -96,7 +96,10 @@ fun PickProductsWithMeasuresDialog(
                         )
                         AnimatedVisibility(visible = combinedAllProducts.isNotEmpty()) {
                             IconButton(
-                                onClick = { addingProducts = true },
+                                onClick = {
+                                    addingProducts = true
+                                    selectedProducts.clear()
+                                },
                                 colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
                             ) {
                                 Icon(Icons.Rounded.AddCircleOutline, null)
@@ -153,6 +156,14 @@ fun PickProductsWithMeasuresDialog(
                                                 .clip(RoundedCornerShape(4.dp)),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
+                                            IconButton(onClick = {
+                                                localProducts = localProducts
+                                                    .toMutableList()
+                                                    .apply { removeIf { p -> p.id == it.id } }
+                                                    .also { _ -> localAmounts.remove(it.id) }
+                                            }) {
+                                                Icon(Icons.Rounded.RemoveCircleOutline, null)
+                                            }
                                             Text(
                                                 text = it.name,
                                                 fontSize = 16.sp,
@@ -292,7 +303,8 @@ fun PickProductsWithMeasuresDialog(
                         localProducts.map {
                             val amount = localAmounts[it.id]
                             it.copy(
-                                amount = amount?.toFloatOrNull() ?: amount?.toIntOrNull()?.toFloat() ?: 0f
+                                amount = amount?.toFloatOrNull() ?: amount?.toIntOrNull()?.toFloat()
+                                ?: 0f
                             )
                         }
                     )
@@ -304,7 +316,7 @@ fun PickProductsWithMeasuresDialog(
                     addingProducts = false
                 }
             }) {
-                Text(if (!addingProducts) stringResource(R.string.okay) else stringResource(R.string.apply))
+                Text(stringResource(if (!addingProducts) R.string.okay else R.string.apply))
             }
         }
     )

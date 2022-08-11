@@ -36,7 +36,7 @@ class RecipePostCreationViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         _categories.value = List(15) { "Категория блюда с порядковым номером $it" }
-        _allProducts.value = List(30) { Product(it, "Продукт $it") }
+        _allProducts.value = List(30) { Product(it, "Продукт $it", mimeType = "грамм") }
     }
 
     fun sendRecipePost(
@@ -50,7 +50,7 @@ class RecipePostCreationViewModel @Inject constructor(
         category: String,
         steps: String
     ) {
-        TODO()
+        //TODO: Send data to server
     }
 
     fun setProducts(newProducts: List<Product>) {

@@ -208,8 +208,7 @@ fun PostCreationScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(paddingValues),
-                            shape = RoundedCornerShape(24.dp),
-                            contentScale = ContentScale.Fit
+                            shape = RoundedCornerShape(24.dp)
                         )
                         FilledIconButton(
                             modifier = Modifier

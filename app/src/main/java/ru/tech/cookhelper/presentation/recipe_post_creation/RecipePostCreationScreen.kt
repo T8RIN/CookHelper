@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -196,7 +197,6 @@ fun RecipePostCreationScreen(
                     Card(
                         onClick = { resultLauncher.launch("image/*") },
                         modifier = Modifier
-                            .height(TextFieldDefaults.MinHeight * 3.5f)
                             .fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp)
                     ) {
@@ -204,7 +204,8 @@ fun RecipePostCreationScreen(
                             if (uri.isEmpty()) {
                                 Column(
                                     modifier = Modifier
-                                        .fillMaxSize()
+                                        .fillMaxWidth()
+                                        .height(TextFieldDefaults.MinHeight * 3.5f)
                                         .padding(8.dp),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
@@ -224,7 +225,7 @@ fun RecipePostCreationScreen(
                                 Box {
                                     Picture(
                                         model = uri,
-                                        modifier = Modifier.fillMaxSize(),
+                                        modifier = Modifier.fillMaxWidth(),
                                         shape = RectangleShape
                                     )
                                     FilledIconButton(
