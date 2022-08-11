@@ -1,16 +1,12 @@
 package ru.tech.cookhelper.presentation.chat
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,11 +20,15 @@ import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
     var value by remember { mutableStateOf("") }
     val state = rememberLazyListState()
+
+    LaunchedEffect(viewModel.messages.size) {
+        if (viewModel.messages.isNotEmpty()) state.animateScrollToItem(viewModel.messages.size - 1)
+    }
+
     Column(
         Modifier
             .fillMaxSize()
-            .imePadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .imePadding()
     ) {
         LazyColumn(
             modifier = Modifier.weight(1f),
@@ -39,9 +39,26 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
                 ChatBubbleItem(user = viewModel.user.value?.copy(id = 1), message = it)
             }
         }
-        TextField(value = value, onValueChange = { value = it })
-        FilledTonalButton(onClick = { viewModel.send(value) }) {
-            Text("Кокнуть")
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondaryContainer),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = { value = it },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(12.dp),
+                shape = RoundedCornerShape(24.dp)
+            )
+            FilledTonalButton(onClick = {
+                viewModel.send(value)
+                value = ""
+            }, modifier = Modifier.padding(end = 12.dp)) {
+                Text("Кокнуть")
+            }
         }
     }
 }

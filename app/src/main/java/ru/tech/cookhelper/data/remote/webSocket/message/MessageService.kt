@@ -25,5 +25,4 @@ class MessageService : WebSocketClient() {
 
     override var baseUrl: String = ""
 
-
 }

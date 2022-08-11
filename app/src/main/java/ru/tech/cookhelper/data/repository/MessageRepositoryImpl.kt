@@ -1,9 +1,10 @@
 package ru.tech.cookhelper.data.repository
 
-import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.data.remote.dto.MessageDto
+import ru.tech.cookhelper.data.remote.dto.toMessage
 import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
 import ru.tech.cookhelper.data.remote.webSocket.message.WebSocketEvent
 import ru.tech.cookhelper.data.utils.JsonParser
@@ -26,7 +27,10 @@ class MessageRepositoryImpl @Inject constructor(
             .collect { event ->
                 when (event) {
                     is WebSocketEvent.Error -> emit(Action.Error(message = event.message))
-                    is WebSocketEvent.Message -> jsonParser.fromJson<Message>(event.text, Message::class.java)?.let { emit(Action.Success(data = it)) }
+                    is WebSocketEvent.Message -> jsonParser.fromJson<MessageDto>(
+                        event.text,
+                        MessageDto::class.java
+                    )?.let { emit(Action.Success(data = it.toMessage())) }
                 }
             }
     }
