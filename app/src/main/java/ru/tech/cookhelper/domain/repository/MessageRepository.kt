@@ -12,4 +12,6 @@ interface MessageRepository {
 
     fun sendMessage(message: String)
 
+    fun stopAwaitingMessages()
+
 }

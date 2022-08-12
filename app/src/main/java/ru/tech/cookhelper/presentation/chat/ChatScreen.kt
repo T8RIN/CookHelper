@@ -65,7 +65,7 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
                 )
             }
         }
-        Row(
+        Box(
             Modifier
                 .fillMaxWidth()
                 .heightIn(
@@ -73,53 +73,58 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
                     max = TextFieldDefaults.MinHeight * 3
                 )
                 .background(textBoxColor)
-                .animateContentSize(),
-            verticalAlignment = Alignment.Bottom
+                .animateContentSize()
         ) {
             val sendButtonWidth =
                 animateDpAsState(targetValue = if (value.isEmpty()) 0.dp else 48.dp)
             val sendButtonAlpha = animateFloatAsState(targetValue = if (value.isEmpty()) 0f else 1f)
             val hintAlpha = animateFloatAsState(targetValue = if (value.isEmpty()) 1f else 0f)
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 12.dp, top = 12.dp, bottom = 12.dp, start = 20.dp)
+            Row(
+                Modifier.navigationBarsPadding(),
+                verticalAlignment = Alignment.Bottom
             ) {
-                val colors = TextFieldDefaults.outlinedTextFieldColors()
-                CompositionLocalProvider(LocalTextSelectionColors provides colors.selectionColors) {
-                    BasicTextField(
-                        value = value,
-                        modifier = Modifier.fillMaxWidth(),
-                        onValueChange = { value = it },
-                        textStyle = LocalTextStyle.current.copy(
-                            color = colors.textColor(true).value,
-                            fontSize = 16.sp
-                        ),
-                        cursorBrush = SolidColor(colors.cursorColor(false).value),
+                Box(
+                    modifier = Modifier.weight(1f).padding(end = 12.dp, top = 12.dp, bottom = 12.dp, start = 20.dp)
+                ) {
+                    val colors = TextFieldDefaults.outlinedTextFieldColors()
+                    CompositionLocalProvider(LocalTextSelectionColors provides colors.selectionColors) {
+                        BasicTextField(
+                            value = value,
+                            modifier = Modifier.fillMaxWidth(),
+                            onValueChange = { value = it },
+                            textStyle = LocalTextStyle.current.copy(
+                                color = colors.textColor(true).value,
+                                fontSize = 16.sp
+                            ),
+                            cursorBrush = SolidColor(colors.cursorColor(false).value),
+                        )
+                    }
+                    Text(
+                        fontSize = 16.sp,
+                        text = stringResource(R.string.write_a_message),
+                        color = textBoxColor.createSecondaryColor(0.5f),
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .alpha(hintAlpha.value),
                     )
                 }
-                Text(
-                    fontSize = 16.sp,
-                    text = stringResource(R.string.write_a_message),
-                    color = textBoxColor.createSecondaryColor(0.5f),
+                IconButton(
+                    onClick = {
+                        viewModel.send(value)
+                        value = ""
+                    },
                     modifier = Modifier
-                        .padding(start = 8.dp)
-                        .alpha(hintAlpha.value),
-                )
-            }
-            IconButton(
-                onClick = {
-                    viewModel.send(value)
-                    value = ""
-                },
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .width(sendButtonWidth.value)
-                    .alpha(sendButtonAlpha.value),
-                colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Icon(Icons.Rounded.Send, null)
+                        .padding(end = 8.dp)
+                        .width(sendButtonWidth.value)
+                        .alpha(sendButtonAlpha.value),
+                    colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Icon(Icons.Rounded.Send, null)
+                }
             }
         }
+    }
+    DisposableEffect(Unit) {
+        onDispose { viewModel.closeConnection() }
     }
 }

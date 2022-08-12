@@ -1,15 +1,18 @@
 package ru.tech.cookhelper.presentation.ui.theme
 
+import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.tech.cookhelper.presentation.app.components.ColorScheme.*
 import ru.tech.cookhelper.presentation.app.components.NightMode
+import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createInverseSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
 
@@ -93,18 +96,28 @@ fun ProKitchenTheme(
 
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = !darkTheme
-
-    SideEffect {
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = useDarkIcons
-        )
-    }
+    val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = {
+            val color = TopAppBarDefaults.smallTopAppBarColors().containerColor(
+                colorTransitionFraction = 1f
+            ).value.createInverseSecondaryColor()
+
+            SideEffect {
+                systemUiController.setStatusBarColor(
+                    color = Color.Transparent,
+                    darkIcons = useDarkIcons
+                )
+                systemUiController.setNavigationBarColor(
+                    color = if (landscape) color else Color.Transparent,
+                    darkIcons = useDarkIcons
+                )
+            }
+            content()
+        }
     )
 }
 

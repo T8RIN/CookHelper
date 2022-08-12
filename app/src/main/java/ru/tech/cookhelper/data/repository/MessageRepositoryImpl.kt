@@ -39,4 +39,6 @@ class MessageRepositoryImpl @Inject constructor(
         messageService.send(message)
     }
 
+    override fun stopAwaitingMessages() = messageService.close()
+
 }

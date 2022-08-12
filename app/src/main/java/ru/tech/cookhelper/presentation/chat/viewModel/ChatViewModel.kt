@@ -29,7 +29,6 @@ class ChatViewModel @Inject constructor(
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: State<User?> = _user
 
-
     val messages = mutableStateListOf<Message>()
 
     init {
@@ -46,6 +45,10 @@ class ChatViewModel @Inject constructor(
                     is Action.Success -> action.data?.let { messages.add(it) }
                 }
             }.launchIn(viewModelScope)
+    }
+
+    fun closeConnection() {
+        repository.stopAwaitingMessages()
     }
 
 }

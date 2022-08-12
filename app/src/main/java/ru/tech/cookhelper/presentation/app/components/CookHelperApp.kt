@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
@@ -19,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -95,7 +97,9 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                 BackHandler { dialogController.show(Dialog.Exit) }
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .navigationBarsLandscapePadding(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ModalNavigationDrawer(
@@ -551,4 +555,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
             }
         }
     }
+}
+
+private fun Modifier.navigationBarsLandscapePadding(): Modifier = composed {
+    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        navigationBarsPadding()
+    } else this
 }

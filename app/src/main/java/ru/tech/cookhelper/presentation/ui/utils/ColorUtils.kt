@@ -32,6 +32,18 @@ object ColorUtils {
         return if (darkTheme) lighten(fraction) else darken(fraction)
     }
 
+    @Composable
+    fun Color.createInverseSecondaryColor(
+        @FloatRange(from = 0.0, to = 1.0) fraction: Float = 0.2f
+    ): Color {
+        val darkTheme = when (LocalSettingsProvider.current.nightMode) {
+            NightMode.SYSTEM -> isSystemInDarkTheme()
+            NightMode.DARK -> true
+            NightMode.LIGHT -> false
+        }
+        return if (!darkTheme) lighten(fraction) else darken(fraction)
+    }
+
     fun Color.lighten(
         @FloatRange(from = 0.0, to = 1.0) fraction: Float = 0.2f
     ): Color = blend(color = Color.White, fraction = fraction)

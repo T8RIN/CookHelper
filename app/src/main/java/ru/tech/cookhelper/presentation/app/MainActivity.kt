@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,8 @@ import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.CookHelperApp
+import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.hideNavigationBars
+import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.showNavigationBars
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
