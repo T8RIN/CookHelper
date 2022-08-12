@@ -121,5 +121,6 @@
     <string name="no_ingredients_picked">Ингредиенты не выбраны, добавьте их, нажав на кнопку</string>
     <string name="apply">Применить</string>
     <string name="search_here">Ищите тут</string>
+    <string name="write_a_message">Написать сообщение…</string>
 
 </resources>
