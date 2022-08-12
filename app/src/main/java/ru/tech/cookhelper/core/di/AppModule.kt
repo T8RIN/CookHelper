@@ -16,6 +16,7 @@ import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import ru.tech.cookhelper.data.local.CookHelperDatabase
 import ru.tech.cookhelper.data.remote.api.CookHelperApi
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
+import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
 import ru.tech.cookhelper.data.repository.CookHelperRepositoryImpl
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
@@ -75,7 +76,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMessageRepository(): MessageRepository = MessageRepositoryImpl(
-        jsonParser = MoshiParser(Moshi.Builder().build())
+    fun provideMessageRepository(
+        messageService: MessageService
+    ): MessageRepository = MessageRepositoryImpl(
+        jsonParser = MoshiParser(Moshi.Builder().build()),
+        messageService = messageService
     )
+
+    @Provides
+    @Singleton
+    fun provideMessageService(): MessageService = MessageService()
+
 }

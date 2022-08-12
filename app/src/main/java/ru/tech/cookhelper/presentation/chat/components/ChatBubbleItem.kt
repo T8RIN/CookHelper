@@ -10,9 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.model.User
@@ -48,11 +48,15 @@ fun ChatBubbleItem(
         bottomStart = if (showPointingArrow) 0.dp else 4.dp
     )
 
+    val minPadding = min(LocalConfiguration.current.screenWidthDp.dp * 0.15f, 48.dp)
+
     val bubblePadding = if (myMessage) PaddingValues(
         end = if (showPointingArrow) 0.dp else 14.dp,
+        start = minPadding,
         bottom = 4.dp
     ) else PaddingValues(
         start = if (showPointingArrow) 0.dp else 14.dp,
+        end = minPadding,
         bottom = 4.dp
     )
 
@@ -68,9 +72,6 @@ fun ChatBubbleItem(
     else PaddingValues(top = 4.dp, start = 4.dp, bottom = 4.dp, end = 8.dp)
 
     var placeTimeUnderTheText by remember { mutableStateOf(false) }
-
-    var maxWidth by remember { mutableStateOf(0.dp) }
-    val density = LocalDensity.current
 
     val canvasModifier = Modifier
         .height(24.dp)
@@ -115,11 +116,7 @@ fun ChatBubbleItem(
     }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .onGloballyPositioned {
-                maxWidth = with(density) { it.size.width.toDp() * 0.85f }
-            },
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = Alignment.Bottom
     ) {
@@ -127,15 +124,7 @@ fun ChatBubbleItem(
         Card(
             colors = CardDefaults.cardColors(containerColor = bubbleColor),
             shape = bubbleShape,
-            modifier = Modifier
-                .padding(bubblePadding)
-                .widthIn(max = maxWidth)
-                .onGloballyPositioned {
-                    val currentWidth = with(density) { it.size.width.toDp() }
-                    if (currentWidth == maxWidth) {
-                        placeTimeUnderTheText = true
-                    }
-                }
+            modifier = Modifier.weight(1f, false).padding(bubblePadding)
         ) {
             if (!placeTimeUnderTheText) {
                 Row(verticalAlignment = Alignment.Bottom) {
@@ -143,7 +132,10 @@ fun ChatBubbleItem(
                         text = message.text,
                         modifier = Modifier
                             .padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 8.dp)
-                            .weight(1f, false)
+                            .weight(1f, false),
+                        onTextLayout = { textLayoutResult ->
+                            if (textLayoutResult.lineCount > 1) placeTimeUnderTheText = true
+                        }
                     )
                     Text(
                         text = message.timestamp.toDate(),
@@ -153,12 +145,16 @@ fun ChatBubbleItem(
                         maxLines = 1,
                     )
                 }
-            } else {
+            }
+            else {
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = message.text,
                         modifier = Modifier
-                            .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 4.dp)
+                            .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 4.dp),
+                        onTextLayout = { textLayoutResult ->
+                            if (textLayoutResult.lineCount > 1) placeTimeUnderTheText = true
+                        }
                     )
                     Text(
                         text = message.timestamp.toDate(),

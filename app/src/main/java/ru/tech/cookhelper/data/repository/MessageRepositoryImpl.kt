@@ -13,7 +13,7 @@ import ru.tech.cookhelper.domain.repository.MessageRepository
 import javax.inject.Inject
 
 class MessageRepositoryImpl @Inject constructor(
-    private val messageService: MessageService = MessageService(),
+    private val messageService: MessageService,
     private val jsonParser: JsonParser
 ) : MessageRepository {
 
