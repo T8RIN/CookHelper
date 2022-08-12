@@ -124,7 +124,4 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
             }
         }
     }
-    DisposableEffect(Unit) {
-        onDispose { viewModel.closeConnection() }
-    }
 }

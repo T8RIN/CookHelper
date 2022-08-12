@@ -19,12 +19,14 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.currentScreen
 
 @Composable
 inline fun <reified VM : ViewModel> scopedViewModel(
-    ignoreDisposing: List<Any> = emptyList()
-): VM = rememberScoped(ignoreDisposing = ignoreDisposing) { viewModel() }
+    ignoreDisposing: List<Any> = emptyList(),
+    noinline onDispose: () -> Unit = {}
+): VM = rememberScoped(ignoreDisposing = ignoreDisposing, onDispose = onDispose) { viewModel() }
 
 @Composable
 fun <VM : ViewModel> rememberScoped(
     ignoreDisposing: List<Any>,
+    onDispose: () -> Unit,
     builder: @Composable () -> VM
 ): VM {
     val activity = LocalContext.current as ComponentActivity
@@ -48,7 +50,8 @@ fun <VM : ViewModel> rememberScoped(
                         key = scopedViewModel::class.name,
                         viewModelStore = viewModelStore!!,
                         savedStateRegistry = savedStateRegistry,
-                        activity = activity
+                        activity = activity,
+                        onDispose = onDispose
                     )
                 }
             }

@@ -12,18 +12,22 @@ import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.model.User
-import ru.tech.cookhelper.domain.repository.MessageRepository
+import ru.tech.cookhelper.domain.use_case.await_new_messages.AwaitNewMessagesUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
+import ru.tech.cookhelper.domain.use_case.send_message.SendMessagesUseCase
+import ru.tech.cookhelper.domain.use_case.stop_awaiting_messages.StopAwaitingMessagesUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val repository: MessageRepository,
+    private val stopAwaitingMessagesUseCase: StopAwaitingMessagesUseCase,
+    private val sendMessagesUseCase: SendMessagesUseCase,
+    awaitNewMessagesUseCase: AwaitNewMessagesUseCase,
     getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
     fun send(message: String) {
-        repository.sendMessage(message)
+        sendMessagesUseCase(message)
     }
 
     private val _user: MutableState<User?> = mutableStateOf(null)
@@ -36,7 +40,7 @@ class ChatViewModel @Inject constructor(
             _user.value = it
         }.launchIn(viewModelScope)
 
-        repository.awaitNewMessages(chatId = "1", token = user.value?.token ?: "")
+        awaitNewMessagesUseCase(chatId = "1", token = user.value?.token ?: "")
             .onEach { action ->
                 when (action) {
                     is Action.Empty -> TODO()
@@ -47,8 +51,9 @@ class ChatViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-    fun closeConnection() {
-        repository.stopAwaitingMessages()
+    override fun onCleared() {
+        super.onCleared()
+        stopAwaitingMessagesUseCase()
     }
 
 }

@@ -13,7 +13,6 @@ import ru.tech.cookhelper.presentation.ui.utils.getPrivateProperty
 import ru.tech.cookhelper.presentation.ui.utils.getPrivatePropertyName
 import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.setAndReturnPrivateProperty
-import java.util.concurrent.ConcurrentSkipListSet
 
 class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
 
@@ -28,7 +27,7 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
 
     private val scopedViewModelsContainer = mutableMapOf<String, ViewModel>()
 
-    private val markedForDisposal = ConcurrentSkipListSet<String>()
+    private val markedForDisposal = mutableMapOf<String, () -> Unit>()
 
     private val disposingJobs = mutableMapOf<String, Job>()
 
@@ -51,19 +50,20 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
         key: String,
         viewModelStore: ViewModelStore,
         savedStateRegistry: SavedStateRegistry,
-        activity: ComponentActivity
+        activity: ComponentActivity,
+        onDispose: () -> Unit
     ) {
         this.viewModelStore = viewModelStore
         this.savedStateRegistry = savedStateRegistry
         this.activity = activity
-        markedForDisposal.add(key)
+        markedForDisposal[key] = onDispose
         scheduleToDisposeBeforeGoingToBackground(key)
     }
 
     private fun scheduleToDisposeBeforeGoingToBackground(key: String) = scheduleToDispose(key = key)
 
     private fun scheduleToDisposeAfterReturningFromBackground() {
-        markedForDisposal.forEach { key -> scheduleToDispose(key) }
+        markedForDisposal.forEach { item -> scheduleToDispose(item.key) }
     }
 
     private fun alreadyDisposing(key: String): Boolean {
@@ -79,6 +79,7 @@ class ScopedViewModelContainer : ViewModel(), LifecycleEventObserver {
         val newDisposingJob = viewModelScope.launch {
             delay(disposeDelayTimeMillis)
             if (removalCondition()) {
+                markedForDisposal[key]?.invoke()
                 markedForDisposal.remove(key)
                 scopedViewModelsContainer.remove(key)
                     ?.also {
