@@ -37,14 +37,15 @@ class ChatViewModel @Inject constructor(
             _user.value = it
         }.launchIn(viewModelScope)
 
-        repository.awaitNewMessages(chatId = "1", token = user.value?.token ?: "").onEach { action ->
-            when (action) {
-                is Action.Empty -> TODO()
-                is Action.Error -> {  }
-                is Action.Loading -> TODO()
-                is Action.Success -> action.data?.let { messages.add(it) }
-            }
-        }.launchIn(viewModelScope)
+        repository.awaitNewMessages(chatId = "1", token = user.value?.token ?: "")
+            .onEach { action ->
+                when (action) {
+                    is Action.Empty -> TODO()
+                    is Action.Error -> {}
+                    is Action.Loading -> TODO()
+                    is Action.Success -> action.data?.let { messages.add(it) }
+                }
+            }.launchIn(viewModelScope)
     }
 
 }

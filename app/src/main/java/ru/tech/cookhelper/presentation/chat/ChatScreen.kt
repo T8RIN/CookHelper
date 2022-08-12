@@ -37,7 +37,8 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel()) {
         ) {
             itemsIndexed(viewModel.messages) { index, message ->
                 val cutTopCorner = viewModel.messages.getOrNull(index - 1)?.userId != message.userId
-                val showPointingArrow = viewModel.messages.getOrNull(index + 1)?.userId != message.userId
+                val showPointingArrow =
+                    viewModel.messages.getOrNull(index + 1)?.userId != message.userId
                 ChatBubbleItem(
                     user = viewModel.user.value?.copy(id = 1),
                     message = message,

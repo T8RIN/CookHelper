@@ -56,7 +56,9 @@ fun CategorySelectionDialog(
                             Text(
                                 text = it,
                                 fontSize = 16.sp,
-                                modifier = Modifier.padding(12.dp).weight(1f)
+                                modifier = Modifier
+                                    .padding(12.dp)
+                                    .weight(1f)
                             )
                             if (selectedCategory == it) {
                                 Icon(

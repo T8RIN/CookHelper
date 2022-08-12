@@ -85,7 +85,16 @@ fun RecipePostCreationScreen(
     var steps by rememberSaveable { mutableStateOf("") }
 
     val dataList = listOf(
-        label, imageUri, time, calories, proteins, fats, carbohydrates, category, steps, viewModel.products.value.joinToString()
+        label,
+        imageUri,
+        time,
+        calories,
+        proteins,
+        fats,
+        carbohydrates,
+        category,
+        steps,
+        viewModel.products.value.joinToString()
     )
 
     val resultLauncher = rememberLauncherForActivityResult(
@@ -119,7 +128,8 @@ fun RecipePostCreationScreen(
         Column(
             Modifier
                 .imePadding()
-                .navigationBarsPadding()) {
+                .navigationBarsPadding()
+        ) {
             TopAppBar(
                 background = TopAppBarDefaults
                     .smallTopAppBarColors()
@@ -268,7 +278,9 @@ fun RecipePostCreationScreen(
                             startIcon = Icons.Outlined.AvTimer,
                             onValueChange = { time = it },
                             label = stringResource(R.string.time),
-                            modifier = Modifier.weight(1f).height(timeHeight),
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(timeHeight),
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number
@@ -289,7 +301,8 @@ fun RecipePostCreationScreen(
                             startIcon = Icons.Outlined.Restaurant,
                             onValueChange = { calories = it },
                             label = stringResource(R.string.calories),
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .weight(1f)
                                 .onSizeChanged {
                                     timeHeight = with(density) { it.height.toDp() }
                                 },

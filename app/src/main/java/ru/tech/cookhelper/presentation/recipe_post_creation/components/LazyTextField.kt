@@ -53,7 +53,7 @@ fun LazyTextField(
             )
             .onFocusChanged {
                 scope.launch {
-                    if(readOnly) {
+                    if (readOnly) {
                         focus.clearFocus()
                         cancel()
                     }
@@ -117,7 +117,7 @@ fun LazyTextField(
             )
             .onFocusChanged {
                 scope.launch {
-                    if(readOnly) {
+                    if (readOnly) {
                         focus.clearFocus()
                         cancel()
                     }

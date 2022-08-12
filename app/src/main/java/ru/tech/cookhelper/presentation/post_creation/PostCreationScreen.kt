@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -61,7 +60,7 @@ fun PostCreationScreen(
     val dialogController = LocalDialogController.current
 
     val goBack = {
-        if(imageUri.isNotEmpty() || content.isNotEmpty() || label.isNotEmpty()) {
+        if (imageUri.isNotEmpty() || content.isNotEmpty() || label.isNotEmpty()) {
             dialogController.show(
                 Dialog.LeaveUnsavedData(
                     title = R.string.post_creation_started,
@@ -69,8 +68,7 @@ fun PostCreationScreen(
                     onLeave = { onBack() }
                 )
             )
-        }
-        else onBack()
+        } else onBack()
     }
 
     Column(
