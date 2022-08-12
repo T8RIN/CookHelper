@@ -1,12 +1,15 @@
 package ru.tech.cookhelper.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.dto.MessageDto
 import ru.tech.cookhelper.data.remote.dto.toMessage
+import ru.tech.cookhelper.data.remote.webSocket.WebSocketState
 import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
-import ru.tech.cookhelper.data.remote.webSocket.message.WebSocketEvent
 import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.repository.MessageRepository
@@ -14,23 +17,33 @@ import javax.inject.Inject
 
 class MessageRepositoryImpl @Inject constructor(
     private val messageService: MessageService,
+    private val chatApi: ChatApi,
     private val jsonParser: JsonParser
 ) : MessageRepository {
 
-    override fun getAllMessages(chatId: String, message: String): Flow<Action<List<Message>>> {
-        TODO("Not yet implemented")
-    }
+    override fun getAllMessages(chatId: String, token: String): Flow<Action<List<Message>>> =
+        flow<Action<List<Message>>> {
+            val response = chatApi.getAllMessages(chatId, token)
+            if (response.status == 400) Action.Success(data = response.chat.map { it.toMessage() })
+            else Action.Error(message = response.message)
+        }.catch { emit(Action.Error(message = it.message)) }
 
     override fun awaitNewMessages(chatId: String, token: String): Flow<Action<Message>> = flow {
         messageService
             .awaitNewMessages(chatId, token)
-            .collect { event ->
-                when (event) {
-                    is WebSocketEvent.Error -> emit(Action.Error(message = event.message))
-                    is WebSocketEvent.Message -> jsonParser.fromJson<MessageDto>(
-                        event.text,
-                        MessageDto::class.java
+            .catch { emit(Action.Error(message = it.message)) }
+            .collect { state ->
+                when (state) {
+                    is WebSocketState.Error -> emit(Action.Error(message = state.message))
+                    is WebSocketState.Message -> jsonParser.fromJson<MessageDto>(
+                        json = state.text,
+                        type = MessageDto::class.java
                     )?.let { emit(Action.Success(data = it.toMessage())) }
+                    WebSocketState.Closing -> emit(Action.Loading())
+                    is WebSocketState.Opened -> emit(Action.Empty())
+                    WebSocketState.Opening -> emit(Action.Loading())
+                    WebSocketState.Restarting -> emit(Action.Loading())
+                    else -> {}
                 }
             }
     }

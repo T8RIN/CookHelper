@@ -35,6 +35,7 @@ import ru.tech.cookhelper.presentation.all_images.AllImagesScreen
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
 import ru.tech.cookhelper.presentation.chat.ChatScreen
+import ru.tech.cookhelper.presentation.chat_list.ChatListScreen
 import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
 import ru.tech.cookhelper.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
 import ru.tech.cookhelper.presentation.favourite_dishes.FavouriteListScreen
@@ -400,9 +401,14 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         screen.baseIcon,
                                         stringResource(screen.title)
                                     )
-                                    is Screen.Messages -> {
-                                        //TODO: Адекватный экран
-                                        ChatScreen()
+                                    is Screen.ChatList -> {
+                                        ChatListScreen()
+                                    }
+                                    is Screen.Chat -> {
+                                        ChatScreen(
+                                            chatId = screen.chatId,
+                                            onBack = { screenController.navigate(screen.previousScreen) }
+                                        )
                                     }
                                     is Screen.Recipes -> Placeholder(
                                         screen.baseIcon,

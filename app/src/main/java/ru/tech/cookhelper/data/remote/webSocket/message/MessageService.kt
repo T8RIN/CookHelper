@@ -6,14 +6,15 @@ import okhttp3.OkHttpClient
 import ru.tech.cookhelper.core.constants.Constants
 import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import ru.tech.cookhelper.data.remote.webSocket.WebSocketClient
+import ru.tech.cookhelper.data.remote.webSocket.WebSocketState
 import java.util.concurrent.TimeUnit
 
 class MessageService : WebSocketClient() {
 
-    fun awaitNewMessages(chatId: String, token: String): Flow<WebSocketEvent> {
-        baseUrl = "${Constants.WS_BASE_URL}ws/chat/$chatId/?token=qwe"
+    fun awaitNewMessages(chatId: String, token: String): Flow<WebSocketState> {
+        baseUrl = "${Constants.WS_BASE_URL}ws/chat/$chatId/?token=$token"
         openWebSocket()
-        return webSocketEvents.receiveAsFlow()
+        return webSocketState.receiveAsFlow()
     }
 
     override val okHttpClient: OkHttpClient

@@ -13,25 +13,30 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.await_new_messages.AwaitNewMessagesUseCase
+import ru.tech.cookhelper.domain.use_case.get_all_messages.GetAllMessagesUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.send_message.SendMessagesUseCase
 import ru.tech.cookhelper.domain.use_case.stop_awaiting_messages.StopAwaitingMessagesUseCase
+import ru.tech.cookhelper.presentation.chat.components.ChatState
+import ru.tech.cookhelper.presentation.ui.utils.UIText
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val stopAwaitingMessagesUseCase: StopAwaitingMessagesUseCase,
     private val sendMessagesUseCase: SendMessagesUseCase,
-    awaitNewMessagesUseCase: AwaitNewMessagesUseCase,
+    private val getAllMessagesUseCase: GetAllMessagesUseCase,
+    private val awaitNewMessagesUseCase: AwaitNewMessagesUseCase,
     getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
-    fun send(message: String) {
-        sendMessagesUseCase(message)
-    }
+    private var chatId: String = ""
 
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: State<User?> = _user
+
+    private val _chatState: MutableState<ChatState> = mutableStateOf(ChatState())
+    val chatState: State<ChatState> = _chatState
 
     val messages = mutableStateListOf<Message>()
 
@@ -39,14 +44,33 @@ class ChatViewModel @Inject constructor(
         getUserUseCase().onEach {
             _user.value = it
         }.launchIn(viewModelScope)
+    }
 
-        awaitNewMessagesUseCase(chatId = "1", token = user.value?.token ?: "")
+    fun awaitAndGetMessages(chatId: String) {
+        this.chatId = chatId
+        awaitNewMessagesUseCase(chatId = chatId, token = "qwe")
+            .onEach { action ->
+                when (action) {
+                    is Action.Empty -> _chatState.value = ChatState()
+                    is Action.Error -> _chatState.value = ChatState(
+                        errorMessage = if (!(action.message
+                                ?: "").contains("Unable to resolve host")
+                        ) UIText.DynamicString(action.message ?: "") else UIText.empty()
+                    )
+                    is Action.Loading -> _chatState.value = ChatState(isLoading = true)
+                    is Action.Success -> action.data?.let { messages.add(it) }.also {
+                        _chatState.value = ChatState()
+                    }
+                }
+            }.launchIn(viewModelScope)
+
+        getAllMessagesUseCase(chatId = chatId, token = "qwe")
             .onEach { action ->
                 when (action) {
                     is Action.Empty -> TODO()
-                    is Action.Error -> {}
+                    is Action.Error -> TODO()
                     is Action.Loading -> TODO()
-                    is Action.Success -> action.data?.let { messages.add(it) }
+                    is Action.Success -> messages.addAll(action.data ?: emptyList())
                 }
             }.launchIn(viewModelScope)
     }
@@ -54,6 +78,14 @@ class ChatViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         stopAwaitingMessagesUseCase()
+    }
+
+    fun resetState() {
+        _chatState.value = ChatState()
+    }
+
+    fun send(message: String) {
+        sendMessagesUseCase(message)
     }
 
 }

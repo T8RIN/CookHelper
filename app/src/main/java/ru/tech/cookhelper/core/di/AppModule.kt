@@ -16,6 +16,7 @@ import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import ru.tech.cookhelper.data.local.CookHelperDatabase
 import ru.tech.cookhelper.data.remote.api.CookHelperApi
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
+import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
 import ru.tech.cookhelper.data.repository.CookHelperRepositoryImpl
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
@@ -45,7 +46,7 @@ object AppModule {
     fun provideAuthService(): AuthService = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create())
-        .addLogger()
+        .setTimeout()
         .build()
         .create(AuthService::class.java)
 
@@ -77,11 +78,22 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMessageRepository(
-        messageService: MessageService
+        messageService: MessageService,
+        chatApi: ChatApi
     ): MessageRepository = MessageRepositoryImpl(
         jsonParser = MoshiParser(Moshi.Builder().build()),
-        messageService = messageService
+        messageService = messageService,
+        chatApi = chatApi
     )
+
+    @Provides
+    @Singleton
+    fun provideChatApi(): ChatApi = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .addLogger()
+        .build()
+        .create(ChatApi::class.java)
 
     @Provides
     @Singleton

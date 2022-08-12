@@ -79,7 +79,7 @@ sealed class Screen(
         selectedIcon = Icons.Filled.ShoppingCart
     )
 
-    object Messages : Screen(
+    object ChatList : Screen(
         title = R.string.messages,
         shortTitle = R.string.messages,
         baseIcon = Icons.Outlined.Message,
@@ -118,12 +118,17 @@ sealed class Screen(
     class RecipePostCreation(
         val previousScreen: Screen = Home
     ) : Screen()
+
+    class Chat(
+        val chatId: String,
+        val previousScreen: Screen = Home
+    ) : Screen()
 }
 
 val drawerList = listOf(
     Screen.Home,
     Screen.Profile,
-    Screen.Messages,
+    Screen.ChatList,
     Screen.Cart,
     Screen.Favourites,
     Screen.BlockList,
@@ -134,6 +139,7 @@ val hideTopBarList = listOf(
     Screen.AllImages::class.name,
     Screen.FullscreenImagePager::class.name,
     Screen.PostCreation::class.name,
+    Screen.Chat::class.name,
     Screen.RecipePostCreation::class.name,
     Screen.MatchedRecipes::class.name,
     Screen.RecipeDetails::class.name,

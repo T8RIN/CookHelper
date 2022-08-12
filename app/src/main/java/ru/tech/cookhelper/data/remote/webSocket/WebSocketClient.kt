@@ -4,8 +4,8 @@ package ru.tech.cookhelper.data.remote.webSocket
 import android.util.Log
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import okhttp3.*
-import ru.tech.cookhelper.data.remote.webSocket.message.WebSocketEvent
 import ru.tech.cookhelper.presentation.ui.utils.name
 
 abstract class WebSocketClient : WebSocketListener() {
@@ -35,19 +35,21 @@ abstract class WebSocketClient : WebSocketListener() {
     /**
      * Канал с обновлениями сокета
      */
-    val webSocketEvents: Channel<WebSocketEvent> = Channel(10)
+    private val _webSocketState: Channel<WebSocketState> = Channel(50)
+    val webSocketState: ReceiveChannel<WebSocketState> = _webSocketState
 
     /**
      * Открываем веб-сокет
      */
     @Synchronized
     fun openWebSocket() {
-        if (opening)
-            return
+        if (opening) return
         Log.d(SOCKET_TAG, "opening")
 
         opening = true
         socketOpen = false
+
+        _webSocketState.trySend(WebSocketState.Opening)
 
         val request = Request.Builder()
             .url(baseUrl)
@@ -63,13 +65,14 @@ abstract class WebSocketClient : WebSocketListener() {
         if (restarting) return
 
         Log.d(SOCKET_TAG, "restarting")
+        _webSocketState.trySend(WebSocketState.Restarting)
 
         restarting = true
 
         if (socketOpen) closeWebSocket()
 
         CoroutineScope(Dispatchers.IO).launch {
-            delay(5000L)
+            delay(4000L)
             restarting = false
             opening = false
             openWebSocket()
@@ -90,10 +93,12 @@ abstract class WebSocketClient : WebSocketListener() {
     @Synchronized
     private fun closeWebSocket() {
         Log.d(SOCKET_TAG, "closing")
+        _webSocketState.trySend(WebSocketState.Closing)
         try {
             webSocket?.close(CLOSE_CODE, CLOSE_REASON)
             socketOpen = false
         } catch (e: Exception) {
+            _webSocketState.trySend(WebSocketState.Error("closeWebSocket error"))
             Log.d(SOCKET_TAG, "closeWebSocket error")
             e.printStackTrace()
         }
@@ -110,6 +115,7 @@ abstract class WebSocketClient : WebSocketListener() {
     override fun onOpen(webSocket: WebSocket, response: Response) {
         super.onOpen(webSocket, response)
         Log.d(SOCKET_TAG, "onOpen")
+        _webSocketState.trySend(WebSocketState.Opened(response))
 
         this.webSocket = webSocket
         socketOpen = true
@@ -122,9 +128,13 @@ abstract class WebSocketClient : WebSocketListener() {
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
         Log.d(SOCKET_TAG, "onFailure: ${t.message}")
-        webSocketEvents.trySend(WebSocketEvent.Error(message = t.message.toString()))
+        _webSocketState.trySend(WebSocketState.Error(t.message.toString()))
         // Переоткрываем
-        restartWebSocket()
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(500L)
+            restartWebSocket()
+            cancel()
+        }
     }
 
     /**
@@ -132,6 +142,7 @@ abstract class WebSocketClient : WebSocketListener() {
      */
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         super.onClosed(webSocket, code, reason)
+        _webSocketState.trySend(WebSocketState.Closed)
         Log.d(SOCKET_TAG, "onClosed")
     }
 
@@ -140,7 +151,7 @@ abstract class WebSocketClient : WebSocketListener() {
      */
     override fun onMessage(webSocket: WebSocket, text: String) {
         super.onMessage(webSocket, text)
-        webSocketEvents.trySend(WebSocketEvent.Message(text))
+        _webSocketState.trySend(WebSocketState.Message(text))
         Log.d(SOCKET_TAG, "received: $text")
     }
 

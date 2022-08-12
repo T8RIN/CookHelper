@@ -6,7 +6,7 @@ import ru.tech.cookhelper.domain.model.Message
 
 interface MessageRepository {
 
-    fun getAllMessages(chatId: String, message: String): Flow<Action<List<Message>>>
+    fun getAllMessages(chatId: String, token: String): Flow<Action<List<Message>>>
 
     fun awaitNewMessages(chatId: String, token: String): Flow<Action<Message>>
 

@@ -122,5 +122,6 @@
     <string name="apply">Применить</string>
     <string name="search_here">Ищите тут</string>
     <string name="write_a_message">Написать сообщение…</string>
+    <string name="waiting_for_connection">Ожидание подключения</string>
 
 </resources>
