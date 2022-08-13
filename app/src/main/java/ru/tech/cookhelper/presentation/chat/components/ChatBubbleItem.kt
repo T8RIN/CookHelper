@@ -124,7 +124,9 @@ fun ChatBubbleItem(
         Card(
             colors = CardDefaults.cardColors(containerColor = bubbleColor),
             shape = bubbleShape,
-            modifier = Modifier.weight(1f, false).padding(bubblePadding)
+            modifier = Modifier
+                .weight(1f, false)
+                .padding(bubblePadding)
         ) {
             if (!placeTimeUnderTheText) {
                 Row(verticalAlignment = Alignment.Bottom) {
@@ -145,8 +147,7 @@ fun ChatBubbleItem(
                         maxLines = 1,
                     )
                 }
-            }
-            else {
+            } else {
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = message.text,

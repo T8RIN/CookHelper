@@ -21,11 +21,10 @@ class MessageRepositoryImpl @Inject constructor(
     private val jsonParser: JsonParser
 ) : MessageRepository {
 
-    override fun getAllMessages(chatId: String, token: String): Flow<Action<List<Message>>> =
-        flow<Action<List<Message>>> {
+    override fun getAllMessages(chatId: String, token: String): Flow<Action<List<Message>>> = flow {
             val response = chatApi.getAllMessages(chatId, token)
-            if (response.status == 400) Action.Success(data = response.chat.map { it.toMessage() })
-            else Action.Error(message = response.message)
+            if (response.status == 400) emit(Action.Success(data = response.chat.map { it.toMessage() }))
+            else emit(Action.Error(message = response.message))
         }.catch { emit(Action.Error(message = it.message)) }
 
     override fun awaitNewMessages(chatId: String, token: String): Flow<Action<Message>> = flow {

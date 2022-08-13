@@ -42,7 +42,7 @@ class ChatViewModel @Inject constructor(
 
     init {
         getUserUseCase().onEach {
-            _user.value = it
+            _user.value = it?.copy(id = 1)
         }.launchIn(viewModelScope)
     }
 
@@ -71,7 +71,7 @@ class ChatViewModel @Inject constructor(
                     is Action.Empty -> TODO()
                     is Action.Error -> TODO()
                     is Action.Loading -> TODO()
-                    is Action.Success -> messages.addAll(action.data ?: emptyList())
+                    is Action.Success -> action.data?.let { messages.addAll(it) }
                 }
             }.launchIn(viewModelScope)
     }
