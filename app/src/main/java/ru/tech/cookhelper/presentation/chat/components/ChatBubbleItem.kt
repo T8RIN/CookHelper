@@ -1,56 +1,54 @@
 package ru.tech.cookhelper.presentation.chat.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
-import ru.tech.cookhelper.domain.model.Message
-import ru.tech.cookhelper.domain.model.User
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun ChatBubbleItem(
-    user: User?,
-    message: Message,
+    isMessageFromCurrentUser: Boolean,
+    text: String,
+    timestamp: Long,
     cutTopCorner: Boolean,
-    showPointingArrow: Boolean
+    showPointingArrow: Boolean,
+    cornerRadius: Dp = 16.dp,
+    bubbleColor: Color = if (isMessageFromCurrentUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
 ) {
-    val myMessage = (user?.id ?: 0) == message.userId
-
     val horizontalArrangement =
-        if (myMessage) Arrangement.End
+        if (isMessageFromCurrentUser) Arrangement.End
         else Arrangement.Start
 
-    val bubbleColor =
-        if (myMessage) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
-
-    val bubbleShape = if (myMessage) RoundedCornerShape(
-        topStart = 16.dp,
-        topEnd = if (cutTopCorner) 16.dp else 4.dp,
+    val bubbleShape = if (isMessageFromCurrentUser) RoundedCornerShape(
+        topStart = cornerRadius,
+        topEnd = if (cutTopCorner) cornerRadius else 4.dp,
         bottomEnd = if (showPointingArrow) 0.dp else 4.dp,
-        bottomStart = 16.dp
+        bottomStart = cornerRadius
     )
     else RoundedCornerShape(
-        topStart = if (cutTopCorner) 16.dp else 4.dp,
-        topEnd = 16.dp,
-        bottomEnd = 16.dp,
+        topStart = if (cutTopCorner) cornerRadius else 4.dp,
+        topEnd = cornerRadius,
+        bottomEnd = cornerRadius,
         bottomStart = if (showPointingArrow) 0.dp else 4.dp
     )
 
     val minPadding = min(LocalConfiguration.current.screenWidthDp.dp * 0.15f, 48.dp)
 
-    val bubblePadding = if (myMessage) PaddingValues(
+    val bubblePadding = if (isMessageFromCurrentUser) PaddingValues(
         end = if (showPointingArrow) 0.dp else 14.dp,
         start = minPadding,
         bottom = 4.dp
@@ -60,7 +58,7 @@ fun ChatBubbleItem(
         bottom = 4.dp
     )
 
-    val canvasPadding = if (myMessage) PaddingValues(
+    val canvasPadding = if (isMessageFromCurrentUser) PaddingValues(
         end = 2.dp,
         bottom = 4.dp
     ) else PaddingValues(
@@ -68,50 +66,40 @@ fun ChatBubbleItem(
         bottom = 4.dp
     )
 
-    val timePadding = if (myMessage) PaddingValues(4.dp)
+    val timePadding = if (isMessageFromCurrentUser) PaddingValues(4.dp)
     else PaddingValues(top = 4.dp, start = 4.dp, bottom = 4.dp, end = 8.dp)
 
     var placeTimeUnderTheText by remember { mutableStateOf(false) }
 
     val canvasModifier = Modifier
-        .height(24.dp)
-        .width(14.dp)
+        .height(14.dp)
+        .width(10.dp)
         .padding(canvasPadding)
+        .scale(scaleX = if (!isMessageFromCurrentUser) -1f else 1f, scaleY = 1f)
 
-    val bottomArrow = @Composable {
+    val bottomArrow: @Composable RowScope.() -> Unit = {
         if (showPointingArrow) {
-            Box {
-                Canvas(canvasModifier) {
-                    val path = Path().apply {
-                        if (!myMessage) {
-                            moveTo(size.width, 0f)
-                            lineTo(size.width, size.height)
-                            lineTo(0f, size.height)
-                        } else {
-                            moveTo(0f, 0f)
-                            lineTo(0f, size.height)
-                            lineTo(size.width, size.height)
-                        }
-                    }
-                    drawPath(
-                        path = path,
-                        brush = SolidColor(bubbleColor)
+            if (!isMessageFromCurrentUser) Spacer(Modifier.width(4.dp))
+            Canvas(canvasModifier) {
+                val path = Path().apply {
+                    val y = size.height
+                    val x = 0f
+                    moveTo(x, y)
+                    cubicTo(
+                        x1 = size.width * 2f,
+                        y1 = y,
+                        x2 = x,
+                        y2 = y,
+                        x3 = x,
+                        y3 = x
                     )
                 }
-                Box(
-                    modifier = canvasModifier
-                        .padding(bottom = 1.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.background,
-                            shape = RoundedCornerShape(
-                                topStartPercent = 0,
-                                topEndPercent = 0,
-                                bottomStartPercent = if (myMessage) 100 else 0,
-                                bottomEndPercent = if (myMessage) 0 else 100
-                            )
-                        )
+                drawPath(
+                    path = path,
+                    brush = SolidColor(bubbleColor)
                 )
             }
+            if (isMessageFromCurrentUser) Spacer(Modifier.width(4.dp))
         }
     }
 
@@ -120,7 +108,7 @@ fun ChatBubbleItem(
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = Alignment.Bottom
     ) {
-        if (!myMessage) bottomArrow()
+        if (!isMessageFromCurrentUser) bottomArrow()
         Card(
             colors = CardDefaults.cardColors(containerColor = bubbleColor),
             shape = bubbleShape,
@@ -131,7 +119,7 @@ fun ChatBubbleItem(
             if (!placeTimeUnderTheText) {
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
-                        text = message.text,
+                        text = text,
                         modifier = Modifier
                             .padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 8.dp)
                             .weight(1f, false),
@@ -140,7 +128,7 @@ fun ChatBubbleItem(
                         }
                     )
                     Text(
-                        text = message.timestamp.toDate(),
+                        text = timestamp.toDate(),
                         fontSize = 12.sp,
                         modifier = Modifier.padding(timePadding),
                         color = contentColorFor(bubbleColor).copy(alpha = 0.5f),
@@ -150,7 +138,7 @@ fun ChatBubbleItem(
             } else {
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = message.text,
+                        text = text,
                         modifier = Modifier
                             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 4.dp),
                         onTextLayout = { textLayoutResult ->
@@ -158,7 +146,7 @@ fun ChatBubbleItem(
                         }
                     )
                     Text(
-                        text = message.timestamp.toDate(),
+                        text = timestamp.toDate(),
                         fontSize = 12.sp,
                         modifier = Modifier.padding(timePadding),
                         color = contentColorFor(bubbleColor).copy(alpha = 0.5f),
@@ -167,7 +155,7 @@ fun ChatBubbleItem(
                 }
             }
         }
-        if (myMessage) bottomArrow()
+        if (isMessageFromCurrentUser) bottomArrow()
     }
 }
 

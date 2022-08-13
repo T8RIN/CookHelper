@@ -185,8 +185,9 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
                         lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
 
                     ChatBubbleItem(
-                        user = viewModel.user.value,
-                        message = message,
+                        isMessageFromCurrentUser = (viewModel.user.value?.id ?: 0) == message.userId,
+                        text = message.text,
+                        timestamp = message.timestamp,
                         cutTopCorner = cutTopCorner,
                         showPointingArrow = showPointingArrow
                     )
