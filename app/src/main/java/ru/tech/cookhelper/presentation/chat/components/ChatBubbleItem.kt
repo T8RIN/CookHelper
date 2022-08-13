@@ -66,10 +66,12 @@ fun ChatBubbleItem(
         bottom = 4.dp
     )
 
-    val timePadding = if (isMessageFromCurrentUser) PaddingValues(4.dp)
-    else PaddingValues(top = 4.dp, start = 4.dp, bottom = 4.dp, end = 8.dp)
-
     var placeTimeUnderTheText by remember { mutableStateOf(false) }
+
+    val timePadding = if (isMessageFromCurrentUser) PaddingValues(
+        top = 4.dp, start = if(placeTimeUnderTheText) 8.dp else 4.dp, bottom = 4.dp, end = 4.dp
+    )
+    else PaddingValues(top = 4.dp, start = 4.dp, bottom = 4.dp, end = 8.dp)
 
     val canvasModifier = Modifier
         .height(14.dp)

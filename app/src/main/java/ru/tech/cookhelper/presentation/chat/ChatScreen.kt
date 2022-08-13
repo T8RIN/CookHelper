@@ -73,7 +73,9 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
     }
 
     val isAtTheBottom by computedStateOf { state.isLastItemVisible }
-    var fabPadding by remember { mutableStateOf(0) }
+    var fabBottomPadding by remember { mutableStateOf(0) }
+    var fabTopPadding by remember { mutableStateOf(0) }
+
     val scrollToBottom = {
         if (viewModel.messages.isNotEmpty()) scope.launch {
             state.animateScrollToItem(viewModel.messages.size - 1)
@@ -107,6 +109,9 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
                 .imePadding()
         ) {
             TopAppBar(
+                modifier = Modifier.onSizeChanged {
+                    fabTopPadding = it.height
+                },
                 size = Size.Centered,
                 scrollBehavior = scrollBehavior,
                 title = {
@@ -215,7 +220,7 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
                     Modifier
                         .navigationBarsPadding()
                         .onSizeChanged {
-                            fabPadding = it.height
+                            fabBottomPadding = it.height
                         },
                     verticalAlignment = Alignment.Bottom
                 ) {
@@ -271,7 +276,10 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
             visible = !isAtTheBottom && newMessages != 0,
             modifier = Modifier
                 .padding(8.dp)
-                .padding(bottom = with(LocalDensity.current) { fabPadding.toDp() })
+                .padding(
+                    bottom = with(LocalDensity.current) { fabBottomPadding.toDp() },
+                    top = with(LocalDensity.current) { fabTopPadding.toDp() }
+                )
                 .align(Alignment.BottomEnd)
                 .imePadding()
         ) {
