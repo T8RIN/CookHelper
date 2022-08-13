@@ -47,6 +47,7 @@ class ChatViewModel @Inject constructor(
     }
 
     fun awaitAndGetMessages(chatId: String) {
+        if(this.chatId == chatId) return
         this.chatId = chatId
         awaitNewMessagesUseCase(chatId = chatId, token = "qwe")
             .onEach { action ->

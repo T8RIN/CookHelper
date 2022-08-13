@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,6 +34,8 @@ import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +65,6 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
     }
 
     val user = viewModel.user.value
-
 
     LaunchedEffect(viewModel.messages.size) {
         if (viewModel.messages.isNotEmpty()) state.animateScrollToItem(viewModel.messages.size - 1)
@@ -146,9 +148,17 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
             contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             itemsIndexed(viewModel.messages) { index, message ->
-                val cutTopCorner = viewModel.messages.getOrNull(index - 1)?.userId != message.userId
+                val higherMessage = viewModel.messages.getOrNull(index - 1)
+                val lowerMessage = viewModel.messages.getOrNull(index + 1)
+                val df = SimpleDateFormat("HH:mm", Locale.getDefault())
+                val topTime = df.formatOrNull(higherMessage?.timestamp)
+                val currentTime = df.formatOrNull(message.timestamp)
+                val bottomTime = df.formatOrNull(lowerMessage?.timestamp)
+
+                val cutTopCorner = higherMessage?.userId != message.userId || topTime != currentTime
                 val showPointingArrow =
-                    viewModel.messages.getOrNull(index + 1)?.userId != message.userId
+                    lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
+
                 ChatBubbleItem(
                     user = viewModel.user.value?.copy(id = 1),
                     message = message,
@@ -167,10 +177,12 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
                 .background(textBoxColor)
                 .animateContentSize()
         ) {
-            val sendButtonWidth =
-                animateDpAsState(targetValue = if (value.isEmpty()) 0.dp else 48.dp)
-            val sendButtonAlpha = animateFloatAsState(targetValue = if (value.isEmpty()) 0f else 1f)
-            val hintAlpha = animateFloatAsState(targetValue = if (value.isEmpty()) 1f else 0f)
+            val emptyField = value.isEmpty()
+            val sendButtonWidth = animateDpAsState(targetValue = if (emptyField) 0.dp else 48.dp)
+            val sendButtonAlpha = animateFloatAsState(targetValue = if (emptyField) 0f else 1f)
+            val hintAlpha = animateFloatAsState(targetValue = if (emptyField) 1f else 0f)
+            val hintOffset =
+                animateDpAsState(targetValue = if (emptyField) 0.dp else LocalConfiguration.current.screenWidthDp.dp / 2f)
             Row(
                 Modifier.navigationBarsPadding(),
                 verticalAlignment = Alignment.Bottom
@@ -199,6 +211,7 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
                         color = textBoxColor.createSecondaryColor(0.5f),
                         modifier = Modifier
                             .padding(start = 8.dp)
+                            .offset(x = hintOffset.value)
                             .alpha(hintAlpha.value),
                     )
                 }
@@ -222,3 +235,7 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
 
     BackHandler { onBack() }
 }
+
+private fun SimpleDateFormat.formatOrNull(
+    timestamp: Long?
+): String? = if (timestamp == null) null else format(timestamp)
