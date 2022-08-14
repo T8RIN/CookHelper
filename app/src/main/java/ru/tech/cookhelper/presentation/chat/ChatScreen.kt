@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.*
-import ru.tech.cookhelper.presentation.chat.components.ChatBubbleItem
+import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
@@ -189,7 +189,7 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
                     val showPointingArrow =
                         lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
 
-                    ChatBubbleItem(
+                    MessageBubbleItem(
                         isMessageFromCurrentUser = (viewModel.user.value?.id ?: 0) == message.userId,
                         text = message.text,
                         timestamp = message.timestamp,

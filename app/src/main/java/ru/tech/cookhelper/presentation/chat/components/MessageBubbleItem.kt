@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun ChatBubbleItem(
+fun MessageBubbleItem(
     isMessageFromCurrentUser: Boolean,
     text: String,
     timestamp: Long,
