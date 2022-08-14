@@ -54,7 +54,7 @@ fun ChatListItem(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = (title.getOrNull(0)?.toString() ?: "*").uppercase(),
+                    text = (title.getOrNull(0)?.toString() ?: "*"),
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     color = MaterialTheme.colorScheme.onTertiaryContainer
@@ -105,6 +105,7 @@ fun ChatListItem(
                     Text(
                         text = newMessagesCount.toString(),
                         fontSize = 14.sp,
+                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }

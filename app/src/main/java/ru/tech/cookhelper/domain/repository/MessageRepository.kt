@@ -2,6 +2,7 @@ package ru.tech.cookhelper.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.domain.model.Chat
 import ru.tech.cookhelper.domain.model.Message
 
 interface MessageRepository {
@@ -13,5 +14,7 @@ interface MessageRepository {
     fun sendMessage(message: String)
 
     fun stopAwaitingMessages()
+
+    fun getChatList(token: String): Flow<Action<List<Chat>>>
 
 }

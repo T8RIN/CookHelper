@@ -6,32 +6,93 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.tech.cookhelper.domain.model.Chat
 import ru.tech.cookhelper.domain.model.User
+import ru.tech.cookhelper.domain.use_case.get_chat_list.GetChatListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
+import ru.tech.cookhelper.presentation.chat_list.components.ChatListState
+import ru.tech.cookhelper.presentation.ui.utils.UIText
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatListViewModel @Inject constructor(
-    getUserUseCase: GetUserUseCase
+    getUserUseCase: GetUserUseCase,
+    private val getChatListUseCase: GetChatListUseCase
 ) : ViewModel() {
 
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: State<User?> = _user
 
-    val chatList: State<List<Chat>> = mutableStateOf(
-        listOf(
-            Chat(id = "1", image = "https://i.stack.imgur.com/CwtL5.png", title = "как какать", lastMessageText = "Никак", lastMessageTimestamp = System.currentTimeMillis(), newMessagesCount = 1),
-            Chat(id = "2", image = null, title = "CockHelper", lastMessageText = "such a nice app", lastMessageTimestamp = System.currentTimeMillis(), newMessagesCount = 0)
-        )
-    )
+    private val _chatListState: MutableState<ChatListState> = mutableStateOf(ChatListState())
+    val chatListState: State<ChatListState> = _chatListState
 
     init {
         getUserUseCase().onEach {
             _user.value = it
+            getChatListUseCase(_user.value?.token ?: "").launchIn(viewModelScope)
         }.launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            while (true) {
+                delay(3000)
+                _chatListState.value = ChatListState(
+                    chatList = listOf(
+                        Chat(
+                            id = "1",
+                            image = "https://i.stack.imgur.com/CwtL5.png",
+                            title = "Интеллектуалы",
+                            lastMessageText = "О чем речь?",
+                            lastMessageTimestamp = System.currentTimeMillis(),
+                            newMessagesCount = 1
+                        ),
+                        Chat(
+                            id = "2",
+                            image = null,
+                            title = "CockHelper",
+                            lastMessageText = "such a nice app",
+                            lastMessageTimestamp = System.currentTimeMillis(),
+                            newMessagesCount = 0
+                        ),
+                        Chat(
+                            id = "3",
+                            image = null,
+                            title = "Артур",
+                            lastMessageText = "Хммммм",
+                            lastMessageTimestamp = System.currentTimeMillis(),
+                            newMessagesCount = 6
+                        ),
+                        Chat(
+                            id = "4",
+                            image = null,
+                            title = "No_Feelings",
+                            lastMessageText = "Я *** и что вы мне сделаете, плюс еще и такое длинное сообщение написал, что * можно 8 раз",
+                            lastMessageTimestamp = System.currentTimeMillis(),
+                            newMessagesCount = 10022
+                        ),
+                        Chat(
+                            id = "5",
+                            image = null,
+                            title = "Dino",
+                            lastMessageText = "Слыш ты арбуз",
+                            lastMessageTimestamp = System.currentTimeMillis(),
+                            newMessagesCount = 99
+                        )
+                    )
+                )
+                delay(3000)
+                _chatListState.value = ChatListState()
+                delay(3000)
+                _chatListState.value = ChatListState(isLoading = true)
+                delay(3000)
+                _chatListState.value = ChatListState(error = UIText.DynamicString("Трешачок какой-то"))
+                delay(50)
+                _chatListState.value = ChatListState(isLoading = true)
+            }
+        }
     }
 
 

@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -19,7 +21,7 @@ import com.google.accompanist.placeholder.material.shimmer
 @Composable
 fun Placeholder(icon: ImageVector, text: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = if (modifier == Modifier) Modifier.fillMaxSize() else modifier,
+        modifier = if (modifier == Modifier) Modifier.fillMaxSize().padding(horizontal = 8.dp) else modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -12,4 +12,9 @@ interface ChatApi {
         @Query("token") token: String
     ): ChatInfo
 
+    @GET("api/chat/get")
+    suspend fun getChatList(
+        @Query("token") token: String
+    ): String
+
 }

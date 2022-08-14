@@ -11,6 +11,7 @@ import ru.tech.cookhelper.data.remote.dto.toMessage
 import ru.tech.cookhelper.data.remote.webSocket.WebSocketState
 import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
 import ru.tech.cookhelper.data.utils.JsonParser
+import ru.tech.cookhelper.domain.model.Chat
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.repository.MessageRepository
 import javax.inject.Inject
@@ -52,5 +53,10 @@ class MessageRepositoryImpl @Inject constructor(
     }
 
     override fun stopAwaitingMessages() = messageService.close()
+
+    override fun getChatList(token: String): Flow<Action<List<Chat>>> = flow {
+        val response = chatApi.getChatList(token)
+        Log.d("COCK", response)
+    }
 
 }
