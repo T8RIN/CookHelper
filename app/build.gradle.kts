@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "ru.tech.cookhelper"
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "ru.tech.cookhelper"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "0.1-still_in_progress"
     }
@@ -87,11 +87,11 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.3.0-alpha03")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.0-alpha")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.26.0-alpha")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.0-alpha")
-    implementation("com.google.accompanist:accompanist-pager:0.26.0-alpha")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.0-alpha")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.1-alpha")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.26.1-alpha")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.1-alpha")
+    implementation("com.google.accompanist:accompanist-pager:0.26.1-alpha")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.1-alpha")
 
     //Coil
     implementation("io.coil-kt:coil:2.1.0")
