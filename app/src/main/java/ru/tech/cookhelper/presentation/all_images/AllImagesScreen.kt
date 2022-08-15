@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.all_images
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -28,8 +29,8 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 fun AllImagesScreen(
     images: List<Image>,
     canAddImages: Boolean,
-    goBack: () -> Unit,
-    onAddImage: () -> Unit
+    onBack: () -> Unit,
+    onAddImage: (uri: String) -> Unit
 ) {
     val screenController = LocalScreenController.current
 
@@ -56,13 +57,13 @@ fun AllImagesScreen(
                 }
             },
             navigationIcon = {
-                IconButton(onClick = { goBack() }) {
+                IconButton(onClick = { onBack() }) {
                     Icon(Icons.Rounded.ArrowBack, null)
                 }
             },
             actions = {
                 if (canAddImages) {
-                    IconButton(onClick = { onAddImage() }) {
+                    IconButton(onClick = { /*TODO: Add image feature*/ }) {
                         Icon(Icons.Rounded.Add, null)
                     }
                 }
@@ -81,5 +82,7 @@ fun AllImagesScreen(
             }
         )
     }
+
+    BackHandler { onBack() }
 
 }

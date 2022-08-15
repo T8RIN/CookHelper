@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.fullscreen_image_pager
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,7 +35,7 @@ import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun FullScreenPagerScreen(images: List<Image>, initialId: String, goBack: () -> Unit) {
+fun FullScreenPagerScreen(images: List<Image>, initialId: String, onBack: () -> Unit) {
     val pagerState =
         rememberPagerState(images.indexOfFirst { it.id == initialId })
 
@@ -85,7 +86,7 @@ fun FullScreenPagerScreen(images: List<Image>, initialId: String, goBack: () -> 
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { goBack() }) {
+                    IconButton(onClick = { onBack() }) {
                         Icon(
                             Icons.Rounded.ArrowBack,
                             null,
@@ -118,4 +119,5 @@ fun FullScreenPagerScreen(images: List<Image>, initialId: String, goBack: () -> 
             }
         }
     }
+    BackHandler { onBack() }
 }

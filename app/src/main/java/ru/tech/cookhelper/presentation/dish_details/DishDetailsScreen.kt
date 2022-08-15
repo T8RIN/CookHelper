@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.dish_details
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,7 +37,7 @@ import ru.tech.cookhelper.presentation.ui.utils.ShareUtils.shareWith
 @Composable
 fun DishDetailsScreen(
     id: Int,
-    goBack: () -> Unit,
+    onBack: () -> Unit,
     viewModel: DishDetailsViewModel = hiltViewModel(
         defaultArguments = bundleOf("id" to id)
     )
@@ -65,7 +66,7 @@ fun DishDetailsScreen(
                     size = Size.Large,
                     title = { Text(state.dish?.title ?: "") },
                     navigationIcon = {
-                        IconButton(onClick = { goBack() }) {
+                        IconButton(onClick = { onBack() }) {
                             Icon(Icons.Rounded.ArrowBack, null)
                         }
                     },
@@ -191,7 +192,7 @@ fun DishDetailsScreen(
             }
         }
     }
-
+    BackHandler { onBack() }
 }
 
 private val Double.s: String

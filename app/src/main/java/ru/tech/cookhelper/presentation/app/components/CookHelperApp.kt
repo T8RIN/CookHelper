@@ -173,37 +173,28 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         )
                                     }
                                     is Screen.RecipeDetails -> {
-                                        val id = screen.id
-                                        val back: () -> Unit =
-                                            { screenController.pop() }
-                                        BackHandler { back() }
-                                        DishDetailsScreen(id, goBack = { back() })
+                                        DishDetailsScreen(
+                                            id = screen.id,
+                                            onBack = { screenController.pop() })
                                     }
                                     is Screen.MatchedRecipes -> {
-                                        val back: () -> Unit = {
-                                            screenController.pop()
-                                        }
-                                        BackHandler { back() }
                                         OnFridgeBasedDishes(
                                             onRecipeClicked = {
                                                 screenController.navigate(
                                                     Screen.RecipeDetails(it)
                                                 )
                                             },
-                                            goBack = { back() }
+                                            onBack = { screenController.pop() }
                                         )
                                     }
                                     is Screen.FullscreenImagePager -> {
-                                        val back: () -> Unit = {
-                                            screenController.pop()
-                                            activity.showSystemBars()
-                                        }
-                                        BackHandler { back() }
-
                                         FullScreenPagerScreen(
                                             images = screen.images,
                                             initialId = screen.id,
-                                            goBack = { back() }
+                                            onBack = {
+                                                screenController.pop()
+                                                activity.showSystemBars()
+                                            }
                                         )
                                     }
                                     is Screen.Settings -> {
@@ -218,21 +209,18 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         )
                                     }
                                     is Screen.Profile -> {
-                                        ProfileScreen(updateTitle = { newTitle ->
-                                            viewModel.title = UIText.DynamicString(newTitle)
-                                        })
+                                        ProfileScreen(
+                                            updateTitle = { newTitle ->
+                                                viewModel.title = UIText.DynamicString(newTitle)
+                                            }
+                                        )
                                     }
                                     is Screen.AllImages -> {
-                                        val back: () -> Unit = {
-                                            screenController.pop()
-                                        }
-                                        BackHandler { back() }
-
                                         AllImagesScreen(
                                             images = screen.images,
                                             canAddImages = screen.canAddImages,
-                                            goBack = { back() },
-                                            onAddImage = {}
+                                            onBack = { screenController.pop() },
+                                            onAddImage = screen.onAddImage
                                         )
                                     }
                                     is Screen.BlockList -> Placeholder(

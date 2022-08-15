@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.dishes_based_on_fridge
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +33,7 @@ import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
 @Composable
 fun OnFridgeBasedDishes(
     onRecipeClicked: (id: Int) -> Unit,
-    goBack: () -> Unit,
+    onBack: () -> Unit,
     viewModel: OnFridgeBasedDishesViewModel = hiltViewModel()
 ) {
 
@@ -57,7 +58,7 @@ fun OnFridgeBasedDishes(
                     size = Size.Small,
                     title = { Text(stringResource(R.string.matched_recipes)) },
                     navigationIcon = {
-                        IconButton(onClick = { goBack() }) {
+                        IconButton(onClick = { onBack() }) {
                             Icon(Icons.Rounded.ArrowBack, null)
                         }
                     },
@@ -102,5 +103,7 @@ fun OnFridgeBasedDishes(
             }
         }
     }
+
+    BackHandler { onBack() }
 
 }

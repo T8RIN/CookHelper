@@ -120,7 +120,8 @@ sealed class Screen(
     @Parcelize
     class AllImages(
         val images: List<Image> = emptyList(),
-        val canAddImages: Boolean = false
+        val canAddImages: Boolean = false,
+        val onAddImage: (uri: String) -> Unit
     ) : Screen()
 
     @Parcelize
