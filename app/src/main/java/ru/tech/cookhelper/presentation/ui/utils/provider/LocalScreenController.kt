@@ -12,6 +12,6 @@ val LocalScreenController = compositionLocalOf { navController<Screen>(Screen.Ho
 val <T> T.isCurrentDestination: Boolean
     @ReadOnlyComposable
     @Composable
-    get() = LocalScreenController.current.backstack.entries.lastOrNull()?.destination == this
+    get() = LocalScreenController.current.currentDestination == this
 
 val <T> NavController<T>.currentDestination: T? get() = this.backstack.entries.lastOrNull()?.destination

@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val screenController = navController<Screen>(
-        startDestination = Screen.Home.Recipes
+        startDestination = Screen.Home.None
     )
 
     var title by mutableStateOf(Screen.Home.Recipes.title)
