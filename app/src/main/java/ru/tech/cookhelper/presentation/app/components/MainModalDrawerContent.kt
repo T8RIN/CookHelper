@@ -8,22 +8,24 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.navigate
+import dev.olshevski.navigation.reimagined.popAll
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.UIText
-import ru.tech.cookhelper.presentation.ui.utils.clearState
 import ru.tech.cookhelper.presentation.ui.utils.drawerList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
-import ru.tech.cookhelper.presentation.ui.utils.provider.isCurrentScreen
-import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import ru.tech.cookhelper.presentation.ui.utils.provider.isCurrentDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainModalDrawerContent(viewModel: MainViewModel, drawerState: DrawerState) {
+fun MainModalDrawerContent(
+    viewModel: MainViewModel,
+    drawerState: DrawerState,
+    onClick: (screen: Screen) -> Unit
+) {
     val screenController = LocalScreenController.current
     val scope = rememberCoroutineScope()
 
@@ -34,13 +36,12 @@ fun MainModalDrawerContent(viewModel: MainViewModel, drawerState: DrawerState) {
                 onClick = {
                     screenController.navigate(Screen.Profile)
                     scope.launch { drawerState.close() }
-                    clearState(all = true)
                 }
             )
         }
 
         items(drawerList) { item ->
-            val selected = item.isCurrentScreen
+            val selected = item.isCurrentDestination
 
             NavigationDrawerItem(
                 icon = { Icon(item iconWith selected, null) },
@@ -51,19 +52,15 @@ fun MainModalDrawerContent(viewModel: MainViewModel, drawerState: DrawerState) {
                     bottomStart = 0.0.dp
                 ),
                 modifier = Modifier.padding(end = 12.dp),
-                label = { Text(stringResource(item.title)) },
+                label = { Text(item.title.asString()) },
                 selected = selected,
                 onClick = {
-                    viewModel.title = UIText.StringResource(item.title)
-                    screenController.navigate(item)
-
-                    if (item is Screen.Home) {
-                        viewModel.title = UIText.StringResource(Screen.Profile.title)
-                        viewModel.selectedItem = 0
-                        viewModel.navDestination = Screen.Recipes
+                    onClick(item)
+                    screenController.apply{
+                        navigate(item)
+                        popAll()
                     }
                     scope.launch { drawerState.close() }
-                    clearState(all = true)
                 }
             )
             if (item is Screen.Home || item is Screen.BlockList) {

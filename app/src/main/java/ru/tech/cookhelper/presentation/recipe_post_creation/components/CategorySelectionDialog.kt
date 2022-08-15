@@ -17,12 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.ui.utils.Dialog
-import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDialog
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 
 @Composable
 fun CategorySelectionDialog(
@@ -39,7 +36,6 @@ fun CategorySelectionDialog(
                 Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                 LazyColumn(
                     modifier = Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.35f),
-                    state = rememberForeverLazyListState(Dialog.CategorySelection::class.name)
                 ) {
                     items(categories) {
                         Row(

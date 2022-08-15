@@ -4,6 +4,8 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.olshevski.navigation.reimagined.navController
+import dev.olshevski.navigation.reimagined.navigate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,6 +22,7 @@ import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.ui.utils.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,12 +39,15 @@ class MainViewModel @Inject constructor(
     var searchMode by mutableStateOf(false)
 
     val currentDialog = mutableStateOf<Dialog>(Dialog.None)
-    val currentScreen = mutableStateOf<Screen>(Screen.Home)
 
-    var navDestination by mutableStateOf<Screen>(Screen.Recipes)
+    val screenController = navController<Screen>(
+        startDestination = Screen.Home.Recipes
+    )
+
     var selectedItem by mutableStateOf(0)
 
-    var title by mutableStateOf<UIText>(UIText.StringResource(Screen.Recipes.title))
+    var title by mutableStateOf<UIText>(Screen.Home.Recipes.title)
+
     val searchString = mutableStateOf("")
 
     private val default: ArrayList<Product> = arrayListOf()
@@ -86,9 +92,11 @@ class MainViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         getUserUseCase().onEach {
-            if (it == null) currentScreen.value = Screen.Authentication
+            if (it == null) screenController.navigate(Screen.Authentication)
             else {
-                if (currentScreen.value == Screen.Authentication) currentScreen.value = Screen.Home
+                if (screenController.currentDestination == Screen.Authentication) screenController.navigate(
+                    Screen.Home.Recipes
+                )
                 _userState.value = UserState(it, it.token)
             }
         }.launchIn(viewModelScope)

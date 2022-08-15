@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
@@ -39,12 +40,11 @@ import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewM
 import ru.tech.cookhelper.presentation.ui.utils.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun PostCreationScreen(
-    viewModel: PostCreationViewModel = scopedViewModel(),
+    viewModel: PostCreationViewModel = hiltViewModel(),
     initialImageUri: String = "",
     onBack: () -> Unit
 ) {

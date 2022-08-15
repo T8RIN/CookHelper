@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ErrorOutline
@@ -18,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
+import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Placeholder
@@ -27,20 +30,15 @@ import ru.tech.cookhelper.presentation.chat_list.viewModel.ChatListViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentScreen
-import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ChatListScreen(viewModel: ChatListViewModel = scopedViewModel()) {
+fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
     val screenController = LocalScreenController.current
     val chatListState = viewModel.chatListState.value
-    val scrollState = rememberForeverLazyListState(Screen.ChatList::class.name)
+    val scrollState = rememberLazyListState()
     var fabExpanded by rememberSaveable { mutableStateOf(true) }
 
     LaunchedEffect(scrollState) {
@@ -66,14 +64,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = scopedViewModel()) {
                     itemsIndexed(state.chatList) { index, chat ->
                         ChatListItem(
                             onClick = {
-                                screenController.apply {
-                                    navigate(
-                                        Screen.Chat(
-                                            chatId = chat.id,
-                                            previousScreen = currentScreen
-                                        )
-                                    )
-                                }
+                                screenController.navigate(Screen.Chat(chatId = chat.id))
                             },
                             image = chat.image,
                             title = chat.title,
@@ -84,13 +75,12 @@ fun ChatListScreen(viewModel: ChatListViewModel = scopedViewModel()) {
                         if (index != state.chatList.lastIndex) Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                     }
                 }
-            }
-            else if (!state.isLoading && state.error.isEmpty()) {
+            } else if (!state.isLoading && state.error.isEmpty()) {
                 Placeholder(
                     icon = Icons.Filled.MessageDraw,
                     text = stringResource(R.string.no_existing_chats)
                 )
-            } else if(state.error.isEmpty()){
+            } else if (state.error.isEmpty()) {
                 Loading()
             } else {
                 LocalToastHost.current.sendToast(Icons.Rounded.ErrorOutline, state.error.asString())

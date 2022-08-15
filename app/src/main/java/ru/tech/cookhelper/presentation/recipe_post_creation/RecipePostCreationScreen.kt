@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
@@ -40,18 +41,15 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.LazyTextF
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.Dialog
-import ru.tech.cookhelper.presentation.ui.utils.clearState
-import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
 )
 @Composable
 fun RecipePostCreationScreen(
-    viewModel: RecipePostCreationViewModel = scopedViewModel(),
+    viewModel: RecipePostCreationViewModel = hiltViewModel(),
     onBack: () -> Unit
 ) {
     val focus = LocalFocusManager.current
@@ -441,12 +439,6 @@ fun RecipePostCreationScreen(
 
     BackHandler { goBack() }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            clearState(key = Dialog.CategorySelection::class.name)
-            clearState(key = Dialog.PickProductsWithMeasures::class.name)
-        }
-    }
 }
 
 fun String.stripToDouble(): String {

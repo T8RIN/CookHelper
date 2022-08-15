@@ -36,12 +36,9 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
-import ru.tech.cookhelper.presentation.ui.utils.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
-import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 
 @OptIn(
     ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class,
@@ -137,7 +134,6 @@ fun PickProductsWithMeasuresDialog(
                             LazyColumn(
                                 modifier = lazyColumnModifier,
                                 contentPadding = PaddingValues(vertical = 4.dp),
-                                state = rememberForeverLazyListState(Dialog.PickProductsWithMeasures::class.name)
                             ) {
                                 items(localProducts) {
                                     Card(

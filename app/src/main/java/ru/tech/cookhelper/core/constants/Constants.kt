@@ -14,6 +14,4 @@ object Constants {
         return IMG_URL.replace(DELIMITER, id.toString())
     }
 
-    const val IMAGE_CAROUSEL_KEY = "image_carousel"
-
 }

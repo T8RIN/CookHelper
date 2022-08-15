@@ -24,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
+import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.*
 import ru.tech.cookhelper.presentation.app.components.Picture
@@ -32,13 +34,8 @@ import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
-import ru.tech.cookhelper.presentation.ui.utils.name
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentScreen
-import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random.Default.nextBoolean
@@ -46,11 +43,9 @@ import kotlin.random.Random.Default.nextBoolean
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = scopedViewModel(ignoreDisposing = listOf(Screen.FullscreenImagePager::class)),
+    viewModel: ProfileViewModel = hiltViewModel(),
     updateTitle: (title: String) -> Unit
 ) {
-    val lazyListState = rememberForeverLazyListState(key = Screen.Profile::class.name)
-
     val screenController = LocalScreenController.current
 
     val toastHost = LocalToastHost.current
@@ -72,7 +67,7 @@ fun ProfileScreen(
                 )
                 return@rememberLauncherForActivityResult
             }
-            screenController.apply { navigate(Screen.PostCreation(currentScreen, uri.toString())) }
+            screenController.navigate(Screen.PostCreation(uri.toString()))
         }
     )
 
@@ -90,7 +85,7 @@ fun ProfileScreen(
     }
 
     LazyColumn(
-        state = lazyListState, contentPadding = PaddingValues(
+        contentPadding = PaddingValues(
             bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 80.dp
         )
     ) {
@@ -177,21 +172,18 @@ fun ProfileScreen(
             ImageCarousel(
                 data = testList,
                 onImageClick = { id ->
-                    screenController.apply {
-                        navigate(
-                            Screen.FullscreenImagePager(
-                                id = id,
-                                images = testList,
-                                previousScreen = currentScreen
-                            )
+                    screenController.navigate(
+                        Screen.FullscreenImagePager(
+                            id = id,
+                            images = testList,
                         )
-                    }
+                    )
                 },
                 onAddImageClick = {
                     //TODO: Add Image Feature
                 },
                 onExpand = {
-                    screenController.navigate(Screen.AllImages(testList, Screen.Profile, true))
+                    screenController.navigate(Screen.AllImages(testList, true))
                 }
             )
         }
@@ -215,9 +207,7 @@ fun ProfileScreen(
                         ),
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            screenController.apply {
-                                navigate(Screen.RecipePostCreation(currentScreen))
-                            }
+                            screenController.navigate(Screen.RecipePostCreation())
                         }
                     ) {
                         Text(stringResource(R.string.recipe))
@@ -230,9 +220,7 @@ fun ProfileScreen(
                         ),
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            screenController.apply {
-                                navigate(Screen.PostCreation(currentScreen))
-                            }
+                            screenController.navigate(Screen.PostCreation())
                         }
                     ) {
                         Text(stringResource(R.string.post))
@@ -387,7 +375,6 @@ fun ProfileScreen(
                             Screen.FullscreenImagePager(
                                 id = id,
                                 images = post.image?.let { listOf(it) } ?: emptyList(),
-                                previousScreen = screenController.currentScreen
                             )
                         )
                     },

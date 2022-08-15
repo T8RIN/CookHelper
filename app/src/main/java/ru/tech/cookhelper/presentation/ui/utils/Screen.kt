@@ -1,132 +1,144 @@
 package ru.tech.cookhelper.presentation.ui.utils
 
-import androidx.annotation.StringRes
+import android.os.Parcelable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 
 sealed class Screen(
-    @StringRes val title: Int = R.string.app_name,
-    @StringRes val shortTitle: Int = R.string.app_name,
-    val baseIcon: ImageVector = Icons.Default.PhoneAndroid,
-    val selectedIcon: ImageVector = Icons.Default.PhoneAndroid
-) {
+    open val title: UIText = UIText.empty(),
+    open val shortTitle: UIText = UIText.empty(),
+    open val baseIcon: ImageVector = Icons.Default.PhoneAndroid,
+    open val selectedIcon: ImageVector = Icons.Default.PhoneAndroid
+) : Parcelable {
 
-    object Forum : Screen(
-        title = R.string.forum_title,
-        shortTitle = R.string.forum,
-        baseIcon = Icons.Outlined.Forum,
-        selectedIcon = Icons.Filled.Forum
-    )
-
-    object Recipes : Screen(
-        title = R.string.recipe_bank,
-        shortTitle = R.string.recipes,
-        baseIcon = Icons.Outlined.DinnerDining,
-        selectedIcon = Icons.Filled.DinnerDining
-    )
-
+    @Parcelize
     object Favourites : Screen(
-        title = R.string.favourite_dishes,
-        shortTitle = R.string.favourites,
+        title = UIText.StringResource(R.string.favourite_dishes),
+        shortTitle = UIText.StringResource(R.string.favourites),
         baseIcon = Icons.Outlined.FavoriteBorder,
         selectedIcon = Icons.Filled.Favorite
     )
 
-    object Fridge : Screen(
-        title = R.string.fridge,
-        shortTitle = R.string.fridge,
-        baseIcon = Icons.Outlined.Fridge,
-        selectedIcon = Icons.Rounded.Fridge
-    )
-
+    @Parcelize
     object Profile : Screen(
-        title = R.string.profile,
-        shortTitle = R.string.profile,
+        title = UIText.StringResource(R.string.profile),
+        shortTitle = UIText.StringResource(R.string.profile),
         baseIcon = Icons.Outlined.AccountCircle,
         selectedIcon = Icons.Filled.AccountCircle
     )
 
+    @Parcelize
     object BlockList : Screen(
-        title = R.string.block_list,
-        shortTitle = R.string.block_list,
+        title = UIText.StringResource(R.string.block_list),
+        shortTitle = UIText.StringResource(R.string.block_list),
         baseIcon = Icons.Outlined.Report,
         selectedIcon = Icons.Filled.Report
     )
 
-    object Home : Screen(
-        title = R.string.home,
-        shortTitle = R.string.home,
-        baseIcon = Icons.Outlined.Home,
-        selectedIcon = Icons.Filled.Home
-    )
+    sealed class Home(
+        override val title: UIText = UIText.StringResource(R.string.home),
+        override val shortTitle: UIText = UIText.StringResource(R.string.home),
+        override val baseIcon: ImageVector = Icons.Default.Home,
+        override val selectedIcon: ImageVector = Icons.Default.Home
+    ) : Screen() {
+        @Parcelize
+        object Recipes : Home(
+            title = UIText.StringResource(R.string.recipe_bank),
+            shortTitle = UIText.StringResource(R.string.recipes),
+            baseIcon = Icons.Outlined.DinnerDining,
+            selectedIcon = Icons.Filled.DinnerDining
+        )
 
+        @Parcelize
+        object Forum : Home(
+            title = UIText.StringResource(R.string.forum_title),
+            shortTitle = UIText.StringResource(R.string.forum),
+            baseIcon = Icons.Outlined.Forum,
+            selectedIcon = Icons.Filled.Forum
+        )
+
+        @Parcelize
+        object Fridge : Home(
+            title = UIText.StringResource(R.string.fridge),
+            shortTitle = UIText.StringResource(R.string.fridge),
+            baseIcon = Icons.Outlined.Fridge,
+            selectedIcon = Icons.Rounded.Fridge
+        )
+
+        @Parcelize
+        object None : Home()
+    }
+
+    @Parcelize
     object Settings : Screen(
-        title = R.string.settings,
-        shortTitle = R.string.settings,
+        title = UIText.StringResource(R.string.settings),
+        shortTitle = UIText.StringResource(R.string.settings),
         baseIcon = Icons.Outlined.Settings,
         selectedIcon = Icons.Filled.Settings
     )
 
+    @Parcelize
     object Cart : Screen(
-        title = R.string.shopping_list,
-        shortTitle = R.string.shopping_list,
+        title = UIText.StringResource(R.string.shopping_list),
+        shortTitle = UIText.StringResource(R.string.shopping_list),
         baseIcon = Icons.Outlined.ShoppingCart,
         selectedIcon = Icons.Filled.ShoppingCart
     )
 
+    @Parcelize
     object ChatList : Screen(
-        title = R.string.messages,
-        shortTitle = R.string.messages,
+        title = UIText.StringResource(R.string.messages),
+        shortTitle = UIText.StringResource(R.string.messages),
         baseIcon = Icons.Outlined.Message,
         selectedIcon = Icons.Filled.Message
     )
 
+    @Parcelize
     class RecipeDetails(
         val id: Int = 0,
-        val previousScreen: Screen = Home
     ) : Screen()
 
-    class MatchedRecipes(
-        val previousScreen: Screen
-    ) : Screen()
+    @Parcelize
+    class MatchedRecipes : Screen()
 
+    @Parcelize
     object Authentication : Screen()
 
+    @Parcelize
     class FullscreenImagePager(
         val id: String = "0",
         val images: List<Image> = emptyList(),
-        val previousScreen: Screen = Home
     ) : Screen()
 
 
+    @Parcelize
     class AllImages(
         val images: List<Image> = emptyList(),
-        val previousScreen: Screen = Home,
         val canAddImages: Boolean = false
     ) : Screen()
 
+    @Parcelize
     class PostCreation(
-        val previousScreen: Screen = Home,
         val imageUri: String = ""
     ) : Screen()
 
-    class RecipePostCreation(
-        val previousScreen: Screen = Home
-    ) : Screen()
+    @Parcelize
+    class RecipePostCreation : Screen()
 
+    @Parcelize
     class Chat(
         val chatId: String,
-        val previousScreen: Screen = Home
     ) : Screen()
 }
 
 val drawerList = listOf(
-    Screen.Home,
+    Screen.Home.None,
     Screen.Profile,
     Screen.ChatList,
     Screen.Cart,
@@ -147,7 +159,7 @@ val hideTopBarList = listOf(
 )
 
 val navBarList = listOf(
-    Screen.Recipes,
-    Screen.Forum,
-    Screen.Fridge
+    Screen.Home.Recipes,
+    Screen.Home.Forum,
+    Screen.Home.Fridge
 )

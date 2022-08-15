@@ -32,6 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.*
@@ -40,17 +42,16 @@ import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onBack: () -> Unit) {
-
-    LaunchedEffect(Unit) {
-        viewModel.awaitAndGetMessages(chatId)
-    }
+fun ChatScreen(
+    chatId: String, viewModel: ChatViewModel = hiltViewModel(
+        defaultArguments = bundleOf("chatId" to chatId)
+    ), onBack: () -> Unit
+) {
 
     val chatState = viewModel.chatState.value
     var value by remember { mutableStateOf("") }
@@ -190,7 +191,8 @@ fun ChatScreen(viewModel: ChatViewModel = scopedViewModel(), chatId: String, onB
                         lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
 
                     MessageBubbleItem(
-                        isMessageFromCurrentUser = (viewModel.user.value?.id ?: 0) == message.userId,
+                        isMessageFromCurrentUser = (viewModel.user.value?.id
+                            ?: 0) == message.userId,
                         text = message.text,
                         timestamp = message.timestamp,
                         cutTopCorner = cutTopCorner,

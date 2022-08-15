@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Placeholder
@@ -26,17 +27,13 @@ import ru.tech.cookhelper.presentation.app.components.Size
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.dishes_based_on_fridge.viewModel.OnFridgeBasedDishesViewModel
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
-import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.name
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun OnFridgeBasedDishes(
     onRecipeClicked: (id: Int) -> Unit,
     goBack: () -> Unit,
-    viewModel: OnFridgeBasedDishesViewModel = scopedViewModel(ignoreDisposing = listOf(Screen.RecipeDetails::class))
+    viewModel: OnFridgeBasedDishesViewModel = hiltViewModel()
 ) {
 
     val state = viewModel.dishes.value
@@ -75,9 +72,7 @@ fun OnFridgeBasedDishes(
                     .padding(padding)
             ) {
                 if (state.recipeList?.isNotEmpty() == true) {
-                    LazyColumn(
-                        state = rememberForeverLazyListState(Screen.MatchedRecipes::class.name)
-                    ) {
+                    LazyColumn {
                         items(state.recipeList) { item ->
                             Row {
                                 Text(

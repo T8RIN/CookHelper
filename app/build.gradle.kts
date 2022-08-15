@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
     kotlin("kapt")
 }
@@ -83,7 +84,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:1.3.0-alpha02")
     implementation("androidx.compose.material:material-icons-extended:1.3.0-alpha02")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha01")
-    implementation("androidx.navigation:navigation-compose:2.5.1")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.compose.foundation:foundation:1.3.0-alpha02")
 
@@ -110,5 +110,10 @@ dependencies {
     implementation("androidx.room:room-runtime:2.4.3")
     implementation("androidx.room:room-ktx:2.4.3")
     kapt("androidx.room:room-compiler:2.4.3")
+
+    //Navigation
+    implementation("dev.olshevski.navigation:reimagined:1.1.1")
+    implementation("dev.olshevski.navigation:reimagined-hilt:1.1.1")
+
 
 }

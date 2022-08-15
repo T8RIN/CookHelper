@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +28,8 @@ class ChatViewModel @Inject constructor(
     private val sendMessagesUseCase: SendMessagesUseCase,
     private val getAllMessagesUseCase: GetAllMessagesUseCase,
     private val awaitNewMessagesUseCase: AwaitNewMessagesUseCase,
-    getUserUseCase: GetUserUseCase
+    getUserUseCase: GetUserUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private var chatId: String = ""
@@ -44,11 +46,11 @@ class ChatViewModel @Inject constructor(
         getUserUseCase().onEach {
             _user.value = it?.copy(id = 1)
         }.launchIn(viewModelScope)
+        chatId = savedStateHandle["chatId"]!!
+        awaitAndGetMessages(chatId)
     }
 
-    fun awaitAndGetMessages(chatId: String) {
-        if(this.chatId == chatId) return
-        this.chatId = chatId
+    private fun awaitAndGetMessages(chatId: String) {
         awaitNewMessagesUseCase(chatId = chatId, token = "qwe")
             .onEach { action ->
                 when (action) {

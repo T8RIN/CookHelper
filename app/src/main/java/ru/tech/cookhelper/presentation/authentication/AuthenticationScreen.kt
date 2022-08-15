@@ -18,18 +18,19 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.LockScreenOrientation
 import ru.tech.cookhelper.presentation.authentication.components.*
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
+
 
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
-fun AuthenticationScreen(viewModel: AuthViewModel = scopedViewModel()) {
+fun AuthenticationScreen(viewModel: AuthViewModel = hiltViewModel()) {
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
     val height = LocalConfiguration.current.screenHeightDp

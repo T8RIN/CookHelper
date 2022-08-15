@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.olshevski.navigation.reimagined.*
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
@@ -51,7 +53,6 @@ import ru.tech.cookhelper.presentation.recipes_list.RecipesList
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.utils.*
-import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.showSystemBars
@@ -68,6 +69,8 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val bottomNavigationController =
+        rememberNavController<Screen.Home>(startDestination = Screen.Home.Recipes)
 
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior by remember {
@@ -84,7 +87,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
         ProKitchenTheme {
             CompositionLocalProvider(
                 values = arrayOf(
-                    LocalScreenController provides viewModel.currentScreen,
+                    LocalScreenController provides viewModel.screenController,
                     LocalDialogController provides viewModel.currentDialog,
                     LocalSnackbarHost provides snackbarHostState,
                     LocalToastHost provides fancyToastValues
@@ -93,7 +96,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                 val screenController = LocalScreenController.current
                 val dialogController = LocalDialogController.current
 
-                val showTopBar by computedStateOf { screenController.currentScreen::class.name !in hideTopBarList }
+                val showTopBar by computedStateOf { screenController.currentDestination!!::class.name !in hideTopBarList }
 
                 BackHandler { dialogController.show(Dialog.Exit) }
 
@@ -104,7 +107,12 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ModalNavigationDrawer(
-                        drawerContent = { MainModalDrawerContent(viewModel, drawerState) },
+                        drawerContent = {
+                            MainModalDrawerContent(viewModel, drawerState, onClick = {
+                                viewModel.title = if (it is Screen.Home) Screen.Home.Recipes.title
+                                else it.title
+                            })
+                        },
                         drawerState = drawerState,
                         gesturesEnabled = showTopBar
                     ) {
@@ -121,7 +129,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                         }
                                     },
                                     actions = {
-                                        when (screenController.currentScreen) {
+                                        when (screenController.currentDestination) {
                                             is Screen.Settings -> {
                                                 IconButton(
                                                     onClick = { dialogController.show(Dialog.AboutApp) },
@@ -163,272 +171,253 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                 )
                             }
 
-                            AnimatedContent(
-                                targetState = screenController.currentScreen, modifier = Modifier
-                                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            AnimatedNavHost(
+                                controller = screenController,
+                                transitionSpec = ScaleCrossfadeTransitionSpec
                             ) { screen ->
-                                when (screen) {
-                                    is Screen.Home -> {
-                                        Scaffold(
-                                            bottomBar = {
-                                                Surface(
-                                                    color = TopAppBarDefaults.smallTopAppBarColors()
-                                                        .containerColor(100f).value
-                                                ) {
-                                                    NavigationBar(modifier = Modifier.navigationBarsPadding()) {
-                                                        val items = navBarList
+                                Box(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+                                    when (screen) {
+                                        is Screen.Home -> {
+                                            Scaffold(
+                                                bottomBar = {
+                                                    Surface(
+                                                        color = TopAppBarDefaults.smallTopAppBarColors()
+                                                            .containerColor(100f).value
+                                                    ) {
+                                                        NavigationBar(modifier = Modifier.navigationBarsPadding()) {
+                                                            val items = navBarList
 
-                                                        items.forEachIndexed { index, screen ->
+                                                            items.forEachIndexed { index, screen ->
 
-                                                            if (viewModel.navDestination == screen) {
-                                                                viewModel.selectedItem = index
+                                                                if (bottomNavigationController.currentDestination == screen) {
+                                                                    viewModel.selectedItem = index
+                                                                }
+
+                                                                NavigationBarItem(
+                                                                    icon = {
+                                                                        Icon(
+                                                                            screen iconWith (viewModel.selectedItem == index),
+                                                                            null
+                                                                        )
+                                                                    },
+                                                                    alwaysShowLabel = false,
+                                                                    label = {
+                                                                        Text(
+                                                                            screen.shortTitle.asString(
+                                                                                activity
+                                                                            )
+                                                                        )
+                                                                    },
+                                                                    selected = viewModel.selectedItem == index,
+                                                                    onClick = {
+                                                                        if (viewModel.selectedItem != index) {
+                                                                            viewModel.apply {
+                                                                                selectedItem = index
+                                                                                bottomNavigationController.navigate(
+                                                                                    screen
+                                                                                )
+                                                                                title = screen.title
+//                                                                                searchMode = false
+//                                                                                updateSearch("")
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                )
                                                             }
-
-                                                            NavigationBarItem(
+                                                        }
+                                                    }
+                                                },
+                                                floatingActionButton = {
+                                                    androidx.compose.animation.AnimatedVisibility(
+                                                        visible = viewModel.selectedItem == 2,
+                                                        enter = fadeIn() + scaleIn(),
+                                                        exit = fadeOut() + scaleOut()
+                                                    ) {
+                                                        Column(horizontalAlignment = Alignment.End) {
+                                                            SmallFloatingActionButton(
+                                                                onClick = {
+                                                                    if (viewModel.productsList.value.error.isNotBlank()) {
+                                                                        showSnackbar(
+                                                                            scope,
+                                                                            snackbarHostState,
+                                                                            viewModel.productsList.value.error,
+                                                                            "Яхшы"
+                                                                        ) {
+                                                                            if (it.clicked) viewModel.reload()
+                                                                        }
+                                                                    } else if (viewModel.productsList.value.list?.isNotEmpty() == true) {
+                                                                        dialogController.show(Dialog.PickProducts)
+                                                                    } else {
+                                                                        showSnackbar(
+                                                                            scope,
+                                                                            snackbarHostState,
+                                                                            "Я не знаю, че не так"
+                                                                        )
+                                                                    }
+                                                                },
+                                                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                                                            ) {
+                                                                Icon(Icons.Rounded.Add, null)
+                                                            }
+                                                            Spacer(Modifier.size(8.dp))
+                                                            ExtendedFloatingActionButton(
+                                                                onClick = {
+                                                                    if (viewModel.productsList.value.list != null) screenController.navigate(
+                                                                        Screen.MatchedRecipes()
+                                                                    )
+                                                                },
+                                                                text = {
+                                                                    Text(stringResource(R.string.match))
+                                                                },
                                                                 icon = {
                                                                     Icon(
-                                                                        screen iconWith (viewModel.selectedItem == index),
+                                                                        Icons.Outlined.FindReplace,
                                                                         null
                                                                     )
-                                                                },
-                                                                alwaysShowLabel = false,
-                                                                label = {
-                                                                    Text(
-                                                                        screen.shortTitle.asString(
-                                                                            activity
-                                                                        )
-                                                                    )
-                                                                },
-                                                                selected = viewModel.selectedItem == index,
-                                                                onClick = {
-                                                                    if (viewModel.selectedItem != index) {
-                                                                        viewModel.apply {
-                                                                            title =
-                                                                                UIText.StringResource(
-                                                                                    screen.title
-                                                                                )
-                                                                            selectedItem = index
-                                                                            navDestination = screen
-                                                                            searchMode = false
-                                                                            updateSearch("")
-                                                                        }
-                                                                        clearState(all = true)
-                                                                    }
                                                                 }
                                                             )
                                                         }
                                                     }
-                                                }
-                                            },
-                                            floatingActionButton = {
-                                                AnimatedVisibility(
-                                                    visible = viewModel.selectedItem == 2,
-                                                    enter = fadeIn() + scaleIn(),
-                                                    exit = fadeOut() + scaleOut()
-                                                ) {
-                                                    Column(horizontalAlignment = Alignment.End) {
-                                                        SmallFloatingActionButton(
-                                                            onClick = {
-                                                                if (viewModel.productsList.value.error.isNotBlank()) {
-                                                                    showSnackbar(
-                                                                        scope,
-                                                                        snackbarHostState,
-                                                                        viewModel.productsList.value.error,
-                                                                        "Яхшы"
-                                                                    ) {
-                                                                        if (it.clicked) viewModel.reload()
+                                                },
+                                                snackbarHost = { SnackbarHost(snackbarHostState) },
+                                            ) { contentPadding ->
+                                                Box(Modifier.padding(contentPadding)) {
+                                                    AnimatedNavHost(
+                                                        controller = bottomNavigationController,
+                                                        transitionSpec = ScaleCrossfadeTransitionSpec
+                                                    ) { bottomNavScreen ->
+                                                        when (bottomNavScreen) {
+                                                            is Screen.Home.Recipes -> {
+                                                                RecipesList(
+                                                                    viewModel.searchString,
+                                                                    onRecipeClick = {
+                                                                        screenController.navigate(
+                                                                            Screen.RecipeDetails(it)
+                                                                        )
                                                                     }
-                                                                } else if (viewModel.productsList.value.list?.isNotEmpty() == true) {
-                                                                    dialogController.show(Dialog.PickProducts)
-                                                                } else {
-                                                                    showSnackbar(
-                                                                        scope,
-                                                                        snackbarHostState,
-                                                                        "Я не знаю, че не так"
-                                                                    )
-                                                                }
-                                                            },
-                                                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                                                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                                                        ) {
-                                                            Icon(Icons.Rounded.Add, null)
+                                                                )
+                                                            }
+                                                            is Screen.Home.Fridge -> {
+                                                                FridgeScreen()
+                                                            }
+                                                            is Screen.Home.Forum -> {
+                                                                Placeholder(
+                                                                    bottomNavScreen.baseIcon,
+                                                                    bottomNavScreen.title.asString()
+                                                                )
+                                                            }
+                                                            else -> {}
                                                         }
-                                                        Spacer(Modifier.size(8.dp))
-                                                        ExtendedFloatingActionButton(
-                                                            onClick = {
-                                                                if (viewModel.productsList.value.list != null) screenController.navigate(
-                                                                    Screen.MatchedRecipes(Screen.Home)
-                                                                )
-                                                            },
-                                                            text = {
-                                                                Text(stringResource(R.string.match))
-                                                            },
-                                                            icon = {
-                                                                Icon(
-                                                                    Icons.Outlined.FindReplace,
-                                                                    null
-                                                                )
-                                                            }
-                                                        )
                                                     }
-                                                }
-                                            },
-                                            snackbarHost = { SnackbarHost(snackbarHostState) },
-                                        ) { contentPadding ->
-
-                                            AnimatedContent(
-                                                targetState = viewModel.navDestination,
-                                                modifier = Modifier.padding(contentPadding)
-                                            ) { deepScreen ->
-                                                when (deepScreen) {
-                                                    is Screen.Recipes -> {
-                                                        RecipesList(
-                                                            viewModel.searchString,
-                                                            onRecipeClick = {
-                                                                screenController.navigate(
-                                                                    Screen.RecipeDetails(
-                                                                        it,
-                                                                        screen
-                                                                    )
-                                                                )
-                                                            }
-                                                        )
-                                                    }
-                                                    is Screen.Fridge -> {
-                                                        FridgeScreen()
-                                                    }
-                                                    is Screen.Forum -> {
-                                                        Placeholder(
-                                                            deepScreen.baseIcon,
-                                                            stringResource(deepScreen.title)
-                                                        )
-                                                    }
-                                                    else -> {}
                                                 }
                                             }
-
                                         }
-                                    }
-                                    is Screen.Favourites -> {
-                                        FavouriteListScreen(
-                                            onRecipeClicked = {
-                                                screenController.navigate(
-                                                    Screen.RecipeDetails(
-                                                        it,
-                                                        screen
+                                        is Screen.Favourites -> {
+                                            FavouriteListScreen(
+                                                onRecipeClicked = {
+                                                    screenController.navigate(
+                                                        Screen.RecipeDetails(it)
                                                     )
-                                                )
+                                                }
+                                            )
+                                        }
+                                        is Screen.RecipeDetails -> {
+                                            val id = screen.id
+                                            val back: () -> Unit =
+                                                { screenController.pop() }
+                                            BackHandler { back() }
+                                            DishDetailsScreen(id, goBack = { back() })
+                                        }
+                                        is Screen.MatchedRecipes -> {
+                                            val back: () -> Unit = {
+                                                screenController.pop()
                                             }
-                                        )
-                                    }
-                                    is Screen.RecipeDetails -> {
-                                        val id = screen.id
-                                        val back: () -> Unit =
-                                            { screenController.navigate(screen.previousScreen) }
-                                        BackHandler { back() }
-                                        DishDetailsScreen(id, goBack = { back() })
-                                    }
-                                    is Screen.MatchedRecipes -> {
-                                        val back: () -> Unit = {
-                                            screenController.navigate(screen.previousScreen)
-                                            clearState(Screen.MatchedRecipes::class.name)
+                                            BackHandler { back() }
+                                            OnFridgeBasedDishes(
+                                                onRecipeClicked = {
+                                                    screenController.navigate(
+                                                        Screen.RecipeDetails(it)
+                                                    )
+                                                },
+                                                goBack = { back() }
+                                            )
                                         }
-                                        BackHandler { back() }
-                                        OnFridgeBasedDishes(
-                                            onRecipeClicked = {
-                                                screenController.navigate(
-                                                    Screen.RecipeDetails(it, screen)
-                                                )
-                                            },
-                                            goBack = { back() }
-                                        )
-                                    }
-                                    is Screen.FullscreenImagePager -> {
-                                        val back: () -> Unit = {
-                                            screenController.navigate(screen.previousScreen)
-                                            activity.showSystemBars()
-                                        }
-                                        BackHandler { back() }
+                                        is Screen.FullscreenImagePager -> {
+                                            val back: () -> Unit = {
+                                                screenController.pop()
+                                                activity.showSystemBars()
+                                            }
+                                            BackHandler { back() }
 
-                                        FullScreenPagerScreen(
-                                            images = screen.images,
-                                            initialId = screen.id,
-                                            goBack = { back() }
-                                        )
-                                    }
-                                    is Screen.Settings -> {
-                                        SettingsScreen(
-                                            settingsState = viewModel.settingsState.value,
-                                            onAction = { id, option ->
-                                                viewModel.insertSetting(
-                                                    id,
-                                                    option
-                                                )
-                                            }
-                                        )
-                                    }
-                                    is Screen.Profile -> {
-                                        ProfileScreen(updateTitle = { newTitle ->
-                                            viewModel.title = UIText.DynamicString(newTitle)
-                                        })
-                                    }
-                                    is Screen.AllImages -> {
-                                        val back: () -> Unit = {
-                                            screenController.navigate(screen.previousScreen)
+                                            FullScreenPagerScreen(
+                                                images = screen.images,
+                                                initialId = screen.id,
+                                                goBack = { back() }
+                                            )
                                         }
-                                        BackHandler { back() }
-
-                                        AllImagesScreen(
-                                            images = screen.images,
-                                            canAddImages = screen.canAddImages,
-                                            goBack = { back() },
-                                            onAddImage = {}
-                                        )
-                                    }
-                                    is Screen.BlockList -> Placeholder(
-                                        screen.baseIcon,
-                                        stringResource(screen.title)
-                                    )
-                                    is Screen.Cart -> Placeholder(
-                                        screen.baseIcon,
-                                        stringResource(screen.title)
-                                    )
-                                    is Screen.Forum -> Placeholder(
-                                        screen.baseIcon,
-                                        stringResource(screen.title)
-                                    )
-                                    is Screen.Fridge -> Placeholder(
-                                        screen.baseIcon,
-                                        stringResource(screen.title)
-                                    )
-                                    is Screen.ChatList -> {
-                                        ChatListScreen()
-                                    }
-                                    is Screen.Chat -> {
-                                        ChatScreen(
-                                            chatId = screen.chatId,
-                                            onBack = { screenController.navigate(screen.previousScreen) }
-                                        )
-                                    }
-                                    is Screen.Recipes -> Placeholder(
-                                        screen.baseIcon,
-                                        stringResource(screen.title)
-                                    )
-                                    is Screen.Authentication -> AuthenticationScreen()
-                                    is Screen.PostCreation -> {
-                                        PostCreationScreen(
-                                            onBack = {
-                                                screenController.navigate(screen.previousScreen)
-                                            },
-                                            initialImageUri = screen.imageUri
-                                        )
-                                    }
-                                    is Screen.RecipePostCreation -> {
-                                        RecipePostCreationScreen(
-                                            onBack = {
-                                                screenController.navigate(screen.previousScreen)
+                                        is Screen.Settings -> {
+                                            SettingsScreen(
+                                                settingsState = viewModel.settingsState.value,
+                                                onAction = { id, option ->
+                                                    viewModel.insertSetting(
+                                                        id,
+                                                        option
+                                                    )
+                                                }
+                                            )
+                                        }
+                                        is Screen.Profile -> {
+                                            ProfileScreen(updateTitle = { newTitle ->
+                                                viewModel.title = UIText.DynamicString(newTitle)
+                                            })
+                                        }
+                                        is Screen.AllImages -> {
+                                            val back: () -> Unit = {
+                                                screenController.pop()
                                             }
+                                            BackHandler { back() }
+
+                                            AllImagesScreen(
+                                                images = screen.images,
+                                                canAddImages = screen.canAddImages,
+                                                goBack = { back() },
+                                                onAddImage = {}
+                                            )
+                                        }
+                                        is Screen.BlockList -> Placeholder(
+                                            screen.baseIcon,
+                                            screen.title.asString()
                                         )
+                                        is Screen.Cart -> Placeholder(
+                                            screen.baseIcon,
+                                            screen.title.asString()
+                                        )
+                                        is Screen.ChatList -> {
+                                            ChatListScreen()
+                                        }
+                                        is Screen.Chat -> {
+                                            ChatScreen(
+                                                chatId = screen.chatId,
+                                                onBack = { screenController.pop() }
+                                            )
+                                        }
+                                        is Screen.Authentication -> AuthenticationScreen()
+                                        is Screen.PostCreation -> {
+                                            PostCreationScreen(
+                                                onBack = {
+                                                    screenController.pop()
+                                                },
+                                                initialImageUri = screen.imageUri
+                                            )
+                                        }
+                                        is Screen.RecipePostCreation -> {
+                                            RecipePostCreationScreen(
+                                                onBack = {
+                                                    screenController.pop()
+                                                }
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -567,4 +556,30 @@ private fun Modifier.navigationBarsLandscapePadding(): Modifier = composed {
     if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
         navigationBarsPadding()
     } else this
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private val ScaleCrossfadeTransitionSpec = object : AnimatedNavHostTransitionSpec<Any?> {
+
+    private fun anim() =
+        fadeIn() + scaleIn(initialScale = 0.85f) with fadeOut(tween(durationMillis = 50)) + scaleOut(
+            targetScale = 0.85f
+        )
+
+    override fun AnimatedNavHostTransitionScope.getContentTransform(
+        action: NavAction,
+        from: Any?,
+        to: Any?
+    ): ContentTransform = anim()
+
+    override fun AnimatedNavHostTransitionScope.toEmptyBackstack(
+        action: NavAction,
+        from: Any?
+    ): ContentTransform = anim()
+
+    override fun AnimatedNavHostTransitionScope.fromEmptyBackstack(
+        action: NavAction,
+        to: Any?
+    ): ContentTransform = anim()
+
 }

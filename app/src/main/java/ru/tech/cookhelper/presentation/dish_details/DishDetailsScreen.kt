@@ -10,14 +10,19 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import com.google.accompanist.flowlayout.FlowRow
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
@@ -26,19 +31,16 @@ import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.dish_details.components.InfoItem
 import ru.tech.cookhelper.presentation.dish_details.viewModel.DishDetailsViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ShareUtils.shareWith
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun DishDetailsScreen(
     id: Int,
     goBack: () -> Unit,
-    viewModel: DishDetailsViewModel = scopedViewModel()
+    viewModel: DishDetailsViewModel = hiltViewModel(
+        defaultArguments = bundleOf("id" to id)
+    )
 ) {
-
-    LaunchedEffect(Unit) {
-        viewModel.load(id)
-    }
 
     val state = viewModel.dishState.value
 

@@ -11,14 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.fridge_list.viewModel.FridgeViewModel
-import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 
 @Composable
-fun FridgeScreen(viewModel: FridgeViewModel = scopedViewModel(ignoreDisposing = listOf(Screen.MatchedRecipes::class))) {
+fun FridgeScreen(viewModel: FridgeViewModel = hiltViewModel()) {
 
     val state = viewModel.listState.value
 
@@ -27,7 +25,6 @@ fun FridgeScreen(viewModel: FridgeViewModel = scopedViewModel(ignoreDisposing = 
         if (state.products != null) {
             LazyColumn(
                 contentPadding = PaddingValues(bottom = 200.dp, top = 10.dp),
-                state = rememberForeverLazyListState(key = "fridge")
             ) {
                 items(state.products) { item ->
                     Row(

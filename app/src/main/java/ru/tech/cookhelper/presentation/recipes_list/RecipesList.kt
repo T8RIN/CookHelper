@@ -12,24 +12,22 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeItem
 import ru.tech.cookhelper.presentation.recipes_list.viewModel.RecipeListViewModel
-import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.clicked
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
-import ru.tech.cookhelper.presentation.ui.utils.scope.scopedViewModel
 import ru.tech.cookhelper.presentation.ui.utils.showSnackbar
 
 @Composable
 fun RecipesList(
     searchString: MutableState<String>,
     onRecipeClick: (id: Int) -> Unit,
-    viewModel: RecipeListViewModel = scopedViewModel(ignoreDisposing = listOf(Screen.RecipeDetails::class))
+    viewModel: RecipeListViewModel = hiltViewModel()
 ) {
     val state = viewModel.recipeState.value
 
@@ -50,7 +48,7 @@ fun RecipesList(
                     )
                 }
             }
-            LazyColumn(state = rememberForeverLazyListState(key = "recipes")) {
+            LazyColumn {
                 items(data) { item ->
                     RecipeItem(recipe = item, onClick = { onRecipeClick(it) })
                 }

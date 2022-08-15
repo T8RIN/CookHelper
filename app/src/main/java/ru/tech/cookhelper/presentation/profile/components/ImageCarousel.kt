@@ -19,10 +19,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.constants.Constants.IMAGE_CAROUSEL_KEY
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.ui.utils.rememberForeverLazyListState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +52,6 @@ fun ImageCarousel(
         }
         LazyRow(
             contentPadding = PaddingValues(horizontal = 15.dp),
-            state = rememberForeverLazyListState(key = IMAGE_CAROUSEL_KEY)
         ) {
             items(data) { item ->
                 OutlinedCard(
