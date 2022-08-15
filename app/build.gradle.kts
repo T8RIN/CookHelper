@@ -16,7 +16,7 @@ android {
         minSdk = 21
         targetSdk = 32
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1-still_in_progress"
     }
 
     buildTypes {
@@ -41,7 +41,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.2.0-alpha08"
     }
     packagingOptions {
         resources {
@@ -54,12 +54,10 @@ dependencies {
 
     //Android Essentials
     implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("com.google.android.material:material:1.7.0-alpha03")
+    implementation("androidx.appcompat:appcompat:1.5.0")
+    implementation("com.google.android.material:material:1.7.0-beta01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.window:window:1.0.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
@@ -79,13 +77,14 @@ dependencies {
 
     //Compose
     implementation("androidx.activity:activity-compose:1.5.1")
-    implementation("androidx.compose.ui:ui:1.3.0-alpha02")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha15")
-    implementation("androidx.compose.material:material-icons-core:1.3.0-alpha02")
-    implementation("androidx.compose.material:material-icons-extended:1.3.0-alpha02")
+    implementation("androidx.compose.ui:ui:1.3.0-alpha03")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha16")
+    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-alpha16")
+    implementation("androidx.compose.material:material-icons-core:1.3.0-alpha03")
+    implementation("androidx.compose.material:material-icons-extended:1.3.0-alpha03")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha01")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.compose.foundation:foundation:1.3.0-alpha02")
+    implementation("androidx.compose.foundation:foundation:1.3.0-alpha03")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.0-alpha")

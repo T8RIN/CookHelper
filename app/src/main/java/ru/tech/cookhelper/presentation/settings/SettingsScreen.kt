@@ -131,7 +131,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                             onClick = { expandedNightMode = !expandedNightMode }
                         }
                         COLOR_SCHEME -> {
-                            val rotation: Float by animateFloatAsState(if (expandedColorScheme) 180f else 0f)
+                            val rotation: Float by animateFloatAsState(if (expandedColorScheme && !settingsState.dynamicColors) 180f else 0f)
                             IconButton(
                                 onClick = { expandedColorScheme = !expandedColorScheme },
                                 modifier = Modifier.rotate(rotation),
