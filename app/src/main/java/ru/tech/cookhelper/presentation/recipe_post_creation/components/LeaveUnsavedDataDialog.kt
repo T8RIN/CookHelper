@@ -1,5 +1,7 @@
 package ru.tech.cookhelper.presentation.recipe_post_creation.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -10,7 +12,6 @@ import androidx.compose.ui.text.style.TextAlign
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentDialog
 
 @Composable
 fun LeaveUnsavedDataDialog(title: Int, message: Int, onLeave: () -> Unit) {
@@ -20,7 +21,7 @@ fun LeaveUnsavedDataDialog(title: Int, message: Int, onLeave: () -> Unit) {
         title = { Text(stringResource(title), textAlign = TextAlign.Center) },
         text = { Text(stringResource(message), textAlign = TextAlign.Center) },
         onDismissRequest = { dialogController.close() },
-        icon = { Icon(dialogController.currentDialog.icon, null) },
+        icon = { Icon(Icons.Outlined.Save, null) },
         confirmButton = {
             TextButton(onClick = { dialogController.close() }) {
                 Text(stringResource(R.string.cancel))

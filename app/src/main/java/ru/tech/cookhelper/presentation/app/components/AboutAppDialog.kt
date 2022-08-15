@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.HelpOutline
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -20,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentDialog
 
 
 @Composable
@@ -37,18 +38,18 @@ fun AboutAppDialog() {
                 Plank(
                     url = "https://github.com/T8RIN",
                     image = "https://avatars.githubusercontent.com/u/52178347?v=4",
-                    text = "T8RIN - mobile app developer"
+                    text = stringResource(R.string.t8rin)
                 )
                 Spacer(Modifier.height(20.dp))
                 Plank(
                     url = "https://github.com/Tannec",
                     image = "https://avatars.githubusercontent.com/u/74925839?v=4",
-                    text = "Tannec - website and api developer"
+                    text = stringResource(R.string.tannec)
                 )
             }
         },
         onDismissRequest = { dialogController.close() },
-        icon = { Icon(dialogController.currentDialog.icon, null) },
+        icon = { Icon(Icons.Rounded.HelpOutline, null) },
         confirmButton = {
             TextButton(onClick = { dialogController.close() }) {
                 Text(stringResource(R.string.okay))

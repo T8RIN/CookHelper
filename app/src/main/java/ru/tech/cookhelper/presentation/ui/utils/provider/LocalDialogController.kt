@@ -1,19 +1,17 @@
 package ru.tech.cookhelper.presentation.ui.utils.provider
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.mutableStateOf
+import dev.olshevski.navigation.reimagined.NavController
+import dev.olshevski.navigation.reimagined.navController
+import dev.olshevski.navigation.reimagined.navigate
+import dev.olshevski.navigation.reimagined.pop
 import ru.tech.cookhelper.presentation.ui.utils.Dialog
 
-val LocalDialogController = compositionLocalOf { mutableStateOf<Dialog>(Dialog.None) }
+val LocalDialogController = compositionLocalOf { navController<Dialog>(Dialog.None) }
 
-fun MutableState<Dialog>.show(dialog: Dialog) {
-    this.value = dialog
-}
+fun NavController<Dialog>.show(dialog: Dialog) = navigate(dialog)
 
-fun MutableState<Dialog>.close() {
-    this.value = Dialog.None
-}
+fun NavController<Dialog>.close() = pop()
 
-
-val MutableState<Dialog>.currentDialog: Dialog get() = this.value
+val NavController<Dialog>.currentDialog: Dialog
+    get() = currentDestination ?: Dialog.None

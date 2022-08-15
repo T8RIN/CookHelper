@@ -1,5 +1,7 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -10,7 +12,6 @@ import androidx.compose.ui.text.style.TextAlign
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentDialog
 
 @Composable
 fun ExitDialog(onExit: () -> Unit) {
@@ -25,7 +26,7 @@ fun ExitDialog(onExit: () -> Unit) {
             )
         },
         onDismissRequest = { dialogController.close() },
-        icon = { Icon(dialogController.currentDialog.icon, null) },
+        icon = { Icon(Icons.Outlined.ExitToApp, null) },
         confirmButton = {
             TextButton(onClick = { dialogController.close() }) {
                 Text(stringResource(R.string.stay))

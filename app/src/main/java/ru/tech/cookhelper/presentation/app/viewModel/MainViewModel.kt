@@ -9,52 +9,28 @@ import dev.olshevski.navigation.reimagined.navigate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.core.Action
-import ru.tech.cookhelper.domain.model.Product
-import ru.tech.cookhelper.domain.use_case.get_fridge_list.GetFridgeListUseCase
-import ru.tech.cookhelper.domain.use_case.get_prod_list.GetProductsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.insert_setting.InsertSettingUseCase
 import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
-import ru.tech.cookhelper.domain.use_case.update_fridge.UpdateFridgeUseCase
 import ru.tech.cookhelper.presentation.app.components.*
-import ru.tech.cookhelper.presentation.ui.utils.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.UIText
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getProductsListUseCase: GetProductsListUseCase,
-    private val getFridgeListUseCase: GetFridgeListUseCase,
-    private val updateFridgeUseCase: UpdateFridgeUseCase,
     getSettingsListUseCase: GetSettingsListUseCase,
     getUserUseCase: GetUserUseCase,
     private val insertSettingUseCase: InsertSettingUseCase,
     private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
 
-    var searchMode by mutableStateOf(false)
-
-    val currentDialog = mutableStateOf<Dialog>(Dialog.None)
-
     val screenController = navController<Screen>(
         startDestination = Screen.Home.Recipes
     )
 
-    var selectedItem by mutableStateOf(0)
-
-    var title by mutableStateOf<UIText>(Screen.Home.Recipes.title)
-
-    val searchString = mutableStateOf("")
-
-    private val default: ArrayList<Product> = arrayListOf()
-    private val _productsList = mutableStateOf(ProductsListState())
-    val productsList: State<ProductsListState> = _productsList
-
-    val tempList = mutableStateListOf<Int>()
+    var title by mutableStateOf(Screen.Home.Recipes.title)
 
     private val _settingsState: MutableState<SettingsState> = mutableStateOf(SettingsState())
     val settingsState: State<SettingsState> = _settingsState
@@ -63,7 +39,6 @@ class MainViewModel @Inject constructor(
     val userState: State<UserState> = _userState
 
     init {
-        fetchList()
         getSettingsListUseCase().onEach { list ->
             var locState = SettingsState()
             list.forEach { setting ->
@@ -100,52 +75,6 @@ class MainViewModel @Inject constructor(
                 _userState.value = UserState(it, it.token)
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun reload() {
-        fetchList()
-    }
-
-    private fun fetchList() {
-        getProductsListUseCase().onEach { result ->
-            when (result) {
-                is Action.Success -> {
-                    _productsList.value =
-                        ProductsListState(list = result.data?.sortedBy { it.name })
-
-                    default.clear()
-                    result.data?.let { default.addAll(it) }
-                }
-                is Action.Error -> {
-                    _productsList.value = ProductsListState(
-                        error = result.message.toString()
-                    )
-                }
-                is Action.Loading -> {
-                    _productsList.value = ProductsListState(isLoading = true)
-                }
-                is Action.Empty -> {}
-            }
-        }.launchIn(viewModelScope)
-        getFridgeListUseCase().onEach { result ->
-            if (result is Action.Success && default.isNotEmpty() && result.data != null) {
-                _productsList.value =
-                    ProductsListState(list = (default - result.data).sortedBy { it.name })
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    fun processToFridge() {
-        viewModelScope.launch {
-            tempList.forEach {
-                updateFridgeUseCase(it, false)
-            }
-            tempList.clear()
-        }
-    }
-
-    fun updateSearch(newSearch: String) {
-        searchString.value = newSearch
     }
 
     fun insertSetting(id: Int, option: String) {

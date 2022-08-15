@@ -52,7 +52,6 @@ fun ChatScreen(
         defaultArguments = bundleOf("chatId" to chatId)
     ), onBack: () -> Unit
 ) {
-
     val chatState = viewModel.chatState.value
     var value by remember { mutableStateOf("") }
     val state = rememberLazyListState()

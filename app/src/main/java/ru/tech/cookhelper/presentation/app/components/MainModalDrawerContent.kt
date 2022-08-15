@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,11 +9,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.popAll
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.drawerList
@@ -22,17 +27,36 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.isCurrentDestination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainModalDrawerContent(
-    viewModel: MainViewModel,
+    userState: UserState,
     drawerState: DrawerState,
     onClick: (screen: Screen) -> Unit
 ) {
     val screenController = LocalScreenController.current
     val scope = rememberCoroutineScope()
 
-    LazyColumn(contentPadding = WindowInsets.systemBars.asPaddingValues()) {
+    LazyColumn(
+        contentPadding = WindowInsets.systemBars.asPaddingValues().addBottomPadding(12.dp),
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(
+                min(
+                    DrawerDefaults.MaximumDrawerWidth,
+                    LocalConfiguration.current.screenWidthDp.dp * 0.8f
+                )
+            )
+            .clip(
+                RoundedCornerShape(
+                    topEnd = 24.dp,
+                    topStart = 0.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 24.dp
+                )
+            )
+            .background(DrawerDefaults.containerColor)
+    ) {
         item {
             MainModalDrawerHeader(
-                userState = viewModel.userState.value,
+                userState = userState,
                 onClick = {
                     screenController.navigate(Screen.Profile)
                     scope.launch { drawerState.close() }
@@ -65,9 +89,19 @@ fun MainModalDrawerContent(
             )
             if (item is Screen.Home || item is Screen.BlockList) {
                 Spacer(Modifier.size(10.dp))
-                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                 Spacer(Modifier.size(10.dp))
             }
         }
     }
+}
+
+@Composable
+private fun PaddingValues.addBottomPadding(dp: Dp): PaddingValues {
+    return PaddingValues(
+        start = calculateStartPadding(LocalLayoutDirection.current),
+        top = calculateTopPadding(),
+        end = calculateEndPadding(LocalLayoutDirection.current),
+        bottom = calculateBottomPadding() + dp
+    )
 }

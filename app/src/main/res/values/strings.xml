@@ -125,5 +125,7 @@
     <string name="waiting_for_connection">Ожидание подключения</string>
     <string name="new_chat">Новый чат</string>
     <string name="no_existing_chats">У вас нет активных чатов, создайте новый прямо сейчас!</string>
+    <string name="t8rin">T8RIN - мобильный разработчик</string>
+    <string name="tannec">Tannec - бэкэнд разработчик</string>
 
 </resources>

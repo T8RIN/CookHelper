@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.get_fridge_list.GetFridgeListUseCase
 import ru.tech.cookhelper.domain.use_case.update_fridge.UpdateFridgeUseCase
@@ -20,36 +19,27 @@ class FridgeViewModel @Inject constructor(
     private val updateFridgeUseCase: UpdateFridgeUseCase
 ) : ViewModel() {
 
-    private val _listState = mutableStateOf(FridgeListState())
-    val listState: State<FridgeListState> = _listState
+    private val _fridgeListState = mutableStateOf(FridgeListState())
+    val fridgeListState: State<FridgeListState> = _fridgeListState
 
     init {
-        getFridgeList()
-    }
-
-    private fun getFridgeList() {
         getFridgeListUseCase().onEach { result ->
             when (result) {
                 is Action.Success -> {
-                    _listState.value = FridgeListState(products = result.data?.sortedBy { it.name })
+                    _fridgeListState.value =
+                        FridgeListState(products = result.data?.sortedBy { it.name })
                 }
                 is Action.Error -> {
-                    _listState.value = FridgeListState(
+                    _fridgeListState.value = FridgeListState(
                         error = result.message ?: "Нәрсәдер начар булып чыккан"
                     )
                 }
                 is Action.Loading -> {
-                    _listState.value = FridgeListState(isLoading = true)
+                    _fridgeListState.value = FridgeListState(isLoading = true)
                 }
                 is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun remove(id: Int) {
-        viewModelScope.launch {
-            updateFridgeUseCase(id, true)
-        }
     }
 
 }

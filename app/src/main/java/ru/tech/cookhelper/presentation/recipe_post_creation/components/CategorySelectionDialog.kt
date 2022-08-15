@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -19,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentDialog
 
 @Composable
 fun CategorySelectionDialog(
@@ -71,7 +71,7 @@ fun CategorySelectionDialog(
             }
         },
         onDismissRequest = { dialogController.close() },
-        icon = { Icon(dialogController.currentDialog.icon, null) },
+        icon = { Icon(Icons.Outlined.Category, null) },
         confirmButton = {
             TextButton(onClick = { dialogController.close() }) {
                 Text(stringResource(R.string.cancel))
