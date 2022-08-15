@@ -16,7 +16,7 @@ android {
         minSdk = 21
         targetSdk = 33
         versionCode = 1
-        versionName = "0.1-still_in_progress"
+        versionName = "0.1"
     }
 
     buildTypes {
@@ -41,7 +41,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0-alpha08"
+        kotlinCompilerExtensionVersion = "1.2.0"
     }
     packagingOptions {
         resources {
