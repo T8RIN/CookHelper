@@ -34,6 +34,7 @@ import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.text.SimpleDateFormat
@@ -85,9 +86,7 @@ fun ProfileScreen(
     }
 
     LazyColumn(
-        contentPadding = PaddingValues(
-            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 80.dp
-        )
+        contentPadding = WindowInsets.navigationBars.asPaddingValues().addPadding(bottom = 80.dp)
     ) {
         item {
             Column(Modifier.padding(horizontal = 15.dp)) {

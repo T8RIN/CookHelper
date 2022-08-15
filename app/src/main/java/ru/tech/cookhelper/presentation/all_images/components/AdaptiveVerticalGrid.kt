@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.ui.utils.addPadding
 
 @Composable
 fun AdaptiveVerticalGrid(images: List<Image>, onImageClick: (id: String) -> Unit) {
@@ -22,9 +23,8 @@ fun AdaptiveVerticalGrid(images: List<Image>, onImageClick: (id: String) -> Unit
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(count),
-        contentPadding = PaddingValues(
-            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 80.dp,
-            start = 2.dp, end = 2.dp, top = 4.dp
+        contentPadding = WindowInsets.navigationBars.asPaddingValues().addPadding(
+            start = 2.dp, end = 2.dp, top = 4.dp, bottom = 80.dp
         ),
         modifier = Modifier.fillMaxSize()
     ) {

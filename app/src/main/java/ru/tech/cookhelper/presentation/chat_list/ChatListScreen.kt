@@ -30,6 +30,7 @@ import ru.tech.cookhelper.presentation.chat_list.viewModel.ChatListViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
@@ -56,10 +57,8 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     state = scrollState,
-                    contentPadding = PaddingValues(
-                        bottom = WindowInsets.navigationBars.asPaddingValues()
-                            .calculateBottomPadding() + 80.dp
-                    )
+                    contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                        .addPadding(bottom = 80.dp)
                 ) {
                     itemsIndexed(state.chatList) { index, chat ->
                         ChatListItem(

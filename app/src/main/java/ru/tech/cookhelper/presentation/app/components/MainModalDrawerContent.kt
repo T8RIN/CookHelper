@@ -11,8 +11,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import dev.olshevski.navigation.reimagined.navigate
@@ -20,6 +18,7 @@ import dev.olshevski.navigation.reimagined.popAll
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.drawerList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.isCurrentDestination
@@ -35,7 +34,7 @@ fun MainModalDrawerContent(
     val scope = rememberCoroutineScope()
 
     LazyColumn(
-        contentPadding = WindowInsets.systemBars.asPaddingValues().addBottomPadding(12.dp),
+        contentPadding = WindowInsets.systemBars.asPaddingValues().addPadding(bottom = 12.dp),
         modifier = Modifier
             .fillMaxHeight()
             .width(
@@ -94,14 +93,4 @@ fun MainModalDrawerContent(
             }
         }
     }
-}
-
-@Composable
-private fun PaddingValues.addBottomPadding(dp: Dp): PaddingValues {
-    return PaddingValues(
-        start = calculateStartPadding(LocalLayoutDirection.current),
-        top = calculateTopPadding(),
-        end = calculateEndPadding(LocalLayoutDirection.current),
-        bottom = calculateBottomPadding() + dp
-    )
 }

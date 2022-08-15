@@ -32,6 +32,7 @@ import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.dish_details.components.InfoItem
 import ru.tech.cookhelper.presentation.dish_details.viewModel.DishDetailsViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ShareUtils.shareWith
+import ru.tech.cookhelper.presentation.ui.utils.addPadding
 
 @ExperimentalMaterial3Api
 @Composable
@@ -90,12 +91,8 @@ fun DishDetailsScreen(
                 if (state.dish != null) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(
-                            top = WindowInsets.statusBars.asPaddingValues()
-                                .calculateTopPadding(),
-                            bottom = WindowInsets.navigationBars.asPaddingValues()
-                                .calculateBottomPadding() + 100.dp
-                        )
+                        contentPadding = WindowInsets.statusBars.asPaddingValues()
+                            .addPadding(bottom = 100.dp)
                     ) {
                         item {
                             Column(modifier = Modifier.padding(horizontal = 10.dp)) {
