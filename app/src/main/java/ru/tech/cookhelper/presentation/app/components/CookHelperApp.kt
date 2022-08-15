@@ -213,9 +213,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                                                         if (viewModel.selectedItem != index) {
                                                                             viewModel.apply {
                                                                                 selectedItem = index
-                                                                                bottomNavigationController.navigate(
-                                                                                    screen
-                                                                                )
+                                                                                bottomNavigationController.apply {
+                                                                                    popAll()
+                                                                                    navigate(screen)
+                                                                                }
                                                                                 title = screen.title
 //                                                                                searchMode = false
 //                                                                                updateSearch("")

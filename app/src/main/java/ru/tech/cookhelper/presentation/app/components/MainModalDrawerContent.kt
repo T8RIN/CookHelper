@@ -56,9 +56,9 @@ fun MainModalDrawerContent(
                 selected = selected,
                 onClick = {
                     onClick(item)
-                    screenController.apply{
-                        navigate(item)
+                    screenController.apply {
                         popAll()
+                        navigate(item)
                     }
                     scope.launch { drawerState.close() }
                 }
