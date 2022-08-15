@@ -1,4 +1,4 @@
-<h1 align="center">CookHelper [🚧Work in Progress🚧]</h1>
+<h1 align="center">CookHelper</br>[🚧Work in Progress🚧]</h1>
 
 <p align="center">
   <img alt="API" src="https://img.shields.io/badge/Api%2021+-50f270?logo=android&logoColor=black&style=for-the-badge"/></a>
@@ -51,8 +51,8 @@ Go to the [Releases](https://github.com/t8rin/CookHelper/releases) to download t
   - MVVM
 
 ## Find this repository useful? :heart:
-Support it by joining __[stargazers](https://github.com/elbehiry/delish/stargazers)__ for this repository. :star: <br>
-And __[follow](https://github.com/elbehiry)__ me for my next creations! 🤩
+Support it by joining __[stargazers](https://github.com/t8rin/cookhelper/stargazers)__ for this repository. :star: <br>
+And __[follow](https://github.com/t8rin)__ me for my next creations! 🤩
 
 # License
 ```xml
