@@ -49,6 +49,9 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 @ExperimentalFoundationApi
 @Composable
 fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit) {
+    val toastHost = LocalToastHost.current
+    val context = LocalContext.current
+
     LazyColumn {
         item { Spacer(Modifier.height(20.dp)) }
         items(Settings.values()) { setting ->
@@ -66,7 +69,6 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(
-                            enabled = if (setting == COLOR_SCHEME) !settingsState.dynamicColors else true,
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onClick() }
@@ -142,7 +144,14 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                         .size(26.dp)
                                 )
                             }
-                            onClick = { expandedColorScheme = !expandedColorScheme }
+                            onClick = {
+                                if (!settingsState.dynamicColors) {
+                                    expandedColorScheme = !expandedColorScheme
+                                } else toastHost.sendToast(
+                                    Icons.Outlined.InvertColors,
+                                    (R.string.cannot_change_theme).asString(context)
+                                )
+                            }
                         }
                     }
                 }
@@ -202,9 +211,6 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
             }
         }
         item {
-            val context = LocalContext.current
-            val toastHost = LocalToastHost.current
-
             Spacer(Modifier.height(80.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(modifier = Modifier.fillMaxWidth()) {
