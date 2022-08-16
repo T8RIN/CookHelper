@@ -21,10 +21,6 @@ class FavouriteListViewModel @Inject constructor(
     val favState: State<RecipeState> = _favState
 
     init {
-        getFavourites()
-    }
-
-    private fun getFavourites() {
         getFavouriteDishesUseCase().onEach { result ->
             when (result) {
                 is Action.Success -> {
@@ -41,10 +37,6 @@ class FavouriteListViewModel @Inject constructor(
                 is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun reload() {
-        getFavourites()
     }
 
 }

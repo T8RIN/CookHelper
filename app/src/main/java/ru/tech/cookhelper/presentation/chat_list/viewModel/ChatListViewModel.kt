@@ -33,7 +33,6 @@ class ChatListViewModel @Inject constructor(
     init {
         getUserUseCase().onEach {
             _user.value = it
-            getChatListUseCase(_user.value?.token ?: "").launchIn(viewModelScope)
         }.launchIn(viewModelScope)
 
         viewModelScope.launch {

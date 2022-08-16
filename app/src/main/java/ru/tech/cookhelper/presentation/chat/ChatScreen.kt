@@ -4,11 +4,11 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
+import ru.tech.cookhelper.presentation.chat.components.MessageHeader
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
@@ -45,7 +46,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ChatScreen(
     chatId: String, viewModel: ChatViewModel = hiltViewModel(
@@ -176,27 +177,41 @@ fun ChatScreen(
                 verticalArrangement = Arrangement.Bottom,
                 contentPadding = PaddingValues(vertical = 12.dp)
             ) {
-                itemsIndexed(viewModel.messages) { index, message ->
+                viewModel.messages.forEachIndexed { index, message ->
                     val higherMessage = viewModel.messages.getOrNull(index - 1)
                     val lowerMessage = viewModel.messages.getOrNull(index + 1)
-                    val df = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    val topTime = df.formatOrNull(higherMessage?.timestamp)
-                    val currentTime = df.formatOrNull(message.timestamp)
-                    val bottomTime = df.formatOrNull(lowerMessage?.timestamp)
 
-                    val cutTopCorner =
-                        higherMessage?.userId != message.userId || topTime != currentTime
-                    val showPointingArrow =
-                        lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
+                    val topDay = formatOrNull(higherMessage?.timestamp, "d")
+                    val currentDay = formatOrNull(message.timestamp, "d")
 
-                    MessageBubbleItem(
-                        isMessageFromCurrentUser = (viewModel.user.value?.id
-                            ?: 0) == message.userId,
-                        text = message.text,
-                        timestamp = message.timestamp,
-                        cutTopCorner = cutTopCorner,
-                        showPointingArrow = showPointingArrow
-                    )
+                    if (topDay != currentDay) stickyHeader {
+                        MessageHeader(
+                            text = formatOrNull(
+                                message.timestamp,
+                                "d MMMM"
+                            ).toString()
+                        )
+                    }
+
+                    item {
+                        val topTime = formatOrNull(higherMessage?.timestamp)
+                        val currentTime = formatOrNull(message.timestamp)
+                        val bottomTime = formatOrNull(lowerMessage?.timestamp)
+
+                        val cutTopCorner =
+                            higherMessage?.userId != message.userId || topTime != currentTime
+                        val showPointingArrow =
+                            lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
+
+                        MessageBubbleItem(
+                            isMessageFromCurrentUser = (viewModel.user.value?.id
+                                ?: 0) == message.userId,
+                            text = message.text,
+                            timestamp = message.timestamp,
+                            cutTopCorner = cutTopCorner,
+                            showPointingArrow = showPointingArrow
+                        )
+                    }
                 }
             }
 
@@ -309,9 +324,13 @@ fun ChatScreen(
     BackHandler { onBack() }
 }
 
-private fun SimpleDateFormat.formatOrNull(
-    timestamp: Long?
-): String? = if (timestamp == null) null else format(timestamp)
+private fun formatOrNull(
+    timestamp: Long?,
+    pattern: String = "HH:mm"
+): String? {
+    val formatter = SimpleDateFormat(pattern, Locale.getDefault())
+    return if (timestamp == null) null else formatter.format(timestamp)
+}
 
 private val LazyListState.isLastItemVisible: Boolean
     get() = layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1

@@ -35,7 +35,6 @@ import ru.tech.cookhelper.presentation.chat.ChatScreen
 import ru.tech.cookhelper.presentation.chat_list.ChatListScreen
 import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
 import ru.tech.cookhelper.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
-import ru.tech.cookhelper.presentation.favourite_dishes.FavouriteListScreen
 import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScreen
 import ru.tech.cookhelper.presentation.home_screen.HomeScreen
 import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
@@ -158,20 +157,17 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                         ) { screen ->
                             Box(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
                                 when (screen) {
-                                    is Screen.Home -> HomeScreen(
-                                        onTitleChange = {
-                                            viewModel.title = screen.title
-                                        }
-                                    )
-                                    is Screen.Favourites -> {
-                                        FavouriteListScreen(
-                                            onRecipeClicked = {
-                                                screenController.navigate(
-                                                    Screen.RecipeDetails(it)
-                                                )
+                                    is Screen.Home -> {
+                                        HomeScreen(
+                                            onTitleChange = {
+                                                viewModel.title = screen.title
                                             }
                                         )
                                     }
+                                    is Screen.Favourites -> Placeholder(
+                                        screen.baseIcon,
+                                        screen.title.asString()
+                                    )
                                     is Screen.RecipeDetails -> {
                                         DishDetailsScreen(
                                             id = screen.id,
