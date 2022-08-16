@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
-import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.iconWith
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 @Composable
 fun <T : Screen> BottomNavigationBar(

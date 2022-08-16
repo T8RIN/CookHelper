@@ -14,11 +14,11 @@ import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.insert_setting.InsertSettingUseCase
 import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.*
-import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import javax.inject.Inject
 
 @HiltViewModel

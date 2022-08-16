@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.get_fridge_list.GetFridgeListUseCase
-import ru.tech.cookhelper.domain.use_case.update_fridge.UpdateFridgeUseCase
 import ru.tech.cookhelper.presentation.fridge_list.components.FridgeListState
 import ru.tech.cookhelper.presentation.ui.utils.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
@@ -19,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FridgeViewModel @Inject constructor(
-    private val getFridgeListUseCase: GetFridgeListUseCase,
-    private val updateFridgeUseCase: UpdateFridgeUseCase
+    private val getFridgeListUseCase: GetFridgeListUseCase
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _fridgeListState = mutableStateOf(FridgeListState())

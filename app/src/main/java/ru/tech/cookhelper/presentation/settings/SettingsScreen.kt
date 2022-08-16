@@ -40,7 +40,7 @@ import ru.tech.cookhelper.presentation.app.components.Settings.*
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
 import ru.tech.cookhelper.presentation.ui.theme.colorList
-import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @ExperimentalFoundationApi

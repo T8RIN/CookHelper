@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.tech.cookhelper.presentation.app.components.ColorScheme.*
 import ru.tech.cookhelper.presentation.app.components.NightMode
-import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createInverseSecondaryColor
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverseSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
 

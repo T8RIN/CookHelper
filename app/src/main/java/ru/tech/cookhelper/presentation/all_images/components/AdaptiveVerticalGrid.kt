@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.ui.utils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 
 @Composable
 fun AdaptiveVerticalGrid(images: List<Image>, onImageClick: (id: String) -> Unit) {

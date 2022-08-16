@@ -34,7 +34,7 @@ import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.StrokeTextField
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
-import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost

@@ -5,7 +5,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.navController
-import ru.tech.cookhelper.presentation.ui.utils.Screen
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 val LocalScreenController = compositionLocalOf { navController<Screen>(Screen.Home.Recipes) }
 

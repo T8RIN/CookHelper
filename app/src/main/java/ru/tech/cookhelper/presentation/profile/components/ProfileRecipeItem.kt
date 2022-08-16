@@ -20,8 +20,8 @@ import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
-import ru.tech.cookhelper.presentation.ui.utils.ShareUtils.shareWith
-import ru.tech.cookhelper.presentation.ui.utils.StateUtils
+import ru.tech.cookhelper.presentation.ui.utils.android.ShareUtils.shareWith
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils
 import java.text.SimpleDateFormat
 import java.util.*
 

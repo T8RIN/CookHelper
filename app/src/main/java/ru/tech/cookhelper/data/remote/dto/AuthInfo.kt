@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.data.remote.api.auth
+package ru.tech.cookhelper.data.remote.dto
 
 data class AuthInfo(
     val message: String,

@@ -14,16 +14,15 @@ import ru.tech.cookhelper.core.constants.Constants.BASE_URL
 import ru.tech.cookhelper.core.utils.RetrofitUtils.addLogger
 import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import ru.tech.cookhelper.data.local.CookHelperDatabase
-import ru.tech.cookhelper.data.remote.api.CookHelperApi
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
-import ru.tech.cookhelper.data.repository.CookHelperRepositoryImpl
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
+import ru.tech.cookhelper.data.repository.SettingsRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
 import ru.tech.cookhelper.data.utils.MoshiParser
-import ru.tech.cookhelper.domain.repository.CookHelperRepository
 import ru.tech.cookhelper.domain.repository.MessageRepository
+import ru.tech.cookhelper.domain.repository.SettingsRepository
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Singleton
 
@@ -31,15 +30,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideCookHelperApi(): CookHelperApi = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create())
-        .setTimeout()
-        .build()
-        .create(CookHelperApi::class.java)
 
     @Provides
     @Singleton
@@ -57,16 +47,15 @@ object AppModule {
     ): CookHelperDatabase = Room.databaseBuilder(
         applicationContext,
         CookHelperDatabase::class.java,
-        "kastybiy_db"
+        "cook_helper_db"
     ).fallbackToDestructiveMigration().fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton
-    fun provideCookHelperRepository(
-        api: CookHelperApi,
+    fun provideSettingsRepository(
         db: CookHelperDatabase
-    ): CookHelperRepository =
-        CookHelperRepositoryImpl(api, db.favRecipeDao, db.fridgeDao, db.settingsDao)
+    ): SettingsRepository =
+        SettingsRepositoryImpl(settingsDao = db.settingsDao)
 
     @Provides
     @Singleton

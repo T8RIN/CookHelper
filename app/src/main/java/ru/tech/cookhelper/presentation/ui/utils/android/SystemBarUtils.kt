@@ -1,10 +1,10 @@
-package ru.tech.cookhelper.presentation.ui.utils
+package ru.tech.cookhelper.presentation.ui.utils.android
 
 import android.app.Activity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
-object StatusBarUtils {
+object SystemBarUtils {
 
     val Activity.isSystemBarsHidden: Boolean
         get() {

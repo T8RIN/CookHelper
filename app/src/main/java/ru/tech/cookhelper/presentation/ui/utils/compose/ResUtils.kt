@@ -1,7 +1,8 @@
-package ru.tech.cookhelper.presentation.ui.utils
+package ru.tech.cookhelper.presentation.ui.utils.compose
 
 import android.content.Context
 import androidx.compose.ui.graphics.vector.ImageVector
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 object ResUtils {
 

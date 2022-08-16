@@ -1,8 +1,8 @@
 package ru.tech.cookhelper.presentation.ui.utils.event
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 sealed class Event {
     class ShowSnackbar(val text: UIText, val action: () -> Unit) : Event()

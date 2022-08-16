@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils
+package ru.tech.cookhelper.presentation.ui.utils.navigation
 
 import android.os.Parcelable
 import androidx.annotation.StringRes

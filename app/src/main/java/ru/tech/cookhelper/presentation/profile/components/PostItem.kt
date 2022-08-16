@@ -24,7 +24,7 @@ import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
-import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import java.text.SimpleDateFormat
 import java.util.*
 

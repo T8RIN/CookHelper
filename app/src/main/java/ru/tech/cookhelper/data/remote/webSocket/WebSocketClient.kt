@@ -6,7 +6,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import okhttp3.*
-import ru.tech.cookhelper.presentation.ui.utils.name
+import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 
 abstract class WebSocketClient : WebSocketListener() {
     protected abstract val okHttpClient: OkHttpClient

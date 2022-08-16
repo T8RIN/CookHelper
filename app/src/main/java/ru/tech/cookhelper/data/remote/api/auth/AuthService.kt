@@ -2,6 +2,7 @@ package ru.tech.cookhelper.data.remote.api.auth
 
 import retrofit2.Call
 import retrofit2.http.*
+import ru.tech.cookhelper.data.remote.dto.AuthInfo
 
 interface AuthService {
 

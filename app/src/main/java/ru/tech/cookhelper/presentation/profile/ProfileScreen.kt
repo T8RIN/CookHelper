@@ -34,16 +34,15 @@ import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
-import ru.tech.cookhelper.presentation.ui.utils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random.Default.nextBoolean
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),

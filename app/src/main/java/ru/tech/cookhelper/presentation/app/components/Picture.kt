@@ -23,9 +23,9 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.hideSystemBars
-import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.isSystemBarsHidden
-import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.showSystemBars
+import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.hideSystemBars
+import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.isSystemBarsHidden
+import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.Zoomable
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.rememberZoomableState

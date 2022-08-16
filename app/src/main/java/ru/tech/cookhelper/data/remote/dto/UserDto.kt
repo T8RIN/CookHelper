@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.data.remote.api.auth
+package ru.tech.cookhelper.data.remote.dto
 
 import ru.tech.cookhelper.domain.model.User
 

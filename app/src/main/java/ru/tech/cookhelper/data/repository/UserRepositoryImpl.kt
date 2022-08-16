@@ -11,7 +11,7 @@ import ru.tech.cookhelper.data.local.dao.UserDao
 import ru.tech.cookhelper.data.local.entity.toEntity
 import ru.tech.cookhelper.data.local.entity.toUser
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
-import ru.tech.cookhelper.data.remote.api.auth.toUser
+import ru.tech.cookhelper.data.remote.dto.toUser
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Inject

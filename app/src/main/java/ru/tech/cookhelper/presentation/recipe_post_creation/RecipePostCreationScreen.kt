@@ -40,7 +40,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Expandabl
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.LazyTextField
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
-import ru.tech.cookhelper.presentation.ui.utils.Dialog
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 

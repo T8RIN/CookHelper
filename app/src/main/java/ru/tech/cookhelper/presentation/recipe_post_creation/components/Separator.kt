@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createSecondaryColor
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 
 @Composable
 fun Separator(

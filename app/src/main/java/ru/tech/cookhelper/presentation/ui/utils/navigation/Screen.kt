@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils
+package ru.tech.cookhelper.presentation.ui.utils.navigation
 
 import android.os.Parcelable
 import androidx.compose.material.icons.Icons
@@ -7,8 +7,10 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
+import ru.tech.cookhelper.presentation.ui.utils.UIText
 
 sealed class Screen(
     open val title: UIText = UIText.Empty(),

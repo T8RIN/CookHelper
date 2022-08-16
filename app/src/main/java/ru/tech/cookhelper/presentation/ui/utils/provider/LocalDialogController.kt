@@ -5,7 +5,7 @@ import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.navController
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
-import ru.tech.cookhelper.presentation.ui.utils.Dialog
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 
 val LocalDialogController = compositionLocalOf { navController<Dialog>(Dialog.None) }
 

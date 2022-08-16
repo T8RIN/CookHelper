@@ -41,8 +41,8 @@ import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
 import ru.tech.cookhelper.presentation.chat.components.MessageHeader
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
-import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createSecondaryColor
-import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost

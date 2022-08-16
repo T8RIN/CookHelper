@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils
+package ru.tech.cookhelper.presentation.ui.utils.android
 
 import android.content.Context
 import android.content.Intent

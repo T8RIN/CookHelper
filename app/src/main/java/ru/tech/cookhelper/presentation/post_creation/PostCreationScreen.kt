@@ -37,7 +37,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
-import ru.tech.cookhelper.presentation.ui.utils.Dialog
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 

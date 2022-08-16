@@ -9,11 +9,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.check_favourite.CheckFavouriteUseCase
 import ru.tech.cookhelper.domain.use_case.get_dish_by_id.GetDishByIdUseCase
-import ru.tech.cookhelper.domain.use_case.update_favorite.UpdateFavDishUseCase
 import ru.tech.cookhelper.presentation.dish_details.components.DishDetailsState
 import ru.tech.cookhelper.presentation.ui.utils.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
@@ -26,7 +24,6 @@ import javax.inject.Inject
 class DishDetailsViewModel @Inject constructor(
     getDishByIdUseCase: GetDishByIdUseCase,
     private val checkFavouriteUseCase: CheckFavouriteUseCase,
-    private val updateFavDishUseCase: UpdateFavDishUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
@@ -57,13 +54,6 @@ class DishDetailsViewModel @Inject constructor(
                 is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun processFavorites(id: Int) {
-        viewModelScope.launch {
-            updateFavDishUseCase(id, _isFavorite.value)
-            _isFavorite.value = !_isFavorite.value
-        }
     }
 
 }

@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils
+package ru.tech.cookhelper.presentation.ui.utils.compose
 
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.isSystemInDarkTheme

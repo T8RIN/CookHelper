@@ -17,10 +17,10 @@ import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.popAll
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.ui.utils.ResUtils.iconWith
-import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.addPadding
-import ru.tech.cookhelper.presentation.ui.utils.drawerList
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.iconWith
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
+import ru.tech.cookhelper.presentation.ui.utils.navigation.drawerList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.isCurrentDestination
 
