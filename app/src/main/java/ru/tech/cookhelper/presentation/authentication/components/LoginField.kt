@@ -9,8 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.ErrorOutline
-import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,6 +29,8 @@ import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -153,21 +153,13 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(16.dp * mod))
 
-    viewModel.loginState.value.error.let { errorMessage ->
-        if (errorMessage.isNotEmpty()) {
-            toastHost.sendToast(
-                Icons.Outlined.ErrorOutline,
-                errorMessage.asString(context)
+    viewModel.eventFlow.collectOnLifecycle {
+        when (it) {
+            is Event.ShowToast -> toastHost.sendToast(
+                it.icon,
+                it.text.asString(context)
             )
-            viewModel.resetState()
+            else -> {}
         }
     }
-
-    val user = viewModel.loginState.value.user
-    if (user != null && user.verified) {
-        val message = stringResource(R.string.welcome_user, user.name)
-        toastHost.sendToast(Icons.Outlined.Face, message)
-        viewModel.resetState()
-    }
-
 }

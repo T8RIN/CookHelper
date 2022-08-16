@@ -3,8 +3,6 @@ package ru.tech.cookhelper.presentation.authentication.components
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.util.*
 
@@ -56,9 +56,13 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
 
     Spacer(Modifier.size(64.dp * mod))
 
-    OTPField(length = 6, codeState = viewModel.codeState.value, onFilled = {
-        viewModel.checkVerificationCode(it)
-    })
+    OTPField(
+        length = 6,
+        codeState = viewModel.codeState.value,
+        onFilled = {
+            viewModel.checkVerificationCode(it)
+        }
+    )
 
     Spacer(Modifier.size(16.dp * mod))
     Row(
@@ -94,11 +98,13 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(16.dp * mod))
 
-    if (viewModel.codeState.value.matched) {
-        toastHost.sendToast(
-            Icons.Rounded.Face,
-            context.getString(R.string.welcome_user, viewModel.currentName)
-        )
-        viewModel.resetState()
+    viewModel.eventFlow.collectOnLifecycle {
+        when (it) {
+            is Event.ShowToast -> toastHost.sendToast(
+                it.icon,
+                it.text.asString(context)
+            )
+            else -> {}
+        }
     }
 }

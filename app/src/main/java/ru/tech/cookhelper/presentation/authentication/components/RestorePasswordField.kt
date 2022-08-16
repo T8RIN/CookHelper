@@ -11,8 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,6 +32,8 @@ import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -204,20 +204,14 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         }
     }
 
-    if (viewModel.restorePasswordState.value.found) {
-        toastHost.sendToast(
-            Icons.Outlined.Email,
-            context.getString(R.string.check_email_to_restore)
-        )
-        viewModel.resetState()
-    }
-
-    if (viewModel.restorePasswordState.value.error.isNotEmpty()) {
-        toastHost.sendToast(
-            Icons.Outlined.ErrorOutline,
-            viewModel.restorePasswordState.value.error.asString()
-        )
-        viewModel.resetState()
+    viewModel.eventFlow.collectOnLifecycle {
+        when (it) {
+            is Event.ShowToast -> toastHost.sendToast(
+                it.icon,
+                it.text.asString(context)
+            )
+            else -> {}
+        }
     }
 
 }

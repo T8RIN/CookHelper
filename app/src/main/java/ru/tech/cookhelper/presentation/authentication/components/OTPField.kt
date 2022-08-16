@@ -5,8 +5,6 @@ import androidx.compose.animation.core.animateOffset
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
@@ -20,7 +18,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -31,9 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.app.components.shimmer
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
@@ -162,14 +157,10 @@ fun OTPField(
         }
     }
 
-    val toastHost = LocalToastHost.current
-    val context = LocalContext.current
-
-    if (codeState.error.isNotEmpty()) {
+    if (codeState.error) {
         LaunchedEffect(codeState.error) {
             onChange("")
 
-            toastHost.sendToast(Icons.Outlined.ErrorOutline, codeState.error.asString(context))
             otpPos = OtpPos.Right
             delay(75)
             otpPos = OtpPos.Left

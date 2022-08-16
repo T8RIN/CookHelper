@@ -11,8 +11,8 @@ import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 
 sealed class Screen(
-    open val title: UIText = UIText.empty(),
-    open val shortTitle: UIText = UIText.empty(),
+    open val title: UIText = UIText.Empty(),
+    open val shortTitle: UIText = UIText.Empty(),
     open val baseIcon: ImageVector = Icons.Default.PhoneAndroid,
     open val selectedIcon: ImageVector = Icons.Default.PhoneAndroid
 ) : Parcelable {

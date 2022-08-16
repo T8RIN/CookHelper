@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.domain.use_case.request_code
 
-import ru.tech.cookhelper.data.remote.api.auth.AuthInfo
+import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Inject
 
@@ -9,5 +9,5 @@ class RequestCodeUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         token: String
-    ): Result<AuthInfo> = userRepository.requestCode(token)
+    ): Result<User?> = userRepository.requestCode(token)
 }

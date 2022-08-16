@@ -96,7 +96,7 @@ fun FancyToast(fancyToastValues: FancyToastValues) {
 }
 
 fun MutableState<FancyToastValues>.sendToast(
-    icon: ImageVector,
+    icon: ImageVector?,
     message: String,
     length: Int = Toast.LENGTH_LONG
 ) {

@@ -1,11 +1,11 @@
 package ru.tech.cookhelper.presentation.app.viewModel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.olshevski.navigation.reimagined.navController
-import dev.olshevski.navigation.reimagined.navigate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -15,7 +15,10 @@ import ru.tech.cookhelper.domain.use_case.insert_setting.InsertSettingUseCase
 import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.ui.utils.Screen
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
+import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,13 +27,10 @@ class MainViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase,
     private val insertSettingUseCase: InsertSettingUseCase,
     private val logoutUseCase: LogoutUseCase
-) : ViewModel() {
+) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
-    val screenController = navController<Screen>(
-        startDestination = Screen.Home.None
-    )
-
-    var title by mutableStateOf(Screen.Home.Recipes.title)
+    private val _title: MutableState<UIText> = mutableStateOf(Screen.Home.Recipes.title)
+    val title: State<UIText> = _title
 
     private val _settingsState: MutableState<SettingsState> = mutableStateOf(SettingsState())
     val settingsState: State<SettingsState> = _settingsState
@@ -66,13 +66,16 @@ class MainViewModel @Inject constructor(
             _settingsState.value = locState
         }.launchIn(viewModelScope)
 
-        getUserUseCase().onEach {
-            if (it == null) screenController.navigate(Screen.Authentication)
+        getUserUseCase().onEach { user ->
+            if (user == null) sendEvent(Event.NavigateTo(Screen.Authentication))
             else {
-                if (screenController.currentDestination == Screen.Authentication) screenController.navigate(
-                    Screen.Home.Recipes
+                sendEvent(
+                    Event.NavigateIf(
+                        predicate = { it == Screen.Authentication },
+                        screen = Screen.Home.Recipes
+                    )
                 )
-                _userState.value = UserState(it, it.token)
+                _userState.value = UserState(user, user.token)
             }
         }.launchIn(viewModelScope)
     }
@@ -85,6 +88,10 @@ class MainViewModel @Inject constructor(
 
     fun logOut() {
         viewModelScope.launch { logoutUseCase() }
+    }
+
+    fun updateTitle(newTitle: UIText) {
+        _title.value = newTitle
     }
 }
 

@@ -10,8 +10,8 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.data.local.dao.UserDao
 import ru.tech.cookhelper.data.local.entity.toEntity
 import ru.tech.cookhelper.data.local.entity.toUser
-import ru.tech.cookhelper.data.remote.api.auth.AuthInfo
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
+import ru.tech.cookhelper.data.remote.api.auth.toUser
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Inject
@@ -22,14 +22,14 @@ class UserRepositoryImpl @Inject constructor(
     private val userDao: UserDao
 ) : UserRepository {
 
-    override fun loginWith(login: String, password: String): Flow<Action<AuthInfo>> = flow {
+    override fun loginWith(login: String, password: String): Flow<Action<User?>> = flow {
         emit(Action.Loading())
         val response = io { authService.loginWith(login, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
             101, 102 -> emit(Action.Empty(body.status))
-            100, 103 -> emit(Action.Success(data = body))
+            100, 103 -> emit(Action.Success(data = body.user?.toUser()))
             else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
@@ -40,31 +40,31 @@ class UserRepositoryImpl @Inject constructor(
         nickname: String,
         email: String,
         password: String
-    ): Flow<Action<AuthInfo>> = flow {
+    ): Flow<Action<User?>> = flow {
         emit(Action.Loading())
         val response =
             io { authService.registerWith(name, surname, nickname, email, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
-        if (body.status == 100) emit(Action.Success(data = body))
+        if (body.status == 100) emit(Action.Success(data = body.user?.toUser()))
         else emit(Action.Error(message = body.message))
 
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
     override suspend fun requestCode(
         token: String
-    ): Result<AuthInfo> = runCatching {
-        authService.requestCode(token)
+    ): Result<User?> = runCatching {
+        authService.requestCode(token).user?.toUser()
     }
 
-    override fun checkCode(code: String, token: String): Flow<Action<AuthInfo>> = flow {
+    override fun checkCode(code: String, token: String): Flow<Action<User?>> = flow {
         emit(Action.Loading())
         val response = io { authService.verifyEmail(code, token).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
             102 -> emit(Action.Empty())
-            100 -> emit(Action.Success(data = body))
+            100 -> emit(Action.Success(data = body.user?.toUser()))
             else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
@@ -75,9 +75,9 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun checkLoginOrEmailForAvailability(
         query: String
-    ): Action<AuthInfo> = try {
+    ): Action<User?> = try {
         val response = authService.checkLoginOrEmailForAvailability(query)
-        if (response.status == 100) Action.Success(data = response)
+        if (response.status == 100) Action.Success(data = response.user?.toUser())
         else Action.Error(message = response.message)
     } catch (t: Throwable) {
         Action.Error(message = t.message.toString())
@@ -87,8 +87,22 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun requestPasswordRestoreCode(
         login: String
-    ): Result<AuthInfo> = runCatching {
-        authService.requestPasswordRestoreCode(login)
+    ): Action<User?> {
+        val result = kotlin.runCatching { authService.requestPasswordRestoreCode(login) }
+        if (result.isFailure) {
+            return Action.Error(message = result.exceptionOrNull()?.message)
+        } else {
+            val authInfo = result.getOrNull()
+            if (authInfo != null) {
+                return when (authInfo.status) {
+                    100 -> Action.Success(authInfo.user?.toUser())
+                    else -> {
+                        Action.Empty(status = authInfo.status)
+                    }
+                }
+            }
+            return Action.Empty()
+        }
     }
 
 
@@ -96,14 +110,14 @@ class UserRepositoryImpl @Inject constructor(
         login: String,
         code: String,
         newPassword: String
-    ): Flow<Action<AuthInfo>> = flow {
+    ): Flow<Action<User?>> = flow {
         emit(Action.Loading())
         val response = io { authService.restorePasswordBy(login, code, newPassword).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
             102 -> emit(Action.Empty())
-            100 -> emit(Action.Success(data = body))
+            100 -> emit(Action.Success(data = body.user?.toUser()))
             else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }

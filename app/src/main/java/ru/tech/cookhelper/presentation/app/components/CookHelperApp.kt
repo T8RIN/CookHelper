@@ -1,7 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import android.content.res.Configuration
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.olshevski.navigation.reimagined.*
@@ -48,20 +48,24 @@ import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.utils.*
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.StatusBarUtils.showSystemBars
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
-@ExperimentalComposeUiApi
-@ExperimentalFoundationApi
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class
+)
 @Composable
-fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewModel()) {
+fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
+    val activity = LocalContext.current.findActivity()
     val fancyToastValues = remember { mutableStateOf(FancyToastValues()) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val dialogController = rememberNavController<Dialog>(startDestination = Dialog.None)
+    val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
 
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior by remember {
@@ -74,7 +78,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
 
     CompositionLocalProvider(
         values = arrayOf(
-            LocalScreenController provides viewModel.screenController,
+            LocalScreenController provides screenController,
             LocalDialogController provides dialogController,
             LocalSnackbarHost provides snackbarHostState,
             LocalToastHost provides fancyToastValues,
@@ -82,8 +86,6 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
         )
     ) {
         ProKitchenTheme {
-            val screenController = LocalScreenController.current
-
             val showTopBar by computedStateOf { screenController.currentDestination!!::class.name !in hideTopBarList }
 
             BackHandler { dialogController.show(Dialog.Exit) }
@@ -100,9 +102,10 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                             userState = viewModel.userState.value,
                             drawerState = drawerState,
                             onClick = {
-                                viewModel.title =
+                                viewModel.updateTitle(
                                     if (it is Screen.Home) Screen.Home.Recipes.title
                                     else it.title
+                                )
                             }
                         )
                     },
@@ -144,7 +147,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                 },
                                 title = {
                                     Text(
-                                        viewModel.title.asString(),
+                                        viewModel.title.value.asString(),
                                         fontWeight = FontWeight.Medium
                                     )
                                 },
@@ -159,9 +162,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                 when (screen) {
                                     is Screen.Home -> {
                                         HomeScreen(
-                                            onTitleChange = {
-                                                viewModel.title = screen.title
-                                            }
+                                            onTitleChange = { viewModel.updateTitle(screen.title) }
                                         )
                                     }
                                     is Screen.Favourites -> Placeholder(
@@ -189,7 +190,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                             initialId = screen.id,
                                             onBack = {
                                                 screenController.pop()
-                                                activity.showSystemBars()
+                                                activity?.showSystemBars()
                                             }
                                         )
                                     }
@@ -207,7 +208,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                                     is Screen.Profile -> {
                                         ProfileScreen(
                                             updateTitle = { newTitle ->
-                                                viewModel.title = UIText.DynamicString(newTitle)
+                                                viewModel.updateTitle(UIText.DynamicString(newTitle))
                                             }
                                         )
                                     }
@@ -261,7 +262,7 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                 DialogNavHost(controller = dialogController) { dialog ->
                     when (dialog) {
                         is Dialog.Exit -> {
-                            ExitDialog(onExit = { activity.finishAffinity() })
+                            ExitDialog(onExit = { activity?.finishAffinity() })
                         }
                         is Dialog.AboutApp -> {
                             AboutAppDialog()
@@ -270,11 +271,11 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
                             val toastHost = LocalToastHost.current
                             LogoutDialog(
                                 onLogout = {
-                                    if (activity.isOnline()) {
+                                    if (activity?.isOnline() == true) {
                                         viewModel.logOut()
                                     } else toastHost.sendToast(
                                         Icons.Outlined.SignalWifiConnectedNoInternet4,
-                                        message = activity.getString(R.string.no_connection)
+                                        message = activity?.getString(R.string.no_connection) ?: ""
                                     )
                                     dialogController.close()
                                 }
@@ -312,6 +313,18 @@ fun CookHelperApp(activity: ComponentActivity, viewModel: MainViewModel = viewMo
             }
         }
     }
+
+    viewModel.eventFlow.collectOnLifecycle {
+        when (it) {
+            is Event.NavigateIf -> {
+                if (
+                    it.predicate(screenController.currentDestination ?: Screen.Home.None)
+                ) screenController.navigate(it.screen)
+            }
+            is Event.NavigateTo -> screenController.navigate(it.screen)
+            else -> {}
+        }
+    }
 }
 
 private fun Modifier.navigationBarsLandscapePadding(): Modifier = composed {
@@ -322,7 +335,6 @@ private fun Modifier.navigationBarsLandscapePadding(): Modifier = composed {
 
 @OptIn(ExperimentalAnimationApi::class)
 internal val ScaleCrossfadeTransitionSpec = AnimatedNavHostTransitionSpec<Any?> { _, _, _ ->
-    fadeIn() + scaleIn(initialScale = 0.85f) with fadeOut(tween(durationMillis = 50)) + scaleOut(
-        targetScale = 0.85f
-    )
+    (fadeIn() + scaleIn(initialScale = 0.85f))
+        .with(fadeOut(tween(durationMillis = 50)) + scaleOut(targetScale = 0.85f))
 }

@@ -58,7 +58,7 @@ class ChatViewModel @Inject constructor(
                     is Action.Error -> _chatState.value = ChatState(
                         errorMessage = if (!(action.message
                                 ?: "").contains("Unable to resolve host")
-                        ) UIText.DynamicString(action.message ?: "") else UIText.empty()
+                        ) UIText.DynamicString(action.message ?: "") else UIText.Empty()
                     )
                     is Action.Loading -> _chatState.value = ChatState(isLoading = true)
                     is Action.Success -> action.data?.let { messages.add(it) }.also {

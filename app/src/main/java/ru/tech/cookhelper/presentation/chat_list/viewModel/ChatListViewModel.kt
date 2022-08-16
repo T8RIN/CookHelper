@@ -25,7 +25,7 @@ import javax.inject.Inject
 class ChatListViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase,
     private val getChatListUseCase: GetChatListUseCase
-) : ViewModel(), ViewModelEvents by ViewModelEventsImpl() {
+) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: State<User?> = _user
