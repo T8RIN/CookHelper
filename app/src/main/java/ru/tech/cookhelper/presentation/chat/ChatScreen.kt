@@ -167,10 +167,12 @@ fun ChatScreen(
                 }
             }
 
-            AnimatedContent(targetState = viewModel.loadingAllMessages.value) { loading ->
-                if (loading) Loading(modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f))
+            AnimatedContent(
+                targetState = viewModel.loadingAllMessages.value,
+                modifier = Modifier.weight(1f),
+                transitionSpec = { fadeIn() with fadeOut() }
+            ) { loading ->
+                if (loading) Loading()
                 else {
                     LazyColumn(
                         modifier = Modifier
