@@ -5,7 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import ru.tech.cookhelper.presentation.app.components.NightMode
+import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.core.graphics.ColorUtils as AndroidColorUtils
 

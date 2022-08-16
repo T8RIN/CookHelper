@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components
+package ru.tech.cookhelper.presentation.authentication.components.registration
 
 import android.util.Patterns
 import androidx.activity.compose.BackHandler

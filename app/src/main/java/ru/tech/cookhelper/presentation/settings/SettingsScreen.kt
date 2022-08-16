@@ -35,9 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.*
-import ru.tech.cookhelper.presentation.app.components.Settings.*
+import ru.tech.cookhelper.presentation.app.components.Toast
+import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.settings.components.NightMode
+import ru.tech.cookhelper.presentation.settings.components.Settings
+import ru.tech.cookhelper.presentation.settings.components.Settings.*
+import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
 import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString

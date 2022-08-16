@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components
+package ru.tech.cookhelper.presentation.authentication.components.registration
 
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 

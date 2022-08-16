@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components
+package ru.tech.cookhelper.presentation.authentication.components.confirm_email
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle

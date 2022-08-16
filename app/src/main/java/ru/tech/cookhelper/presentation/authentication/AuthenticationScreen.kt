@@ -21,7 +21,11 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.LockScreenOrientation
-import ru.tech.cookhelper.presentation.authentication.components.*
+import ru.tech.cookhelper.presentation.authentication.components.AuthState
+import ru.tech.cookhelper.presentation.authentication.components.confirm_email.ConfirmEmailField
+import ru.tech.cookhelper.presentation.authentication.components.login.LoginField
+import ru.tech.cookhelper.presentation.authentication.components.registration.RegistrationField
+import ru.tech.cookhelper.presentation.authentication.components.restore_password.RestorePasswordField
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 
 

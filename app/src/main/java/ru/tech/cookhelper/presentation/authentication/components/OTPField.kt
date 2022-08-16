@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import ru.tech.cookhelper.presentation.app.components.shimmer
+import ru.tech.cookhelper.presentation.authentication.components.confirm_email.CodeState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi

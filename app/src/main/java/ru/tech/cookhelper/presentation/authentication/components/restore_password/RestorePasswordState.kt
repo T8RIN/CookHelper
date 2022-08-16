@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components
+package ru.tech.cookhelper.presentation.authentication.components.restore_password
 
 import ru.tech.cookhelper.domain.model.User
 

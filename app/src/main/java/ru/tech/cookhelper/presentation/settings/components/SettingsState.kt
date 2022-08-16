@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.settings.components
 
 data class SettingsState(
     val dynamicColors: Boolean = true,

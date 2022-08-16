@@ -13,7 +13,11 @@ import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCa
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.insert_setting.InsertSettingUseCase
 import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
-import ru.tech.cookhelper.presentation.app.components.*
+import ru.tech.cookhelper.presentation.app.components.UserState
+import ru.tech.cookhelper.presentation.settings.components.ColorScheme
+import ru.tech.cookhelper.presentation.settings.components.NightMode
+import ru.tech.cookhelper.presentation.settings.components.Settings
+import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents

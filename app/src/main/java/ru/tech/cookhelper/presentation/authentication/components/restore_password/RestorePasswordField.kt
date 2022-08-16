@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components
+package ru.tech.cookhelper.presentation.authentication.components.restore_password
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event

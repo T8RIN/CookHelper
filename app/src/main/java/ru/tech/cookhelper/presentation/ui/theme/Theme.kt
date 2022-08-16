@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.tech.cookhelper.presentation.app.components.ColorScheme.*
-import ru.tech.cookhelper.presentation.app.components.NightMode
+import ru.tech.cookhelper.presentation.settings.components.ColorScheme.*
+import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverseSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
