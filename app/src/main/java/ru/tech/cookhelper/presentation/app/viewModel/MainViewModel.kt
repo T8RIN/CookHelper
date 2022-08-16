@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
                 sendEvent(
                     Event.NavigateIf(
                         predicate = { it == Screen.Authentication },
-                        screen = Screen.Home.Recipes
+                        screen = Screen.Home.None
                     )
                 )
                 _userState.value = UserState(user, user.token)

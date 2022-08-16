@@ -13,5 +13,5 @@ fun NavController<Dialog>.show(dialog: Dialog) = navigate(dialog)
 
 fun NavController<Dialog>.close() = pop()
 
-val NavController<Dialog>.currentDialog: Dialog
+inline val NavController<Dialog>.currentDialog: Dialog
     get() = currentDestination ?: Dialog.None

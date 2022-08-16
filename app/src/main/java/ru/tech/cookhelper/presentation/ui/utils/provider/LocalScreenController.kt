@@ -9,9 +9,9 @@ import ru.tech.cookhelper.presentation.ui.utils.Screen
 
 val LocalScreenController = compositionLocalOf { navController<Screen>(Screen.Home.Recipes) }
 
-val <T> T.isCurrentDestination: Boolean
+inline val <T> T.isCurrentDestination: Boolean
     @ReadOnlyComposable
     @Composable
     get() = LocalScreenController.current.currentDestination == this
 
-val <T> NavController<T>.currentDestination: T? get() = this.backstack.entries.lastOrNull()?.destination
+inline val <T> NavController<T>.currentDestination: T? get() = this.backstack.entries.lastOrNull()?.destination
