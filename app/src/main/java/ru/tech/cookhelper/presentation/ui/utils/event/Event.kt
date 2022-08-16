@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.presentation.ui.utils.event
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 sealed class Event {

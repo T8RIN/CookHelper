@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils
+package ru.tech.cookhelper.presentation.ui.utils.compose
 
 import android.content.Context
 import androidx.annotation.StringRes

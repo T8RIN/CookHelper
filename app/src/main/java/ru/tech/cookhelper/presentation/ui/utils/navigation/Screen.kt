@@ -10,7 +10,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
-import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 
 sealed class Screen(
     open val title: UIText = UIText.Empty(),

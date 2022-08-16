@@ -50,7 +50,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class,
     ExperimentalAnimationApi::class
 )
 @Composable

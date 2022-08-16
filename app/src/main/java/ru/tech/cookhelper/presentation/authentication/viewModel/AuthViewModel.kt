@@ -26,7 +26,7 @@ import ru.tech.cookhelper.domain.use_case.request_code.RequestCodeUseCase
 import ru.tech.cookhelper.domain.use_case.restore_password.ApplyPasswordByCodeUseCase
 import ru.tech.cookhelper.domain.use_case.restore_password.SendRestoreCodeUseCase
 import ru.tech.cookhelper.presentation.authentication.components.*
-import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl

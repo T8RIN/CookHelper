@@ -15,7 +15,7 @@ import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.ScaleCrossfadeTransitionSpec
 import ru.tech.cookhelper.presentation.home_screen.components.BottomNavigationBar
-import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.navBarList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost

@@ -13,7 +13,7 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.check_favourite.CheckFavouriteUseCase
 import ru.tech.cookhelper.domain.use_case.get_dish_by_id.GetDishByIdUseCase
 import ru.tech.cookhelper.presentation.dish_details.components.DishDetailsState
-import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
