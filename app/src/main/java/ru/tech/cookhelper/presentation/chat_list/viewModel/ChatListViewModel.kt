@@ -16,13 +16,16 @@ import ru.tech.cookhelper.domain.use_case.get_chat_list.GetChatListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.presentation.chat_list.components.ChatListState
 import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatListViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase,
     private val getChatListUseCase: GetChatListUseCase
-) : ViewModel() {
+) : ViewModel(), ViewModelEvents by ViewModelEventsImpl() {
 
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: State<User?> = _user
@@ -87,12 +90,8 @@ class ChatListViewModel @Inject constructor(
                 delay(3000)
                 _chatListState.value = ChatListState(isLoading = true)
                 delay(3000)
-                _chatListState.value = ChatListState(error = UIText.DynamicString("Трешачок какой-то"))
-                delay(50)
-                _chatListState.value = ChatListState(isLoading = true)
+                sendEvent(Event.ShowToast(UIText.DynamicString("Трешачок какой-то")))
             }
         }
     }
-
-
 }

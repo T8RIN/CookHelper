@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
@@ -31,6 +32,8 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Expandabl
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
@@ -74,15 +77,13 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
                         if (index != state.chatList.lastIndex) Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                     }
                 }
-            } else if (!state.isLoading && state.error.isEmpty()) {
+            } else if (!state.isLoading) {
                 Placeholder(
                     icon = Icons.Filled.MessageDraw,
                     text = stringResource(R.string.no_existing_chats)
                 )
-            } else if (state.error.isEmpty()) {
-                Loading()
             } else {
-                LocalToastHost.current.sendToast(Icons.Rounded.ErrorOutline, state.error.asString())
+                Loading()
             }
         }
 
@@ -99,6 +100,18 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
                 .align(Alignment.BottomEnd)
         )
 
+    }
+
+    val toastHost = LocalToastHost.current
+    val context = LocalContext.current
+    viewModel.eventFlow.collectOnLifecycle {
+        when (it) {
+            is Event.ShowToast -> toastHost.sendToast(
+                Icons.Rounded.ErrorOutline,
+                it.text.asString(context)
+            )
+            else -> {}
+        }
     }
 
 }
