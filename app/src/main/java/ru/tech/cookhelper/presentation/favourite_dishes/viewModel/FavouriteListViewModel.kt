@@ -10,12 +10,16 @@ import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.get_favourites.GetFavouriteDishesUseCase
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeState
+import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouriteListViewModel @Inject constructor(
     private val getFavouriteDishesUseCase: GetFavouriteDishesUseCase
-) : ViewModel() {
+) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _favState = mutableStateOf(RecipeState())
     val favState: State<RecipeState> = _favState
@@ -27,9 +31,8 @@ class FavouriteListViewModel @Inject constructor(
                     _favState.value = RecipeState(recipeList = result.data)
                 }
                 is Action.Error -> {
-                    _favState.value = RecipeState(
-                        error = result.message ?: "Нәрсәдер начар булып чыккан"
-                    )
+                    _favState.value = _favState.value.copy(isLoading = false)
+                    sendEvent(Event.ShowToast(UIText.DynamicString(result.message ?: "")))
                 }
                 is Action.Loading -> {
                     _favState.value = RecipeState(isLoading = true)

@@ -15,6 +15,10 @@ import ru.tech.cookhelper.domain.use_case.check_favourite.CheckFavouriteUseCase
 import ru.tech.cookhelper.domain.use_case.get_dish_by_id.GetDishByIdUseCase
 import ru.tech.cookhelper.domain.use_case.update_favorite.UpdateFavDishUseCase
 import ru.tech.cookhelper.presentation.dish_details.components.DishDetailsState
+import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
 import javax.inject.Inject
 
 @ExperimentalMaterial3Api
@@ -24,7 +28,7 @@ class DishDetailsViewModel @Inject constructor(
     private val checkFavouriteUseCase: CheckFavouriteUseCase,
     private val updateFavDishUseCase: UpdateFavDishUseCase,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private var id = -1
 
@@ -44,9 +48,8 @@ class DishDetailsViewModel @Inject constructor(
                     _dishState.value = DishDetailsState(dish = result.data)
                 }
                 is Action.Error -> {
-                    _dishState.value = DishDetailsState(
-                        error = result.message ?: "Нәрсәдер начар булып чыккан"
-                    )
+                    _dishState.value = _dishState.value.copy(isLoading = false)
+                    sendEvent(Event.ShowToast(UIText.DynamicString(result.message ?: "")))
                 }
                 is Action.Loading -> {
                     _dishState.value = DishDetailsState(isLoading = true)

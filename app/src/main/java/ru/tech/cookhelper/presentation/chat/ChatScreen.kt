@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,11 +43,16 @@ import ru.tech.cookhelper.presentation.chat.components.MessageHeader
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
 import ru.tech.cookhelper.presentation.ui.utils.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun ChatScreen(
     chatId: String, viewModel: ChatViewModel = hiltViewModel(
@@ -93,14 +99,6 @@ fun ChatScreen(
     LaunchedEffect(viewModel.messages.size) {
         if (viewModel.messages.lastOrNull()?.userId == user?.id) scrollToBottom()
         if (!isAtTheBottom) newMessages++
-    }
-
-    if (chatState.errorMessage.isNotEmpty()) {
-        LocalToastHost.current.sendToast(
-            Icons.Rounded.ErrorOutline,
-            chatState.errorMessage.asString()
-        )
-        viewModel.resetState()
     }
 
     Box {
@@ -169,48 +167,55 @@ fun ChatScreen(
                 }
             }
 
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-                state = state,
-                verticalArrangement = Arrangement.Bottom,
-                contentPadding = PaddingValues(vertical = 12.dp)
-            ) {
-                viewModel.messages.forEachIndexed { index, message ->
-                    val higherMessage = viewModel.messages.getOrNull(index - 1)
-                    val lowerMessage = viewModel.messages.getOrNull(index + 1)
+            AnimatedContent(targetState = viewModel.loadingAllMessages.value) { loading ->
+                if (loading) Loading(modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f))
+                else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .nestedScroll(scrollBehavior.nestedScrollConnection),
+                        state = state,
+                        verticalArrangement = Arrangement.Bottom,
+                        contentPadding = PaddingValues(vertical = 12.dp)
+                    ) {
+                        viewModel.messages.forEachIndexed { index, message ->
+                            val higherMessage = viewModel.messages.getOrNull(index - 1)
+                            val lowerMessage = viewModel.messages.getOrNull(index + 1)
 
-                    val topDay = formatOrNull(higherMessage?.timestamp, "d")
-                    val currentDay = formatOrNull(message.timestamp, "d")
+                            val topDay = formatOrNull(higherMessage?.timestamp, "d")
+                            val currentDay = formatOrNull(message.timestamp, "d")
 
-                    if (topDay != currentDay) stickyHeader {
-                        MessageHeader(
-                            text = formatOrNull(
-                                message.timestamp,
-                                "d MMMM"
-                            ).toString()
-                        )
-                    }
+                            if (topDay != currentDay) stickyHeader {
+                                MessageHeader(
+                                    text = formatOrNull(
+                                        message.timestamp,
+                                        "d MMMM"
+                                    ).toString()
+                                )
+                            }
 
-                    item {
-                        val topTime = formatOrNull(higherMessage?.timestamp)
-                        val currentTime = formatOrNull(message.timestamp)
-                        val bottomTime = formatOrNull(lowerMessage?.timestamp)
+                            item {
+                                val topTime = formatOrNull(higherMessage?.timestamp)
+                                val currentTime = formatOrNull(message.timestamp)
+                                val bottomTime = formatOrNull(lowerMessage?.timestamp)
 
-                        val cutTopCorner =
-                            higherMessage?.userId != message.userId || topTime != currentTime
-                        val showPointingArrow =
-                            lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
+                                val cutTopCorner =
+                                    higherMessage?.userId != message.userId || topTime != currentTime
+                                val showPointingArrow =
+                                    lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
 
-                        MessageBubbleItem(
-                            isMessageFromCurrentUser = (viewModel.user.value?.id
-                                ?: 0) == message.userId,
-                            text = message.text,
-                            timestamp = message.timestamp,
-                            cutTopCorner = cutTopCorner,
-                            showPointingArrow = showPointingArrow
-                        )
+                                MessageBubbleItem(
+                                    isMessageFromCurrentUser = (viewModel.user.value?.id
+                                        ?: 0) == message.userId,
+                                    text = message.text,
+                                    timestamp = message.timestamp,
+                                    cutTopCorner = cutTopCorner,
+                                    showPointingArrow = showPointingArrow
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -320,6 +325,19 @@ fun ChatScreen(
             }
         }
     }
+
+    val toastHost = LocalToastHost.current
+    val context = LocalContext.current
+    viewModel.eventFlow.collectOnLifecycle {
+        when (it) {
+            is Event.ShowToast -> toastHost.sendToast(
+                Icons.Rounded.ErrorOutline,
+                it.text.asString(context)
+            )
+            else -> {}
+        }
+    }
+
 
     BackHandler { onBack() }
 }

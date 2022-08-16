@@ -10,30 +10,29 @@ import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.get_recipes_list.GetRecipeListUseCase
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeState
+import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeListViewModel @Inject constructor(
     private val getRecipeListUseCase: GetRecipeListUseCase
-) : ViewModel() {
+) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _recipeState = mutableStateOf(RecipeState())
     val recipeState: State<RecipeState> = _recipeState
 
     init {
-        getCuisine()
-    }
-
-    private fun getCuisine() {
         getRecipeListUseCase().onEach { result ->
             when (result) {
                 is Action.Success -> {
                     _recipeState.value = RecipeState(recipeList = result.data)
                 }
                 is Action.Error -> {
-                    _recipeState.value = RecipeState(
-                        error = result.message ?: "Нәрсәдер начар булып чыккан"
-                    )
+                    _recipeState.value = _recipeState.value.copy(isLoading = false)
+                    sendEvent(Event.ShowToast(UIText.DynamicString(result.message ?: "")))
                 }
                 is Action.Loading -> {
                     _recipeState.value = RecipeState(isLoading = true)
@@ -41,10 +40,6 @@ class RecipeListViewModel @Inject constructor(
                 is Action.Empty -> TODO()
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun reload() {
-        getCuisine()
     }
 
 }

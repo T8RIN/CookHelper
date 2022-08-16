@@ -4,6 +4,5 @@ import ru.tech.cookhelper.domain.model.Recipe
 
 data class DishDetailsState(
     val isLoading: Boolean = false,
-    val dish: Recipe? = null,
-    val error: String = ""
+    val dish: Recipe? = null
 )

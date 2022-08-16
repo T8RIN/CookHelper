@@ -11,13 +11,17 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.get_fridge_list.GetFridgeListUseCase
 import ru.tech.cookhelper.domain.use_case.update_fridge.UpdateFridgeUseCase
 import ru.tech.cookhelper.presentation.fridge_list.components.FridgeListState
+import ru.tech.cookhelper.presentation.ui.utils.UIText
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
+import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
 import javax.inject.Inject
 
 @HiltViewModel
 class FridgeViewModel @Inject constructor(
     private val getFridgeListUseCase: GetFridgeListUseCase,
     private val updateFridgeUseCase: UpdateFridgeUseCase
-) : ViewModel() {
+) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _fridgeListState = mutableStateOf(FridgeListState())
     val fridgeListState: State<FridgeListState> = _fridgeListState
@@ -30,9 +34,8 @@ class FridgeViewModel @Inject constructor(
                         FridgeListState(products = result.data?.sortedBy { it.name })
                 }
                 is Action.Error -> {
-                    _fridgeListState.value = FridgeListState(
-                        error = result.message ?: "Нәрсәдер начар булып чыккан"
-                    )
+                    _fridgeListState.value = _fridgeListState.value.copy(isLoading = false)
+                    sendEvent(Event.ShowToast(UIText.DynamicString(result.message ?: "")))
                 }
                 is Action.Loading -> {
                     _fridgeListState.value = FridgeListState(isLoading = true)
