@@ -28,12 +28,11 @@ fun CategorySelectionDialog(
     onCategorySelected: (String) -> Unit
 ) {
     val dialogController = LocalDialogController.current
-
     AlertDialog(
         title = { Text(stringResource(R.string.choose_category)) },
         text = {
             Column {
-                Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                Separator()
                 LazyColumn(
                     modifier = Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.35f),
                 ) {
@@ -67,7 +66,7 @@ fun CategorySelectionDialog(
                         }
                     }
                 }
-                Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                Separator()
             }
         },
         onDismissRequest = { dialogController.close() },

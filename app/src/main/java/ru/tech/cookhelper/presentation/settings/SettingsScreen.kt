@@ -2,7 +2,6 @@ package ru.tech.cookhelper.presentation.settings
 
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
@@ -36,11 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.NightMode
-import ru.tech.cookhelper.presentation.app.components.Settings
+import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.app.components.Settings.*
-import ru.tech.cookhelper.presentation.app.components.SettingsState
-import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
 import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.presentation.ui.utils.ResUtils.asString
@@ -207,7 +204,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                     )
                 }
                 Spacer(Modifier.height(10.dp))
-                Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                Separator()
             }
         }
         item {
@@ -231,7 +228,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                     toastHost.sendToast(
                                         Icons.Outlined.GetApp,
                                         (R.string.long_click_to_go).asString(context),
-                                        Toast.LENGTH_SHORT
+                                        Toast.Short.time
                                     )
                                 }
                             )

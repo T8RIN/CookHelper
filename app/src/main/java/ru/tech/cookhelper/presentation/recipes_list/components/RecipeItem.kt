@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AvTimer
 import androidx.compose.material.icons.outlined.LocalFireDepartment
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 
 @Composable
 fun RecipeItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
@@ -93,6 +93,6 @@ fun RecipeItem(recipe: Recipe, onClick: (id: Int) -> Unit) {
             }
         }
         Spacer(Modifier.size(10.dp))
-        Divider(Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.surfaceVariant)
+        Separator()
     }
 }

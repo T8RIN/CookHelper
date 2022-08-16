@@ -129,10 +129,10 @@ fun PickProductsWithMeasuresDialog(
             AnimatedContent(targetState = addingProducts) { picking ->
                 if (!picking) {
                     if (localProducts.isNotEmpty()) {
-                        Column {
-                            Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                        Column(modifier = lazyColumnModifier) {
+                            Separator()
                             LazyColumn(
-                                modifier = lazyColumnModifier,
+                                modifier = Modifier.weight(1f, false),
                                 contentPadding = PaddingValues(vertical = 4.dp),
                             ) {
                                 items(localProducts) {
@@ -196,7 +196,7 @@ fun PickProductsWithMeasuresDialog(
                                     }
                                 }
                             }
-                            Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                            Separator()
                         }
                     } else {
                         Column(
@@ -225,10 +225,10 @@ fun PickProductsWithMeasuresDialog(
                         else true
                     }
                     if (list.isNotEmpty()) {
-                        Column {
-                            Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                        Column(lazyColumnModifier) {
+                            Separator()
                             LazyColumn(
-                                modifier = lazyColumnModifier,
+                                modifier = Modifier.weight(1f, false),
                                 contentPadding = PaddingValues(vertical = 4.dp),
                             ) {
                                 items(list) {
@@ -265,7 +265,7 @@ fun PickProductsWithMeasuresDialog(
                                     }
                                 }
                             }
-                            Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                            Separator()
                         }
                     } else {
                         Column(

@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,6 +33,7 @@ import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.addPadding
@@ -254,7 +256,7 @@ fun ProfileScreen(
                 FlexibleTabRow(
                     selectedTabIndex = selectedTabIndex,
                     tabs = tabs,
-                    divider = { Divider(color = MaterialTheme.colorScheme.surfaceVariant) },
+                    divider = { Separator() },
                     onTabClick = { tabIndex ->
                         selectedTabIndex = tabIndex
                     }
@@ -396,10 +398,7 @@ fun ProfileScreen(
                     }
                 )
                 if (posts.lastIndex != index) {
-                    Divider(
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
-                        thickness = 8.dp
-                    )
+                    Separator(thickness = 8.dp, modifier = Modifier.alpha(0.2f))
                 }
             }
         } else {

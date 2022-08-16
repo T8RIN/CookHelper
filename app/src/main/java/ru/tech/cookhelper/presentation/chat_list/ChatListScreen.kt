@@ -9,9 +9,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +27,7 @@ import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.chat_list.components.ChatListItem
 import ru.tech.cookhelper.presentation.chat_list.viewModel.ChatListViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.Screen
 import ru.tech.cookhelper.presentation.ui.utils.addPadding
@@ -74,7 +73,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
                             lastMessageTimestamp = chat.lastMessageTimestamp,
                             newMessagesCount = chat.newMessagesCount
                         )
-                        if (index != state.chatList.lastIndex) Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                        if (index != state.chatList.lastIndex) Separator()
                     }
                 }
             } else if (!state.isLoading) {

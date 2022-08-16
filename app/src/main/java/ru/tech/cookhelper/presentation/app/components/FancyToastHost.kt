@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.*
@@ -18,25 +17,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.max
+import kotlinx.coroutines.*
 import kotlin.math.min
 
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
-fun FancyToast(fancyToastValues: FancyToastValues) {
-    val showToast = remember {
-        MutableTransitionState(false).apply {
-            targetState = false
-        }
-    }
+fun FancyToastHost(fancyToastValues: FancyToastValues) {
+    val showToast = remember { MutableTransitionState(false) }
     val conf = LocalConfiguration.current
     val sizeMin = min(conf.screenWidthDp, conf.screenHeightDp).dp
-    val sizeMax = max(conf.screenWidthDp, conf.screenHeightDp).dp
 
     fancyToastValues.apply {
         Box(
@@ -45,7 +35,7 @@ fun FancyToast(fancyToastValues: FancyToastValues) {
             AnimatedVisibility(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = sizeMax * 0.2f)
+                    .padding(bottom = sizeMin * 0.2f, top = 24.dp)
                     .then(
                         if (showToast.isIdle) Modifier.shadow(4.dp, RoundedCornerShape(24.dp))
                         else Modifier
@@ -88,7 +78,7 @@ fun FancyToast(fancyToastValues: FancyToastValues) {
                     delay(200L)
                 }
                 showToast.targetState = true
-                delay(if (length == Toast.LENGTH_LONG) 5000L else 2500L)
+                delay(length)
                 showToast.targetState = false
             }
         }
@@ -98,22 +88,25 @@ fun FancyToast(fancyToastValues: FancyToastValues) {
 fun MutableState<FancyToastValues>.sendToast(
     icon: ImageVector?,
     message: String,
-    length: Int = Toast.LENGTH_LONG
+    length: Long = Toast.Long.time
 ) {
-    var fancyToastValues = FancyToastValues(icon, message, length)
-    if (value == fancyToastValues) fancyToastValues = value.copy(message = value.message + " ")
-
     CoroutineScope(Dispatchers.Main).launch {
+        val fancyToastValues = FancyToastValues(icon, message, length)
         delay(200L)
-        this@sendToast.apply {
-            value = value.copy(message = message, icon = icon)
-        }
+        value = if (value == fancyToastValues) {
+            fancyToastValues.copy(message = " ${value.message} ")
+        } else fancyToastValues
+        cancel()
     }
-    value = fancyToastValues
 }
 
 data class FancyToastValues(
     val icon: ImageVector? = null,
     val message: String = "",
-    val length: Int = Toast.LENGTH_LONG
+    val length: Long = Toast.Long.time
 )
+
+sealed class Toast(val time: kotlin.Long) {
+    object Long : Toast(3500L)
+    object Short : Toast(1500L)
+}

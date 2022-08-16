@@ -309,7 +309,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     }
                 }
 
-                FancyToast(fancyToastValues.value)
+                FancyToastHost(fancyToastValues.value)
             }
         }
     }
