@@ -41,6 +41,8 @@ import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
 import ru.tech.cookhelper.presentation.chat.components.MessageHeader
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
@@ -308,14 +310,14 @@ fun ChatScreen(
                 .imePadding()
         ) {
             Box {
-                SmallFloatingActionButton(
+                ExpandableFloatingActionButton(
                     onClick = { scrollToBottom() },
+                    size = FabSize.Small,
                     modifier = Modifier.padding(8.dp),
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                ) {
-                    Icon(Icons.Rounded.KeyboardArrowDown, null)
-                }
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    icon = { Icon(Icons.Rounded.KeyboardArrowDown, null) }
+                )
                 Badge(
                     Modifier
                         .padding(8.dp)

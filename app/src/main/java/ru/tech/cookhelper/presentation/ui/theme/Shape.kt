@@ -95,7 +95,6 @@ class PolygonShape(sides: Int, rotation: Float = 0f) : Shape {
 val TetraStarShape = RoundedStarShape(4, 0.19f, 45f)
 val HexagonShape = RoundedStarShape(6, 0.025f)
 val ErtsgammaShape = RoundedStarShape(12, 0.06f)
-val SquircleShape = SmoothRoundedCornerShape(16.dp, 80)
 
 data class SmoothRoundedCornerShape(
     private val topLeft: Dp = 0.dp,
@@ -462,17 +461,16 @@ data class SmoothRoundedCornerShape(
     )
 }
 
-fun SmoothRoundedCornerShape(
+fun SquircleShape(
     cornerRadius: Dp,
-    smoothness: Int = 60
-) =
-    SmoothRoundedCornerShape(
-        topLeft = cornerRadius,
-        topLeftSmoothness = smoothness,
-        topRight = cornerRadius,
-        topRightSmoothness = smoothness,
-        bottomRight = cornerRadius,
-        bottomRightSmoothness = smoothness,
-        bottomLeft = cornerRadius,
-        bottomLeftSmoothness = smoothness
-    )
+    smoothness: Int = 85
+) = SmoothRoundedCornerShape(
+    topLeft = cornerRadius,
+    topLeftSmoothness = smoothness,
+    topRight = cornerRadius,
+    topRightSmoothness = smoothness,
+    bottomRight = cornerRadius,
+    bottomRightSmoothness = smoothness,
+    bottomLeft = cornerRadius,
+    bottomLeftSmoothness = smoothness
+)
