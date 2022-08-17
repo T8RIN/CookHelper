@@ -464,13 +464,27 @@ data class SmoothRoundedCornerShape(
 fun SquircleShape(
     cornerRadius: Dp,
     smoothness: Int = 85
+) = SquircleShape(
+    topStart = cornerRadius,
+    topEnd = cornerRadius,
+    bottomEnd = cornerRadius,
+    bottomStart = cornerRadius,
+    smoothness = smoothness
+)
+
+fun SquircleShape(
+    smoothness: Int = 85,
+    topStart: Dp = 0.dp,
+    topEnd: Dp = 0.dp,
+    bottomStart: Dp = 0.dp,
+    bottomEnd: Dp = 0.dp
 ) = SmoothRoundedCornerShape(
-    topLeft = cornerRadius,
+    topLeft = topStart,
     topLeftSmoothness = smoothness,
-    topRight = cornerRadius,
+    topRight = topEnd,
     topRightSmoothness = smoothness,
-    bottomRight = cornerRadius,
+    bottomRight = bottomEnd,
     bottomRightSmoothness = smoothness,
-    bottomLeft = cornerRadius,
+    bottomLeft = bottomStart,
     bottomLeftSmoothness = smoothness
 )

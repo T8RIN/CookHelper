@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.profile.components
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
@@ -20,6 +19,7 @@ import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.android.ShareUtils.shareWith
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils
 import java.text.SimpleDateFormat
@@ -55,7 +55,7 @@ fun ProfileRecipeItem(
             .heightIn(min = 300.dp)
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-        shape = RoundedCornerShape(24.dp),
+        shape = SquircleShape(24.dp),
         onClick = { onRecipeClick(recipePost.postId) }
     ) {
         AuthorBubble(
@@ -70,7 +70,7 @@ fun ProfileRecipeItem(
             modifier = Modifier
                 .height(175.dp)
                 .padding(bottom = 8.dp),
-            shape = RoundedCornerShape(24.dp)
+            shape = SquircleShape(24.dp)
         )
         Column(
             modifier = Modifier

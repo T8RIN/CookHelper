@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +17,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.*
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import kotlin.math.min
 
 @ExperimentalAnimationApi
@@ -37,7 +37,7 @@ fun FancyToastHost(fancyToastValues: FancyToastValues) {
                     .align(Alignment.BottomCenter)
                     .padding(bottom = sizeMin * 0.2f, top = 24.dp)
                     .then(
-                        if (showToast.isIdle) Modifier.shadow(4.dp, RoundedCornerShape(24.dp))
+                        if (showToast.isIdle) Modifier.shadow(4.dp, SquircleShape(24.dp))
                         else Modifier
                     ),
                 visibleState = showToast,
@@ -50,7 +50,7 @@ fun FancyToastHost(fancyToastValues: FancyToastValues) {
                         .alpha(0.98f)
                         .heightIn(48.dp)
                         .widthIn(0.dp, (sizeMin * 0.7f)),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = SquircleShape(24.dp),
                 ) {
                     Row(
                         Modifier.padding(15.dp),

@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.profile.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
@@ -12,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,10 +57,11 @@ fun ImageCarousel(
             items(data) { item ->
                 OutlinedCard(
                     onClick = { onImageClick(item.id) },
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(100.dp),
+                    shape = SquircleShape(12.dp)
                 ) {
                     Picture(
-                        shape = RoundedCornerShape(0.dp),
+                        shape = RectangleShape,
                         model = item.link,
                         modifier = Modifier.fillMaxSize()
                     )
@@ -67,7 +69,11 @@ fun ImageCarousel(
                 Spacer(Modifier.width(5.dp))
             }
             item {
-                Card(onClick = onAddImageClick, modifier = Modifier.size(imageSize)) {
+                Card(
+                    onClick = onAddImageClick,
+                    modifier = Modifier.size(imageSize),
+                    shape = SquircleShape(12.dp)
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()

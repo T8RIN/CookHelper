@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SearchOff
@@ -36,6 +35,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
@@ -149,7 +149,7 @@ fun PickProductsWithMeasuresDialog(
                                             modifier = Modifier
                                                 .padding(vertical = 12.dp)
                                                 .fillMaxWidth()
-                                                .clip(RoundedCornerShape(4.dp)),
+                                                .clip(SquircleShape(4.dp)),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             IconButton(onClick = {
@@ -236,7 +236,7 @@ fun PickProductsWithMeasuresDialog(
                                         modifier = Modifier
                                             .padding(vertical = 4.dp)
                                             .fillMaxWidth()
-                                            .clip(RoundedCornerShape(4.dp))
+                                            .clip(SquircleShape(4.dp))
                                             .clickable {
                                                 selectedProducts.apply {
                                                     if (!contains(it.id)) add(it.id)

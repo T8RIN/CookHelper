@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,6 +16,7 @@ import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.popAll
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -46,11 +46,9 @@ fun MainModalDrawerContent(
                 )
             )
             .clip(
-                RoundedCornerShape(
+                SquircleShape(
                     topEnd = 24.dp,
-                    topStart = 0.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 24.dp
+                    bottomStart = 0.dp
                 )
             )
             .background(containerColor)
@@ -70,11 +68,9 @@ fun MainModalDrawerContent(
 
             NavigationDrawerItem(
                 icon = { Icon(item iconWith selected, null) },
-                shape = RoundedCornerShape(
-                    topStart = 0.0.dp,
+                shape = SquircleShape(
                     topEnd = 36.0.dp,
                     bottomEnd = 36.0.dp,
-                    bottomStart = 0.0.dp
                 ),
                 modifier = Modifier.padding(end = 12.dp),
                 label = { Text(item.title.asString()) },
