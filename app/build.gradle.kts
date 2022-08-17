@@ -16,7 +16,7 @@ android {
         minSdk = 21
         targetSdk = 33
         versionCode = 1
-        versionName = "0.1"
+        versionName = "0.1-alpha"
     }
 
     buildTypes {
@@ -60,8 +60,8 @@ dependencies {
     implementation("androidx.window:window:1.0.0")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Coroutine Lifecycle Scopes
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha01")
@@ -94,10 +94,10 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager-indicators:0.26.1-alpha")
 
     //Coil
-    implementation("io.coil-kt:coil:2.1.0")
-    implementation("io.coil-kt:coil-compose:2.1.0")
-    implementation("io.coil-kt:coil-gif:2.1.0")
-    implementation("io.coil-kt:coil-svg:2.1.0")
+    implementation("io.coil-kt:coil:2.2.0")
+    implementation("io.coil-kt:coil-compose:2.2.0")
+    implementation("io.coil-kt:coil-gif:2.2.0")
+    implementation("io.coil-kt:coil-svg:2.2.0")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
