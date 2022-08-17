@@ -321,9 +321,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     viewModel.eventFlow.collectOnLifecycle {
         when (it) {
             is Event.NavigateIf -> {
-                if (
-                    it.predicate(screenController.currentDestination ?: Screen.Home.None)
-                ) screenController.navigate(it.screen)
+                if (it.predicate(screenController.currentDestination)) screenController.navigate(it.screen)
             }
             is Event.NavigateTo -> screenController.navigate(it.screen)
             else -> {}
