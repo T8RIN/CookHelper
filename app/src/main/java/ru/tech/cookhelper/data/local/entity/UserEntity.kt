@@ -2,6 +2,7 @@ package ru.tech.cookhelper.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ru.tech.cookhelper.data.local.utils.DatabaseEntity
 import ru.tech.cookhelper.domain.model.User
 
 @Entity
@@ -23,29 +24,29 @@ data class UserEntity(
     val surname: String,
     val lastSeen: Long,
     val token: String
-)
+) : DatabaseEntity {
+    override fun asDomain(): User = User(
+        id,
+        avatar,
+        bannedIngredients,
+        bannedRecipes,
+        email,
+        forums,
+        fridge,
+        name,
+        nickname,
+        ownRecipes,
+        starredIngredients,
+        starredRecipes,
+        status,
+        verified,
+        surname,
+        lastSeen,
+        token
+    )
+}
 
-fun UserEntity.toUser() = User(
-    id,
-    avatar,
-    bannedIngredients,
-    bannedRecipes,
-    email,
-    forums,
-    fridge,
-    name,
-    nickname,
-    ownRecipes,
-    starredIngredients,
-    starredRecipes,
-    status,
-    verified,
-    surname,
-    lastSeen,
-    token
-)
-
-fun User.toEntity() = UserEntity(
+fun User.asDatabaseEntity() = UserEntity(
     id,
     avatar,
     bannedIngredients,

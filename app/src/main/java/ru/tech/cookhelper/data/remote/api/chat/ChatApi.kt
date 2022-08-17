@@ -2,7 +2,7 @@ package ru.tech.cookhelper.data.remote.api.chat
 
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.tech.cookhelper.data.remote.dto.ChatInfo
+import ru.tech.cookhelper.data.remote.response.ChatResponse
 
 interface ChatApi {
 
@@ -10,7 +10,7 @@ interface ChatApi {
     suspend fun getAllMessages(
         @Query("id") chatId: String,
         @Query("token") token: String
-    ): ChatInfo
+    ): ChatResponse
 
     @GET("api/chat/get")
     suspend fun getChatList(

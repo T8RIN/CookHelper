@@ -1,19 +1,11 @@
 package ru.tech.cookhelper.core.di
 
-import android.content.Context
-import androidx.room.Room
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import ru.tech.cookhelper.core.constants.Constants.BASE_URL
-import ru.tech.cookhelper.core.utils.RetrofitUtils.addLogger
-import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
-import ru.tech.cookhelper.data.local.CookHelperDatabase
+import ru.tech.cookhelper.data.local.database.CookHelperDatabase
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
@@ -26,30 +18,9 @@ import ru.tech.cookhelper.domain.repository.SettingsRepository
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideAuthService(): AuthService = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create())
-        .setTimeout()
-        .build()
-        .create(AuthService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideDatabase(
-        @ApplicationContext applicationContext: Context
-    ): CookHelperDatabase = Room.databaseBuilder(
-        applicationContext,
-        CookHelperDatabase::class.java,
-        "cook_helper_db"
-    ).fallbackToDestructiveMigration().fallbackToDestructiveMigration().build()
-
+object RepositoryModule {
     @Provides
     @Singleton
     fun provideSettingsRepository(
@@ -74,18 +45,5 @@ object AppModule {
         messageService = messageService,
         chatApi = chatApi
     )
-
-    @Provides
-    @Singleton
-    fun provideChatApi(): ChatApi = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create())
-        .addLogger()
-        .build()
-        .create(ChatApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideMessageService(): MessageService = MessageService()
 
 }

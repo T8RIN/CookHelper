@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.data.remote.dto
 
 import com.squareup.moshi.Json
+import ru.tech.cookhelper.data.remote.utils.Dto
 import ru.tech.cookhelper.domain.model.Message
 
 data class MessageDto(
@@ -12,6 +13,6 @@ data class MessageDto(
     val attachmentId: String?,
     @field:Json(name = "user_id")
     val userId: Long
-)
-
-fun MessageDto.toMessage() = Message(id, timestamp, text, attachmentId, userId)
+) : Dto {
+    override fun asDomain(): Message = Message(id, timestamp, text, attachmentId, userId)
+}

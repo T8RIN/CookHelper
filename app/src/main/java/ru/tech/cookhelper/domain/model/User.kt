@@ -1,5 +1,7 @@
 package ru.tech.cookhelper.domain.model
 
+import ru.tech.cookhelper.domain.utils.Domain
+
 data class User(
     val id: Long,
     val avatar: String? = null,
@@ -18,4 +20,4 @@ data class User(
     val surname: String,
     val lastSeen: Long,
     val token: String
-)
+) : Domain

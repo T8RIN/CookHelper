@@ -2,7 +2,7 @@ package ru.tech.cookhelper.data.remote.api.auth
 
 import retrofit2.Call
 import retrofit2.http.*
-import ru.tech.cookhelper.data.remote.dto.AuthInfo
+import ru.tech.cookhelper.data.remote.response.AuthResponse
 
 interface AuthService {
 
@@ -11,7 +11,7 @@ interface AuthService {
     fun loginWith(
         @Part("login") login: String,
         @Part("password") password: String
-    ): Call<AuthInfo>
+    ): Call<AuthResponse>
 
     @Multipart
     @POST("api/user/post/reg/")
@@ -21,24 +21,24 @@ interface AuthService {
         @Part("nickname") nickname: String,
         @Part("email") email: String,
         @Part("password") password: String
-    ): Call<AuthInfo>
+    ): Call<AuthResponse>
 
     @Multipart
     @POST("api/user/post/verify/")
     fun verifyEmail(
         @Part("code") code: String,
         @Part("token") token: String
-    ): Call<AuthInfo>
+    ): Call<AuthResponse>
 
     @GET("api/user/get/verification/")
     suspend fun requestCode(
         @Query("token") token: String
-    ): AuthInfo
+    ): AuthResponse
 
     @GET("api/user/get/recover-password/")
     suspend fun requestPasswordRestoreCode(
         @Query("login") login: String
-    ): AuthInfo
+    ): AuthResponse
 
     @Multipart
     @POST("api/user/post/recover-password/")
@@ -46,11 +46,11 @@ interface AuthService {
         @Part("login") login: String,
         @Part("code") code: String,
         @Part("password") password: String
-    ): Call<AuthInfo>
+    ): Call<AuthResponse>
 
     @GET("api/user/get/login-availability/")
     suspend fun checkLoginOrEmailForAvailability(
         @Query("login") query: String
-    ): AuthInfo
+    ): AuthResponse
 
 }

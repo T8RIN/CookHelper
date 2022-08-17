@@ -8,10 +8,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.data.local.dao.UserDao
-import ru.tech.cookhelper.data.local.entity.toEntity
-import ru.tech.cookhelper.data.local.entity.toUser
+import ru.tech.cookhelper.data.local.entity.asDatabaseEntity
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
-import ru.tech.cookhelper.data.remote.dto.toUser
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Inject
@@ -29,7 +27,7 @@ class UserRepositoryImpl @Inject constructor(
 
         when (body.status) {
             101, 102 -> emit(Action.Empty(body.status))
-            100, 103 -> emit(Action.Success(data = body.user?.toUser()))
+            100, 103 -> emit(Action.Success(data = body.user?.asDomain()))
             else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
@@ -46,7 +44,7 @@ class UserRepositoryImpl @Inject constructor(
             io { authService.registerWith(name, surname, nickname, email, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
-        if (body.status == 100) emit(Action.Success(data = body.user?.toUser()))
+        if (body.status == 100) emit(Action.Success(data = body.user?.asDomain()))
         else emit(Action.Error(message = body.message))
 
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
@@ -54,7 +52,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun requestCode(
         token: String
     ): Result<User?> = runCatching {
-        authService.requestCode(token).user?.toUser()
+        authService.requestCode(token).user?.asDomain()
     }
 
     override fun checkCode(code: String, token: String): Flow<Action<User?>> = flow {
@@ -64,20 +62,20 @@ class UserRepositoryImpl @Inject constructor(
 
         when (body.status) {
             102 -> emit(Action.Empty())
-            100 -> emit(Action.Success(data = body.user?.toUser()))
+            100 -> emit(Action.Success(data = body.user?.asDomain()))
             else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
-    override suspend fun cacheUser(user: User) = userDao.cacheUser(user.toEntity())
+    override suspend fun cacheUser(user: User) = userDao.cacheUser(user.asDatabaseEntity())
 
-    override fun getUser(): Flow<User?> = userDao.getUser().map { it?.toUser() }
+    override fun getUser(): Flow<User?> = userDao.getUser().map { it?.asDomain() }
 
     override suspend fun checkLoginOrEmailForAvailability(
         query: String
     ): Action<User?> = try {
         val response = authService.checkLoginOrEmailForAvailability(query)
-        if (response.status == 100) Action.Success(data = response.user?.toUser())
+        if (response.status == 100) Action.Success(data = response.user?.asDomain())
         else Action.Error(message = response.message)
     } catch (t: Throwable) {
         Action.Error(message = t.message.toString())
@@ -95,7 +93,7 @@ class UserRepositoryImpl @Inject constructor(
             val authInfo = result.getOrNull()
             if (authInfo != null) {
                 return when (authInfo.status) {
-                    100 -> Action.Success(authInfo.user?.toUser())
+                    100 -> Action.Success(authInfo.user?.asDomain())
                     else -> {
                         Action.Empty(status = authInfo.status)
                     }
@@ -117,7 +115,7 @@ class UserRepositoryImpl @Inject constructor(
 
         when (body.status) {
             102 -> emit(Action.Empty())
-            100 -> emit(Action.Success(data = body.user?.toUser()))
+            100 -> emit(Action.Success(data = body.user?.asDomain()))
             else -> emit(Action.Error(message = body.message))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }

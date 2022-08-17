@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.data.local
+package ru.tech.cookhelper.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

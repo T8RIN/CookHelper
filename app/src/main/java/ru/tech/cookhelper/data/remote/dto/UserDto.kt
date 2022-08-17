@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.data.remote.dto
 
+import ru.tech.cookhelper.data.remote.utils.Dto
 import ru.tech.cookhelper.domain.model.User
 
 data class UserDto(
@@ -20,24 +21,24 @@ data class UserDto(
     val surname: String?,
     val lastSeen: Long?,
     val token: String?
-)
-
-fun UserDto.toUser() = User(
-    id ?: 0,
-    avatar,
-    bannedIngredients,
-    bannedRecipes,
-    email ?: "",
-    forums,
-    fridge?.joinToString(),
-    name ?: "",
-    nickname ?: "",
-    ownRecipes,
-    starredIngredients,
-    starredRecipes,
-    status,
-    verified ?: false,
-    surname ?: "",
-    lastSeen ?: 0L,
-    token ?: ""
-)
+) : Dto {
+    override fun asDomain(): User = User(
+        id ?: 0,
+        avatar,
+        bannedIngredients,
+        bannedRecipes,
+        email ?: "",
+        forums,
+        fridge?.joinToString(),
+        name ?: "",
+        nickname ?: "",
+        ownRecipes,
+        starredIngredients,
+        starredRecipes,
+        status,
+        verified ?: false,
+        surname ?: "",
+        lastSeen ?: 0L,
+        token ?: ""
+    )
+}
