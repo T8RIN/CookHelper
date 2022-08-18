@@ -37,7 +37,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.LazyTextField
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTextField
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -190,7 +190,7 @@ fun RecipePostCreationScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    LazyTextField(
+                    RoundedTextField(
                         value = label,
                         onValueChange = { label = it },
                         startIcon = Icons.Outlined.FontDownload,
@@ -254,7 +254,7 @@ fun RecipePostCreationScreen(
                         }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    LazyTextField(
+                    RoundedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = viewModel.products.value.joinToString(
                             separator = "\n",
@@ -271,7 +271,7 @@ fun RecipePostCreationScreen(
                     Row {
                         var timeHeight by remember { mutableStateOf(56.dp) }
                         val density = LocalDensity.current
-                        LazyTextField(
+                        RoundedTextField(
                             value = time,
                             startIcon = Icons.Outlined.AvTimer,
                             onValueChange = { time = it },
@@ -294,7 +294,7 @@ fun RecipePostCreationScreen(
                             }
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        LazyTextField(
+                        RoundedTextField(
                             value = calories,
                             startIcon = Icons.Outlined.Restaurant,
                             onValueChange = { calories = it },
@@ -320,7 +320,7 @@ fun RecipePostCreationScreen(
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row {
-                        LazyTextField(
+                        RoundedTextField(
                             value = proteins,
                             startIcon = Icons.Outlined.Egg,
                             onValueChange = { proteins = it },
@@ -334,7 +334,7 @@ fun RecipePostCreationScreen(
                             onLoseFocusTransformation = { removeSuffix(".") }
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        LazyTextField(
+                        RoundedTextField(
                             value = fats,
                             startIcon = Icons.Outlined.OilBarrel,
                             onValueChange = { fats = it },
@@ -349,7 +349,7 @@ fun RecipePostCreationScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    LazyTextField(
+                    RoundedTextField(
                         value = carbohydrates,
                         startIcon = Icons.Outlined.Cake,
                         onValueChange = { carbohydrates = it },
@@ -364,7 +364,7 @@ fun RecipePostCreationScreen(
                         onLoseFocusTransformation = { removeSuffix(".") }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    LazyTextField(
+                    RoundedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = category,
                         onValueChange = {},
@@ -389,7 +389,7 @@ fun RecipePostCreationScreen(
                         }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    LazyTextField(
+                    RoundedTextField(
                         value = steps,
                         startIcon = Icons.Outlined.Notes,
                         onValueChange = { steps = it },

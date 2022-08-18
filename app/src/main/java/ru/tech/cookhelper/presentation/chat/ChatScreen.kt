@@ -108,7 +108,7 @@ fun ChatScreen(
                 modifier = Modifier.onSizeChanged {
                     fabTopPadding = it.height
                 },
-                size = Size.Centered,
+                topAppBarSize = TopAppBarSize.Centered,
                 scrollBehavior = scrollBehavior,
                 title = {
                     Row(

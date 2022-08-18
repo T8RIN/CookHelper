@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LazyTextField(
+fun RoundedTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     label: String,
@@ -89,7 +89,7 @@ fun LazyTextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LazyTextField(
+fun RoundedTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     hint: String,

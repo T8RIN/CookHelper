@@ -104,7 +104,7 @@ fun PickProductsWithMeasuresDialog(
                         }
                     }
                 } else {
-                    LazyTextField(
+                    RoundedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 16.sp),
                         onValueChange = { allProductsSearch = it },

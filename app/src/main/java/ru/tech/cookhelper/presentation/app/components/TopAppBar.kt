@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
-    size: Size = Size.Small,
+    topAppBarSize: TopAppBarSize = TopAppBarSize.Small,
     title: @Composable () -> Unit,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -32,8 +32,8 @@ fun TopAppBar(
     )
 
     Surface(color = backgroundColor) {
-        when (size) {
-            Size.Small -> {
+        when (topAppBarSize) {
+            TopAppBarSize.Small -> {
                 SmallTopAppBar(
                     title,
                     paddingModifier,
@@ -43,7 +43,7 @@ fun TopAppBar(
                     scrollBehavior
                 )
             }
-            Size.Centered -> {
+            TopAppBarSize.Centered -> {
                 CenterAlignedTopAppBar(
                     title,
                     paddingModifier,
@@ -53,7 +53,7 @@ fun TopAppBar(
                     scrollBehavior
                 )
             }
-            Size.Medium -> {
+            TopAppBarSize.Medium -> {
                 MediumTopAppBar(
                     title,
                     paddingModifier,
@@ -63,7 +63,7 @@ fun TopAppBar(
                     scrollBehavior
                 )
             }
-            Size.Large -> {
+            TopAppBarSize.Large -> {
                 LargeTopAppBar(
                     title,
                     paddingModifier,
@@ -77,4 +77,4 @@ fun TopAppBar(
     }
 }
 
-enum class Size { Small, Centered, Medium, Large }
+enum class TopAppBarSize { Small, Centered, Medium, Large }

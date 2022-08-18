@@ -92,7 +92,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     Column {
                         AnimatedVisibility(visible = showTopAppBar) {
                             TopAppBar(
-                                size = Size.Centered,
+                                topAppBarSize = TopAppBarSize.Centered,
                                 navigationIcon = {
                                     IconButton(
                                         onClick = { scope.launch { drawerState.open() } },
