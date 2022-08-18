@@ -241,7 +241,9 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                             onBack = { screenController.pop() }
                                         )
                                     }
-                                    is Screen.Authentication -> AuthenticationScreen()
+                                    is Screen.Authentication -> {
+                                        AuthenticationScreen()
+                                    }
                                     is Screen.PostCreation -> {
                                         PostCreationScreen(
                                             onBack = {

@@ -4,7 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -25,16 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Toast
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
@@ -43,7 +44,9 @@ import ru.tech.cookhelper.presentation.settings.components.Settings
 import ru.tech.cookhelper.presentation.settings.components.Settings.*
 import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.colorList
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
@@ -81,18 +84,20 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                             else 0.5f
                         } else 1f
                     )
-                    Box(
-                        Modifier
+                    Surface(
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        shape = SquircleShape(14.dp),
+                        modifier = Modifier
                             .size(42.dp)
-                            .clip(RoundedCornerShape(13.dp))
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
                             .then(alphaModifier)
                     ) {
-                        Icon(
-                            setting.getIcon(settingsState.nightMode),
-                            null,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
+                        Box(Modifier.fillMaxSize()) {
+                            Icon(
+                                setting.getIcon(settingsState.nightMode),
+                                null,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
                     }
                     Spacer(Modifier.width(16.dp))
                     Text(
@@ -215,10 +220,10 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
             Spacer(Modifier.height(80.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    Box(
-                        Modifier
+                    Surface(
+                        modifier = Modifier
                             .size(86.dp)
-                            .shadow(4.dp, RoundedCornerShape(20.dp))
+                            .clip(SquircleShape(20.dp))
                             .combinedClickable(
                                 onLongClick = {
                                     context.startActivity(
@@ -236,16 +241,13 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                                     )
                                 }
                             )
-                            .background(
-                                MaterialTheme.colorScheme.background
-                            )
-                            .clip(RoundedCornerShape(20.dp))
                             .align(Alignment.Center),
+                        shape = SquircleShape(20.dp),
+                        color = MaterialTheme.colorScheme.background.createSecondaryColor(0.05f),
                         content = {}
                     )
-                    Image(
-                        painter = painterResource(R.drawable.ic_launcher_foreground),
-                        contentDescription = null,
+                    Picture(
+                        model = R.drawable.ic_launcher_foreground,
                         modifier = Modifier
                             .size(114.dp)
                             .align(Alignment.Center)

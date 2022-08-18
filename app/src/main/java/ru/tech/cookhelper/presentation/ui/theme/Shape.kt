@@ -55,11 +55,11 @@ class RoundedStarShape(
 
         }
     )
-
 }
 
+@Suppress("unused")
 class PolygonShape(sides: Int, rotation: Float = 0f) : Shape {
-    private val STEPCOUNT = ((TWO_PI) / sides)
+    private val stepCount = (TWO_PI) / sides
 
     private val rotationDegree = (PI / 180) * rotation
 
@@ -83,7 +83,7 @@ class PolygonShape(sides: Int, rotation: Float = 0f) : Shape {
             val y = r * sin(t)
             lineTo((x + xCenter).toFloat(), (y + yCenter).toFloat())
 
-            t += STEPCOUNT
+            t += stepCount
         }
 
         val x = r * cos(t)
@@ -92,8 +92,13 @@ class PolygonShape(sides: Int, rotation: Float = 0f) : Shape {
     })
 }
 
+@Suppress("unused")
 val TetraStarShape = RoundedStarShape(4, 0.19f, 45f)
+
+@Suppress("unused")
 val HexagonShape = RoundedStarShape(6, 0.025f)
+
+@Suppress("unused")
 val ErtsgammaShape = RoundedStarShape(12, 0.06f)
 
 data class SmoothRoundedCornerShape(
@@ -461,6 +466,7 @@ data class SmoothRoundedCornerShape(
     )
 }
 
+@Suppress("FunctionName")
 fun SquircleShape(
     cornerRadius: Dp,
     smoothness: Int = 85
@@ -472,6 +478,7 @@ fun SquircleShape(
     smoothness = smoothness
 )
 
+@Suppress("FunctionName")
 fun SquircleShape(
     smoothness: Int = 85,
     topStart: Dp = 0.dp,

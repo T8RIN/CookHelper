@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.profile.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -54,11 +55,12 @@ fun ImageCarousel(
         LazyRow(
             contentPadding = PaddingValues(horizontal = 15.dp),
         ) {
-            items(data) { item ->
+            items(data + data) { item ->
                 OutlinedCard(
                     onClick = { onImageClick(item.id) },
-                    modifier = Modifier.size(100.dp),
-                    shape = SquircleShape(12.dp)
+                    modifier = Modifier.size(imageSize),
+                    shape = SquircleShape(12.dp),
+                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     Picture(
                         shape = RectangleShape,
