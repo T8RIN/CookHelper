@@ -5,11 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -21,6 +22,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.all_images.components.AdaptiveVerticalGrid
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
+import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 
@@ -33,15 +35,7 @@ fun AllImagesScreen(
     onAddImage: (uri: String) -> Unit
 ) {
     val screenController = LocalScreenController.current
-
-    val topAppBarState = rememberTopAppBarState()
-    val scrollBehavior by remember {
-        mutableStateOf(
-            TopAppBarDefaults.pinnedScrollBehavior(
-                topAppBarState
-            )
-        )
-    }
+    val scrollBehavior by rememberTopAppBarScrollBehavior()
 
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         TopAppBar(

@@ -22,16 +22,14 @@ import dev.olshevski.navigation.reimagined.AnimatedNavHostTransitionSpec
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.rememberNavController
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
-import ru.tech.cookhelper.presentation.ui.utils.navigation.hideTopBarList
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @OptIn(
@@ -54,14 +52,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         remember { mutableStateOf(null) }
     LaunchedEffect(screenController.currentDestination) { topAppBarActions.clearActions() }
 
-    val topAppBarState = rememberTopAppBarState()
-    val scrollBehavior by remember {
-        mutableStateOf(
-            TopAppBarDefaults.pinnedScrollBehavior(
-                topAppBarState
-            )
-        )
-    }
+    val scrollBehavior by rememberTopAppBarScrollBehavior()
 
     CompositionLocalProvider(
         values = arrayOf(
@@ -74,7 +65,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         )
     ) {
         ProKitchenTheme {
-            val showTopBar by computedStateOf { screenController.currentDestination!!::class.name !in hideTopBarList }
+            val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
 
             BackHandler { dialogController.show(Dialog.Exit(onExit = { activity?.finishAffinity() })) }
 
@@ -99,22 +90,19 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                         )
                     },
                     drawerState = drawerState,
-                    gesturesEnabled = showTopBar
+                    gesturesEnabled = showTopAppBar
                 ) {
                     Column {
-                        AnimatedVisibility(visible = showTopBar) {
+                        AnimatedVisibility(visible = showTopAppBar) {
                             TopAppBar(
                                 size = Size.Centered,
                                 navigationIcon = {
-                                    IconButton(onClick = {
-                                        scope.launch { drawerState.open() }
-                                    }) {
-                                        Icon(Icons.Rounded.Menu, null)
-                                    }
+                                    IconButton(
+                                        onClick = { scope.launch { drawerState.open() } },
+                                        content = { Icon(Icons.Rounded.Menu, null) }
+                                    )
                                 },
-                                actions = {
-                                    topAppBarActions(this)
-                                },
+                                actions = { topAppBarActions(this) },
                                 title = {
                                     Text(
                                         viewModel.title.value.asString(),

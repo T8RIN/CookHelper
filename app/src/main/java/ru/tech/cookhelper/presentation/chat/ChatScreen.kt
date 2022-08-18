@@ -45,6 +45,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Expandabl
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
@@ -73,14 +74,7 @@ fun ChatScreen(
             colorTransitionFraction = 1f
         ).value
 
-    val topAppBarState = rememberTopAppBarState()
-    val scrollBehavior by remember {
-        mutableStateOf(
-            TopAppBarDefaults.pinnedScrollBehavior(
-                topAppBarState
-            )
-        )
-    }
+    val scrollBehavior by rememberTopAppBarScrollBehavior()
 
     val isAtTheBottom by computedStateOf { state.isLastItemVisible }
     var fabBottomPadding by remember { mutableStateOf(0) }

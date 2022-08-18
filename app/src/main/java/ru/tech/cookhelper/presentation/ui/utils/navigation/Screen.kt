@@ -7,7 +7,6 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
@@ -16,7 +15,8 @@ sealed class Screen(
     open val title: UIText = UIText.Empty(),
     open val shortTitle: UIText = UIText.Empty(),
     open val baseIcon: ImageVector = Icons.Default.PhoneAndroid,
-    open val selectedIcon: ImageVector = Icons.Default.PhoneAndroid
+    open val selectedIcon: ImageVector = Icons.Default.PhoneAndroid,
+    open val showTopAppBar: Boolean = true
 ) : Parcelable {
 
     @Parcelize
@@ -104,19 +104,19 @@ sealed class Screen(
     @Parcelize
     class RecipeDetails(
         val id: Int = 0,
-    ) : Screen()
+    ) : Screen(showTopAppBar = false)
 
     @Parcelize
-    class MatchedRecipes : Screen()
+    class MatchedRecipes : Screen(showTopAppBar = false)
 
     @Parcelize
-    object Authentication : Screen()
+    object Authentication : Screen(showTopAppBar = false)
 
     @Parcelize
     class FullscreenImagePager(
         val id: String = "0",
         val images: List<Image> = emptyList(),
-    ) : Screen()
+    ) : Screen(showTopAppBar = false)
 
 
     @Parcelize
@@ -124,20 +124,20 @@ sealed class Screen(
         val images: List<Image> = emptyList(),
         val canAddImages: Boolean = false,
         val onAddImage: (uri: String) -> Unit
-    ) : Screen()
+    ) : Screen(showTopAppBar = false)
 
     @Parcelize
     class PostCreation(
         val imageUri: String = ""
-    ) : Screen()
+    ) : Screen(showTopAppBar = false)
 
     @Parcelize
-    class RecipePostCreation : Screen()
+    class RecipePostCreation : Screen(showTopAppBar = false)
 
     @Parcelize
     class Chat(
         val chatId: String,
-    ) : Screen()
+    ) : Screen(showTopAppBar = false)
 }
 
 val drawerList = listOf(
@@ -148,17 +148,6 @@ val drawerList = listOf(
     Screen.Favourites,
     Screen.BlockList,
     Screen.Settings
-)
-
-val hideTopBarList = listOf(
-    Screen.AllImages::class.name,
-    Screen.FullscreenImagePager::class.name,
-    Screen.PostCreation::class.name,
-    Screen.Chat::class.name,
-    Screen.RecipePostCreation::class.name,
-    Screen.MatchedRecipes::class.name,
-    Screen.RecipeDetails::class.name,
-    Screen.Authentication::class.name
 )
 
 val navBarList = listOf(
