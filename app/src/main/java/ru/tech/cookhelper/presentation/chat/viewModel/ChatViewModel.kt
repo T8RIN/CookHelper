@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.presentation.chat.viewModel
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -39,13 +39,13 @@ class ChatViewModel @Inject constructor(
     private var chatId: String = ""
 
     private val _user: MutableState<User?> = mutableStateOf(null)
-    val user: State<User?> = _user
+    val user: User? by _user
 
     private val _chatState: MutableState<ChatState> = mutableStateOf(ChatState())
-    val chatState: State<ChatState> = _chatState
+    val chatState: ChatState by _chatState
 
     private val _loadingAllMessages: MutableState<Boolean> = mutableStateOf(false)
-    val loadingAllMessages: State<Boolean> = _loadingAllMessages
+    val loadingAllMessages: Boolean by _loadingAllMessages
 
     val messages = mutableStateListOf<Message>()
 

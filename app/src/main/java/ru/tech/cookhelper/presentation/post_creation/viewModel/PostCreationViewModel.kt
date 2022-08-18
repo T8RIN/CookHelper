@@ -2,7 +2,7 @@ package ru.tech.cookhelper.presentation.post_creation.viewModel
 
 import android.net.Uri
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +19,7 @@ class PostCreationViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _user: MutableState<User?> = mutableStateOf(null)
-    val user: State<User?> = _user
+    val user: User? by _user
 
     init {
         getUserUseCase()

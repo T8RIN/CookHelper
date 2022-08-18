@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.presentation.recipes_list.viewModel
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +22,7 @@ class RecipeListViewModel @Inject constructor(
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _recipeState = mutableStateOf(RecipeState())
-    val recipeState: State<RecipeState> = _recipeState
+    val recipeState: RecipeState by _recipeState
 
     init {
         getRecipeListUseCase().onEach { result ->

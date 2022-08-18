@@ -36,7 +36,7 @@ import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +62,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
     }
 
     val isFormValid by computedStateOf {
-        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password && viewModel.checkLoginState.value.error.isEmpty() && isPasswordValid
+        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password && viewModel.checkLoginState.error.isEmpty() && isPasswordValid
     }
 
     val focusManager = LocalFocusManager.current
@@ -80,7 +80,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
         style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center
     )
     Spacer(Modifier.size(32.dp * mod))
-    AnimatedContent(viewModel.registrationState.value.isLoading) { isLoading ->
+    AnimatedContent(viewModel.registrationState.isLoading) { isLoading ->
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -127,11 +127,11 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                 Spacer(Modifier.size(8.dp * mod))
                 StrokeTextField(
                     value = nick,
-                    loading = viewModel.checkLoginState.value.isLoading,
+                    loading = viewModel.checkLoginState.isLoading,
                     onValueChange = { nick = it; viewModel.checkLoginForAvailability(it) },
                     label = { Text(stringResource(R.string.nick)) },
                     singleLine = true,
-                    isError = nick.isEmpty() || viewModel.checkLoginState.value.error.isNotEmpty(),
+                    isError = nick.isEmpty() || viewModel.checkLoginState.error.isNotEmpty(),
                     error = {
                         if (nick.isNotEmpty()) Text(
                             stringResource(R.string.nickname_rejected),
@@ -157,14 +157,14 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                         Spacer(Modifier.size(8.dp * mod))
                         StrokeTextField(
                             value = email,
-                            loading = viewModel.checkEmailState.value.isLoading,
+                            loading = viewModel.checkEmailState.isLoading,
                             onValueChange = {
                                 email =
                                     it; if (email.isValid()) viewModel.checkEmailForAvailability(it)
                             },
                             label = { Text(stringResource(R.string.email)) },
                             singleLine = true,
-                            isError = email.isEmpty() || email.isNotValid() || viewModel.checkEmailState.value.error.isNotEmpty(),
+                            isError = email.isEmpty() || email.isNotValid() || viewModel.checkEmailState.error.isNotEmpty(),
                             error = {
                                 if (email.isNotEmpty() && email.isValid()) Text(
                                     stringResource(
@@ -258,7 +258,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
 
     Spacer(Modifier.size(32.dp * mod))
     Button(
-        enabled = if (!viewModel.registrationState.value.isLoading) isFormValid else false,
+        enabled = if (!viewModel.registrationState.isLoading) isFormValid else false,
         onClick = {
             viewModel.registerWith(
                 name.capitalize(),
@@ -284,7 +284,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(16.dp * mod))
 
-    viewModel.eventFlow.collectOnLifecycle {
+    viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.ShowToast -> toastHost.sendToast(
                 Icons.Rounded.ErrorOutline,

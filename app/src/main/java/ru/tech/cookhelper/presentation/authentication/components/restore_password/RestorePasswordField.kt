@@ -34,7 +34,7 @@ import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,7 +68,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
     )
     Spacer(Modifier.size(8.dp * mod))
 
-    AnimatedContent(viewModel.restorePasswordState.value) { state ->
+    AnimatedContent(viewModel.restorePasswordState) { state ->
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -164,7 +164,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                             Spacer(Modifier.size(32.dp * mod))
                             OTPField(
                                 length = 5,
-                                codeState = viewModel.restorePasswordCodeState.value,
+                                codeState = viewModel.restorePasswordCodeState,
                                 onChange = { localCode -> code = localCode }
                             )
                         }
@@ -205,7 +205,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         }
     }
 
-    viewModel.eventFlow.collectOnLifecycle {
+    viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.ShowToast -> toastHost.sendToast(
                 it.icon,

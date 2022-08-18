@@ -55,7 +55,7 @@ fun PostCreationScreen(
     var label by rememberSaveable { mutableStateOf("") }
     var imageUri by rememberSaveable { mutableStateOf(initialImageUri) }
 
-    val user = viewModel.user.value
+    val user = viewModel.user
 
     val dialogController = LocalDialogController.current
 

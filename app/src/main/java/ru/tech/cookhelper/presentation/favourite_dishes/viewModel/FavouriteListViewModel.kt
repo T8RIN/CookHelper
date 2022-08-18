@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.presentation.favourite_dishes.viewModel
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +22,7 @@ class FavouriteListViewModel @Inject constructor(
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _favState = mutableStateOf(RecipeState())
-    val favState: State<RecipeState> = _favState
+    val favState: RecipeState by _favState
 
     init {
         getFavouriteDishesUseCase().onEach { result ->

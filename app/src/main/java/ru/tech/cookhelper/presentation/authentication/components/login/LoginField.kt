@@ -30,7 +30,7 @@ import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +66,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
         textAlign = TextAlign.Center
     )
     Spacer(Modifier.size(64.dp * mod))
-    AnimatedContent(viewModel.loginState.value.isLoading) { isLoading ->
+    AnimatedContent(viewModel.loginState.isLoading) { isLoading ->
         Column {
             if (isLoading) Loading(Modifier.fillMaxWidth())
             else {
@@ -132,7 +132,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(48.dp * mod))
     Button(
-        enabled = if (!viewModel.loginState.value.isLoading) isFormValid else false,
+        enabled = if (!viewModel.loginState.isLoading) isFormValid else false,
         onClick = { viewModel.logInWith(login, password) },
         modifier = Modifier.defaultMinSize(
             minWidth = TextFieldDefaults.MinWidth
@@ -153,7 +153,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(16.dp * mod))
 
-    viewModel.eventFlow.collectOnLifecycle {
+    viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.ShowToast -> toastHost.sendToast(
                 it.icon,

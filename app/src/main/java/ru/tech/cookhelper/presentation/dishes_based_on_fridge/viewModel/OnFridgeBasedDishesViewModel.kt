@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.presentation.dishes_based_on_fridge.viewModel
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +16,6 @@ class OnFridgeBasedDishesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _dishes = mutableStateOf(PodborState())
-    val dishes: State<PodborState> = _dishes
+    val dishes: PodborState by _dishes
 
 }

@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.presentation.profile.viewModel
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +20,7 @@ class ProfileViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
     private val _userState: MutableState<UserState> = mutableStateOf(UserState())
-    val userState: State<UserState> = _userState
+    val userState: UserState by _userState
 
     init {
         getUserUseCase().onEach { user ->

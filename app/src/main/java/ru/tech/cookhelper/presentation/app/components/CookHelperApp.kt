@@ -24,7 +24,7 @@ import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivit
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
@@ -44,8 +44,9 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
-    val topAppBarActions: MutableState<(@Composable RowScope.() -> Unit)?> =
-        remember { mutableStateOf(null) }
+    val topAppBarActions: MutableState<(@Composable RowScope.() -> Unit)?> = remember {
+        mutableStateOf(null)
+    }
     LaunchedEffect(screenController.currentDestination) { topAppBarActions.clearActions() }
 
     val scrollBehavior by rememberTopAppBarScrollBehavior()
@@ -56,7 +57,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalDialogController provides dialogController,
             LocalSnackbarHost provides snackbarHostState,
             LocalToastHost provides fancyToastValues,
-            LocalSettingsProvider provides viewModel.settingsState.value,
+            LocalSettingsProvider provides viewModel.settingsState,
             LocalTopAppBarActions provides topAppBarActions
         )
     ) {
@@ -72,7 +73,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                 ModalNavigationDrawer(
                     drawerContent = {
                         MainModalDrawerContent(
-                            userState = viewModel.userState.value,
+                            userState = viewModel.userState,
                             drawerState = drawerState,
                             onClick = {
                                 viewModel.updateTitle(
@@ -99,7 +100,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                 actions = { topAppBarActions(this) },
                                 title = {
                                     Text(
-                                        viewModel.title.value.asString(),
+                                        viewModel.title.asString(),
                                         fontWeight = FontWeight.Medium
                                     )
                                 },
@@ -122,7 +123,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         }
     }
 
-    viewModel.eventFlow.collectOnLifecycle {
+    viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.NavigateIf -> {
                 if (it.predicate(screenController.currentDestination)) screenController.navigate(it.screen)

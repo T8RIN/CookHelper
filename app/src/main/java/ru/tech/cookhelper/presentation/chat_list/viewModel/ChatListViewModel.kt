@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.presentation.chat_list.viewModel
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,10 +27,10 @@ class ChatListViewModel @Inject constructor(
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _user: MutableState<User?> = mutableStateOf(null)
-    val user: State<User?> = _user
+    val user: User? by _user
 
     private val _chatListState: MutableState<ChatListState> = mutableStateOf(ChatListState())
-    val chatListState: State<ChatListState> = _chatListState
+    val chatListState: ChatListState by _chatListState
 
     init {
         getUserUseCase().onEach {

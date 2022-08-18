@@ -22,7 +22,7 @@ import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.util.*
 
@@ -59,7 +59,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
 
     OTPField(
         length = 6,
-        codeState = viewModel.codeState.value,
+        codeState = viewModel.codeState,
         onFilled = {
             viewModel.checkVerificationCode(it)
         }
@@ -99,7 +99,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
     }
     Spacer(Modifier.size(16.dp * mod))
 
-    viewModel.eventFlow.collectOnLifecycle {
+    viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.ShowToast -> toastHost.sendToast(
                 it.icon,

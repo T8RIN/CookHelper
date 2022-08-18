@@ -5,7 +5,10 @@ import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material.icons.rounded.Password
-import androidx.compose.runtime.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -64,28 +67,32 @@ class AuthViewModel @Inject constructor(
     private var previousState by mutableStateOf(AuthState.Login)
 
     private val _authState: MutableState<AuthState> = mutableStateOf(AuthState.Login)
-    val authState: State<AuthState> = _authState
+    val authState: AuthState by _authState
 
-    private val _codeState = mutableStateOf(CodeState())
-    val codeState: State<CodeState> = _codeState
+    private val _codeState: MutableState<CodeState> = mutableStateOf(CodeState())
+    val codeState: CodeState by _codeState
 
-    private val _loginState = mutableStateOf(LoginState())
-    val loginState: State<LoginState> = _loginState
+    private val _loginState: MutableState<LoginState> = mutableStateOf(LoginState())
+    val loginState: LoginState by _loginState
 
-    private val _registrationState = mutableStateOf(RegistrationState())
-    val registrationState: State<RegistrationState> = _registrationState
+    private val _registrationState: MutableState<RegistrationState> =
+        mutableStateOf(RegistrationState())
+    val registrationState: RegistrationState by _registrationState
 
-    private val _restorePasswordState = mutableStateOf(RestorePasswordState())
-    val restorePasswordState: State<RestorePasswordState> = _restorePasswordState
+    private val _restorePasswordState: MutableState<RestorePasswordState> =
+        mutableStateOf(RestorePasswordState())
+    val restorePasswordState: RestorePasswordState by _restorePasswordState
 
-    private val _restorePasswordCodeState = mutableStateOf(CodeState())
-    val restorePasswordCodeState: State<CodeState> = _restorePasswordCodeState
+    private val _restorePasswordCodeState: MutableState<CodeState> = mutableStateOf(CodeState())
+    val restorePasswordCodeState: CodeState by _restorePasswordCodeState
 
-    private val _checkLoginState = mutableStateOf(CheckLoginOrEmailState())
-    val checkLoginState: State<CheckLoginOrEmailState> = _checkLoginState
+    private val _checkLoginState: MutableState<CheckLoginOrEmailState> =
+        mutableStateOf(CheckLoginOrEmailState())
+    val checkLoginState: CheckLoginOrEmailState by _checkLoginState
 
-    private val _checkEmailState = mutableStateOf(CheckLoginOrEmailState())
-    val checkEmailState: State<CheckLoginOrEmailState> = _checkEmailState
+    private val _checkEmailState: MutableState<CheckLoginOrEmailState> =
+        mutableStateOf(CheckLoginOrEmailState())
+    val checkEmailState: CheckLoginOrEmailState by _checkEmailState
 
     fun openPasswordRestore() {
         _restorePasswordState.value = RestorePasswordState(state = RestoreState.Login)

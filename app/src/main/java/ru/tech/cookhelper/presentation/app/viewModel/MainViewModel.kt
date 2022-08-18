@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.presentation.app.viewModel
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,40 +29,40 @@ class MainViewModel @Inject constructor(
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _title: MutableState<UIText> = mutableStateOf(Screen.Home.Recipes.title)
-    val title: State<UIText> = _title
+    val title: UIText by _title
 
     private val _settingsState: MutableState<SettingsState> = mutableStateOf(SettingsState())
-    val settingsState: State<SettingsState> = _settingsState
+    val settingsState: SettingsState by _settingsState
 
     private val _userState: MutableState<UserState> = mutableStateOf(UserState())
-    val userState: State<UserState> = _userState
+    val userState: UserState by _userState
 
     init {
         getSettingsListUseCase().onEach { list ->
-            var locState = SettingsState()
+            var state = SettingsState()
             list.forEach { setting ->
                 when (setting.id) {
                     Settings.DYNAMIC_COLORS.ordinal -> {
-                        locState = locState.copy(
+                        state = state.copy(
                             dynamicColors = setting.option.toBooleanStrictOrNull() ?: false
                         )
                     }
                     Settings.COLOR_SCHEME.ordinal -> {
                         val index = setting.option.toIntOrNull() ?: ColorScheme.BLUE.ordinal
-                        locState = locState.copy(colorScheme = enumValues<ColorScheme>()[index])
+                        state = state.copy(colorScheme = enumValues<ColorScheme>()[index])
                     }
                     Settings.NIGHT_MODE.ordinal -> {
                         val index = setting.option.toIntOrNull() ?: NightMode.SYSTEM.ordinal
-                        locState = locState.copy(nightMode = enumValues<NightMode>()[index])
+                        state = state.copy(nightMode = enumValues<NightMode>()[index])
                     }
                     Settings.CART_CONNECTION.ordinal -> {
-                        locState = locState.copy(
+                        state = state.copy(
                             cartConnection = setting.option.toBoolean()
                         )
                     }
                 }
             }
-            _settingsState.value = locState
+            _settingsState.value = state
         }.launchIn(viewModelScope)
 
         getUserUseCase().onEach { user ->

@@ -31,7 +31,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
@@ -40,7 +40,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 @Composable
 fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
     val screenController = LocalScreenController.current
-    val chatListState = viewModel.chatListState.value
+    val chatListState = viewModel.chatListState
     val scrollState = rememberLazyListState()
     var fabExpanded by rememberSaveable { mutableStateOf(true) }
 
@@ -103,7 +103,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
 
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
-    viewModel.eventFlow.collectOnLifecycle {
+    viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.ShowToast -> toastHost.sendToast(
                 Icons.Rounded.ErrorOutline,

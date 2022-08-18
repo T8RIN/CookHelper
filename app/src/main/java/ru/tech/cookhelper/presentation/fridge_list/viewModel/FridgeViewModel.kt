@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.presentation.fridge_list.viewModel
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +22,7 @@ class FridgeViewModel @Inject constructor(
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _fridgeListState = mutableStateOf(FridgeListState())
-    val fridgeListState: State<FridgeListState> = _fridgeListState
+    val fridgeListState: FridgeListState by _fridgeListState
 
     init {
         getFridgeListUseCase().onEach { result ->

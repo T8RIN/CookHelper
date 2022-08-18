@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.presentation.recipe_post_creation.viewModel
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,16 +19,16 @@ class RecipePostCreationViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _allProducts: MutableState<List<Product>> = mutableStateOf(emptyList())
-    val allProducts: State<List<Product>> = _allProducts
+    val allProducts: List<Product> by _allProducts
 
     private val _products: MutableState<List<Product>> = mutableStateOf(emptyList())
-    val products: State<List<Product>> = _products
+    val products: List<Product> by _products
 
     private val _user: MutableState<User?> = mutableStateOf(null)
-    val user: State<User?> = _user
+    val user: User? by _user
 
     private val _categories: MutableState<List<String>> = mutableStateOf(emptyList())
-    val categories: State<List<String>> = _categories
+    val categories: List<String> by _categories
 
     init {
         getUserUseCase()

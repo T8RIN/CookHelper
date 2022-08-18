@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.presentation.dish_details.viewModel
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -28,10 +28,10 @@ class DishDetailsViewModel @Inject constructor(
     private var id = -1
 
     private val _dishState = mutableStateOf(DishDetailsState())
-    val dishState: State<DishDetailsState> = _dishState
+    val dishState: DishDetailsState by _dishState
 
     private val _isFavorite = mutableStateOf(false)
-    val isFavorite: State<Boolean> = _isFavorite
+    val isFavorite: Boolean by _isFavorite
 
     init {
         id = savedStateHandle["id"]!!

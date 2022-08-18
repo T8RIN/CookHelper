@@ -76,7 +76,7 @@ fun ProfileScreen(
         )
     }
 
-    val userState = viewModel.userState.value
+    val userState = viewModel.userState
     val nick = userState.user?.nickname
     if (nick != null) LaunchedEffect(Unit) { updateTitle(nick) }
 

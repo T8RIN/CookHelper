@@ -47,7 +47,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSeconda
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,7 +63,7 @@ fun ChatScreen(
         defaultArguments = bundleOf("chatId" to chatId)
     ), onBack: () -> Unit
 ) {
-    val chatState = viewModel.chatState.value
+    val chatState = viewModel.chatState
     var value by remember { mutableStateOf("") }
     val state = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -87,7 +87,7 @@ fun ChatScreen(
     }
     var newMessages by rememberSaveable { mutableStateOf(0) }
 
-    val user = viewModel.user.value
+    val user = viewModel.user
 
     LaunchedEffect(isAtTheBottom) {
         if (isAtTheBottom) newMessages = 0
@@ -165,7 +165,7 @@ fun ChatScreen(
             }
 
             AnimatedContent(
-                targetState = viewModel.loadingAllMessages.value,
+                targetState = viewModel.loadingAllMessages,
                 modifier = Modifier.weight(1f),
                 transitionSpec = { fadeIn() with fadeOut() }
             ) { loading ->
@@ -206,7 +206,7 @@ fun ChatScreen(
                                     lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
 
                                 MessageBubbleItem(
-                                    isMessageFromCurrentUser = (viewModel.user.value?.id
+                                    isMessageFromCurrentUser = (viewModel.user?.id
                                         ?: 0) == message.userId,
                                     text = message.text,
                                     timestamp = message.timestamp,
@@ -230,12 +230,10 @@ fun ChatScreen(
                     .animateContentSize()
             ) {
                 val emptyField = value.isEmpty()
-                val sendButtonWidth =
-                    animateDpAsState(targetValue = if (emptyField) 0.dp else 48.dp)
-                val sendButtonAlpha = animateFloatAsState(targetValue = if (emptyField) 0f else 1f)
-                val hintAlpha = animateFloatAsState(targetValue = if (emptyField) 1f else 0f)
-                val hintOffset =
-                    animateDpAsState(targetValue = if (emptyField) 0.dp else LocalConfiguration.current.screenWidthDp.dp / 2f)
+                val sendButtonWidth by animateDpAsState(targetValue = if (emptyField) 0.dp else 48.dp)
+                val sendButtonAlpha by animateFloatAsState(targetValue = if (emptyField) 0f else 1f)
+                val hintAlpha by animateFloatAsState(targetValue = if (emptyField) 1f else 0f)
+                val hintOffset by animateDpAsState(targetValue = if (emptyField) 0.dp else LocalConfiguration.current.screenWidthDp.dp / 2f)
                 Row(
                     Modifier
                         .navigationBarsPadding()
@@ -269,8 +267,8 @@ fun ChatScreen(
                             color = textBoxColor.createSecondaryColor(0.5f),
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .offset(x = hintOffset.value)
-                                .alpha(hintAlpha.value),
+                                .offset(x = hintOffset)
+                                .alpha(hintAlpha),
                         )
                     }
                     IconButton(
@@ -281,8 +279,8 @@ fun ChatScreen(
                         enabled = !chatState.isLoading,
                         modifier = Modifier
                             .padding(end = 8.dp)
-                            .width(sendButtonWidth.value)
-                            .alpha(sendButtonAlpha.value),
+                            .width(sendButtonWidth)
+                            .alpha(sendButtonAlpha),
                         colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
                     ) {
                         Icon(Icons.Rounded.Send, null)
@@ -327,7 +325,7 @@ fun ChatScreen(
 
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
-    viewModel.eventFlow.collectOnLifecycle {
+    viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.ShowToast -> toastHost.sendToast(
                 Icons.Rounded.ErrorOutline,

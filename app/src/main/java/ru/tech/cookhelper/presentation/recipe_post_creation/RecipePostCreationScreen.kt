@@ -70,7 +70,7 @@ fun RecipePostCreationScreen(
         }
     }
 
-    val user = viewModel.user.value
+    val user = viewModel.user
 
     var imageUri by rememberSaveable { mutableStateOf("") }
     var category by rememberSaveable { mutableStateOf("") }
@@ -92,7 +92,7 @@ fun RecipePostCreationScreen(
         carbohydrates,
         category,
         steps,
-        viewModel.products.value.joinToString()
+        viewModel.products.joinToString()
     )
 
     val resultLauncher = rememberLauncherForActivityResult(
@@ -256,7 +256,7 @@ fun RecipePostCreationScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     RoundedTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = viewModel.products.value.joinToString(
+                        value = viewModel.products.joinToString(
                             separator = "\n",
                             transform = { "${it.name} - ${it.amount} ${it.mimeType}" }
                         ).trim(),
@@ -376,7 +376,7 @@ fun RecipePostCreationScreen(
                             IconButton(onClick = {
                                 dialogController.show(
                                     Dialog.CategorySelection(
-                                        categories = viewModel.categories.value,
+                                        categories = viewModel.categories,
                                         onCategorySelected = {
                                             category = it
                                         },
@@ -414,8 +414,8 @@ fun RecipePostCreationScreen(
             onClick = {
                 dialogController.show(
                     Dialog.PickProductsWithMeasures(
-                        products = viewModel.products.value,
-                        allProducts = viewModel.allProducts.value,
+                        products = viewModel.products,
+                        allProducts = viewModel.allProducts,
                         onProductsPicked = { newProducts ->
                             viewModel.setProducts(newProducts)
                         }

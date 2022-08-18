@@ -69,7 +69,7 @@ fun AuthenticationScreen(viewModel: AuthViewModel = hiltViewModel()) {
                 )
                 Spacer(Modifier.size(20.dp * mod))
                 AnimatedContent(
-                    targetState = viewModel.authState.value,
+                    targetState = viewModel.authState,
                     modifier = Modifier.fillMaxSize(),
                     transitionSpec = {
                         fadeIn(animationSpec = tween(350, delayMillis = 150)) with fadeOut(
