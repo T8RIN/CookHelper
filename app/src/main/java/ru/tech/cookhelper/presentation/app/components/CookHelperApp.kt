@@ -4,8 +4,6 @@ import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -16,39 +14,22 @@ import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.olshevski.navigation.reimagined.*
+import dev.olshevski.navigation.reimagined.AnimatedNavHostTransitionSpec
+import dev.olshevski.navigation.reimagined.navigate
+import dev.olshevski.navigation.reimagined.rememberNavController
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
 import ru.tech.cookhelper.core.utils.ReflectionUtils.name
-import ru.tech.cookhelper.presentation.all_images.AllImagesScreen
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
-import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
-import ru.tech.cookhelper.presentation.chat.ChatScreen
-import ru.tech.cookhelper.presentation.chat_list.ChatListScreen
-import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
-import ru.tech.cookhelper.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
-import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScreen
-import ru.tech.cookhelper.presentation.home_screen.HomeScreen
-import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
-import ru.tech.cookhelper.presentation.profile.ProfileScreen
-import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategorySelectionDialog
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.PickProductsWithMeasuresDialog
-import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
-import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
-import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -58,7 +39,6 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
-    ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class
 )
 @Composable
 fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
@@ -92,7 +72,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         ProKitchenTheme {
             val showTopBar by computedStateOf { screenController.currentDestination!!::class.name !in hideTopBarList }
 
-            BackHandler { dialogController.show(Dialog.Exit) }
+            BackHandler { dialogController.show(Dialog.Exit(onExit = { activity?.finishAffinity() })) }
 
             Surface(
                 modifier = Modifier
@@ -110,6 +90,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                     if (it is Screen.Home) Screen.Home.Recipes.title
                                     else it.title
                                 )
+                                screenController.navigateAndPopAll(it)
                             }
                         )
                     },
@@ -141,8 +122,19 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                             )
                                         }
                                         is Screen.Profile -> {
+                                            val toastHost = LocalToastHost.current
                                             IconButton(
-                                                onClick = { dialogController.show(Dialog.Logout) },
+                                                onClick = {
+                                                    dialogController.show(Dialog.Logout(onLogout = {
+                                                        if (activity?.isOnline() == true) {
+                                                            viewModel.logOut()
+                                                        } else toastHost.sendToast(
+                                                            Icons.Outlined.SignalWifiConnectedNoInternet4,
+                                                            message = activity?.getString(R.string.no_connection)
+                                                                ?: ""
+                                                        )
+                                                    }))
+                                                },
                                                 content = { Icon(Icons.Outlined.Logout, null) }
                                             )
                                         }
@@ -158,162 +150,16 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                 scrollBehavior = scrollBehavior
                             )
                         }
-                        AnimatedNavHost(
+                        ScreenNavigationBox(
+                            nestedScrollConnection = scrollBehavior.nestedScrollConnection,
                             controller = screenController,
-                            transitionSpec = ScaleCrossfadeTransitionSpec
-                        ) { screen ->
-                            Box(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
-                                when (screen) {
-                                    is Screen.Home -> {
-                                        HomeScreen(
-                                            onTitleChange = { viewModel.updateTitle(screen.title) }
-                                        )
-                                    }
-                                    is Screen.Favourites -> Placeholder(
-                                        screen.baseIcon,
-                                        screen.title.asString()
-                                    )
-                                    is Screen.RecipeDetails -> {
-                                        DishDetailsScreen(
-                                            id = screen.id,
-                                            onBack = { screenController.pop() })
-                                    }
-                                    is Screen.MatchedRecipes -> {
-                                        OnFridgeBasedDishes(
-                                            onRecipeClicked = {
-                                                screenController.navigate(
-                                                    Screen.RecipeDetails(it)
-                                                )
-                                            },
-                                            onBack = { screenController.pop() }
-                                        )
-                                    }
-                                    is Screen.FullscreenImagePager -> {
-                                        FullScreenPagerScreen(
-                                            images = screen.images,
-                                            initialId = screen.id,
-                                            onBack = {
-                                                screenController.pop()
-                                                activity?.showSystemBars()
-                                            }
-                                        )
-                                    }
-                                    is Screen.Settings -> {
-                                        SettingsScreen(
-                                            settingsState = viewModel.settingsState.value,
-                                            onAction = { id, option ->
-                                                viewModel.insertSetting(
-                                                    id,
-                                                    option
-                                                )
-                                            }
-                                        )
-                                    }
-                                    is Screen.Profile -> {
-                                        ProfileScreen(
-                                            updateTitle = { newTitle ->
-                                                viewModel.updateTitle(UIText.DynamicString(newTitle))
-                                            }
-                                        )
-                                    }
-                                    is Screen.AllImages -> {
-                                        AllImagesScreen(
-                                            images = screen.images,
-                                            canAddImages = screen.canAddImages,
-                                            onBack = { screenController.pop() },
-                                            onAddImage = screen.onAddImage
-                                        )
-                                    }
-                                    is Screen.BlockList -> Placeholder(
-                                        screen.baseIcon,
-                                        screen.title.asString()
-                                    )
-                                    is Screen.Cart -> Placeholder(
-                                        screen.baseIcon,
-                                        screen.title.asString()
-                                    )
-                                    is Screen.ChatList -> {
-                                        ChatListScreen()
-                                    }
-                                    is Screen.Chat -> {
-                                        ChatScreen(
-                                            chatId = screen.chatId,
-                                            onBack = { screenController.pop() }
-                                        )
-                                    }
-                                    is Screen.Authentication -> {
-                                        AuthenticationScreen()
-                                    }
-                                    is Screen.PostCreation -> {
-                                        PostCreationScreen(
-                                            onBack = {
-                                                screenController.pop()
-                                            },
-                                            initialImageUri = screen.imageUri
-                                        )
-                                    }
-                                    is Screen.RecipePostCreation -> {
-                                        RecipePostCreationScreen(
-                                            onBack = {
-                                                screenController.pop()
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                            transitionSpec = ScaleCrossfadeTransitionSpec,
+                            onTitleChange = { viewModel.updateTitle(it) }
+                        )
                     }
                 }
 
-                DialogNavHost(controller = dialogController) { dialog ->
-                    when (dialog) {
-                        is Dialog.Exit -> {
-                            ExitDialog(onExit = { activity?.finishAffinity() })
-                        }
-                        is Dialog.AboutApp -> {
-                            AboutAppDialog()
-                        }
-                        is Dialog.Logout -> {
-                            val toastHost = LocalToastHost.current
-                            LogoutDialog(
-                                onLogout = {
-                                    if (activity?.isOnline() == true) {
-                                        viewModel.logOut()
-                                    } else toastHost.sendToast(
-                                        Icons.Outlined.SignalWifiConnectedNoInternet4,
-                                        message = activity?.getString(R.string.no_connection) ?: ""
-                                    )
-                                    dialogController.close()
-                                }
-                            )
-                        }
-                        is Dialog.PickProducts -> {
-                            TODO()
-                        }
-                        is Dialog.CategorySelection -> {
-                            CategorySelectionDialog(
-                                categories = dialog.categories,
-                                selectedCategory = dialog.selectedCategory,
-                                onCategorySelected = dialog.onCategorySelected
-                            )
-                        }
-                        is Dialog.LeaveUnsavedData -> {
-                            LeaveUnsavedDataDialog(
-                                title = dialog.title,
-                                message = dialog.message,
-                                onLeave = dialog.onLeave
-                            )
-                        }
-                        is Dialog.PickProductsWithMeasures -> {
-                            PickProductsWithMeasuresDialog(
-                                products = dialog.products,
-                                allProducts = dialog.allProducts,
-                                onProductsPicked = dialog.onProductsPicked
-                            )
-                        }
-                        else -> {}
-                    }
-                }
+                DialogNavigationBox(controller = dialogController)
 
                 FancyToastHost(fancyToastValues.value)
             }
@@ -338,7 +184,7 @@ private fun Modifier.navigationBarsLandscapePadding(): Modifier = composed {
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-internal val ScaleCrossfadeTransitionSpec = AnimatedNavHostTransitionSpec<Any?> { _, _, _ ->
+val ScaleCrossfadeTransitionSpec = AnimatedNavHostTransitionSpec<Any?> { _, _, _ ->
     (fadeIn() + scaleIn(initialScale = 0.85f))
         .with(fadeOut(tween(durationMillis = 50)) + scaleOut(targetScale = 0.85f))
 }

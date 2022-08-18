@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.dish_details.viewModel
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -19,7 +18,6 @@ import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
 import javax.inject.Inject
 
-@ExperimentalMaterial3Api
 @HiltViewModel
 class DishDetailsViewModel @Inject constructor(
     getDishByIdUseCase: GetDishByIdUseCase,

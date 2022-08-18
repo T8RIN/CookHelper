@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
-import ru.tech.cookhelper.domain.use_case.insert_setting.InsertSettingUseCase
 import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.settings.components.ColorScheme
@@ -29,7 +28,6 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     getSettingsListUseCase: GetSettingsListUseCase,
     getUserUseCase: GetUserUseCase,
-    private val insertSettingUseCase: InsertSettingUseCase,
     private val logoutUseCase: LogoutUseCase
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
@@ -82,12 +80,6 @@ class MainViewModel @Inject constructor(
                 _userState.value = UserState(user, user.token)
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun insertSetting(id: Int, option: String) {
-        viewModelScope.launch {
-            insertSettingUseCase(id, option)
-        }
     }
 
     fun logOut() {

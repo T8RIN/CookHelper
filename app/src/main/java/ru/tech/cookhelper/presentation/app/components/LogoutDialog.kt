@@ -33,7 +33,10 @@ fun LogoutDialog(onLogout: () -> Unit) {
             }
         },
         dismissButton = {
-            TextButton(onClick = { onLogout() }) {
+            TextButton(onClick = {
+                onLogout()
+                dialogController.close()
+            }) {
                 Text(stringResource(R.string.close))
             }
         }

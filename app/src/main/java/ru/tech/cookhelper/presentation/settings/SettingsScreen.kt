@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
@@ -44,15 +45,19 @@ import ru.tech.cookhelper.presentation.settings.components.Settings
 import ru.tech.cookhelper.presentation.settings.components.Settings.*
 import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
+import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit) {
+fun SettingsScreen(
+    viewModel: SettingsViewModel = hiltViewModel(),
+    settingsState: SettingsState
+) {
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
 
@@ -111,7 +116,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                             var checked by remember { mutableStateOf(settingsState.cartConnection) }
                             Spacer(Modifier.width(8.dp))
                             Switch(checked = checked, onCheckedChange = {
-                                onAction(setting.ordinal, (!checked).toString())
+                                viewModel.insertSetting(setting.ordinal, !checked)
                                 checked = !checked
                             })
                             Spacer(Modifier.width(20.dp))
@@ -120,7 +125,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                             var checked by remember { mutableStateOf(settingsState.dynamicColors) }
                             Spacer(Modifier.width(8.dp))
                             Switch(checked = checked, onCheckedChange = {
-                                onAction(setting.ordinal, (!checked).toString())
+                                viewModel.insertSetting(setting.ordinal, !checked)
                                 checked = !checked
                             })
                             Spacer(Modifier.width(20.dp))
@@ -166,7 +171,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         items = listOf(R.string.dark, R.string.light, R.string.system),
                         selectedIndex = settingsState.nightMode.ordinal,
                         indexChanged = {
-                            onAction(setting.ordinal, it.toString())
+                            viewModel.insertSetting(setting.ordinal, it)
                         }
                     )
                 }
@@ -178,7 +183,7 @@ fun SettingsScreen(settingsState: SettingsState, onAction: (Int, String) -> Unit
                         itemsIndexed(colorList) { index, item ->
                             Box {
                                 OutlinedButton(
-                                    onClick = { onAction(setting.ordinal, index.toString()) },
+                                    onClick = { viewModel.insertSetting(setting.ordinal, index) },
                                     shape = CircleShape,
                                     border = BorderStroke(
                                         1.dp, item.md_theme_light_primary

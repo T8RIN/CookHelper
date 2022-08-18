@@ -3,12 +3,10 @@ package ru.tech.cookhelper.presentation.authentication
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -29,10 +27,7 @@ import ru.tech.cookhelper.presentation.authentication.components.restore_passwor
 import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
 
 
-@ExperimentalComposeUiApi
-@ExperimentalFoundationApi
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AuthenticationScreen(viewModel: AuthViewModel = hiltViewModel()) {
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)

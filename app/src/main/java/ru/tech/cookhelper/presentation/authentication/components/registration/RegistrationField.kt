@@ -89,7 +89,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
             else {
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = { name = it.trim() },
                     label = { Text(stringResource(R.string.name)) },
                     singleLine = true,
                     isError = name.isEmpty(),
@@ -108,7 +108,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                 Spacer(Modifier.size(8.dp * mod))
                 OutlinedTextField(
                     value = surname,
-                    onValueChange = { surname = it },
+                    onValueChange = { surname = it.trim() },
                     label = { Text(stringResource(R.string.surname)) },
                     singleLine = true,
                     isError = surname.isEmpty(),

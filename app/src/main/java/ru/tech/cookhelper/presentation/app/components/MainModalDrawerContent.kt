@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import dev.olshevski.navigation.reimagined.navigate
-import dev.olshevski.navigation.reimagined.popAll
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
@@ -77,10 +76,6 @@ fun MainModalDrawerContent(
                     selected = selected,
                     onClick = {
                         onClick(item)
-                        screenController.apply {
-                            popAll()
-                            navigate(item)
-                        }
                         scope.launch { drawerState.close() }
                     }
                 )

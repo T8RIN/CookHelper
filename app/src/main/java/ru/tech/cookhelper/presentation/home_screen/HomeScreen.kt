@@ -9,8 +9,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
-import dev.olshevski.navigation.reimagined.navigate
-import dev.olshevski.navigation.reimagined.popAll
 import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.ScaleCrossfadeTransitionSpec
@@ -20,6 +18,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.navBarList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
+import ru.tech.cookhelper.presentation.ui.utils.provider.navigateAndPopAll
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -33,10 +32,7 @@ fun HomeScreen(onTitleChange: (newTitle: UIText) -> Unit) {
                     ?: Screen.Home.Recipes,
                 items = navBarList,
                 onClick = { screen ->
-                    bottomNavigationController.apply {
-                        popAll()
-                        navigate(screen)
-                    }
+                    bottomNavigationController.navigateAndPopAll(screen)
                     onTitleChange(screen.title)
                 }
             )

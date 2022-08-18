@@ -11,7 +11,9 @@ sealed class Dialog : Parcelable {
     object None : Dialog()
 
     @Parcelize
-    object Exit : Dialog()
+    class Exit(
+        val onExit: () -> Unit
+    ) : Dialog()
 
     @Parcelize
     object AboutApp : Dialog()
@@ -20,7 +22,9 @@ sealed class Dialog : Parcelable {
     object PickProducts : Dialog()
 
     @Parcelize
-    object Logout : Dialog()
+    class Logout(
+        val onLogout: () -> Unit
+    ) : Dialog()
 
     @Parcelize
     class CategorySelection(
