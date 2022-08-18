@@ -114,5 +114,7 @@ dependencies {
     implementation("dev.olshevski.navigation:reimagined:1.1.1")
     implementation("dev.olshevski.navigation:reimagined-hilt:1.1.1")
 
+    //SplashScreenApi
+    implementation("androidx.core:core-splashscreen:1.0.0")
 
 }

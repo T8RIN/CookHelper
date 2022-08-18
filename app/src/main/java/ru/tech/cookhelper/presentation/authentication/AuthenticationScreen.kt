@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.authentication
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,14 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.LockScreenOrientation
+import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.authentication.components.AuthState
 import ru.tech.cookhelper.presentation.authentication.components.confirm_email.ConfirmEmailField
 import ru.tech.cookhelper.presentation.authentication.components.login.LoginField
@@ -62,10 +62,12 @@ fun AuthenticationScreen(viewModel: AuthViewModel = hiltViewModel()) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.size(16.dp * mod))
-                Image(
-                    painterResource(id = R.drawable.ic_logo_144),
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp)
+                Picture(
+                    model = R.drawable.ic_launcher_foreground,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .scale(2f),
+                    shimmerEnabled = false
                 )
                 Spacer(Modifier.size(20.dp * mod))
                 AnimatedContent(
