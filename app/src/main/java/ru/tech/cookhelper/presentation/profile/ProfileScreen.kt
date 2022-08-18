@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,17 +31,19 @@ import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
 import ru.tech.cookhelper.domain.model.*
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random.Default.nextBoolean
@@ -49,9 +54,27 @@ fun ProfileScreen(
     updateTitle: (title: String) -> Unit
 ) {
     val screenController = LocalScreenController.current
+    val dialogController = LocalDialogController.current
+    val activity = LocalContext.current.findActivity()
 
     val toastHost = LocalToastHost.current
     val imageNotPicked = stringResource(R.string.image_not_picked)
+
+    LocalTopAppBarActions.current.setActions {
+        IconButton(
+            onClick = {
+                dialogController.show(Dialog.Logout(onLogout = {
+                    if (activity?.isOnline() == true) {
+                        viewModel.logOut()
+                    } else toastHost.sendToast(
+                        Icons.Outlined.SignalWifiConnectedNoInternet4,
+                        message = activity?.getString(R.string.no_connection) ?: ""
+                    )
+                }))
+            },
+            content = { Icon(Icons.Outlined.Logout, null) }
+        )
+    }
 
     val userState = viewModel.userState.value
     val nick = userState.user?.nickname

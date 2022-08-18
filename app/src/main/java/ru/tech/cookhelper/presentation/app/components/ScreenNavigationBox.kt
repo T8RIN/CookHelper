@@ -23,6 +23,7 @@ import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
 import ru.tech.cookhelper.presentation.profile.ProfileScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
+import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen

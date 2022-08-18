@@ -1,11 +1,9 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
+import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 
 @Composable
 fun LockScreenOrientation(orientation: Int) {
@@ -18,10 +16,4 @@ fun LockScreenOrientation(orientation: Int) {
             activity.requestedOrientation = originalOrientation
         }
     }
-}
-
-fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
 }

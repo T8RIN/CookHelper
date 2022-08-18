@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.profile.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Logout

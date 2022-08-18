@@ -50,7 +50,8 @@ import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
+import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -60,6 +61,19 @@ fun SettingsScreen(
 ) {
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
+    val dialogController = LocalDialogController.current
+
+    LocalTopAppBarActions.current.setActions {
+        IconButton(
+            onClick = { dialogController.show(Dialog.AboutApp) },
+            content = {
+                Icon(
+                    Icons.Outlined.HelpOutline,
+                    null
+                )
+            }
+        )
+    }
 
     LazyColumn {
         item { Spacer(Modifier.height(20.dp)) }

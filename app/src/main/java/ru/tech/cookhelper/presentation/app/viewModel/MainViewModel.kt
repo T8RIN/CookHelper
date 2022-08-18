@@ -8,10 +8,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
-import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.settings.components.ColorScheme
 import ru.tech.cookhelper.presentation.settings.components.NightMode
@@ -27,8 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     getSettingsListUseCase: GetSettingsListUseCase,
-    getUserUseCase: GetUserUseCase,
-    private val logoutUseCase: LogoutUseCase
+    getUserUseCase: GetUserUseCase
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _title: MutableState<UIText> = mutableStateOf(Screen.Home.Recipes.title)
@@ -80,10 +77,6 @@ class MainViewModel @Inject constructor(
                 _userState.value = UserState(user, user.token)
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun logOut() {
-        viewModelScope.launch { logoutUseCase() }
     }
 
     fun updateTitle(newTitle: UIText) {

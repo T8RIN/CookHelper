@@ -5,12 +5,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.Logout
-import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,11 +22,10 @@ import dev.olshevski.navigation.reimagined.AnimatedNavHostTransitionSpec
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.rememberNavController
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
 import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
+import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
@@ -43,13 +40,19 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.*
 @Composable
 fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
+    val scope = rememberCoroutineScope()
     val activity = LocalContext.current.findActivity()
+
     val fancyToastValues = remember { mutableStateOf(FancyToastValues()) }
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
     val dialogController = rememberNavController<Dialog>(startDestination = Dialog.None)
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
+
+    val topAppBarActions: MutableState<(@Composable RowScope.() -> Unit)?> =
+        remember { mutableStateOf(null) }
+    LaunchedEffect(screenController.currentDestination) { topAppBarActions.clearActions() }
 
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior by remember {
@@ -66,7 +69,8 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalDialogController provides dialogController,
             LocalSnackbarHost provides snackbarHostState,
             LocalToastHost provides fancyToastValues,
-            LocalSettingsProvider provides viewModel.settingsState.value
+            LocalSettingsProvider provides viewModel.settingsState.value,
+            LocalTopAppBarActions provides topAppBarActions
         )
     ) {
         ProKitchenTheme {
@@ -109,37 +113,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                     }
                                 },
                                 actions = {
-                                    when (screenController.currentDestination) {
-                                        is Screen.Settings -> {
-                                            IconButton(
-                                                onClick = { dialogController.show(Dialog.AboutApp) },
-                                                content = {
-                                                    Icon(
-                                                        Icons.Outlined.HelpOutline,
-                                                        null
-                                                    )
-                                                }
-                                            )
-                                        }
-                                        is Screen.Profile -> {
-                                            val toastHost = LocalToastHost.current
-                                            IconButton(
-                                                onClick = {
-                                                    dialogController.show(Dialog.Logout(onLogout = {
-                                                        if (activity?.isOnline() == true) {
-                                                            viewModel.logOut()
-                                                        } else toastHost.sendToast(
-                                                            Icons.Outlined.SignalWifiConnectedNoInternet4,
-                                                            message = activity?.getString(R.string.no_connection)
-                                                                ?: ""
-                                                        )
-                                                    }))
-                                                },
-                                                content = { Icon(Icons.Outlined.Logout, null) }
-                                            )
-                                        }
-                                        else -> {}
-                                    }
+                                    topAppBarActions(this)
                                 },
                                 title = {
                                     Text(

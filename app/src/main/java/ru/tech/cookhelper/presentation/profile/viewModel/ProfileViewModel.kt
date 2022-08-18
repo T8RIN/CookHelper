@@ -8,15 +8,17 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
+import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    getUserUseCase: GetUserUseCase
+    getUserUseCase: GetUserUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
-
     private val _userState: MutableState<UserState> = mutableStateOf(UserState())
     val userState: State<UserState> = _userState
 
@@ -24,6 +26,10 @@ class ProfileViewModel @Inject constructor(
         getUserUseCase().onEach { user ->
             user?.let { _userState.value = UserState(it, it.token) }
         }.launchIn(viewModelScope)
+    }
+
+    fun logOut() {
+        viewModelScope.launch { logoutUseCase() }
     }
 
 }

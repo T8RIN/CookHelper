@@ -46,8 +46,8 @@ sealed class Screen(
     sealed class Home(
         override val title: UIText = UIText.StringResource(R.string.home),
         override val shortTitle: UIText = UIText.StringResource(R.string.home),
-        override val baseIcon: ImageVector = Icons.Default.Home,
-        override val selectedIcon: ImageVector = Icons.Default.Home
+        override val baseIcon: ImageVector = Icons.Outlined.Home,
+        override val selectedIcon: ImageVector = Icons.Filled.Home
     ) : Screen() {
         @Parcelize
         object Recipes : Home(

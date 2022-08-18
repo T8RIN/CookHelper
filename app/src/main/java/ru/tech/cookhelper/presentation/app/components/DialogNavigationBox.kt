@@ -4,6 +4,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import dev.olshevski.navigation.reimagined.DialogNavHost
 import dev.olshevski.navigation.reimagined.NavController
+import ru.tech.cookhelper.presentation.profile.components.LogoutDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategorySelectionDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.PickProductsWithMeasuresDialog
