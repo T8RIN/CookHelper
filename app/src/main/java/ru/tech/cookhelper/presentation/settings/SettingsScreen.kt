@@ -269,7 +269,8 @@ fun SettingsScreen(
                         model = R.drawable.ic_launcher_foreground,
                         modifier = Modifier
                             .size(114.dp)
-                            .align(Alignment.Center)
+                            .align(Alignment.Center),
+                        shimmerEnabled = false
                     )
                 }
                 Text(stringResource(R.string.app_name))

@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import android.app.Activity
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.*
@@ -23,6 +22,7 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.hideSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.isSystemBarsHidden
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
@@ -51,9 +51,10 @@ fun Picture(
     colorFilter: ColorFilter? = null,
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
     zoomParams: ZoomParams = ZoomParams(),
-    shimmerEnabled: Boolean = true
+    shimmerEnabled: Boolean = true,
+    crossfadeEnabled: Boolean = true
 ) {
-    val activity = if (zoomParams.zoomEnabled) LocalContext.current as Activity else null
+    val activity = if (zoomParams.zoomEnabled) LocalContext.current.findActivity() else null
 
     var errorOccurred by rememberSaveable { mutableStateOf(false) }
 
@@ -69,7 +70,7 @@ fun Picture(
 
     val request = manualImageRequest ?: ImageRequest.Builder(LocalContext.current)
         .data(model)
-        .crossfade(true)
+        .crossfade(crossfadeEnabled)
         .build()
 
     val image: @Composable () -> Unit = {

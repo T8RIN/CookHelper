@@ -16,7 +16,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverse
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
 
-private val Colors.LightThemeColors: Material3ColorScheme
+private val ColorScheme.LightThemeColors: Material3ColorScheme
     get() = lightColorScheme(
         primary = md_theme_light_primary,
         onPrimary = md_theme_light_onPrimary,
@@ -45,7 +45,7 @@ private val Colors.LightThemeColors: Material3ColorScheme
         inverseSurface = md_theme_light_inverseSurface,
         inversePrimary = md_theme_light_inversePrimary,
     )
-private val Colors.DarkThemeColors: Material3ColorScheme
+private val ColorScheme.DarkThemeColors: Material3ColorScheme
     get() = darkColorScheme(
         primary = md_theme_dark_primary,
         onPrimary = md_theme_dark_onPrimary,
@@ -124,27 +124,17 @@ fun ProKitchenTheme(
 
 @Composable
 fun getColorScheme(darkTheme: Boolean): Material3ColorScheme {
-    return if (darkTheme) {
-        when (LocalSettingsProvider.current.colorScheme) {
-            BLUE -> Blue.DarkThemeColors
-            VIOLET -> Violet.DarkThemeColors
-            GREEN -> Green.DarkThemeColors
-            YELLOW -> Yellow.DarkThemeColors
-            RED -> Red.DarkThemeColors
-            PINK -> Pink.DarkThemeColors
-            ORANGE -> Orange.DarkThemeColors
-            MINT -> Mint.DarkThemeColors
-        }
-    } else {
-        when (LocalSettingsProvider.current.colorScheme) {
-            BLUE -> Blue.LightThemeColors
-            VIOLET -> Violet.LightThemeColors
-            GREEN -> Green.LightThemeColors
-            YELLOW -> Yellow.LightThemeColors
-            RED -> Red.LightThemeColors
-            PINK -> Pink.LightThemeColors
-            ORANGE -> Orange.LightThemeColors
-            MINT -> Mint.LightThemeColors
-        }
+    when (LocalSettingsProvider.current.colorScheme) {
+        BLUE -> ColorScheme.Blue
+        VIOLET -> ColorScheme.Violet
+        GREEN -> ColorScheme.Green
+        YELLOW -> ColorScheme.Yellow
+        RED -> ColorScheme.Red
+        PINK -> ColorScheme.Pink
+        ORANGE -> ColorScheme.Orange
+        MINT -> ColorScheme.Mint
+    }.apply {
+        return if (darkTheme) DarkThemeColors
+        else LightThemeColors
     }
 }

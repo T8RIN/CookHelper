@@ -29,9 +29,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
-@OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
@@ -45,6 +43,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     val dialogController = rememberNavController<Dialog>(startDestination = Dialog.None)
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
 
+    val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarActions: MutableState<(@Composable RowScope.() -> Unit)?> =
         remember { mutableStateOf(null) }
     LaunchedEffect(screenController.currentDestination) { topAppBarActions.clearActions() }
@@ -62,8 +61,6 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         )
     ) {
         ProKitchenTheme {
-            val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
-
             BackHandler { dialogController.show(Dialog.Exit(onExit = { activity?.finishAffinity() })) }
 
             Surface(
