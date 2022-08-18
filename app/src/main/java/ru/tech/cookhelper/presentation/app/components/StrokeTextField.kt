@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.presentation.ui.utils.compose.shimmer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

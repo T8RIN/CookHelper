@@ -28,8 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import ru.tech.cookhelper.presentation.app.components.shimmer
 import ru.tech.cookhelper.presentation.authentication.components.confirm_email.CodeState
+import ru.tech.cookhelper.presentation.ui.utils.compose.shimmer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
@@ -75,7 +75,7 @@ fun OTPField(
     ) {
         Spacer(modifier = Modifier.width(8.dp))
         repeat(length) { index ->
-            var tfv = TextFieldValue(code.getOrNull(index = index)?.takeIf {
+            var fieldValue = TextFieldValue(code.getOrNull(index = index)?.takeIf {
                 it.isDigit()
             }?.toString() ?: "", TextRange(1))
 
@@ -85,7 +85,7 @@ fun OTPField(
                     .height(56.dp)
                     .focusRequester(focusRequester = focusRequesters[index])
                     .onKeyEvent { event: KeyEvent ->
-                        if (event.type == KeyEventType.KeyUp && event.key == Key.Backspace && tfv.text.isEmpty()) {
+                        if (event.type == KeyEventType.KeyUp && event.key == Key.Backspace && fieldValue.text.isEmpty()) {
                             focusRequesters
                                 .getOrNull(index - 1)
                                 ?.requestFocus()
@@ -99,14 +99,14 @@ fun OTPField(
                     .shimmer(codeState.isLoading),
                 singleLine = true,
                 readOnly = codeState.isLoading,
-                value = tfv,
+                value = fieldValue,
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
                 onValueChange = { textFieldValue ->
-                    tfv = tfv.copy(selection = TextRange(1))
+                    fieldValue = fieldValue.copy(selection = TextRange(1))
                     val value: String = textFieldValue.text
 
                     val move = {

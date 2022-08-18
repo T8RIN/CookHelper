@@ -1,31 +1,28 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.olshevski.navigation.reimagined.AnimatedNavHostTransitionSpec
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.rememberNavController
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
+import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectOnLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -41,8 +38,8 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     val scope = rememberCoroutineScope()
     val activity = LocalContext.current.findActivity()
 
-    val fancyToastValues = remember { mutableStateOf(FancyToastValues()) }
-    val snackbarHostState = remember { SnackbarHostState() }
+    val fancyToastValues = rememberFancyToastValues()
+    val snackbarHostState = rememberSnackbarHostState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     val dialogController = rememberNavController<Dialog>(startDestination = Dialog.None)
@@ -137,16 +134,4 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             else -> {}
         }
     }
-}
-
-private fun Modifier.navigationBarsLandscapePadding(): Modifier = composed {
-    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        navigationBarsPadding()
-    } else this
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-val ScaleCrossfadeTransitionSpec = AnimatedNavHostTransitionSpec<Any?> { _, _, _ ->
-    (fadeIn() + scaleIn(initialScale = 0.85f))
-        .with(fadeOut(tween(durationMillis = 50)) + scaleOut(targetScale = 0.85f))
 }

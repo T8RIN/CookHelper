@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.profile.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,9 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,6 +22,7 @@ import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -119,16 +117,4 @@ fun PostItem(
         }
         Spacer(Modifier.size(15.dp))
     }
-
-}
-
-private fun Modifier.squareSize(): Modifier = composed {
-    val modifier: Modifier
-    LocalConfiguration.current.apply {
-        val minSize = kotlin.math.min(screenWidthDp, screenHeightDp).dp
-        modifier = if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Modifier.size(minSize)
-        } else Modifier.size(minSize)
-    }
-    modifier
 }
