@@ -2,7 +2,7 @@ package ru.tech.cookhelper.presentation.settings
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -53,7 +53,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
@@ -200,21 +200,24 @@ fun SettingsScreen(
                                     onClick = { viewModel.insertSetting(setting.ordinal, index) },
                                     shape = CircleShape,
                                     border = BorderStroke(
-                                        1.dp, item.md_theme_light_primary
+                                        1.5.dp, item.md_theme_dark_primaryContainer
                                     ),
                                     colors = ButtonDefaults.outlinedButtonColors(
-                                        containerColor = item.md_theme_light_primaryContainer,
-                                        contentColor = item.md_theme_light_primary
+                                        containerColor = item.md_theme_dark_onPrimaryContainer,
+                                        contentColor = item.md_theme_dark_primaryContainer
                                     ),
-                                    modifier = Modifier
-                                        .size(50.dp)
+                                    modifier = Modifier.size(50.dp)
                                 ) {}
-                                if (settingsState.colorScheme.ordinal == index) {
+                                androidx.compose.animation.AnimatedVisibility(
+                                    visible = settingsState.colorScheme.ordinal == index,
+                                    modifier = Modifier.align(Alignment.Center),
+                                    enter = fadeIn() + scaleIn(),
+                                    exit = fadeOut() + scaleOut()
+                                ) {
                                     Icon(
                                         Icons.Rounded.CheckCircle,
                                         null,
                                         tint = item.md_theme_light_primary,
-                                        modifier = Modifier.align(Alignment.Center)
                                     )
                                 }
                             }

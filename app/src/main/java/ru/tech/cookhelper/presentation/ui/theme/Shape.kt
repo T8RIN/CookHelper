@@ -5,101 +5,13 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import java.lang.Math.toRadians
 import kotlin.math.*
 
-
 private const val TWO_PI = 2 * PI
-
-class RoundedStarShape(
-    private val sides: Int,
-    private val curve: Float = 0.09f,
-    rotation: Float = 0f,
-    iterations: Int = 360,
-) : Shape {
-
-    private val steps = (TWO_PI) / iterations.coerceAtMost(360)
-    private val rotationDegree = (PI / 180) * rotation
-
-    override fun createOutline(
-        size: Size,
-        layoutDirection: LayoutDirection,
-        density: Density
-    ): Outline = Outline.Generic(
-        Path().apply {
-            val r = size.height.coerceAtMost(size.width) * 0.4 * (1f - curve)
-
-            val xCenter = size.width * .5f
-            val yCenter = size.height * .5f
-
-            moveTo(xCenter, yCenter)
-
-            var t = 0.0
-
-            while (t <= TWO_PI) {
-                val x = r * (cos(t - rotationDegree) * (1 + curve * cos(sides * t)))
-                val y = r * (sin(t - rotationDegree) * (1 + curve * cos(sides * t)))
-                lineTo((x + xCenter).toFloat(), (y + yCenter).toFloat())
-
-                t += steps
-            }
-
-            val x = r * (cos(t - rotationDegree) * (1 + curve * cos(sides * t)))
-            val y = r * (sin(t - rotationDegree) * (1 + curve * cos(sides * t)))
-            lineTo((x + xCenter).toFloat(), (y + yCenter).toFloat())
-
-        }
-    )
-}
-
-@Suppress("unused")
-class PolygonShape(sides: Int, rotation: Float = 0f) : Shape {
-    private val stepCount = (TWO_PI) / sides
-
-    private val rotationDegree = (PI / 180) * rotation
-
-    override fun createOutline(
-        size: Size,
-        layoutDirection: LayoutDirection,
-        density: Density
-    ): Outline = Outline.Generic(Path().apply {
-
-        val r = min(size.height, size.width) * .5f
-
-        val xCenter = size.width * .5f
-        val yCenter = size.height * .5f
-
-        moveTo(xCenter, yCenter)
-
-        var t = -rotationDegree
-
-        while (t <= TWO_PI) {
-            val x = r * cos(t)
-            val y = r * sin(t)
-            lineTo((x + xCenter).toFloat(), (y + yCenter).toFloat())
-
-            t += stepCount
-        }
-
-        val x = r * cos(t)
-        val y = r * sin(t)
-        lineTo((x + xCenter).toFloat(), (y + yCenter).toFloat())
-    })
-}
-
-@Suppress("unused")
-val TetraStarShape = RoundedStarShape(4, 0.19f, 45f)
-
-@Suppress("unused")
-val HexagonShape = RoundedStarShape(6, 0.025f)
-
-@Suppress("unused")
-val ErtsgammaShape = RoundedStarShape(12, 0.06f)
 
 data class SmoothRoundedCornerShape(
     private val topLeft: Dp = 0.dp,
