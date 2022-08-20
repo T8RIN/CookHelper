@@ -51,7 +51,10 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
     observeExpansion(lazyListState = lazyListState) { fabExpanded = it }
 
     Box {
-        AnimatedContent(targetState = chatListState, modifier = Modifier.fillMaxSize()) { state ->
+        AnimatedContent(
+            targetState = chatListState,
+            modifier = Modifier.fillMaxSize()
+        ) { state ->
             if (state.chatList.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),

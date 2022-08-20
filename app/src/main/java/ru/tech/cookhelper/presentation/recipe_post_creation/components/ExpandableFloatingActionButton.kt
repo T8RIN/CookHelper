@@ -4,20 +4,19 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 
@@ -33,17 +32,19 @@ fun ExpandableFloatingActionButton(
     },
     containerColor: Color = FloatingActionButtonDefaults.containerColor,
     contentColor: Color = contentColorFor(containerColor),
+    elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     text: @Composable () -> Unit = {},
-    icon: @Composable () -> Unit,
+    icon: @Composable (iconSize: Dp) -> Unit,
     onClick: () -> Unit
 ) {
-    val horizontalPadding by animateDpAsState(targetValue = if (expanded) 16.dp else 0.dp)
+    val horizontalPadding by animateDpAsState(targetValue = if (expanded) size.getPadding() else 0.dp)
     val content: @Composable () -> Unit = {
         Row(
             modifier = Modifier.padding(horizontal = horizontalPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            icon()
+            icon(size.getIconSize())
             AnimatedVisibility(visible = expanded) {
                 Row {
                     Spacer(Modifier.width(12.dp))
@@ -60,6 +61,8 @@ fun ExpandableFloatingActionButton(
                 shape = shape,
                 containerColor = containerColor,
                 contentColor = contentColor,
+                interactionSource = interactionSource,
+                elevation = elevation,
                 content = content
             )
         }
@@ -70,6 +73,8 @@ fun ExpandableFloatingActionButton(
                 shape = shape,
                 containerColor = containerColor,
                 contentColor = contentColor,
+                interactionSource = interactionSource,
+                elevation = elevation,
                 content = content
             )
         }
@@ -80,15 +85,22 @@ fun ExpandableFloatingActionButton(
                 shape = shape,
                 containerColor = containerColor,
                 contentColor = contentColor,
+                interactionSource = interactionSource,
+                elevation = elevation,
                 content = content
             )
         }
     }
 }
 
+private fun FabSize.getIconSize(): Dp = when (this) {
+    FabSize.Small, FabSize.Common -> 24.dp
+    FabSize.Large -> FloatingActionButtonDefaults.LargeIconSize
+}
+
 @SuppressLint("ComposableNaming")
 @Composable
-fun observeExpansion(scrollState: ScrollState, onChange: (state: Boolean) -> Unit) {
+fun observeExpansion(scrollState: ScrollState, onChange: (expanded: Boolean) -> Unit) {
     LaunchedEffect(scrollState) {
         var previousOffset = 0
         snapshotFlow {
@@ -102,16 +114,22 @@ fun observeExpansion(scrollState: ScrollState, onChange: (state: Boolean) -> Uni
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun observeExpansion(lazyListState: LazyListState, onChange: (state: Boolean) -> Unit) {
+fun observeExpansion(lazyListState: LazyListState, onChange: (expanded: Boolean) -> Unit) {
     LaunchedEffect(lazyListState) {
-        var previousOffset = 0
+        var previousItemIndex = 0
         snapshotFlow {
-            lazyListState.firstVisibleItemScrollOffset
-        }.collect {
-            onChange(it <= previousOffset)
-            previousOffset = it
+            lazyListState.firstVisibleItemIndex
+        }.collect { currentItemIndex ->
+            onChange(previousItemIndex <= currentItemIndex)
+            previousItemIndex = currentItemIndex
         }
     }
+}
+
+private fun FabSize.getPadding(): Dp = when (this) {
+    FabSize.Small -> 8.dp
+    FabSize.Common -> 16.dp
+    FabSize.Large -> 24.dp
 }
 
 enum class FabSize { Small, Common, Large }

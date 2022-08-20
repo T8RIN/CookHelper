@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ExitToApp
+import androidx.compose.material.icons.outlined.DoorBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,7 +26,7 @@ fun ExitDialog(onExit: () -> Unit) {
             )
         },
         onDismissRequest = { dialogController.close() },
-        icon = { Icon(Icons.Outlined.ExitToApp, null) },
+        icon = { Icon(Icons.Outlined.DoorBack, null) },
         confirmButton = {
             TextButton(onClick = { dialogController.close() }) {
                 Text(stringResource(R.string.stay))
