@@ -38,6 +38,7 @@ import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTextField
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.observeExpansion
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -60,15 +61,7 @@ fun RecipePostCreationScreen(
 
     val dialogController = LocalDialogController.current
 
-    LaunchedEffect(scrollState) {
-        var prev = 0
-        snapshotFlow {
-            scrollState.value
-        }.collect {
-            fabExpanded = it <= prev
-            prev = it
-        }
-    }
+    observeExpansion(scrollState = scrollState) { fabExpanded = it }
 
     val user = viewModel.user
 

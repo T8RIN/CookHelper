@@ -1,14 +1,19 @@
 package ru.tech.cookhelper.presentation.recipe_post_creation.components
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -77,6 +82,34 @@ fun ExpandableFloatingActionButton(
                 contentColor = contentColor,
                 content = content
             )
+        }
+    }
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+fun observeExpansion(scrollState: ScrollState, onChange: (state: Boolean) -> Unit) {
+    LaunchedEffect(scrollState) {
+        var previousOffset = 0
+        snapshotFlow {
+            scrollState.value
+        }.collect {
+            onChange(it <= previousOffset)
+            previousOffset = it
+        }
+    }
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+fun observeExpansion(lazyListState: LazyListState, onChange: (state: Boolean) -> Unit) {
+    LaunchedEffect(lazyListState) {
+        var previousOffset = 0
+        snapshotFlow {
+            lazyListState.firstVisibleItemScrollOffset
+        }.collect {
+            onChange(it <= previousOffset)
+            previousOffset = it
         }
     }
 }

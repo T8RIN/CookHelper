@@ -11,8 +11,11 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +31,7 @@ import ru.tech.cookhelper.presentation.chat_list.components.ChatListItem
 import ru.tech.cookhelper.presentation.chat_list.viewModel.ChatListViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.observeExpansion
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
@@ -41,24 +45,17 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
     val screenController = LocalScreenController.current
     val chatListState = viewModel.chatListState
-    val scrollState = rememberLazyListState()
+    val lazyListState = rememberLazyListState()
     var fabExpanded by rememberSaveable { mutableStateOf(true) }
 
-    LaunchedEffect(scrollState) {
-        var prev = 0
-        snapshotFlow { scrollState.firstVisibleItemIndex }
-            .collect {
-                fabExpanded = it <= prev
-                prev = it
-            }
-    }
+    observeExpansion(lazyListState = lazyListState) { fabExpanded = it }
 
     Box {
         AnimatedContent(targetState = chatListState, modifier = Modifier.fillMaxSize()) { state ->
             if (state.chatList.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    state = scrollState,
+                    state = lazyListState,
                     contentPadding = WindowInsets.navigationBars.asPaddingValues()
                         .addPadding(bottom = 80.dp)
                 ) {
