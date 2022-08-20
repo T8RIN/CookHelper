@@ -38,16 +38,16 @@ fun ExpandableFloatingActionButton(
     icon: @Composable (iconSize: Dp) -> Unit,
     onClick: () -> Unit
 ) {
-    val horizontalPadding by animateDpAsState(targetValue = if (expanded) size.getPadding() else 0.dp)
+    val horizontalPadding by animateDpAsState(targetValue = if (expanded) size.horizontalPadding else 0.dp)
     val content: @Composable () -> Unit = {
         Row(
             modifier = Modifier.padding(horizontal = horizontalPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            icon(size.getIconSize())
+            icon(size.iconSize)
             AnimatedVisibility(visible = expanded) {
                 Row {
-                    Spacer(Modifier.width(12.dp))
+                    Spacer(Modifier.width(size.spacerPadding))
                     text()
                 }
             }
@@ -93,11 +93,6 @@ fun ExpandableFloatingActionButton(
     }
 }
 
-private fun FabSize.getIconSize(): Dp = when (this) {
-    FabSize.Small, FabSize.Common -> 24.dp
-    FabSize.Large -> FloatingActionButtonDefaults.LargeIconSize
-}
-
 @SuppressLint("ComposableNaming")
 @Composable
 fun observeExpansion(scrollState: ScrollState, onChange: (expanded: Boolean) -> Unit) {
@@ -126,10 +121,24 @@ fun observeExpansion(lazyListState: LazyListState, onChange: (expanded: Boolean)
     }
 }
 
-private fun FabSize.getPadding(): Dp = when (this) {
-    FabSize.Small -> 8.dp
-    FabSize.Common -> 16.dp
-    FabSize.Large -> 24.dp
-}
+private val FabSize.horizontalPadding: Dp
+    get() = when (this) {
+        FabSize.Small -> 8.dp
+        FabSize.Common -> 16.dp
+        FabSize.Large -> 24.dp
+    }
+
+private val FabSize.spacerPadding: Dp
+    get() = when (this) {
+        FabSize.Small -> 4.dp
+        FabSize.Common -> 12.dp
+        FabSize.Large -> 20.dp
+    }
+
+private val FabSize.iconSize: Dp
+    get() = when (this) {
+        FabSize.Small, FabSize.Common -> 24.dp
+        FabSize.Large -> FloatingActionButtonDefaults.LargeIconSize
+    }
 
 enum class FabSize { Small, Common, Large }

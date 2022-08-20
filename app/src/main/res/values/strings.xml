@@ -25,7 +25,7 @@
     <string name="app_closing">Закрытие приложения</string>
     <string name="app_closing_message">Приложение будет закрыто, все данные будут сохранены в облаке, продолжить?</string>
     <string name="stay">Отстаться</string>
-    <string name="close">Выйти</string>
+    <string name="exit">Выйти</string>
     <string name="app_theme_mode">Тема приложения</string>
     <string name="dynamic_сolors">Динамечские цвета</string>
     <string name="cart_connection">Связь корзины и холодильника</string>
@@ -129,4 +129,5 @@
     <string name="tannec">Tannec - бэкэнд разработчик</string>
     <string name="cannot_change_theme">Невозможно изменить цветовую палитру, если включены динамические цвета</string>
     <string name="password_changed">Пароль успешно изменен, войдите в систему</string>
+    <string name="close">Закрыть</string>
 </resources>

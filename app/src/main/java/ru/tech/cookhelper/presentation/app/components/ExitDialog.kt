@@ -34,7 +34,7 @@ fun ExitDialog(onExit: () -> Unit) {
         },
         dismissButton = {
             TextButton(onClick = { onExit() }) {
-                Text(stringResource(R.string.close))
+                Text(stringResource(R.string.exit))
             }
         }
     )

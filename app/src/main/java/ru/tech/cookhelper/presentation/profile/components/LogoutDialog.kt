@@ -37,7 +37,7 @@ fun LogoutDialog(onLogout: () -> Unit) {
                 onLogout()
                 dialogController.close()
             }) {
-                Text(stringResource(R.string.close))
+                Text(stringResource(R.string.exit))
             }
         }
     )
