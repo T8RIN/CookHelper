@@ -41,19 +41,20 @@ fun FloatingActionButtonWithOptions(
     options: List<FabOption>,
     scrimEnabled: Boolean = true,
     scrimColor: Color = MaterialTheme.colorScheme.scrim.copy(0.32f),
-    optionsGravity: OptionsGravity = OptionsGravity.End,
+    globalOptionsGravity: OptionsGravity = OptionsGravity.End,
+    internalOptionsGravity: OptionsGravity = OptionsGravity.End,
     onOptionSelected: (option: FabOption) -> Unit,
     onClick: (showingOptions: Boolean) -> Unit = {}
 ) {
     var showingOptions by rememberSaveable { mutableStateOf(false) }
     val scale by animateFloatAsState(targetValue = if (showingOptions) 1f else 0f)
 
-    val horizontalAlignment = when (optionsGravity) {
+    val horizontalAlignment = when (globalOptionsGravity) {
         OptionsGravity.Start -> Alignment.Start
         OptionsGravity.Center -> Alignment.CenterHorizontally
         OptionsGravity.End -> Alignment.End
     }
-    val crossAxisAlignment = when (optionsGravity) {
+    val crossAxisAlignment = when (internalOptionsGravity) {
         OptionsGravity.Start -> FlowCrossAxisAlignment.Start
         OptionsGravity.Center -> FlowCrossAxisAlignment.Center
         OptionsGravity.End -> FlowCrossAxisAlignment.End
