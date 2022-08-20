@@ -35,8 +35,13 @@ sealed class UIText {
 
     fun isNotEmpty(): Boolean = !isEmpty()
 
+    @Suppress("FunctionName")
     companion object {
         fun Empty() = DynamicString("")
+        fun String.asUIText() = DynamicString(this)
+        fun Int.asUIText() = StringResource(this)
+        fun UIText(value: String) = DynamicString(value)
+        fun UIText(@StringRes value: Int) = StringResource(value)
     }
 
 }

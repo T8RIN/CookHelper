@@ -1,24 +1,26 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,7 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -40,8 +43,11 @@ fun FloatingActionButtonWithOptions(
     scrimColor: Color = MaterialTheme.colorScheme.scrim.copy(0.32f),
     optionsGravity: OptionsGravity = OptionsGravity.End,
     onOptionSelected: (option: FabOption) -> Unit,
-    onClick: () -> Unit = {}
+    onClick: (showingOptions: Boolean) -> Unit = {}
 ) {
+    var showingOptions by rememberSaveable { mutableStateOf(false) }
+    val scale by animateFloatAsState(targetValue = if (showingOptions) 1f else 0f)
+
     val horizontalAlignment = when (optionsGravity) {
         OptionsGravity.Start -> Alignment.Start
         OptionsGravity.Center -> Alignment.CenterHorizontally
@@ -52,7 +58,6 @@ fun FloatingActionButtonWithOptions(
         OptionsGravity.Center -> FlowCrossAxisAlignment.Center
         OptionsGravity.End -> FlowCrossAxisAlignment.End
     }
-    var showingOptions by rememberSaveable { mutableStateOf(false) }
     Scrim(
         showing = showingOptions,
         onTap = { showingOptions = false },
@@ -62,13 +67,24 @@ fun FloatingActionButtonWithOptions(
         modifier = modifier,
         horizontalAlignment = horizontalAlignment
     ) {
-        AnimatedVisibility(visible = showingOptions, modifier = Modifier.weight(1f, false)) {
+        AnimatedVisibility(
+            visible = showingOptions,
+            modifier = Modifier.weight(1f, false),
+            enter = fadeIn() + slideInVertically { it / 3 },
+            exit = fadeOut() + slideOutVertically { it / 3 }
+        ) {
             FlowColumn(
                 crossAxisAlignment = crossAxisAlignment,
-                modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 4.dp)
+                crossAxisSpacing = 4.dp,
+                mainAxisSpacing = 2.dp,
+                modifier = Modifier.padding(
+                    vertical = 12.dp,
+                    horizontal = 8.dp
+                )
             ) {
                 options.forEachIndexed { index, option ->
                     ExpandableFloatingActionButton(
+                        modifier = Modifier.scale(scale),
                         size = FabSize.Small,
                         icon = {
                             Icon(
@@ -79,7 +95,7 @@ fun FloatingActionButtonWithOptions(
                         },
                         text = {
                             if (option.text.isNotEmpty()) {
-                                Text(option.text)
+                                Text(text = option.text.asString())
                             }
                         },
                         expanded = option.text.isNotEmpty(),
@@ -88,14 +104,13 @@ fun FloatingActionButtonWithOptions(
                             showingOptions = false
                         }
                     )
-                    Spacer(Modifier.height(4.dp))
                 }
             }
         }
         ExpandableFloatingActionButton(
             onClick = {
-                onClick()
                 showingOptions = !showingOptions
+                onClick(showingOptions)
             },
             expanded = expanded,
             icon = { size ->
@@ -109,9 +124,11 @@ fun FloatingActionButtonWithOptions(
                 }
             },
             text = {
-                AnimatedContent(targetState = showingOptions) { showClose ->
-                    if (showClose) Text(stringResource(R.string.close))
-                    else text()
+                if (text != {}) {
+                    AnimatedContent(targetState = showingOptions) { showClose ->
+                        if (showClose) Text(stringResource(R.string.close))
+                        else text()
+                    }
                 }
             }
         )
@@ -120,7 +137,7 @@ fun FloatingActionButtonWithOptions(
 
 data class FabOption(
     val index: Int = 0,
-    val text: String = "",
+    val text: UIText = UIText.Empty(),
     val icon: ImageVector
 )
 
@@ -139,13 +156,16 @@ fun Scrim(
         exit = fadeOut()
     ) {
         Canvas(
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(onTap) {
-                    detectTapGestures { onTap() }
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
+                    onTap()
                 }
         ) {
-            drawRect(color, alpha = fraction())
+            drawRect(color = color, alpha = fraction())
         }
     }
 }
