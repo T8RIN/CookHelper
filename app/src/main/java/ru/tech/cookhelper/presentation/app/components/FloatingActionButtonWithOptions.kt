@@ -40,6 +40,7 @@ fun FloatingActionButtonWithOptions(
     expanded: Boolean = false,
     options: List<FabOption>,
     scrimEnabled: Boolean = true,
+    colors: FabWithOptionsColors = FabWithOptionsColors.make(),
     scrimColor: Color = MaterialTheme.colorScheme.scrim.copy(0.32f),
     globalOptionsGravity: OptionsGravity = OptionsGravity.End,
     internalOptionsGravity: OptionsGravity = OptionsGravity.End,
@@ -103,7 +104,9 @@ fun FloatingActionButtonWithOptions(
                         onClick = {
                             onOptionSelected(option.copy(index = index))
                             showingOptions = false
-                        }
+                        },
+                        contentColor = colors.optionButtonContentColor,
+                        containerColor = colors.optionButtonContainerColor
                     )
                 }
             }
@@ -131,10 +134,37 @@ fun FloatingActionButtonWithOptions(
                         else text()
                     }
                 }
-            }
+            },
+            contentColor = colors.contentColor,
+            containerColor = colors.containerColor
         )
+
     }
 }
+
+interface FabWithOptionsColors {
+    val contentColor: Color
+    val containerColor: Color
+    val optionButtonContentColor: Color
+    val optionButtonContainerColor: Color
+
+    companion object {
+        @Composable
+        fun make(
+            contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+            containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+            optionButtonContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+            optionButtonContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer
+        ): FabWithOptionsColors = object : FabWithOptionsColors {
+            override val contentColor: Color = contentColor
+            override val containerColor: Color = containerColor
+            override val optionButtonContentColor: Color = optionButtonContentColor
+            override val optionButtonContainerColor: Color = optionButtonContainerColor
+        }
+    }
+
+}
+
 
 data class FabOption(
     val index: Int = 0,
