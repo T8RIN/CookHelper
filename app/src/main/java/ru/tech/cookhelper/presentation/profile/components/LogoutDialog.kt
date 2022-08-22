@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
@@ -25,6 +26,7 @@ fun LogoutDialog(onLogout: () -> Unit) {
                 textAlign = TextAlign.Center
             )
         },
+        shape = DialogShape,
         onDismissRequest = { dialogController.close() },
         icon = { Icon(Icons.Outlined.Logout, null) },
         confirmButton = {

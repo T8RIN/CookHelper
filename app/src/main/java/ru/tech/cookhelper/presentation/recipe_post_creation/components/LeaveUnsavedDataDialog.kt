@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
@@ -18,6 +19,7 @@ fun LeaveUnsavedDataDialog(title: Int, message: Int, onLeave: () -> Unit) {
     val dialogController = LocalDialogController.current
 
     AlertDialog(
+        shape = DialogShape,
         title = { Text(stringResource(title), textAlign = TextAlign.Center) },
         text = { Text(stringResource(message), textAlign = TextAlign.Center) },
         onDismissRequest = { dialogController.close() },

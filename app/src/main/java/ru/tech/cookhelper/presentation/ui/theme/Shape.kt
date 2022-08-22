@@ -11,9 +11,7 @@ import androidx.compose.ui.unit.dp
 import java.lang.Math.toRadians
 import kotlin.math.*
 
-private const val TWO_PI = 2 * PI
-
-data class SmoothRoundedCornerShape(
+data class SquircleShape(
     private val topLeft: Dp = 0.dp,
     private val topLeftSmoothness: Int = 60,
     private val topRight: Dp = 0.dp,
@@ -249,7 +247,7 @@ data class SmoothRoundedCornerShape(
         topEnd: CornerSize,
         bottomEnd: CornerSize,
         bottomStart: CornerSize
-    ) = SmoothRoundedCornerShape(
+    ) = SquircleShape(
         topLeft,
         topLeftSmoothness,
         topRight,
@@ -397,7 +395,7 @@ fun SquircleShape(
     topEnd: Dp = 0.dp,
     bottomStart: Dp = 0.dp,
     bottomEnd: Dp = 0.dp
-) = SmoothRoundedCornerShape(
+) = SquircleShape(
     topLeft = topStart,
     topLeftSmoothness = smoothness,
     topRight = topEnd,
@@ -407,3 +405,5 @@ fun SquircleShape(
     bottomLeft = bottomStart,
     bottomLeftSmoothness = smoothness
 )
+
+val DialogShape = SquircleShape(28.dp, 100)

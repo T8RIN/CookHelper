@@ -34,6 +34,7 @@ import androidx.compose.ui.window.DialogProperties
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
+import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
@@ -74,6 +75,7 @@ fun PickProductsWithMeasuresDialog(
         Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.5f)
 
     AlertDialog(
+        shape = DialogShape,
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = Modifier
             .fillMaxWidth(0.85f)

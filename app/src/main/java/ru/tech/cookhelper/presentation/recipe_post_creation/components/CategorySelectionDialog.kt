@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
@@ -29,6 +30,7 @@ fun CategorySelectionDialog(
 ) {
     val dialogController = LocalDialogController.current
     AlertDialog(
+        shape = DialogShape,
         title = { Text(stringResource(R.string.choose_category)) },
         text = {
             Column {
