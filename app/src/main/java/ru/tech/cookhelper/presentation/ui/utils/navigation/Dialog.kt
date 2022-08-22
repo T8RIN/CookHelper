@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.ui.utils.navigation
 
 import android.os.Parcelable
 import androidx.annotation.StringRes
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.domain.model.Product
 
@@ -12,7 +13,7 @@ sealed class Dialog : Parcelable {
 
     @Parcelize
     class Exit(
-        val onExit: () -> Unit
+        @IgnoredOnParcel val onExit: () -> Unit = {}
     ) : Dialog()
 
     @Parcelize
@@ -23,27 +24,27 @@ sealed class Dialog : Parcelable {
 
     @Parcelize
     class Logout(
-        val onLogout: () -> Unit
+        @IgnoredOnParcel val onLogout: () -> Unit = {}
     ) : Dialog()
 
     @Parcelize
     class CategorySelection(
         val categories: List<String>,
         val selectedCategory: String,
-        val onCategorySelected: (category: String) -> Unit
+        @IgnoredOnParcel val onCategorySelected: (category: String) -> Unit = {}
     ) : Dialog()
 
     @Parcelize
     class LeaveUnsavedData(
         @StringRes val title: Int,
         @StringRes val message: Int,
-        val onLeave: () -> Unit
+        @IgnoredOnParcel val onLeave: () -> Unit = {}
     ) : Dialog()
 
     @Parcelize
     class PickProductsWithMeasures(
         val products: List<Product>,
         val allProducts: List<Product>,
-        val onProductsPicked: (newProducts: List<Product>) -> Unit
+        @IgnoredOnParcel val onProductsPicked: (newProducts: List<Product>) -> Unit = {}
     ) : Dialog()
 }

@@ -211,7 +211,7 @@ fun ProfileScreen(
                             images = testList,
                             canAddImages = true,
                             onAddImage = {
-
+                                //TODO: Send picked image to server
                             }
                         )
                     )
@@ -238,7 +238,7 @@ fun ProfileScreen(
                         ),
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            screenController.navigate(Screen.RecipePostCreation())
+                            screenController.navigate(Screen.RecipePostCreation)
                         }
                     ) {
                         Text(stringResource(R.string.recipe))

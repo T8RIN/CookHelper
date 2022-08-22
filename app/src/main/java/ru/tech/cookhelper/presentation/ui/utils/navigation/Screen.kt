@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
@@ -107,7 +108,7 @@ sealed class Screen(
     ) : Screen(showTopAppBar = false)
 
     @Parcelize
-    class MatchedRecipes : Screen(showTopAppBar = false)
+    object MatchedRecipes : Screen(showTopAppBar = false)
 
     @Parcelize
     object Authentication : Screen(showTopAppBar = false)
@@ -115,7 +116,7 @@ sealed class Screen(
     @Parcelize
     class FullscreenImagePager(
         val id: String = "0",
-        val images: List<Image> = emptyList(),
+        val images: List<Image> = emptyList()
     ) : Screen(showTopAppBar = false)
 
 
@@ -123,7 +124,7 @@ sealed class Screen(
     class AllImages(
         val images: List<Image> = emptyList(),
         val canAddImages: Boolean = false,
-        val onAddImage: (uri: String) -> Unit
+        @IgnoredOnParcel val onAddImage: (uri: String) -> Unit = {}
     ) : Screen(showTopAppBar = false)
 
     @Parcelize
@@ -132,7 +133,7 @@ sealed class Screen(
     ) : Screen(showTopAppBar = false)
 
     @Parcelize
-    class RecipePostCreation : Screen(showTopAppBar = false)
+    object RecipePostCreation : Screen(showTopAppBar = false)
 
     @Parcelize
     class Chat(
