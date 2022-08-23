@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components.login
+package ru.tech.cookhelper.presentation.login_screen
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -24,19 +24,28 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.NavController
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
+import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.sendToast
-import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.login_screen.viewModel.LoginViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
 @Composable
-fun LoginField(mod: Float, viewModel: AuthViewModel) {
+fun LoginField(
+    scaleModifier: Float,
+    onGetCredentials: (name: String, email: String, token: String) -> Unit,
+    authController: NavController<Screen>,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
 
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
@@ -59,13 +68,13 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
         style = MaterialTheme.typography.headlineLarge,
         textAlign = TextAlign.Center
     )
-    Spacer(Modifier.size(8.dp * mod))
+    Spacer(Modifier.size(8.dp * scaleModifier))
     Text(
         stringResource(R.string.login_to_your_account),
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center
     )
-    Spacer(Modifier.size(64.dp * mod))
+    Spacer(Modifier.size(64.dp * scaleModifier))
     AnimatedContent(viewModel.loginState.isLoading) { isLoading ->
         Column {
             if (isLoading) Loading(Modifier.fillMaxWidth())
@@ -88,7 +97,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
                             }
                     }
                 )
-                Spacer(Modifier.size(8.dp * mod))
+                Spacer(Modifier.size(8.dp * scaleModifier))
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -116,7 +125,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
                         }
                     }
                 )
-                Spacer(Modifier.size(8.dp * mod))
+                Spacer(Modifier.size(8.dp * scaleModifier))
                 Row(
                     modifier = Modifier.defaultMinSize(
                         minWidth = TextFieldDefaults.MinWidth
@@ -124,13 +133,13 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(
-                        onClick = { viewModel.openPasswordRestore() },
+                        onClick = { authController.navigate(Screen.Authentication.RestorePassword) },
                         content = { Text(stringResource(R.string.forgot), color = Color.Gray) })
                 }
             }
         }
     }
-    Spacer(Modifier.size(48.dp * mod))
+    Spacer(Modifier.size(48.dp * scaleModifier))
     Button(
         enabled = if (!viewModel.loginState.isLoading) isFormValid else false,
         onClick = { viewModel.logInWith(login, password) },
@@ -138,7 +147,7 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
             minWidth = TextFieldDefaults.MinWidth
         ), content = { Text(stringResource(R.string.log_in)) }
     )
-    Spacer(Modifier.size(64.dp * mod))
+    Spacer(Modifier.size(64.dp * scaleModifier))
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             stringResource(R.string.need_account),
@@ -147,11 +156,11 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
         )
         Spacer(Modifier.size(12.dp))
         TextButton(
-            onClick = { viewModel.openRegistration() },
+            onClick = { authController.navigate(Screen.Authentication.Register) },
             content = { Text(stringResource(R.string.sign_up)) }
         )
     }
-    Spacer(Modifier.size(16.dp * mod))
+    Spacer(Modifier.size(16.dp * scaleModifier))
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
@@ -159,6 +168,12 @@ fun LoginField(mod: Float, viewModel: AuthViewModel) {
                 it.icon,
                 it.text.asString(context)
             )
+            is Event.SendData -> {
+                onGetCredentials(it["name"], it["email"], it["token"])
+            }
+            is Event.NavigateTo -> {
+                authController.navigate(it.screen)
+            }
             else -> {}
         }
     }

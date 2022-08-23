@@ -66,11 +66,11 @@ class MainViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         getUserUseCase().onEach { user ->
-            if (user == null) sendEvent(Event.NavigateTo(Screen.Authentication))
+            if (user == null) sendEvent(Event.NavigateTo(Screen.Authentication.Login))
             else {
                 sendEvent(
                     Event.NavigateIf(
-                        predicate = { it == Screen.Authentication },
+                        predicate = { it is Screen.Authentication },
                         screen = Screen.Home.None
                     )
                 )

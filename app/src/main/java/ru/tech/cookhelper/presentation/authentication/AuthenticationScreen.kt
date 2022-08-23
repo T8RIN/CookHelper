@@ -7,6 +7,10 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -15,26 +19,31 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
+import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.LockScreenOrientation
 import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.authentication.components.AuthState
-import ru.tech.cookhelper.presentation.authentication.components.confirm_email.ConfirmEmailField
-import ru.tech.cookhelper.presentation.authentication.components.login.LoginField
-import ru.tech.cookhelper.presentation.authentication.components.registration.RegistrationField
-import ru.tech.cookhelper.presentation.authentication.components.restore_password.RestorePasswordField
-import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.confirm_email.ConfirmEmailField
+import ru.tech.cookhelper.presentation.login_screen.LoginField
+import ru.tech.cookhelper.presentation.registration_screen.RegistrationField
+import ru.tech.cookhelper.presentation.restore_password.RestorePasswordField
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
+import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun AuthenticationScreen(viewModel: AuthViewModel = hiltViewModel()) {
+fun AuthenticationScreen() {
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+    val authController = rememberNavController<Screen>(Screen.Authentication.Login)
 
     val height = LocalConfiguration.current.screenHeightDp
 
-    val mod: Float = when {
+    var name by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var token by rememberSaveable { mutableStateOf("") }
+
+    val scaleModifier: Float = when {
         height >= 850 -> 1.5f
         height >= 650 -> 1f
         height >= 450 -> 0.5f
@@ -61,7 +70,7 @@ fun AuthenticationScreen(viewModel: AuthViewModel = hiltViewModel()) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(Modifier.size(16.dp * mod))
+                Spacer(Modifier.size(16.dp * scaleModifier))
                 Picture(
                     model = R.drawable.ic_launcher_foreground,
                     modifier = Modifier
@@ -69,35 +78,60 @@ fun AuthenticationScreen(viewModel: AuthViewModel = hiltViewModel()) {
                         .scale(2f),
                     shimmerEnabled = false
                 )
-                Spacer(Modifier.size(20.dp * mod))
+                Spacer(Modifier.size(20.dp * scaleModifier))
                 AnimatedContent(
-                    targetState = viewModel.authState,
+                    targetState = authController.currentDestination ?: Screen.Authentication.Login,
                     modifier = Modifier.fillMaxSize(),
                     transitionSpec = {
                         fadeIn(animationSpec = tween(350, delayMillis = 150)) with fadeOut(
                             animationSpec = tween(150)
                         )
                     }
-                ) { authState ->
+                ) { screen ->
                     Column(
                         Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        when (authState) {
-                            AuthState.Login -> LoginField(mod = mod, viewModel = viewModel)
-                            AuthState.Registration -> RegistrationField(
-                                mod = mod,
-                                viewModel = viewModel
-                            )
-                            AuthState.RestorePassword -> RestorePasswordField(
-                                mod = mod,
-                                viewModel = viewModel
-                            )
-                            AuthState.ConfirmEmail -> ConfirmEmailField(
-                                mod = mod,
-                                viewModel = viewModel
-                            )
+                        when (screen) {
+                            Screen.Authentication.Confirmation -> {
+                                ConfirmEmailField(
+                                    authController = authController,
+                                    scaleModifier = scaleModifier,
+                                    name = name,
+                                    email = email,
+                                    token = token
+                                )
+                            }
+                            Screen.Authentication.Login -> {
+                                LoginField(
+                                    scaleModifier = scaleModifier,
+                                    onGetCredentials = { n, e, t ->
+                                        name = n
+                                        email = e
+                                        token = t
+                                    },
+                                    authController = authController
+                                )
+                            }
+                            Screen.Authentication.Register -> {
+                                RegistrationField(
+                                    scaleModifier = scaleModifier,
+                                    authController = authController,
+                                    onGetCredentials = { n, e, t ->
+                                        name = n
+                                        email = e
+                                        token = t
+                                    }
+                                )
+                            }
+                            Screen.Authentication.RestorePassword -> {
+                                RestorePasswordField(
+                                    scaleModifier = scaleModifier,
+                                    authController = authController
+                                )
+                            }
+                            else -> {}
                         }
                     }
                 }

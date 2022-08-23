@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components.login
+package ru.tech.cookhelper.presentation.login_screen.components
 
 import ru.tech.cookhelper.domain.model.User
 

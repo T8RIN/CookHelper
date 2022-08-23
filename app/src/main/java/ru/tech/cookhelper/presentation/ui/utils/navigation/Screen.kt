@@ -111,7 +111,12 @@ sealed class Screen(
     object MatchedRecipes : Screen(showTopAppBar = false)
 
     @Parcelize
-    object Authentication : Screen(showTopAppBar = false)
+    sealed class Authentication : Screen(showTopAppBar = false) {
+        object Login : Authentication()
+        object Register : Authentication()
+        object Confirmation : Authentication()
+        object RestorePassword : Authentication()
+    }
 
     @Parcelize
     class FullscreenImagePager(

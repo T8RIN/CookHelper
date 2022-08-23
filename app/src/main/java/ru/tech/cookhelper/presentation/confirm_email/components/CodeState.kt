@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components.confirm_email
+package ru.tech.cookhelper.presentation.confirm_email.components
 
 data class CodeState(
     val isLoading: Boolean = false,

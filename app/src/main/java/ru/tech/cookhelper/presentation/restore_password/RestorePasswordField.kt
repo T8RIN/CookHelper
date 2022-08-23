@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components.restore_password
+package ru.tech.cookhelper.presentation.restore_password
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -27,21 +27,31 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.NavController
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
+import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
-import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
+import ru.tech.cookhelper.presentation.restore_password.viewModel.RestorePasswordViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
-fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
+fun RestorePasswordField(
+    scaleModifier: Float,
+    authController: NavController<Screen>,
+    viewModel: RestorePasswordViewModel = hiltViewModel()
+) {
 
     var login by rememberSaveable { mutableStateOf("") }
     val toastHost = LocalToastHost.current
@@ -66,7 +76,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
         style = MaterialTheme.typography.headlineLarge,
         textAlign = TextAlign.Center
     )
-    Spacer(Modifier.size(8.dp * mod))
+    Spacer(Modifier.size(8.dp * scaleModifier))
 
     AnimatedContent(viewModel.restorePasswordState) { state ->
         Column(
@@ -77,12 +87,12 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                 stringResource(if (state.state == RestoreState.Login) R.string.type_your_email else R.string.type_new_password_and_code),
                 style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center
             )
-            Spacer(Modifier.size(64.dp * mod))
+            Spacer(Modifier.size(64.dp * scaleModifier))
 
             if (state.isLoading) Loading(Modifier.fillMaxWidth())
             else when (state.state) {
                 RestoreState.Login -> {
-                    BackHandler { viewModel.goBack() }
+                    BackHandler { authController.goBack() }
 
                     OutlinedTextField(
                         value = login,
@@ -135,7 +145,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                             }
                         }
                     )
-                    Spacer(Modifier.size(8.dp * mod))
+                    Spacer(Modifier.size(8.dp * scaleModifier))
                     OutlinedTextField(
                         value = passwordRepeat,
                         onValueChange = { passwordRepeat = it },
@@ -161,7 +171,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                     )
                     AnimatedVisibility(isFormValid) {
                         Column {
-                            Spacer(Modifier.size(32.dp * mod))
+                            Spacer(Modifier.size(32.dp * scaleModifier))
                             OTPField(
                                 length = 5,
                                 codeState = viewModel.restorePasswordCodeState,
@@ -171,7 +181,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                     }
                 }
             }
-            Spacer(Modifier.size(48.dp * mod))
+            Spacer(Modifier.size(48.dp * scaleModifier))
             Button(
                 enabled = if (state.state == RestoreState.Login) {
                     if (!state.isLoading) login.isNotEmpty() else false
@@ -188,7 +198,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                 ),
                 content = { Text(stringResource(if (state.state == RestoreState.Login) R.string.send_email else R.string.save)) }
             )
-            Spacer(Modifier.size(64.dp * mod))
+            Spacer(Modifier.size(64.dp * scaleModifier))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     stringResource(if (state.state == RestoreState.Login) R.string.have_account else R.string.wrong_credentials_question),
@@ -197,11 +207,15 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                 )
                 Spacer(Modifier.size(12.dp))
                 TextButton(
-                    onClick = { viewModel.apply { if (state.state == RestoreState.Login) openLogin() else openPasswordRestore() } },
+                    onClick = {
+                        if (state.state == RestoreState.Login) authController.navigate(
+                            Screen.Authentication.Login
+                        ) else authController.navigate(Screen.Authentication.RestorePassword)
+                    },
                     content = { Text(stringResource(if (state.state == RestoreState.Login) R.string.log_in_have_acc else R.string.go_back)) }
                 )
             }
-            Spacer(Modifier.size(16.dp * mod))
+            Spacer(Modifier.size(16.dp * scaleModifier))
         }
     }
 
@@ -211,6 +225,7 @@ fun RestorePasswordField(mod: Float, viewModel: AuthViewModel) {
                 it.icon,
                 it.text.asString(context)
             )
+            is Event.NavigateTo -> authController.navigate(it.screen)
             else -> {}
         }
     }

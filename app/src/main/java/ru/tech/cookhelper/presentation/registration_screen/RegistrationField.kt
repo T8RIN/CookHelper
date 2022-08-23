@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components.registration
+package ru.tech.cookhelper.presentation.registration_screen
 
 import android.util.Patterns
 import androidx.activity.compose.BackHandler
@@ -29,20 +29,30 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.olshevski.navigation.reimagined.NavController
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
+import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.StrokeTextField
 import ru.tech.cookhelper.presentation.app.components.sendToast
-import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.registration_screen.viewModel.RegistrationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
 @Composable
-fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
+fun RegistrationField(
+    scaleModifier: Float,
+    authController: NavController<Screen>,
+    onGetCredentials: (name: String, email: String, token: String) -> Unit,
+    viewModel: RegistrationViewModel = hiltViewModel()
+) {
 
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
@@ -67,19 +77,19 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
 
     val focusManager = LocalFocusManager.current
 
-    BackHandler { viewModel.goBack() }
+    BackHandler { authController.goBack() }
 
     Text(
         stringResource(R.string.register),
         style = MaterialTheme.typography.headlineLarge,
         textAlign = TextAlign.Center
     )
-    Spacer(Modifier.size(8.dp * mod))
+    Spacer(Modifier.size(8.dp * scaleModifier))
     Text(
         stringResource(R.string.create_your_new_account),
         style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center
     )
-    Spacer(Modifier.size(32.dp * mod))
+    Spacer(Modifier.size(32.dp * scaleModifier))
     AnimatedContent(viewModel.registrationState.isLoading) { isLoading ->
         Column(
             verticalArrangement = Arrangement.Center,
@@ -105,7 +115,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                             }
                     }
                 )
-                Spacer(Modifier.size(8.dp * mod))
+                Spacer(Modifier.size(8.dp * scaleModifier))
                 OutlinedTextField(
                     value = surname,
                     onValueChange = { surname = it.trim() },
@@ -124,7 +134,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                             }
                     }
                 )
-                Spacer(Modifier.size(8.dp * mod))
+                Spacer(Modifier.size(8.dp * scaleModifier))
                 StrokeTextField(
                     value = nick,
                     loading = viewModel.checkLoginState.isLoading,
@@ -154,7 +164,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                 )
                 AnimatedVisibility(name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty()) {
                     Column {
-                        Spacer(Modifier.size(8.dp * mod))
+                        Spacer(Modifier.size(8.dp * scaleModifier))
                         StrokeTextField(
                             value = email,
                             loading = viewModel.checkEmailState.isLoading,
@@ -218,7 +228,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                                 }
                             }
                         )
-                        Spacer(Modifier.size(8.dp * mod))
+                        Spacer(Modifier.size(8.dp * scaleModifier))
                         OutlinedTextField(
                             value = passwordRepeat,
                             onValueChange = { passwordRepeat = it },
@@ -256,7 +266,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
         }
     }
 
-    Spacer(Modifier.size(32.dp * mod))
+    Spacer(Modifier.size(32.dp * scaleModifier))
     Button(
         enabled = if (!viewModel.registrationState.isLoading) isFormValid else false,
         onClick = {
@@ -270,7 +280,7 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
             minWidth = TextFieldDefaults.MinWidth
         ), content = { Text(stringResource(R.string.sign_up)) }
     )
-    Spacer(Modifier.size(64.dp * mod))
+    Spacer(Modifier.size(64.dp * scaleModifier))
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             stringResource(R.string.have_account),
@@ -279,10 +289,10 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
         )
         Spacer(Modifier.size(12.dp))
         TextButton(
-            onClick = { viewModel.openLogin() },
+            onClick = { authController.navigate(Screen.Authentication.Login) },
             content = { Text(stringResource(R.string.log_in_have_acc)) })
     }
-    Spacer(Modifier.size(16.dp * mod))
+    Spacer(Modifier.size(16.dp * scaleModifier))
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
@@ -290,6 +300,12 @@ fun RegistrationField(mod: Float, viewModel: AuthViewModel) {
                 Icons.Rounded.ErrorOutline,
                 it.text.asString(context)
             )
+            is Event.SendData -> {
+                onGetCredentials(it["name"], it["email"], it["token"])
+            }
+            is Event.NavigateTo -> {
+                authController.navigate(it.screen)
+            }
             else -> {}
         }
     }

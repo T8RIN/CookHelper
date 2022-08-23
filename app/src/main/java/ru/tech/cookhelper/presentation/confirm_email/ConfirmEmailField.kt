@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.authentication.components.confirm_email
+package ru.tech.cookhelper.presentation.confirm_email
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -17,19 +17,32 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
+import dev.olshevski.navigation.reimagined.NavController
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
+import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
-import ru.tech.cookhelper.presentation.authentication.viewModel.AuthViewModel
+import ru.tech.cookhelper.presentation.confirm_email.viewModel.ConfirmEmailViewModel
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import java.util.*
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
-fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
+fun ConfirmEmailField(
+    authController: NavController<Screen>,
+    scaleModifier: Float,
+    name: String, email: String, token: String,
+    viewModel: ConfirmEmailViewModel = hiltViewModel(
+        defaultArguments = bundleOf("name" to name, "email" to email, "token" to token)
+    )
+) {
 
     val toastHost = LocalToastHost.current
     val width = LocalConfiguration.current.screenWidthDp
@@ -40,22 +53,22 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
         else -> ((width - 16 * 5) / 6)
     }
 
-    BackHandler { viewModel.goBack() }
+    BackHandler { authController.goBack() }
 
     Text(
         stringResource(R.string.last_step,
-            viewModel.currentName.replaceFirstChar { it.titlecase(Locale.getDefault()) }),
+            viewModel.name.replaceFirstChar { it.titlecase(Locale.getDefault()) }),
         style = MaterialTheme.typography.headlineLarge,
         textAlign = TextAlign.Center
     )
-    Spacer(Modifier.size(8.dp * mod))
+    Spacer(Modifier.size(8.dp * scaleModifier))
     Text(
-        stringResource(R.string.code_sent_to_your_email, viewModel.currentEmail),
+        stringResource(R.string.code_sent_to_your_email, viewModel.email),
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center
     )
 
-    Spacer(Modifier.size(64.dp * mod))
+    Spacer(Modifier.size(64.dp * scaleModifier))
 
     OTPField(
         length = 6,
@@ -65,7 +78,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
         }
     )
 
-    Spacer(Modifier.size(16.dp * mod))
+    Spacer(Modifier.size(16.dp * scaleModifier))
     Row(
         modifier = Modifier.defaultMinSize(
             minWidth = (size * 6 + 16 * 3).dp
@@ -85,7 +98,7 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
             }
         )
     }
-    Spacer(Modifier.size(48.dp * mod))
+    Spacer(Modifier.size(48.dp * scaleModifier))
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             stringResource(R.string.mistaken),
@@ -94,10 +107,10 @@ fun ConfirmEmailField(mod: Float, viewModel: AuthViewModel) {
         )
         Spacer(Modifier.size(12.dp))
         TextButton(
-            onClick = { viewModel.openRegistration() },
+            onClick = { authController.navigate(Screen.Authentication.Register) },
             content = { Text(stringResource(R.string.sign_up)) })
     }
-    Spacer(Modifier.size(16.dp * mod))
+    Spacer(Modifier.size(16.dp * scaleModifier))
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {

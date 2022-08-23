@@ -38,7 +38,11 @@ fun FancyToastHost(fancyToastValues: FancyToastValues) {
             enter = fadeIn(),
             exit = fadeOut()
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding()
+            ) {
                 Card(
                     colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onTertiaryContainer),
                     modifier = Modifier
