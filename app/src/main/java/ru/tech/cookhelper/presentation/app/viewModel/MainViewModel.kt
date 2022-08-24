@@ -11,10 +11,11 @@ import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
-import ru.tech.cookhelper.presentation.settings.components.ColorScheme
 import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.settings.components.Settings
 import ru.tech.cookhelper.presentation.settings.components.SettingsState
+import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
+import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -43,13 +44,11 @@ class MainViewModel @Inject constructor(
             list.forEach { setting ->
                 when (setting.id) {
                     Settings.DYNAMIC_COLORS.ordinal -> {
-                        state = state.copy(
-                            dynamicColors = setting.option.toBooleanStrictOrNull() ?: false
-                        )
+                        state = state.copy(dynamicColors = setting.option.toBoolean())
                     }
                     Settings.COLOR_SCHEME.ordinal -> {
-                        val index = setting.option.toIntOrNull() ?: ColorScheme.BLUE.ordinal
-                        state = state.copy(colorScheme = enumValues<ColorScheme>()[index])
+                        val index = setting.option.toIntOrNull() ?: ColorScheme.Blue.ordinal
+                        state = state.copy(colorScheme = colorList[index])
                     }
                     Settings.NIGHT_MODE.ordinal -> {
                         val index = setting.option.toIntOrNull() ?: NightMode.SYSTEM.ordinal

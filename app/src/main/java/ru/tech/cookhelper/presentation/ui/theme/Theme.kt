@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.tech.cookhelper.presentation.settings.components.ColorScheme.*
 import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverseSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
@@ -44,6 +43,7 @@ private val ColorScheme.LightThemeColors: Material3ColorScheme
         inverseOnSurface = md_theme_light_inverseOnSurface,
         inverseSurface = md_theme_light_inverseSurface,
         inversePrimary = md_theme_light_inversePrimary,
+        surfaceTint = md_theme_light_surfaceTint
     )
 private val ColorScheme.DarkThemeColors: Material3ColorScheme
     get() = darkColorScheme(
@@ -73,6 +73,7 @@ private val ColorScheme.DarkThemeColors: Material3ColorScheme
         inverseOnSurface = md_theme_dark_inverseOnSurface,
         inverseSurface = md_theme_dark_inverseSurface,
         inversePrimary = md_theme_dark_inversePrimary,
+        surfaceTint = md_theme_dark_surfaceTint
     )
 
 @Composable
@@ -124,16 +125,7 @@ fun ProKitchenTheme(
 
 @Composable
 fun getColorScheme(darkTheme: Boolean): Material3ColorScheme {
-    when (LocalSettingsProvider.current.colorScheme) {
-        BLUE -> ColorScheme.Blue
-        VIOLET -> ColorScheme.Violet
-        GREEN -> ColorScheme.Green
-        YELLOW -> ColorScheme.Yellow
-        RED -> ColorScheme.Red
-        PINK -> ColorScheme.Pink
-        ORANGE -> ColorScheme.Orange
-        MINT -> ColorScheme.Mint
-    }.apply {
+    LocalSettingsProvider.current.colorScheme.apply {
         return if (darkTheme) DarkThemeColors
         else LightThemeColors
     }
