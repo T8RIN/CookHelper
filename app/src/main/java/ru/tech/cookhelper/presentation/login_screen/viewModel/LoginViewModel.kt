@@ -16,7 +16,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
-import ru.tech.cookhelper.domain.use_case.login.LoginUseCase
+import ru.tech.cookhelper.domain.use_case.log_in.LoginUseCase
 import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.login_screen.components.LoginState
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText

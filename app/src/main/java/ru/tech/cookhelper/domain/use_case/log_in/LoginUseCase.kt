@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.domain.use_case.login
+package ru.tech.cookhelper.domain.use_case.log_in
 
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Inject

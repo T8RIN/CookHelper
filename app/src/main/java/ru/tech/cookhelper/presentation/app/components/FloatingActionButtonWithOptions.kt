@@ -14,6 +14,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -47,8 +48,8 @@ fun FloatingActionButtonWithOptions(
     onOptionSelected: (option: FabOption) -> Unit,
     onClick: (showingOptions: Boolean) -> Unit = {}
 ) {
-    var showingOptions by rememberSaveable { mutableStateOf(false) }
-    val scale by animateFloatAsState(targetValue = if (showingOptions) 1f else 0f)
+    var isShowingOptions by rememberSaveable { mutableStateOf(false) }
+    val scale by animateFloatAsState(targetValue = if (isShowingOptions) 1f else 0f)
 
     val horizontalAlignment = when (globalOptionsGravity) {
         OptionsGravity.Start -> Alignment.Start
@@ -61,8 +62,8 @@ fun FloatingActionButtonWithOptions(
         OptionsGravity.End -> FlowCrossAxisAlignment.End
     }
     Scrim(
-        showing = showingOptions,
-        onTap = { showingOptions = false },
+        showing = isShowingOptions,
+        onTap = { isShowingOptions = false },
         color = scrimColor
     )
     Column(
@@ -70,7 +71,7 @@ fun FloatingActionButtonWithOptions(
         horizontalAlignment = horizontalAlignment
     ) {
         AnimatedVisibility(
-            visible = showingOptions,
+            visible = isShowingOptions,
             modifier = Modifier.weight(1f, false),
             enter = fadeIn() + slideInVertically { it / 3 },
             exit = fadeOut() + slideOutVertically { it / 3 }
@@ -103,7 +104,7 @@ fun FloatingActionButtonWithOptions(
                         expanded = option.text.isNotEmpty(),
                         onClick = {
                             onOptionSelected(option.copy(index = index))
-                            showingOptions = false
+                            isShowingOptions = false
                         },
                         contentColor = colors.optionButtonContentColor,
                         containerColor = colors.optionButtonContainerColor
@@ -113,12 +114,12 @@ fun FloatingActionButtonWithOptions(
         }
         ExpandableFloatingActionButton(
             onClick = {
-                showingOptions = !showingOptions
-                onClick(showingOptions)
+                isShowingOptions = !isShowingOptions
+                onClick(isShowingOptions)
             },
             expanded = expanded,
             icon = { size ->
-                AnimatedContent(targetState = showingOptions) { showClose ->
+                AnimatedContent(targetState = isShowingOptions) { showClose ->
                     if (showClose) Icon(
                         imageVector = Icons.Rounded.Close,
                         contentDescription = null,
@@ -129,7 +130,7 @@ fun FloatingActionButtonWithOptions(
             },
             text = {
                 if (text != {}) {
-                    AnimatedContent(targetState = showingOptions) { showClose ->
+                    AnimatedContent(targetState = isShowingOptions) { showClose ->
                         if (showClose) Text(stringResource(R.string.close))
                         else text()
                     }
@@ -151,10 +152,10 @@ interface FabWithOptionsColors {
     companion object {
         @Composable
         fun make(
-            contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
             containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-            optionButtonContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
-            optionButtonContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer
+            contentColor: Color = contentColorFor(containerColor),
+            optionButtonContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+            optionButtonContentColor: Color = contentColorFor(optionButtonContainerColor),
         ): FabWithOptionsColors = object : FabWithOptionsColors {
             override val contentColor: Color = contentColor
             override val containerColor: Color = containerColor
@@ -167,9 +168,9 @@ interface FabWithOptionsColors {
 
 
 data class FabOption(
-    val index: Int = 0,
     val text: UIText = UIText.Empty(),
-    val icon: ImageVector
+    val icon: ImageVector,
+    val index: Int = 0,
 )
 
 enum class OptionsGravity { Start, Center, End }

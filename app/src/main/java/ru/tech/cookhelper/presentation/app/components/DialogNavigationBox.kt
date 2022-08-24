@@ -8,6 +8,7 @@ import ru.tech.cookhelper.presentation.profile.components.LogoutDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategorySelectionDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.PickProductsWithMeasuresDialog
+import ru.tech.cookhelper.presentation.settings.components.AboutAppDialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 
 @OptIn(ExperimentalAnimationApi::class)
