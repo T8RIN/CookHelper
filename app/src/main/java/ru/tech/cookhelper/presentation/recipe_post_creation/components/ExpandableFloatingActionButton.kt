@@ -109,14 +109,18 @@ fun observeExpansion(scrollState: ScrollState, onChange: (expanded: Boolean) -> 
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun observeExpansion(lazyListState: LazyListState, onChange: (expanded: Boolean) -> Unit) {
+fun observeExpansion(
+    lazyListState: LazyListState,
+    byOffset: Boolean = false,
+    onChange: (expanded: Boolean) -> Unit
+) {
     LaunchedEffect(lazyListState) {
-        var previousItemIndex = 0
+        var previous = 0
         snapshotFlow {
-            lazyListState.firstVisibleItemIndex
-        }.collect { currentItemIndex ->
-            onChange(previousItemIndex <= currentItemIndex)
-            previousItemIndex = currentItemIndex
+            if (!byOffset) lazyListState.firstVisibleItemIndex else lazyListState.firstVisibleItemScrollOffset
+        }.collect { current ->
+            onChange(previous <= current)
+            previous = current
         }
     }
 }

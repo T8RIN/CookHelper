@@ -8,7 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -57,12 +57,12 @@ fun RecipePostCreationScreen(
     val focus = LocalFocusManager.current
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
 
-    val scrollState = rememberScrollState()
+    val lazyListState = rememberLazyListState()
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
 
     val dialogController = LocalDialogController.current
 
-    observeExpansion(scrollState = scrollState) { fabExpanded = it }
+    observeExpansion(lazyListState = lazyListState, byOffset = true) { fabExpanded = it }
 
     val user = viewModel.user
 
@@ -170,7 +170,8 @@ fun RecipePostCreationScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = WindowInsets.navigationBars.asPaddingValues()
-                    .addPadding(bottom = 88.dp)
+                    .addPadding(bottom = 88.dp),
+                state = lazyListState
             ) {
                 item {
                     Column(
