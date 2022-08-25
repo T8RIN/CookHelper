@@ -12,6 +12,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverseSecondaryColor
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.darken
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.lighten
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
 
@@ -43,7 +45,8 @@ private val ColorScheme.LightThemeColors: Material3ColorScheme
         inverseOnSurface = md_theme_light_inverseOnSurface,
         inverseSurface = md_theme_light_inverseSurface,
         inversePrimary = md_theme_light_inversePrimary,
-        surfaceTint = md_theme_light_surfaceTint
+        surfaceTint = md_theme_light_surfaceTint,
+        outlineVariant = md_theme_dark_surfaceVariant.darken(0.05f)
     )
 private val ColorScheme.DarkThemeColors: Material3ColorScheme
     get() = darkColorScheme(
@@ -73,7 +76,8 @@ private val ColorScheme.DarkThemeColors: Material3ColorScheme
         inverseOnSurface = md_theme_dark_inverseOnSurface,
         inverseSurface = md_theme_dark_inverseSurface,
         inversePrimary = md_theme_dark_inversePrimary,
-        surfaceTint = md_theme_dark_surfaceTint
+        surfaceTint = md_theme_dark_surfaceTint,
+        outlineVariant = md_theme_dark_surfaceVariant.lighten(0.05f)
     )
 
 @OptIn(ExperimentalMaterial3Api::class)

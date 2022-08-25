@@ -2,12 +2,14 @@ package ru.tech.cookhelper.presentation.home_screen
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tech.cookhelper.presentation.app.components.Placeholder
@@ -48,19 +50,28 @@ fun HomeScreen(onTitleChange: (newTitle: UIText) -> Unit) {
                     is Screen.Home.Recipes -> {
                         Placeholder(
                             icon = bottomNavScreen.baseIcon,
-                            text = bottomNavScreen.title.asString()
+                            text = bottomNavScreen.title.asString(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp)
                         )
                     }
                     is Screen.Home.Fridge -> {
                         Placeholder(
                             icon = bottomNavScreen.baseIcon,
-                            text = bottomNavScreen.title.asString()
+                            text = bottomNavScreen.title.asString(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp)
                         )
                     }
                     is Screen.Home.Forum -> {
                         Placeholder(
                             bottomNavScreen.baseIcon,
-                            bottomNavScreen.title.asString()
+                            bottomNavScreen.title.asString(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp)
                         )
                     }
                     else -> {}

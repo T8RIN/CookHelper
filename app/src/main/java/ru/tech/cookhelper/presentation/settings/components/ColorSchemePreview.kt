@@ -4,8 +4,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Computer
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Newspaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -26,7 +26,6 @@ import ru.tech.cookhelper.presentation.home_screen.components.BottomNavigationBa
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
-import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +38,7 @@ fun ColorSchemePreview() {
         shape = SquircleShape(16.dp),
         border = BorderStroke(
             1.dp,
-            MaterialTheme.colorScheme.surfaceVariant.createSecondaryColor(0.05f)
+            MaterialTheme.colorScheme.outlineVariant
         ),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
@@ -57,7 +56,7 @@ fun ColorSchemePreview() {
             background = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
             actions = {
                 IconButton(onClick = {}) {
-                    Icon(Icons.Rounded.Computer, null)
+                    Icon(Icons.Rounded.Newspaper, null)
                 }
             }
         )

@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
@@ -45,6 +46,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
@@ -67,7 +69,7 @@ fun ChatScreen(
     val state = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
-    val textBoxColor = MaterialTheme.colorScheme.surfaceColorAtElevation(10.dp)
+    val textBoxColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
 
     val scrollBehavior = rememberTopAppBarScrollBehavior()
 
@@ -93,7 +95,7 @@ fun ChatScreen(
         if (!isAtTheBottom) newMessages++
     }
 
-    Box {
+    Box(Modifier.navigationBarsLandscapePadding()) {
         Column(
             Modifier
                 .fillMaxSize()
