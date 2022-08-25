@@ -53,15 +53,13 @@ fun ColorSchemePreview() {
                     Icon(Icons.Rounded.ArrowBack, null)
                 }
             },
+            windowInsets = WindowInsets(0.dp),
+            background = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
             actions = {
                 IconButton(onClick = {}) {
                     Icon(Icons.Rounded.Computer, null)
                 }
-            },
-            background = TopAppBarDefaults.smallTopAppBarColors().containerColor(
-                colorTransitionFraction = 1f
-            ).value,
-            enableTopPadding = false
+            }
         )
         Text(
             stringResource(R.string.chat_preview),
@@ -141,6 +139,7 @@ fun ColorSchemePreview() {
                 Screen.Profile,
                 Screen.Home.None
             ),
+            windowInsets = WindowInsets(0.dp),
             onClick = { selectedItem = it })
     }
 }

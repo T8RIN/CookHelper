@@ -76,6 +76,7 @@ private val ColorScheme.DarkThemeColors: Material3ColorScheme
         surfaceTint = md_theme_dark_surfaceTint
     )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProKitchenTheme(
     dynamicColor: Boolean = LocalSettingsProvider.current.dynamicColors,
@@ -103,9 +104,7 @@ fun ProKitchenTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = {
-            val color = TopAppBarDefaults.smallTopAppBarColors().containerColor(
-                colorTransitionFraction = 1f
-            ).value.createInverseSecondaryColor()
+            val color = NavigationBarDefaults.containerColor.createInverseSecondaryColor()
 
             SideEffect {
                 systemUiController.setStatusBarColor(

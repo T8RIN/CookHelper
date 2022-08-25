@@ -7,20 +7,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 
 @Composable
 fun Separator(
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.surfaceVariant.createSecondaryColor(0.05f),
-    thickness: Dp = DividerDefaults.Thickness,
-    startIndent: Dp = 0.dp
+    thickness: Dp = DividerDefaults.Thickness
 ) {
     Divider(
         modifier = modifier,
         color = color,
-        thickness = thickness,
-        startIndent = startIndent
+        thickness = thickness
     )
 }

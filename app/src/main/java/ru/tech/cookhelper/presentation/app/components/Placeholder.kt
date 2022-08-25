@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 
 @Composable
 fun Placeholder(
@@ -22,7 +23,9 @@ fun Placeholder(
     Column(
         modifier = if (modifier == Modifier) Modifier
             .fillMaxSize()
-            .padding(horizontal = 8.dp) else modifier,
+            .padding(horizontal = 8.dp)
+            .navigationBarsLandscapePadding()
+        else modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

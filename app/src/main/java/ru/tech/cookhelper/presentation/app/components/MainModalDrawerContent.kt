@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +17,7 @@ import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.setPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.iconWith
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.drawerList
@@ -32,6 +34,7 @@ fun MainModalDrawerContent(
     val screenController = LocalScreenController.current
     val scope = rememberCoroutineScope()
     val containerColor = MaterialTheme.colorScheme.surface
+    val conf = LocalConfiguration.current
 
     Surface(
         shape = SquircleShape(
@@ -50,7 +53,11 @@ fun MainModalDrawerContent(
             ),
     ) {
         LazyColumn(
-            contentPadding = WindowInsets.systemBars.asPaddingValues().addPadding(bottom = 12.dp),
+            contentPadding = WindowInsets.systemBars.asPaddingValues().addPadding(bottom = 12.dp)
+                .setPadding(
+                    predicate = { conf.orientation == Configuration.ORIENTATION_LANDSCAPE },
+                    end = 0.dp
+                ),
             modifier = Modifier.fillMaxSize()
         ) {
             item {

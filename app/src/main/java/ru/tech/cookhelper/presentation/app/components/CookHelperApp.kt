@@ -22,7 +22,6 @@ import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
-import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -49,7 +48,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     }
     LaunchedEffect(screenController.currentDestination) { topAppBarActions.clearActions() }
 
-    val scrollBehavior by rememberTopAppBarScrollBehavior()
+    val scrollBehavior = rememberTopAppBarScrollBehavior()
 
     CompositionLocalProvider(
         values = arrayOf(
@@ -65,9 +64,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             BackHandler { dialogController.show(Dialog.Exit(onExit = { activity?.finishAffinity() })) }
 
             Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsLandscapePadding(),
+                modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
                 ModalNavigationDrawer(

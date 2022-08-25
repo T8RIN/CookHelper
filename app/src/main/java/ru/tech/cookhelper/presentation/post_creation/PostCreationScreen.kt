@@ -8,10 +8,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.rounded.Cancel
@@ -79,10 +78,7 @@ fun PostCreationScreen(
             }
     ) {
         TopAppBar(
-            background = TopAppBarDefaults
-                .smallTopAppBarColors()
-                .containerColor(1f)
-                .value,
+            background = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
             title = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -130,99 +126,99 @@ fun PostCreationScreen(
             }
         )
 
-        Column(
+        LazyColumn(
             Modifier
                 .fillMaxSize()
-                .imePadding()
-                .navigationBarsPadding()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .imePadding(),
+            contentPadding = WindowInsets.navigationBars.asPaddingValues(),
         ) {
-            TextField(
-                value = label,
-                onValueChange = {
-                    label = it
-                },
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp, top = 16.dp)
-                    .fillMaxWidth()
-                    .animateContentSize(),
-                colors = TextFieldDefaults.textFieldColors(
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent
-                ),
-                shape = shape,
-                label = {
-                    Text(
-                        stringResource(R.string.enter_headline),
-                        modifier = Modifier.offset(y = 4.dp)
-                    )
-                },
-                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
-            )
-
-            TextField(
-                value = content,
-                onValueChange = {
-                    content = it
-                },
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 32.dp)
-                    .fillMaxWidth()
-                    .animateContentSize(),
-                colors = TextFieldDefaults.textFieldColors(
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent
-                ),
-                shape = shape,
-                label = {
-                    Text(
-                        stringResource(R.string.whats_new),
-                        modifier = Modifier.offset(y = 4.dp)
-                    )
-                },
-                textStyle = TextStyle(fontSize = 20.sp)
-            )
-
-            AnimatedContent(targetState = imageUri) { uri ->
-                if (uri.isEmpty()) {
-                    OutlinedButton(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxWidth(),
-                        onClick = { resultLauncher.launch("image/*") }
-                    ) {
-                        Spacer(Modifier.width(8.dp))
-                        Icon(Icons.Outlined.Image, null)
-                        Spacer(Modifier.width(16.dp))
-                        Text(stringResource(R.string.add_image))
-                        Spacer(Modifier.width(8.dp))
-                    }
-                } else {
-                    Box {
-                        Picture(
-                            model = imageUri,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(paddingValues),
-                            shape = RoundedCornerShape(24.dp)
+            item {
+                TextField(
+                    value = label,
+                    onValueChange = {
+                        label = it
+                    },
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp, top = 16.dp)
+                        .fillMaxWidth()
+                        .animateContentSize(),
+                    colors = TextFieldDefaults.textFieldColors(
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent
+                    ),
+                    shape = shape,
+                    label = {
+                        Text(
+                            stringResource(R.string.enter_headline),
+                            modifier = Modifier.offset(y = 4.dp)
                         )
-                        FilledIconButton(
+                    },
+                    textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                )
+
+                TextField(
+                    value = content,
+                    onValueChange = {
+                        content = it
+                    },
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 32.dp)
+                        .fillMaxWidth()
+                        .animateContentSize(),
+                    colors = TextFieldDefaults.textFieldColors(
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent
+                    ),
+                    shape = shape,
+                    label = {
+                        Text(
+                            stringResource(R.string.whats_new),
+                            modifier = Modifier.offset(y = 4.dp)
+                        )
+                    },
+                    textStyle = TextStyle(fontSize = 20.sp)
+                )
+
+                AnimatedContent(targetState = imageUri) { uri ->
+                    if (uri.isEmpty()) {
+                        OutlinedButton(
                             modifier = Modifier
-                                .padding(end = 14.dp, top = 6.dp)
-                                .size(40.dp)
-                                .align(Alignment.TopEnd),
-                            colors = IconButtonDefaults.filledIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                            ),
-                            onClick = { imageUri = "" }
+                                .padding(paddingValues)
+                                .fillMaxWidth(),
+                            onClick = { resultLauncher.launch("image/*") }
                         ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Cancel,
-                                contentDescription = null
+                            Spacer(Modifier.width(8.dp))
+                            Icon(Icons.Outlined.Image, null)
+                            Spacer(Modifier.width(16.dp))
+                            Text(stringResource(R.string.add_image))
+                            Spacer(Modifier.width(8.dp))
+                        }
+                    } else {
+                        Box {
+                            Picture(
+                                model = imageUri,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(paddingValues),
+                                shape = RoundedCornerShape(24.dp)
                             )
+                            FilledIconButton(
+                                modifier = Modifier
+                                    .padding(end = 14.dp, top = 6.dp)
+                                    .size(40.dp)
+                                    .align(Alignment.TopEnd),
+                                colors = IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                                ),
+                                onClick = { imageUri = "" }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Cancel,
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
                 }

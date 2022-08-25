@@ -41,4 +41,20 @@ object PaddingUtils {
             end = -end
         )
     }
+
+    @Composable
+    fun PaddingValues.setPadding(
+        predicate: () -> Boolean = { true },
+        bottom: Dp = calculateBottomPadding(),
+        top: Dp = calculateTopPadding(),
+        start: Dp = calculateStartPadding(LocalLayoutDirection.current),
+        end: Dp = calculateEndPadding(LocalLayoutDirection.current)
+    ): PaddingValues {
+        return if (predicate()) PaddingValues(
+            bottom = bottom,
+            top = top,
+            start = start,
+            end = end
+        ) else this
+    }
 }

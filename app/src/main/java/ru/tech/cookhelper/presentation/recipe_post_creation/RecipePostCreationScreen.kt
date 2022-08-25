@@ -7,10 +7,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.*
@@ -41,6 +41,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTe
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.observeExpansion
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
@@ -117,15 +118,10 @@ fun RecipePostCreationScreen(
             }
     ) {
         Column(
-            Modifier
-                .imePadding()
-                .navigationBarsPadding()
+            Modifier.imePadding()
         ) {
             TopAppBar(
-                background = TopAppBarDefaults
-                    .smallTopAppBarColors()
-                    .containerColor(1f)
-                    .value,
+                background = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -171,234 +167,234 @@ fun RecipePostCreationScreen(
                 }
             )
 
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                    .addPadding(bottom = 88.dp)
             ) {
-                Column(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    RoundedTextField(
-                        value = label,
-                        onValueChange = { label = it },
-                        startIcon = Icons.Outlined.FontDownload,
-                        label = stringResource(R.string.recipe_headline),
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = false,
-                        shape = RoundedCornerShape(24.dp),
-                        textStyle = TextStyle(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = LocalTextStyle.current.fontSize
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Card(
-                        onClick = { resultLauncher.launch("image/*") },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp)
+                item {
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AnimatedContent(targetState = imageUri) { uri ->
-                            if (uri.isEmpty()) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(TextFieldDefaults.MinHeight * 3.5f)
-                                        .padding(8.dp),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        Icons.Rounded.AddCircle,
-                                        null,
-                                        modifier = Modifier.size(48.dp)
-                                    )
-                                    Spacer(Modifier.height(8.dp))
-                                    Text(
-                                        stringResource(R.string.add_image),
-                                        fontWeight = FontWeight.Bold,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            } else {
-                                Box {
-                                    Picture(
-                                        model = uri,
-                                        modifier = Modifier.fillMaxWidth(),
-                                        shape = RectangleShape
-                                    )
-                                    FilledIconButton(
-                                        onClick = { resultLauncher.launch("image/*") },
-                                        modifier = Modifier.align(Alignment.TopEnd),
-                                        colors = IconButtonDefaults.filledIconButtonColors(
-                                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                                            containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        RoundedTextField(
+                            value = label,
+                            onValueChange = { label = it },
+                            startIcon = Icons.Outlined.FontDownload,
+                            label = stringResource(R.string.recipe_headline),
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = false,
+                            shape = RoundedCornerShape(24.dp),
+                            textStyle = TextStyle(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = LocalTextStyle.current.fontSize
+                            )
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Card(
+                            onClick = { resultLauncher.launch("image/*") },
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp)
+                        ) {
+                            AnimatedContent(targetState = imageUri) { uri ->
+                                if (uri.isEmpty()) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(TextFieldDefaults.MinHeight * 3.5f)
+                                            .padding(8.dp),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
-                                        Icon(Icons.Rounded.Autorenew, null)
+                                        Icon(
+                                            Icons.Rounded.AddCircle,
+                                            null,
+                                            modifier = Modifier.size(48.dp)
+                                        )
+                                        Spacer(Modifier.height(8.dp))
+                                        Text(
+                                            stringResource(R.string.add_image),
+                                            fontWeight = FontWeight.Bold,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                } else {
+                                    Box {
+                                        Picture(
+                                            model = uri,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            shape = RectangleShape
+                                        )
+                                        FilledIconButton(
+                                            onClick = { resultLauncher.launch("image/*") },
+                                            modifier = Modifier.align(Alignment.TopEnd),
+                                            colors = IconButtonDefaults.filledIconButtonColors(
+                                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                                                containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                                            )
+                                        ) {
+                                            Icon(Icons.Rounded.Autorenew, null)
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    RoundedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = viewModel.products.joinToString(
-                            separator = "\n",
-                            transform = { "${it.name} - ${it.amount} ${it.mimeType}" }
-                        ).trim(),
-                        onValueChange = {},
-                        shape = RoundedCornerShape(24.dp),
-                        readOnly = true,
-                        singleLine = false,
-                        label = stringResource(R.string.ingredients),
-                        startIcon = Icons.Outlined.ProductMeasure
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row {
-                        var timeHeight by remember { mutableStateOf(56.dp) }
-                        val density = LocalDensity.current
+                        Spacer(modifier = Modifier.height(8.dp))
                         RoundedTextField(
-                            value = time,
-                            startIcon = Icons.Outlined.AvTimer,
-                            onValueChange = { time = it },
-                            label = stringResource(R.string.time),
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(timeHeight),
+                            modifier = Modifier.fillMaxWidth(),
+                            value = viewModel.products.joinToString(
+                                separator = "\n",
+                                transform = { "${it.name} - ${it.amount} ${it.mimeType}" }
+                            ).trim(),
+                            onValueChange = {},
+                            shape = RoundedCornerShape(24.dp),
+                            readOnly = true,
+                            singleLine = false,
+                            label = stringResource(R.string.ingredients),
+                            startIcon = Icons.Outlined.ProductMeasure
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row {
+                            var timeHeight by remember { mutableStateOf(56.dp) }
+                            val density = LocalDensity.current
+                            RoundedTextField(
+                                value = time,
+                                startIcon = Icons.Outlined.AvTimer,
+                                onValueChange = { time = it },
+                                label = stringResource(R.string.time),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(timeHeight),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                shape = RoundedCornerShape(
+                                    topStart = 24.dp,
+                                    topEnd = 4.dp,
+                                    bottomStart = 4.dp,
+                                    bottomEnd = 4.dp
+                                ),
+                                formatText = {
+                                    filter { it.isDigit() }
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            RoundedTextField(
+                                value = calories,
+                                startIcon = Icons.Outlined.Restaurant,
+                                onValueChange = { calories = it },
+                                label = stringResource(R.string.calories),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .onSizeChanged {
+                                        timeHeight = with(density) { it.height.toDp() }
+                                    },
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                shape = RoundedCornerShape(
+                                    topStart = 4.dp,
+                                    topEnd = 24.dp,
+                                    bottomStart = 4.dp,
+                                    bottomEnd = 4.dp
+                                ),
+                                formatText = { stripToDouble() },
+                                onLoseFocusTransformation = { removeSuffix(".") }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row {
+                            RoundedTextField(
+                                value = proteins,
+                                startIcon = Icons.Outlined.Egg,
+                                onValueChange = { proteins = it },
+                                label = stringResource(R.string.proteins),
+                                modifier = Modifier.weight(1f),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                formatText = { stripToDouble() },
+                                onLoseFocusTransformation = { removeSuffix(".") }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            RoundedTextField(
+                                value = fats,
+                                startIcon = Icons.Outlined.OilBarrel,
+                                onValueChange = { fats = it },
+                                label = stringResource(R.string.fats),
+                                modifier = Modifier.weight(1f),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                formatText = { stripToDouble() },
+                                onLoseFocusTransformation = { removeSuffix(".") }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        RoundedTextField(
+                            value = carbohydrates,
+                            startIcon = Icons.Outlined.Cake,
+                            onValueChange = { carbohydrates = it },
+                            label = stringResource(R.string.carbohydrates),
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = false,
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number
                             ),
-                            shape = RoundedCornerShape(
-                                topStart = 24.dp,
-                                topEnd = 4.dp,
-                                bottomStart = 4.dp,
-                                bottomEnd = 4.dp
-                            ),
-                            formatText = {
-                                filter { it.isDigit() }
+                            formatText = { stripToDouble() },
+                            onLoseFocusTransformation = { removeSuffix(".") }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        RoundedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = category,
+                            onValueChange = {},
+                            readOnly = true,
+                            singleLine = false,
+                            label = stringResource(R.string.category),
+                            startIcon = Icons.Outlined.Category,
+                            endIcon = {
+                                IconButton(onClick = {
+                                    dialogController.show(
+                                        Dialog.CategorySelection(
+                                            categories = viewModel.categories,
+                                            onCategorySelected = {
+                                                category = it
+                                            },
+                                            selectedCategory = category
+                                        )
+                                    )
+                                }) {
+                                    Icon(Icons.Rounded.Edit, null)
+                                }
                             }
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         RoundedTextField(
-                            value = calories,
-                            startIcon = Icons.Outlined.Restaurant,
-                            onValueChange = { calories = it },
-                            label = stringResource(R.string.calories),
-                            modifier = Modifier
-                                .weight(1f)
-                                .onSizeChanged {
-                                    timeHeight = with(density) { it.height.toDp() }
-                                },
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next,
-                                keyboardType = KeyboardType.Number
-                            ),
+                            value = steps,
+                            startIcon = Icons.Outlined.Notes,
+                            onValueChange = { steps = it },
+                            label = stringResource(R.string.step_by_step_recipe),
+                            modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(
                                 topStart = 4.dp,
-                                topEnd = 24.dp,
-                                bottomStart = 4.dp,
-                                bottomEnd = 4.dp
+                                topEnd = 4.dp,
+                                bottomStart = 24.dp,
+                                bottomEnd = 24.dp
                             ),
-                            formatText = { stripToDouble() },
-                            onLoseFocusTransformation = { removeSuffix(".") }
+                            singleLine = false,
+                            keyboardOptions = KeyboardOptions.Default
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row {
-                        RoundedTextField(
-                            value = proteins,
-                            startIcon = Icons.Outlined.Egg,
-                            onValueChange = { proteins = it },
-                            label = stringResource(R.string.proteins),
-                            modifier = Modifier.weight(1f),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next,
-                                keyboardType = KeyboardType.Number
-                            ),
-                            formatText = { stripToDouble() },
-                            onLoseFocusTransformation = { removeSuffix(".") }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        RoundedTextField(
-                            value = fats,
-                            startIcon = Icons.Outlined.OilBarrel,
-                            onValueChange = { fats = it },
-                            label = stringResource(R.string.fats),
-                            modifier = Modifier.weight(1f),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next,
-                                keyboardType = KeyboardType.Number
-                            ),
-                            formatText = { stripToDouble() },
-                            onLoseFocusTransformation = { removeSuffix(".") }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    RoundedTextField(
-                        value = carbohydrates,
-                        startIcon = Icons.Outlined.Cake,
-                        onValueChange = { carbohydrates = it },
-                        label = stringResource(R.string.carbohydrates),
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = false,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Number
-                        ),
-                        formatText = { stripToDouble() },
-                        onLoseFocusTransformation = { removeSuffix(".") }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    RoundedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = category,
-                        onValueChange = {},
-                        readOnly = true,
-                        singleLine = false,
-                        label = stringResource(R.string.category),
-                        startIcon = Icons.Outlined.Category,
-                        endIcon = {
-                            IconButton(onClick = {
-                                dialogController.show(
-                                    Dialog.CategorySelection(
-                                        categories = viewModel.categories,
-                                        onCategorySelected = {
-                                            category = it
-                                        },
-                                        selectedCategory = category
-                                    )
-                                )
-                            }) {
-                                Icon(Icons.Rounded.Edit, null)
-                            }
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    RoundedTextField(
-                        value = steps,
-                        startIcon = Icons.Outlined.Notes,
-                        onValueChange = { steps = it },
-                        label = stringResource(R.string.step_by_step_recipe),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 88.dp),
-                        shape = RoundedCornerShape(
-                            topStart = 4.dp,
-                            topEnd = 4.dp,
-                            bottomStart = 24.dp,
-                            bottomEnd = 24.dp
-                        ),
-                        singleLine = false,
-                        keyboardOptions = KeyboardOptions.Default
-                    )
                 }
             }
         }

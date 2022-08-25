@@ -62,7 +62,7 @@ sealed interface ColorScheme {
     val md_theme_dark_inversePrimary: Color
     val md_theme_dark_surfaceTint: Color
 
-    object DarkBlue: ColorScheme {
+    object DarkBlue : ColorScheme {
         override val ordinal: Int = 0
 
         override val md_theme_light_primary = Color(0xFF4755B6)
@@ -666,7 +666,7 @@ sealed interface ColorScheme {
         override val md_theme_dark_surfaceTint get() = md_theme_light_inversePrimary
     }
 
-    object Violet: ColorScheme {
+    object Violet : ColorScheme {
         override val ordinal: Int = 10
 
         override val md_theme_light_primary = Color(0xFF7149AE)

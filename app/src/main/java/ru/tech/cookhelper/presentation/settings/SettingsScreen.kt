@@ -46,6 +46,7 @@ import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
@@ -72,7 +73,9 @@ fun SettingsScreen(
         )
     }
 
-    LazyColumn(contentPadding = PaddingValues(top = 20.dp)) {
+    LazyColumn(
+        contentPadding = WindowInsets.navigationBars.asPaddingValues().addPadding(top = 20.dp)
+    ) {
         items(Settings.values(), key = { it.name }) { setting ->
             Column(
                 modifier = Modifier.animateContentSize(),

@@ -3,7 +3,10 @@ package ru.tech.cookhelper.presentation.all_images
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.rounded.Add
@@ -13,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -42,7 +44,7 @@ fun AllImagesScreen(
     onAddImage: (uri: String) -> Unit
 ) {
     val screenController = LocalScreenController.current
-    val scrollBehavior by rememberTopAppBarScrollBehavior()
+    val scrollBehavior = rememberTopAppBarScrollBehavior()
     val context = LocalContext.current
     val toastHost = LocalToastHost.current
 
@@ -62,7 +64,6 @@ fun AllImagesScreen(
 
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         TopAppBar(
-            modifier = Modifier.statusBarsPadding(),
             title = {
                 Row {
                     Text(

@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ErrorOutline
@@ -68,13 +67,9 @@ fun ChatScreen(
     val state = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
-    val textBoxColor = TopAppBarDefaults
-        .smallTopAppBarColors()
-        .containerColor(
-            colorTransitionFraction = 1f
-        ).value
+    val textBoxColor = MaterialTheme.colorScheme.surfaceColorAtElevation(10.dp)
 
-    val scrollBehavior by rememberTopAppBarScrollBehavior()
+    val scrollBehavior = rememberTopAppBarScrollBehavior()
 
     val isAtTheBottom by computedStateOf { state.isLastItemVisible }
     var fabBottomPadding by remember { mutableStateOf(0) }
@@ -140,14 +135,7 @@ fun ChatScreen(
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            TopAppBarDefaults
-                                .smallTopAppBarColors()
-                                .containerColor(
-                                    colorTransitionFraction = scrollBehavior.state.overlappedFraction
-                                ).value
-                        ),
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Spacer(Modifier.weight(1f))
@@ -247,20 +235,17 @@ fun ChatScreen(
                             .weight(1f)
                             .padding(end = 12.dp, top = 12.dp, bottom = 12.dp, start = 20.dp)
                     ) {
-                        val colors = TextFieldDefaults.outlinedTextFieldColors()
-                        CompositionLocalProvider(LocalTextSelectionColors provides colors.selectionColors) {
-                            BasicTextField(
-                                value = value,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                onValueChange = { value = it },
-                                textStyle = LocalTextStyle.current.copy(
-                                    color = colors.textColor(true).value,
-                                    fontSize = 16.sp
-                                ),
-                                cursorBrush = SolidColor(colors.cursorColor(false).value),
-                            )
-                        }
+                        BasicTextField(
+                            value = value,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onValueChange = { value = it },
+                            textStyle = LocalTextStyle.current.copy(
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontSize = 16.sp
+                            ),
+                            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                        )
                         Text(
                             fontSize = 16.sp,
                             text = stringResource(R.string.write_a_message),
