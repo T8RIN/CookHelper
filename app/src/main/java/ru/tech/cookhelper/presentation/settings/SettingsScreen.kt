@@ -64,12 +64,7 @@ fun SettingsScreen(
     LocalTopAppBarActions.current.setActions {
         IconButton(
             onClick = { dialogController.show(Dialog.AboutApp) },
-            content = {
-                Icon(
-                    Icons.Outlined.HelpOutline,
-                    null
-                )
-            }
+            content = { Icon(Icons.Outlined.HelpOutline, null) }
         )
     }
 
@@ -286,6 +281,7 @@ fun SettingsScreen(
             Spacer(Modifier.height(80.dp))
         }
     }
+
 }
 
 fun Settings.getIcon(nightMode: NightMode): ImageVector {

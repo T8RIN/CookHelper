@@ -46,7 +46,7 @@ private val ColorScheme.LightThemeColors: Material3ColorScheme
         inverseSurface = md_theme_light_inverseSurface,
         inversePrimary = md_theme_light_inversePrimary,
         surfaceTint = md_theme_light_surfaceTint,
-        outlineVariant = md_theme_dark_surfaceVariant.darken(0.05f)
+        outlineVariant = md_theme_light_surfaceVariant.darken(0.05f)
     )
 private val ColorScheme.DarkThemeColors: Material3ColorScheme
     get() = darkColorScheme(
@@ -80,7 +80,6 @@ private val ColorScheme.DarkThemeColors: Material3ColorScheme
         outlineVariant = md_theme_dark_surfaceVariant.lighten(0.05f)
     )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProKitchenTheme(
     dynamicColor: Boolean = LocalSettingsProvider.current.dynamicColors,
