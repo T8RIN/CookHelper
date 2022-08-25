@@ -55,7 +55,7 @@ fun ImageCarousel(
         LazyRow(
             contentPadding = PaddingValues(horizontal = 15.dp),
         ) {
-            items(data) { item ->
+            items(data, key = { it.id }) { item ->
                 OutlinedCard(
                     onClick = { onImageClick(item.id) },
                     modifier = Modifier.size(imageSize),

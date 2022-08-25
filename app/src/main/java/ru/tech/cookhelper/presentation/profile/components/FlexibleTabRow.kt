@@ -25,7 +25,6 @@ fun FlexibleTabRow(
     onTabClick: (index: Int) -> Unit,
     divider: @Composable () -> Unit
 ) {
-
     val density = LocalDensity.current
     val tabWidths = remember {
         val tabWidthStateList = mutableStateListOf<Dp>()

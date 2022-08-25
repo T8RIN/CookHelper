@@ -62,7 +62,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
                     contentPadding = WindowInsets.navigationBars.asPaddingValues()
                         .addPadding(bottom = 80.dp)
                 ) {
-                    itemsIndexed(state.chatList) { index, chat ->
+                    itemsIndexed(state.chatList, key = { _, item -> item.id }) { index, chat ->
                         ChatListItem(
                             onClick = {
                                 screenController.navigate(Screen.Chat(chatId = chat.id))

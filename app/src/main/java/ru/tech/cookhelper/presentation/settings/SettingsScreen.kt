@@ -75,9 +75,8 @@ fun SettingsScreen(
         )
     }
 
-    LazyColumn {
-        item { Spacer(Modifier.height(20.dp)) }
-        items(Settings.values()) { setting ->
+    LazyColumn(contentPadding = PaddingValues(top = 20.dp)) {
+        items(Settings.values(), key = { it.name }) { setting ->
             Column(
                 modifier = Modifier.animateContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -194,7 +193,7 @@ fun SettingsScreen(
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 30.dp)
                     ) {
-                        itemsIndexed(colorList) { index, item ->
+                        itemsIndexed(colorList, key = { _, cs -> cs.ordinal }) { index, item ->
                             Box {
                                 OutlinedButton(
                                     onClick = { viewModel.insertSetting(setting.ordinal, index) },

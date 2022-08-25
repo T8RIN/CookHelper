@@ -137,7 +137,7 @@ fun PickProductsWithMeasuresDialog(
                                 modifier = Modifier.weight(1f, false),
                                 contentPadding = PaddingValues(vertical = 4.dp),
                             ) {
-                                items(localProducts) {
+                                items(localProducts, key = { it.id }) {
                                     Card(
                                         modifier = Modifier
                                             .padding(vertical = 4.dp),
@@ -221,10 +221,12 @@ fun PickProductsWithMeasuresDialog(
                         }
                     }
                 } else {
-                    val list = combinedAllProducts.filter {
-                        if (allProductsSearch.isNotEmpty()) it.name.lowercase()
-                            .contains(allProductsSearch.lowercase())
-                        else true
+                    val list = remember {
+                        combinedAllProducts.filter {
+                            if (allProductsSearch.isNotEmpty()) it.name.lowercase()
+                                .contains(allProductsSearch.lowercase())
+                            else true
+                        }
                     }
                     if (list.isNotEmpty()) {
                         Column(lazyColumnModifier) {
@@ -233,7 +235,7 @@ fun PickProductsWithMeasuresDialog(
                                 modifier = Modifier.weight(1f, false),
                                 contentPadding = PaddingValues(vertical = 4.dp),
                             ) {
-                                items(list) {
+                                items(list, key = { it.id }) {
                                     Row(
                                         modifier = Modifier
                                             .padding(vertical = 4.dp)

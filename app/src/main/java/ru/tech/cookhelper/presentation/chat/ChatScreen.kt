@@ -186,7 +186,7 @@ fun ChatScreen(
                             val topDay = formatOrNull(higherMessage?.timestamp, "d")
                             val currentDay = formatOrNull(message.timestamp, "d")
 
-                            if (topDay != currentDay) stickyHeader {
+                            if (topDay != currentDay) stickyHeader(key = message.timestamp) {
                                 MessageHeader(
                                     text = formatOrNull(
                                         message.timestamp,
@@ -195,7 +195,7 @@ fun ChatScreen(
                                 )
                             }
 
-                            item {
+                            item(key = message.id) {
                                 val topTime = formatOrNull(higherMessage?.timestamp)
                                 val currentTime = formatOrNull(message.timestamp)
                                 val bottomTime = formatOrNull(lowerMessage?.timestamp)

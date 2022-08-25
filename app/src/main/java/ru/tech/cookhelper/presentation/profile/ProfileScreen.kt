@@ -1,51 +1,34 @@
 package ru.tech.cookhelper.presentation.profile
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.outlined.BrokenImage
-import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
-import androidx.compose.material.icons.rounded.PhoneAndroid
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
 import ru.tech.cookhelper.domain.model.*
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.random.Random.Default.nextBoolean
 
 @Composable
@@ -57,20 +40,22 @@ fun ProfileScreen(
     val dialogController = LocalDialogController.current
     val activity = LocalContext.current.findActivity()
 
-    val toastHost = LocalToastHost.current
-    val imageNotPicked = stringResource(R.string.image_not_picked)
-
     LocalTopAppBarActions.current.setActions {
+        val toastHost = LocalToastHost.current
         IconButton(
             onClick = {
-                dialogController.show(Dialog.Logout(onLogout = {
-                    if (activity?.isOnline() == true) {
-                        viewModel.logOut()
-                    } else toastHost.sendToast(
-                        Icons.Outlined.SignalWifiConnectedNoInternet4,
-                        message = activity?.getString(R.string.no_connection) ?: ""
+                dialogController.show(
+                    Dialog.Logout(
+                        onLogout = {
+                            if (activity?.isOnline() == true) {
+                                viewModel.logOut()
+                            } else toastHost.sendToast(
+                                Icons.Outlined.SignalWifiConnectedNoInternet4,
+                                message = activity?.getString(R.string.no_connection) ?: ""
+                            )
+                        }
                     )
-                }))
+                )
             },
             content = { Icon(Icons.Outlined.Logout, null) }
         )
@@ -82,116 +67,16 @@ fun ProfileScreen(
 
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
-    val resultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri ->
-            if (uri == null) {
-                toastHost.sendToast(
-                    icon = Icons.Outlined.BrokenImage,
-                    message = imageNotPicked
-                )
-                return@rememberLauncherForActivityResult
-            }
-            screenController.navigate(Screen.PostCreation(uri.toString()))
-        }
-    )
-
-    val status = userState.user?.status
-    val lastSeen by computedStateOf(userState) {
-        val lastSeen = userState.user?.lastSeen ?: 0L
-        val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
-                "yyyy",
-                Locale.getDefault()
-            ).format(lastSeen).toInt()
-        ) {
-            SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-        } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
-        df.format(lastSeen)
-    }
-
     LazyColumn(
         contentPadding = WindowInsets.navigationBars.asPaddingValues().addPadding(bottom = 80.dp)
     ) {
         item {
-            Column(Modifier.padding(horizontal = 15.dp)) {
-                Row(Modifier.fillMaxWidth()) {
-                    Picture(
-                        model = userState.user?.avatar,
-                        modifier = Modifier
-                            .padding(top = 15.dp)
-                            .size(80.dp),
-                        error = {
-                            Icon(Icons.Filled.AccountCircle, null)
-                        }
-                    )
-                    Spacer(Modifier.width(10.dp))
-                    Column(
-                        Modifier
-                            .padding(top = 15.dp),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            userState.user?.let { "${it.name} ${it.surname}" }.toString(),
-                            modifier = Modifier.padding(start = 5.dp),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight(450)
-                        )
-                        Spacer(Modifier.height(5.dp))
-                        if (status?.isEmpty() == true) {
-                            Row(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .clickable {
-                                        //TODO: UpdateStatus
-                                    }
-                            ) {
-                                Spacer(Modifier.width(5.dp))
-                                Text(
-                                    text = stringResource(R.string.set_status),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                                Spacer(Modifier.width(5.dp))
-                            }
-                        } else {
-                            Text(
-                                userState.user?.status.toString(),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                        Spacer(Modifier.height(6.dp))
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(start = 5.dp)
-                        ) {
-                            Icon(
-                                Icons.Rounded.PhoneAndroid,
-                                null,
-                                modifier = Modifier.size(12.dp),
-                                tint = Color.Gray
-                            )
-                            Spacer(Modifier.width(3.dp))
-                            Text(
-                                text = lastSeen,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Gray
-                            )
-                        }
-                    }
-                }
-                Spacer(Modifier.height(10.dp))
-                FilledTonalButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { /*TODO: Edit Profile*/ }) {
-                    Text(stringResource(R.string.edit))
-                }
-            }
-        }
-        item { Spacer(Modifier.height(20.dp)) }
-        item {
+            UserInfoBlock(
+                userState = userState,
+                onEdit = { /*TODO: Edit Profile*/ },
+                onStatusUpdate = { /*TODO: UpdateStatus*/ }
+            )
+            Spacer(Modifier.height(20.dp))
             ImageCarousel(
                 data = testList,
                 onImageClick = { id ->
@@ -217,75 +102,24 @@ fun ProfileScreen(
                     )
                 }
             )
-        }
-        item { Spacer(Modifier.height(30.dp)) }
-        item {
-            Column(
-                Modifier.padding(horizontal = 15.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    stringResource(R.string.create).uppercase(),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-                Spacer(Modifier.size(5.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    FilledTonalButton(
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                        ),
-                        modifier = Modifier.weight(1f),
-                        onClick = {
-                            screenController.navigate(Screen.RecipePostCreation)
-                        }
-                    ) {
-                        Text(stringResource(R.string.recipe))
-                    }
-                    Spacer(Modifier.size(5.dp))
-                    FilledTonalButton(
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                        ),
-                        modifier = Modifier.weight(1f),
-                        onClick = {
-                            screenController.navigate(Screen.PostCreation())
-                        }
-                    ) {
-                        Text(stringResource(R.string.post))
-                    }
-                    Spacer(Modifier.size(5.dp))
-                    FilledIconButton(
-                        modifier = Modifier.size(40.dp),
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                        ),
-                        onClick = { resultLauncher.launch("image/*") }
-                    ) {
-                        Icon(Icons.Outlined.Image, null)
-                    }
+            Spacer(Modifier.height(30.dp))
+            PostCreationBlock(
+                onCreateRecipe = {
+                    screenController.navigate(Screen.RecipePostCreation)
+                }, onCreatePost = { imageUri ->
+                    screenController.navigate(Screen.PostCreation(imageUri))
                 }
-            }
+            )
+            Spacer(Modifier.height(10.dp))
+            FlexibleTabRow(
+                selectedTabIndex = selectedTabIndex,
+                tabs = listOf(stringResource(R.string.posts), stringResource(R.string.recipes)),
+                divider = { Separator() },
+                onTabClick = { selectedTabIndex = it }
+            )
+            Spacer(Modifier.height(20.dp))
         }
-        item { Spacer(Modifier.height(10.dp)) }
-        item {
-            val tabs =
-                listOf(stringResource(R.string.posts), stringResource(R.string.recipes))
-            Column {
-                FlexibleTabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    tabs = tabs,
-                    divider = { Separator() },
-                    onTabClick = { tabIndex ->
-                        selectedTabIndex = tabIndex
-                    }
-                )
-            }
-        }
-        item { Spacer(Modifier.height(20.dp)) }
+
         if (selectedTabIndex.toTab() == SelectedTab.Posts) {
             val posts = listOf(
                 Post(
@@ -328,21 +162,7 @@ fun ProfileScreen(
                     )
                 ),
                 Post(
-                    "2",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = "Мем года",
-                    liked = true,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 233,
-                    commentsCount = 1535,
-                    image = Image(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "6"
-                    )
-                ),
-                Post(
-                    "2",
+                    "4",
                     "2",
                     timestamp = System.currentTimeMillis(),
                     title = "Мем года",
@@ -356,7 +176,7 @@ fun ProfileScreen(
                     )
                 ),
                 Post(
-                    "2",
+                    "5",
                     "2",
                     timestamp = System.currentTimeMillis(),
                     title = "Мем года",
@@ -370,7 +190,21 @@ fun ProfileScreen(
                     )
                 ),
                 Post(
+                    "6",
                     "2",
+                    timestamp = System.currentTimeMillis(),
+                    title = "Мем года",
+                    liked = true,
+                    text = "Вампиры суициндики долбят чеснок",
+                    likeCount = 233,
+                    commentsCount = 1535,
+                    image = Image(
+                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
+                        "6"
+                    )
+                ),
+                Post(
+                    "7",
                     "2",
                     timestamp = System.currentTimeMillis(),
                     title = "Мем года",
@@ -384,8 +218,7 @@ fun ProfileScreen(
                     )
                 ),
             )
-
-            itemsIndexed(posts) { index, post ->
+            itemsIndexed(posts, key = { _, post -> post.postId }) { index, post ->
                 PostItem(
                     post = post,
                     authorLoader = {
@@ -424,7 +257,7 @@ fun ProfileScreen(
                 }
             }
         } else {
-            items(6) {
+            items(6, key = { /*TODO: set normal key*/ }) {
                 ProfileRecipeItem(
                     RecipePost(
                         "", "", 0L, nextBoolean(), 29, 12,

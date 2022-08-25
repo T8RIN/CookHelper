@@ -38,7 +38,7 @@ fun CategorySelectionDialog(
                 LazyColumn(
                     modifier = Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.35f),
                 ) {
-                    items(categories) {
+                    items(categories, key = { it }) {
                         Row(
                             modifier = Modifier
                                 .padding(vertical = 4.dp)
