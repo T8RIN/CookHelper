@@ -62,8 +62,69 @@ sealed interface ColorScheme {
     val md_theme_dark_inversePrimary: Color
     val md_theme_dark_surfaceTint: Color
 
-    object Blue : ColorScheme {
+    object DarkBlue: ColorScheme {
         override val ordinal: Int = 0
+
+        override val md_theme_light_primary = Color(0xFF4755B6)
+        override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
+        override val md_theme_light_primaryContainer = Color(0xFFDFE0FF)
+        override val md_theme_light_onPrimaryContainer = Color(0xFF000D60)
+        override val md_theme_light_secondary = Color(0xFF5B5D72)
+        override val md_theme_light_onSecondary = Color(0xFFFFFFFF)
+        override val md_theme_light_secondaryContainer = Color(0xFFE0E1F9)
+        override val md_theme_light_onSecondaryContainer = Color(0xFF181A2C)
+        override val md_theme_light_tertiary = Color(0xFF77536C)
+        override val md_theme_light_onTertiary = Color(0xFFFFFFFF)
+        override val md_theme_light_tertiaryContainer = Color(0xFFFFD7F0)
+        override val md_theme_light_onTertiaryContainer = Color(0xFF2D1127)
+        override val md_theme_light_error = Color(0xFFBA1A1A)
+        override val md_theme_light_errorContainer = Color(0xFFFFDAD6)
+        override val md_theme_light_onError = Color(0xFFFFFFFF)
+        override val md_theme_light_onErrorContainer = Color(0xFF410002)
+        override val md_theme_light_background = Color(0xFFFFFBFF)
+        override val md_theme_light_onBackground = Color(0xFF1B1B1F)
+        override val md_theme_light_surface = Color(0xFFFFFBFF)
+        override val md_theme_light_onSurface = Color(0xFF1B1B1F)
+        override val md_theme_light_surfaceVariant = Color(0xFFE3E1EC)
+        override val md_theme_light_onSurfaceVariant = Color(0xFF46464F)
+        override val md_theme_light_outline = Color(0xFF777680)
+        override val md_theme_light_inverseOnSurface = Color(0xFFF3F0F4)
+        override val md_theme_light_inverseSurface = Color(0xFF303034)
+        override val md_theme_light_inversePrimary = Color(0xFFBCC3FF)
+
+        override val md_theme_dark_primary = Color(0xFFBCC3FF)
+        override val md_theme_dark_onPrimary = Color(0xFF112286)
+        override val md_theme_dark_primaryContainer = Color(0xFF2E3C9D)
+        override val md_theme_dark_onPrimaryContainer = Color(0xFFDFE0FF)
+        override val md_theme_dark_secondary = Color(0xFFC4C5DD)
+        override val md_theme_dark_onSecondary = Color(0xFF2D2F42)
+        override val md_theme_dark_secondaryContainer = Color(0xFF434559)
+        override val md_theme_dark_onSecondaryContainer = Color(0xFFE0E1F9)
+        override val md_theme_dark_tertiary = Color(0xFFE6BAD7)
+        override val md_theme_dark_onTertiary = Color(0xFF45263D)
+        override val md_theme_dark_tertiaryContainer = Color(0xFF5D3C54)
+        override val md_theme_dark_onTertiaryContainer = Color(0xFFFFD7F0)
+        override val md_theme_dark_error = Color(0xFFFFB4AB)
+        override val md_theme_dark_errorContainer = Color(0xFF93000A)
+        override val md_theme_dark_onError = Color(0xFF690005)
+        override val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
+        override val md_theme_dark_background = Color(0xFF1B1B1F)
+        override val md_theme_dark_onBackground = Color(0xFFE4E1E6)
+        override val md_theme_dark_surface = Color(0xFF1B1B1F)
+        override val md_theme_dark_onSurface = Color(0xFFE4E1E6)
+        override val md_theme_dark_surfaceVariant = Color(0xFF46464F)
+        override val md_theme_dark_onSurfaceVariant = Color(0xFFC7C5D0)
+        override val md_theme_dark_outline = Color(0xFF90909A)
+        override val md_theme_dark_inverseOnSurface = Color(0xFF1B1B1F)
+        override val md_theme_dark_inverseSurface = Color(0xFFE4E1E6)
+        override val md_theme_dark_inversePrimary = Color(0xFF4755B6)
+
+        override val md_theme_light_surfaceTint get() = LightBlue.md_theme_dark_inversePrimary
+        override val md_theme_dark_surfaceTint get() = LightBlue.md_theme_light_inversePrimary
+    }
+
+    object Blue : ColorScheme {
+        override val ordinal: Int = 1
 
         override val md_theme_light_primary = Color(0xFF00658a)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -91,7 +152,6 @@ sealed interface ColorScheme {
         override val md_theme_light_inverseOnSurface = Color(0xFFF4EFF4)
         override val md_theme_light_inverseSurface = Color(0xFF313033)
         override val md_theme_light_inversePrimary = Color(0xFF78d1ff)
-        override val md_theme_light_surfaceTint get() = md_theme_dark_inversePrimary
 
         override val md_theme_dark_primary = Color(0xFF78d1ff)
         override val md_theme_dark_onPrimary = Color(0xFF003549)
@@ -119,11 +179,13 @@ sealed interface ColorScheme {
         override val md_theme_dark_inverseOnSurface = Color(0xFF1C1B1F)
         override val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)
         override val md_theme_dark_inversePrimary = Color(0xFF00658a)
+
+        override val md_theme_light_surfaceTint get() = md_theme_dark_inversePrimary
         override val md_theme_dark_surfaceTint get() = md_theme_light_inversePrimary
     }
 
     object LightBlue : ColorScheme {
-        override val ordinal: Int = 1
+        override val ordinal: Int = 2
 
         override val md_theme_light_primary = Color(0xFF006A68)
         override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
@@ -184,7 +246,7 @@ sealed interface ColorScheme {
     }
 
     object Mint : ColorScheme {
-        override val ordinal: Int = 2
+        override val ordinal: Int = 3
 
         override val md_theme_light_primary = Color(0xFF006d3c)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -244,7 +306,7 @@ sealed interface ColorScheme {
     }
 
     object Green : ColorScheme {
-        override val ordinal: Int = 3
+        override val ordinal: Int = 4
 
         override val md_theme_light_primary = Color(0xFF006e00)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -304,7 +366,7 @@ sealed interface ColorScheme {
     }
 
     object Yellow : ColorScheme {
-        override val ordinal: Int = 4
+        override val ordinal: Int = 5
 
         override val md_theme_light_primary = Color(0xFF606200)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -364,7 +426,7 @@ sealed interface ColorScheme {
     }
 
     object Carrot : ColorScheme {
-        override val ordinal: Int = 5
+        override val ordinal: Int = 6
 
         override val md_theme_light_primary = Color(0xFF6E5D00)
         override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
@@ -425,7 +487,7 @@ sealed interface ColorScheme {
     }
 
     object Orange : ColorScheme {
-        override val ordinal: Int = 6
+        override val ordinal: Int = 7
 
         override val md_theme_light_primary = Color(0xFF944b00)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -485,7 +547,7 @@ sealed interface ColorScheme {
     }
 
     object Red : ColorScheme {
-        override val ordinal: Int = 7
+        override val ordinal: Int = 8
 
         override val md_theme_light_primary = Color(0xFFc10000)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -545,7 +607,7 @@ sealed interface ColorScheme {
     }
 
     object Pink : ColorScheme {
-        override val ordinal: Int = 8
+        override val ordinal: Int = 9
 
         override val md_theme_light_primary = Color(0xFFb70071)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -604,8 +666,69 @@ sealed interface ColorScheme {
         override val md_theme_dark_surfaceTint get() = md_theme_light_inversePrimary
     }
 
-    object Violet : ColorScheme {
-        override val ordinal: Int = 9
+    object Violet: ColorScheme {
+        override val ordinal: Int = 10
+
+        override val md_theme_light_primary = Color(0xFF7149AE)
+        override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
+        override val md_theme_light_primaryContainer = Color(0xFFECDCFF)
+        override val md_theme_light_onPrimaryContainer = Color(0xFF280056)
+        override val md_theme_light_secondary = Color(0xFF645A70)
+        override val md_theme_light_onSecondary = Color(0xFFFFFFFF)
+        override val md_theme_light_secondaryContainer = Color(0xFFEBDEF7)
+        override val md_theme_light_onSecondaryContainer = Color(0xFF1F182A)
+        override val md_theme_light_tertiary = Color(0xFF7F525C)
+        override val md_theme_light_onTertiary = Color(0xFFFFFFFF)
+        override val md_theme_light_tertiaryContainer = Color(0xFFFFD9DF)
+        override val md_theme_light_onTertiaryContainer = Color(0xFF32101A)
+        override val md_theme_light_error = Color(0xFFBA1A1A)
+        override val md_theme_light_errorContainer = Color(0xFFFFDAD6)
+        override val md_theme_light_onError = Color(0xFFFFFFFF)
+        override val md_theme_light_onErrorContainer = Color(0xFF410002)
+        override val md_theme_light_background = Color(0xFFFFFBFF)
+        override val md_theme_light_onBackground = Color(0xFF1D1B1E)
+        override val md_theme_light_surface = Color(0xFFFFFBFF)
+        override val md_theme_light_onSurface = Color(0xFF1D1B1E)
+        override val md_theme_light_surfaceVariant = Color(0xFFE8E0EB)
+        override val md_theme_light_onSurfaceVariant = Color(0xFF4A454E)
+        override val md_theme_light_outline = Color(0xFF7B757F)
+        override val md_theme_light_inverseOnSurface = Color(0xFFF5EFF4)
+        override val md_theme_light_inverseSurface = Color(0xFF323033)
+        override val md_theme_light_inversePrimary = Color(0xFFD6BAFF)
+
+        override val md_theme_dark_primary = Color(0xFFD6BAFF)
+        override val md_theme_dark_onPrimary = Color(0xFF41127C)
+        override val md_theme_dark_primaryContainer = Color(0xFF582F94)
+        override val md_theme_dark_onPrimaryContainer = Color(0xFFECDCFF)
+        override val md_theme_dark_secondary = Color(0xFFCEC2DB)
+        override val md_theme_dark_onSecondary = Color(0xFF352D40)
+        override val md_theme_dark_secondaryContainer = Color(0xFF4C4357)
+        override val md_theme_dark_onSecondaryContainer = Color(0xFFEBDEF7)
+        override val md_theme_dark_tertiary = Color(0xFFF1B7C3)
+        override val md_theme_dark_onTertiary = Color(0xFF4B252E)
+        override val md_theme_dark_tertiaryContainer = Color(0xFF643B44)
+        override val md_theme_dark_onTertiaryContainer = Color(0xFFFFD9DF)
+        override val md_theme_dark_error = Color(0xFFFFB4AB)
+        override val md_theme_dark_errorContainer = Color(0xFF93000A)
+        override val md_theme_dark_onError = Color(0xFF690005)
+        override val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
+        override val md_theme_dark_background = Color(0xFF1D1B1E)
+        override val md_theme_dark_onBackground = Color(0xFFE7E1E6)
+        override val md_theme_dark_surface = Color(0xFF1D1B1E)
+        override val md_theme_dark_onSurface = Color(0xFFE7E1E6)
+        override val md_theme_dark_surfaceVariant = Color(0xFF4A454E)
+        override val md_theme_dark_onSurfaceVariant = Color(0xFFCBC4CF)
+        override val md_theme_dark_outline = Color(0xFF958E99)
+        override val md_theme_dark_inverseOnSurface = Color(0xFF1D1B1E)
+        override val md_theme_dark_inverseSurface = Color(0xFFE7E1E6)
+        override val md_theme_dark_inversePrimary = Color(0xFF7149AE)
+
+        override val md_theme_light_surfaceTint get() = md_theme_dark_inversePrimary
+        override val md_theme_dark_surfaceTint get() = md_theme_light_inversePrimary
+    }
+
+    object VioletVariant : ColorScheme {
+        override val ordinal: Int = 11
 
         override val md_theme_light_primary = Color(0xFFa200bb)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
@@ -667,6 +790,7 @@ sealed interface ColorScheme {
 }
 
 val colorList: List<ColorScheme> = listOf(
+    ColorScheme.DarkBlue,
     ColorScheme.Blue,
     ColorScheme.LightBlue,
     ColorScheme.Mint,
@@ -676,7 +800,8 @@ val colorList: List<ColorScheme> = listOf(
     ColorScheme.Orange,
     ColorScheme.Red,
     ColorScheme.Pink,
-    ColorScheme.Violet
+    ColorScheme.Violet,
+    ColorScheme.VioletVariant,
 )
 
 val LikeColor = Color(0xFFff4e3a)
