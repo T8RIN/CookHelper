@@ -339,7 +339,7 @@ fun ChatScreen(
     BackHandler { onBack() }
 }
 
-private fun formatOrNull(
+fun formatOrNull(
     timestamp: Long?,
     pattern: String = "HH:mm"
 ): String? {

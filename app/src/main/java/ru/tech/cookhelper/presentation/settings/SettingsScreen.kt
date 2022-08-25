@@ -40,11 +40,8 @@ import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Toast
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.settings.components.NightMode
-import ru.tech.cookhelper.presentation.settings.components.Settings
+import ru.tech.cookhelper.presentation.settings.components.*
 import ru.tech.cookhelper.presentation.settings.components.Settings.*
-import ru.tech.cookhelper.presentation.settings.components.SettingsState
-import ru.tech.cookhelper.presentation.settings.components.ToggleGroup
 import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.colorList
@@ -223,6 +220,7 @@ fun SettingsScreen(
                             Spacer(Modifier.width(5.dp))
                         }
                     }
+                    ColorSchemePreview()
                 }
                 setting.subtitle?.apply {
                     Spacer(Modifier.height(10.dp))

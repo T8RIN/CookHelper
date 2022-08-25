@@ -16,6 +16,7 @@ fun TopAppBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     background: Color? = null,
+    enableTopPadding: Boolean = true,
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
@@ -24,7 +25,7 @@ fun TopAppBar(
         colorTransitionFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
     ).value
 
-    val paddingModifier = modifier.statusBarsPadding()
+    val paddingModifier = if (enableTopPadding) modifier.statusBarsPadding() else Modifier
 
     val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
         containerColor = Color.Transparent,

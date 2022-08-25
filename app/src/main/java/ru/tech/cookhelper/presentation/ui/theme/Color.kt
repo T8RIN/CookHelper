@@ -789,7 +789,7 @@ sealed interface ColorScheme {
 
 }
 
-val colorList: List<ColorScheme> = listOf(
+val colorList = listOf<ColorScheme>(
     ColorScheme.DarkBlue,
     ColorScheme.Blue,
     ColorScheme.LightBlue,
