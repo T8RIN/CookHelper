@@ -257,7 +257,7 @@ fun ProfileScreen(
                 }
             }
         } else {
-            items(6, key = { /*TODO: set normal key*/ }) {
+            items(6, key = { /*TODO: set normal key*/ it }) {
                 ProfileRecipeItem(
                     RecipePost(
                         "", "", 0L, nextBoolean(), 29, 12,
