@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import ru.tech.cookhelper.presentation.settings.components.NightMode
+import ru.tech.cookhelper.presentation.ui.theme.isDarkMode
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.core.graphics.ColorUtils as AndroidColorUtils
 
@@ -24,24 +25,14 @@ object ColorUtils {
     fun Color.createSecondaryColor(
         @FloatRange(from = 0.0, to = 1.0) fraction: Float = 0.2f
     ): Color {
-        val darkTheme = when (LocalSettingsProvider.current.nightMode) {
-            NightMode.SYSTEM -> isSystemInDarkTheme()
-            NightMode.DARK -> true
-            NightMode.LIGHT -> false
-        }
-        return if (darkTheme) lighten(fraction) else darken(fraction)
+        return if (isDarkMode()) lighten(fraction) else darken(fraction)
     }
 
     @Composable
     fun Color.createInverseSecondaryColor(
         @FloatRange(from = 0.0, to = 1.0) fraction: Float = 0.2f
     ): Color {
-        val darkTheme = when (LocalSettingsProvider.current.nightMode) {
-            NightMode.SYSTEM -> isSystemInDarkTheme()
-            NightMode.DARK -> true
-            NightMode.LIGHT -> false
-        }
-        return if (!darkTheme) lighten(fraction) else darken(fraction)
+        return if (!isDarkMode()) lighten(fraction) else darken(fraction)
     }
 
     fun Color.lighten(

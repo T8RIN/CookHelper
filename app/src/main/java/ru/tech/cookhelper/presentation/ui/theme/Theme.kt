@@ -85,18 +85,14 @@ fun ProKitchenTheme(
     dynamicColor: Boolean = LocalSettingsProvider.current.dynamicColors,
     content: @Composable () -> Unit
 ) {
-    val darkTheme = when (LocalSettingsProvider.current.nightMode) {
-        NightMode.SYSTEM -> isSystemInDarkTheme()
-        NightMode.DARK -> true
-        NightMode.LIGHT -> false
-    }
+    val darkTheme = isDarkMode()
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        else -> getColorScheme(darkTheme)
+        else -> getColorScheme()
     }
 
     val systemUiController = rememberSystemUiController()
@@ -124,9 +120,15 @@ fun ProKitchenTheme(
     )
 }
 
+@Composable
+fun isDarkMode() = when (LocalSettingsProvider.current.nightMode) {
+    NightMode.SYSTEM -> isSystemInDarkTheme()
+    NightMode.DARK -> true
+    NightMode.LIGHT -> false
+}
 
 @Composable
-fun getColorScheme(darkTheme: Boolean): Material3ColorScheme {
+fun getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
     LocalSettingsProvider.current.colorScheme.apply {
         return if (darkTheme) DarkThemeColors
         else LightThemeColors
