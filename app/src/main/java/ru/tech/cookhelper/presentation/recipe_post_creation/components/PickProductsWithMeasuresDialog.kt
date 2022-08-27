@@ -221,7 +221,7 @@ fun PickProductsWithMeasuresDialog(
                         }
                     }
                 } else {
-                    val list = remember {
+                    val list by computedStateOf(allProductsSearch) {
                         combinedAllProducts.filter {
                             if (allProductsSearch.isNotEmpty()) it.name.lowercase()
                                 .contains(allProductsSearch.lowercase())
@@ -302,10 +302,7 @@ fun PickProductsWithMeasuresDialog(
                     onProductsPicked(
                         localProducts.map {
                             val amount = localAmounts[it.id]
-                            it.copy(
-                                amount = amount?.toFloatOrNull() ?: amount?.toIntOrNull()?.toFloat()
-                                ?: 0f
-                            )
+                            it.copy(amount = amount.toFloatOrZero())
                         }
                     )
                 } else {
@@ -360,3 +357,5 @@ private val MapListSaver = Saver<SnapshotStateMap<Int, String>, String>(
         map
     }
 )
+
+private fun String?.toFloatOrZero() = this?.toFloatOrNull() ?: this?.toIntOrNull()?.toFloat() ?: 0f

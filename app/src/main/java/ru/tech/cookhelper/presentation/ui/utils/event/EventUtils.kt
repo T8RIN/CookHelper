@@ -19,7 +19,10 @@ inline fun <reified T> Flow<T>.collectWithLifecycle(
     var job by remember { mutableStateOf<Job?>(null) }
     LaunchedEffect(Unit) {
         job = lifecycleOwner.lifecycleScope.launch {
-            flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).collect(action)
+            flowWithLifecycle(
+                lifecycle = lifecycleOwner.lifecycle,
+                minActiveState = minActiveState
+            ).collect(collector = action)
         }
     }
     DisposableEffect(Unit) {
