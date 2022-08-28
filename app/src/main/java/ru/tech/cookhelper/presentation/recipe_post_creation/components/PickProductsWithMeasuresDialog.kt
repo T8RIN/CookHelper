@@ -42,7 +42,8 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 @OptIn(
-    ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalAnimationApi::class,
+    ExperimentalComposeUiApi::class,
     ExperimentalMaterial3Api::class
 )
 @Composable
