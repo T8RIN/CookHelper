@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ViewModelEvents<T> {
     val eventFlow: Flow<T>
-    fun sendEvent(event: T)
+    fun sendEvent(event: T): Boolean
 }

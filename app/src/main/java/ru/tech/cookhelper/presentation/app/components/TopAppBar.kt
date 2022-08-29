@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.*
@@ -72,3 +73,36 @@ fun TopAppBar(
 }
 
 enum class TopAppBarSize { Small, Centered, Medium, Large }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AnimatedTopAppBar(
+    modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    topAppBarSize: TopAppBarSize = TopAppBarSize.Small,
+    title: @Composable () -> Unit,
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    background: Color? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    visible: Boolean = true,
+    enter: EnterTransition = fadeIn() + expandVertically(),
+    exit: ExitTransition = fadeOut() + shrinkVertically()
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = enter,
+        exit = exit
+    ) {
+        TopAppBar(
+            topAppBarSize = topAppBarSize,
+            scrollBehavior = scrollBehavior,
+            modifier = modifier,
+            windowInsets = windowInsets,
+            title = title,
+            navigationIcon = navigationIcon,
+            actions = actions,
+            background = background
+        )
+    }
+}

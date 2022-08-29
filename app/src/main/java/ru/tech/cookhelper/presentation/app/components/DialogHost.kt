@@ -13,7 +13,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun DialogNavigationBox(controller: NavController<Dialog>) {
+fun DialogHost(controller: NavController<Dialog>) {
     DialogNavHost(controller = controller) { dialog ->
         when (dialog) {
             is Dialog.Exit -> {

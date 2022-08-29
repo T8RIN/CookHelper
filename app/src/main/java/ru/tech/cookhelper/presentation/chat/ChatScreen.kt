@@ -44,7 +44,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Expandabl
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
-import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
@@ -70,7 +70,7 @@ fun ChatScreen(
 
     val textBoxColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
 
-    val scrollBehavior = rememberTopAppBarScrollBehavior()
+    val scrollBehavior = topAppBarScrollBehavior()
 
     val isAtTheBottom by computedStateOf { state.isLastItemVisible }
     var fabBottomPadding by remember { mutableStateOf(0) }

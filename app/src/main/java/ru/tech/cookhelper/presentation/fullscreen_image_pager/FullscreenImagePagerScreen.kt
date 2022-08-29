@@ -27,10 +27,10 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.presentation.app.components.AnimatedTopAppBar
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
@@ -67,35 +67,32 @@ fun FullScreenPagerScreen(images: List<Image>, initialId: String, onBack: () -> 
                 }
             )
         }
-        AnimatedVisibility(
+        AnimatedTopAppBar(
+            background = Color.Black.copy(alpha = 0.5f),
+            title = {
+                Text(
+                    stringResource(
+                        R.string.count_of_all,
+                        pagerState.currentPage + 1,
+                        pagerState.pageCount
+                    ),
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = { onBack() }) {
+                    Icon(
+                        Icons.Rounded.ArrowBack,
+                        null,
+                        tint = Color.White
+                    )
+                }
+            },
             visible = !isTopBarHidden,
             enter = slideInVertically() + fadeIn(),
             exit = slideOutVertically() + fadeOut()
-        ) {
-            TopAppBar(
-                background = Color.Black.copy(alpha = 0.5f),
-                title = {
-                    Text(
-                        stringResource(
-                            R.string.count_of_all,
-                            pagerState.currentPage + 1,
-                            pagerState.pageCount
-                        ),
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { onBack() }) {
-                        Icon(
-                            Icons.Rounded.ArrowBack,
-                            null,
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-        }
+        )
         AnimatedVisibility(
             visible = !isTopBarHidden,
             enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(),

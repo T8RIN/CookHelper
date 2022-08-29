@@ -1,7 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -21,7 +20,7 @@ import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
 import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
-import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -44,11 +43,10 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarActions: MutableState<(@Composable RowScope.() -> Unit)?> = remember {
-        mutableStateOf(null)
-    }
-    LaunchedEffect(screenController.currentDestination) { topAppBarActions.clearActions() }
+        mutableStateOf<(@Composable RowScope.() -> Unit)?>(null)
+    }.also { clearActionsOnNavigate() }
 
-    val scrollBehavior = rememberTopAppBarScrollBehavior()
+    val scrollBehavior = topAppBarScrollBehavior()
 
     CompositionLocalProvider(
         values = arrayOf(
@@ -61,7 +59,11 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         )
     ) {
         ProKitchenTheme {
-            BackHandler { dialogController.show(Dialog.Exit(onExit = { activity?.finishAffinity() })) }
+            BackHandler {
+                dialogController.show(
+                    Dialog.Exit(onExit = { activity?.finishAffinity() })
+                )
+            }
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -85,26 +87,25 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     gesturesEnabled = showTopAppBar
                 ) {
                     Column {
-                        AnimatedVisibility(visible = showTopAppBar) {
-                            TopAppBar(
-                                topAppBarSize = TopAppBarSize.Centered,
-                                navigationIcon = {
-                                    IconButton(
-                                        onClick = { scope.launch { drawerState.open() } },
-                                        content = { Icon(Icons.Rounded.Menu, null) }
-                                    )
-                                },
-                                actions = { topAppBarActions(this) },
-                                title = {
-                                    Text(
-                                        viewModel.title.asString(),
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                },
-                                scrollBehavior = scrollBehavior
-                            )
-                        }
-                        ScreenNavigationBox(
+                        AnimatedTopAppBar(
+                            topAppBarSize = TopAppBarSize.Centered,
+                            navigationIcon = {
+                                IconButton(
+                                    onClick = { scope.launch { drawerState.open() } },
+                                    content = { Icon(Icons.Rounded.Menu, null) }
+                                )
+                            },
+                            actions = { topAppBarActions(this) },
+                            title = {
+                                Text(
+                                    viewModel.title.asString(),
+                                    fontWeight = FontWeight.Medium
+                                )
+                            },
+                            visible = showTopAppBar,
+                            scrollBehavior = scrollBehavior
+                        )
+                        ScreenHost(
                             nestedScrollConnection = scrollBehavior.nestedScrollConnection,
                             controller = screenController,
                             transitionSpec = ScaleCrossfadeTransitionSpec,
@@ -113,7 +114,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     }
                 }
 
-                DialogNavigationBox(controller = dialogController)
+                DialogHost(controller = dialogController)
 
                 FancyToastHost(fancyToastValues.value)
             }

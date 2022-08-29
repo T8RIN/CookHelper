@@ -7,7 +7,5 @@ import kotlinx.coroutines.flow.receiveAsFlow
 class ViewModelEventsImpl<T> : ViewModelEvents<T> {
     private val eventChannel: Channel<T> = Channel(Channel.BUFFERED)
     override val eventFlow: Flow<T> = eventChannel.receiveAsFlow()
-    override fun sendEvent(event: T) {
-        eventChannel.trySend(event)
-    }
+    override fun sendEvent(event: T) = eventChannel.trySend(event).isSuccess
 }

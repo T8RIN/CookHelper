@@ -6,11 +6,11 @@ import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 
-object TopAppBarStateUtils {
+object TopAppBarUtils {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun rememberTopAppBarScrollBehavior(
+    fun topAppBarScrollBehavior(
         scrollBehavior: ScrollBehavior = ScrollBehavior.Pinned,
         canScroll: () -> Boolean = { true },
         topAppBarState: TopAppBarState = rememberTopAppBarState()

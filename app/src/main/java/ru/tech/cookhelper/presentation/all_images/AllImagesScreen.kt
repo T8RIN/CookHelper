@@ -30,7 +30,7 @@ import ru.tech.cookhelper.presentation.all_images.components.AdaptiveVerticalGri
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
-import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarStateUtils.rememberTopAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
@@ -44,7 +44,7 @@ fun AllImagesScreen(
     onAddImage: (uri: String) -> Unit
 ) {
     val screenController = LocalScreenController.current
-    val scrollBehavior = rememberTopAppBarScrollBehavior()
+    val scrollBehavior = topAppBarScrollBehavior()
     val context = LocalContext.current
     val toastHost = LocalToastHost.current
 

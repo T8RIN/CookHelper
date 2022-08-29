@@ -32,7 +32,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ScreenNavigationBox(
+fun ScreenHost(
     controller: NavController<Screen>,
     nestedScrollConnection: NestedScrollConnection,
     transitionSpec: AnimatedNavHostTransitionSpec<Any?>,
