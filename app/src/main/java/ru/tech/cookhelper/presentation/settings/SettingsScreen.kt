@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
@@ -121,21 +122,43 @@ fun SettingsScreen(
                     )
                     when (setting) {
                         CART_CONNECTION -> {
-                            var checked by remember { mutableStateOf(settingsState.cartConnection) }
                             Spacer(Modifier.width(8.dp))
-                            Switch(checked = checked, onCheckedChange = {
-                                viewModel.insertSetting(setting.ordinal, !checked)
-                                checked = !checked
-                            })
+                            Switch(
+                                checked = settingsState.cartConnection,
+                                onCheckedChange = {
+                                    viewModel.insertSetting(
+                                        setting.ordinal,
+                                        !settingsState.cartConnection
+                                    )
+                                },
+                                thumbContent = {
+                                    Icon(
+                                        Icons.Filled.Done,
+                                        null,
+                                        Modifier.size(16.dp)
+                                    )
+                                }
+                            )
                             Spacer(Modifier.width(20.dp))
                         }
                         DYNAMIC_COLORS -> {
-                            var checked by remember { mutableStateOf(settingsState.dynamicColors) }
                             Spacer(Modifier.width(8.dp))
-                            Switch(checked = checked, onCheckedChange = {
-                                viewModel.insertSetting(setting.ordinal, !checked)
-                                checked = !checked
-                            })
+                            Switch(
+                                checked = settingsState.dynamicColors,
+                                onCheckedChange = {
+                                    viewModel.insertSetting(
+                                        setting.ordinal,
+                                        !settingsState.dynamicColors
+                                    )
+                                },
+                                thumbContent = {
+                                    Icon(
+                                        Icons.Filled.Done,
+                                        null,
+                                        Modifier.size(16.dp)
+                                    )
+                                }
+                            )
                             Spacer(Modifier.width(20.dp))
                         }
                         NIGHT_MODE -> {
@@ -145,8 +168,9 @@ fun SettingsScreen(
                                 modifier = Modifier.rotate(rotation)
                             ) {
                                 Icon(
-                                    Icons.Rounded.KeyboardArrowDown, null, modifier = Modifier
-                                        .size(26.dp)
+                                    imageVector = Icons.Rounded.KeyboardArrowDown,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(26.dp)
                                 )
                             }
                             onClick = { expandedNightMode = !expandedNightMode }
@@ -159,8 +183,9 @@ fun SettingsScreen(
                                 enabled = !settingsState.dynamicColors
                             ) {
                                 Icon(
-                                    Icons.Rounded.KeyboardArrowDown, null, modifier = Modifier
-                                        .size(26.dp)
+                                    imageVector = Icons.Rounded.KeyboardArrowDown,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(26.dp)
                                 )
                             }
                             onClick = {

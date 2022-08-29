@@ -33,7 +33,7 @@ fun MainModalDrawerContent(
 ) {
     val screenController = LocalScreenController.current
     val scope = rememberCoroutineScope()
-    val containerColor = MaterialTheme.colorScheme.surface
+    val containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(0.5.dp)
     val conf = LocalConfiguration.current
 
     Surface(
@@ -79,6 +79,7 @@ fun MainModalDrawerContent(
                         topEnd = 36.0.dp,
                         bottomEnd = 36.0.dp,
                     ),
+                    colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = containerColor),
                     modifier = Modifier.padding(end = 12.dp),
                     label = { Text(item.title.asString()) },
                     selected = selected,
