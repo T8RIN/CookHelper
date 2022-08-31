@@ -43,8 +43,11 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarActions: MutableState<(@Composable RowScope.() -> Unit)?> = remember {
-        mutableStateOf<(@Composable RowScope.() -> Unit)?>(null)
-    }.also { clearActionsOnNavigate() }
+        mutableStateOf(null)
+    }
+    LaunchedEffect(screenController.currentDestination) {
+        topAppBarActions.clearActions()
+    }
 
     val scrollBehavior = topAppBarScrollBehavior()
 
