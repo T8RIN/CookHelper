@@ -1,11 +1,14 @@
 package ru.tech.cookhelper.presentation.profile.components
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -13,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,7 +26,10 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,9 +37,25 @@ fun ImageCarousel(
     imageSize: Dp = 100.dp,
     data: List<Image>,
     onImageClick: (id: String) -> Unit,
-    onAddImageClick: () -> Unit,
+    onAddImage: (imageUri: String) -> Unit,
     onExpand: () -> Unit
 ) {
+    val toastHost = LocalToastHost.current
+    val context = LocalContext.current
+    val resultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            if (uri == null) {
+                toastHost.sendToast(
+                    icon = Icons.Outlined.BrokenImage,
+                    message = (R.string.image_not_picked).asString(context)
+                )
+                return@rememberLauncherForActivityResult
+            }
+            onAddImage(uri.toString())
+        }
+    )
+
     Column {
         Row(
             Modifier
@@ -72,7 +95,7 @@ fun ImageCarousel(
             }
             item {
                 Card(
-                    onClick = onAddImageClick,
+                    onClick = { resultLauncher.launch("image/*") },
                     modifier = Modifier.size(imageSize),
                     shape = SquircleShape(12.dp)
                 ) {

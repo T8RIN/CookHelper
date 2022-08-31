@@ -78,7 +78,7 @@ fun ProfileScreen(
                     dialogController.show(
                         Dialog.EditStatus(
                             currentStatus = currentStatus,
-                            onDone = { /*TODO: UpdateStatus*/ }
+                            onDone = { viewModel.updateStatus(it) }
                         )
                     )
                 },
@@ -87,7 +87,7 @@ fun ProfileScreen(
                     dialogController.show(
                         Dialog.PickOrOpenAvatar(
                             hasAvatar = hasAvatar,
-                            onAvatarPicked = { /*TODO: UpdateAvatar*/ },
+                            onAvatarPicked = { viewModel.addAvatar(it) },
                             onOpenAvatar = { /*TODO: OpenAvatar*/ }
                         )
                     )
@@ -104,17 +104,13 @@ fun ProfileScreen(
                         )
                     )
                 },
-                onAddImageClick = {
-                    //TODO: Add Image Feature
-                },
+                onAddImage = { viewModel.addImage(it) },
                 onExpand = {
                     screenController.navigate(
                         Screen.AllImages(
                             images = testList,
                             canAddImages = true,
-                            onAddImage = {
-                                //TODO: Send picked image to server
-                            }
+                            onAddImage = { viewModel.addImage(it) }
                         )
                     )
                 }

@@ -32,4 +32,16 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch { logoutUseCase() }
     }
 
+    fun addImage(imageUri: String) {
+        //TODO: Send picked image to server
+    }
+
+    fun updateStatus(newStatus: String) {
+        /*TODO: UpdateStatus*/
+    }
+
+    fun addAvatar(imageUri: String) {
+        /*TODO: UpdateAvatar*/
+    }
+
 }
