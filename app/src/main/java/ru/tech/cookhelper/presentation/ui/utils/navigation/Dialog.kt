@@ -57,7 +57,7 @@ sealed class Dialog : Parcelable {
     @Parcelize
     class PickOrOpenAvatar(
         val hasAvatar: Boolean,
-        @IgnoredOnParcel val onAvatarPicked: () -> Unit = {},
+        @IgnoredOnParcel val onAvatarPicked: (imageUri: String) -> Unit = {},
         @IgnoredOnParcel val onOpenAvatar: () -> Unit = {}
     ) : Dialog()
 }

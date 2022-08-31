@@ -54,6 +54,7 @@ fun UserInfoBlock(
                 modifier = Modifier
                     .padding(top = 15.dp)
                     .size(80.dp)
+                    .clip(CircleShape)
                     .clickable { onAvatarClick(/*TODO: Provide avatar list from user */) },
                 error = {
                     Icon(Icons.Filled.AccountCircle, null)

@@ -138,4 +138,7 @@
     <string name="edit_status">Изменить статус</string>
     <string name="status">Статус</string>
     <string name="done">Готово</string>
+    <string name="avatar">Аватар</string>
+    <string name="show_avatar">Просмотреть</string>
+    <string name="edit_avatar">Добавить новый</string>
 </resources>
