@@ -65,7 +65,13 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
                     itemsIndexed(state.chatList, key = { _, item -> item.id }) { index, chat ->
                         ChatListItem(
                             onClick = {
-                                screenController.navigate(Screen.Chat(chatId = chat.id))
+                                screenController.navigate(
+                                    Screen.Chat(
+                                        chatId = chat.id,
+                                        chatTitle = chat.title,
+                                        imageUrl = chat.image
+                                    )
+                                )
                             },
                             image = chat.image,
                             title = chat.title,

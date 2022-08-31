@@ -41,7 +41,12 @@ class ChatViewModel @Inject constructor(
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: User? by _user
 
-    private val _chatState: MutableState<ChatState> = mutableStateOf(ChatState())
+    private val _chatState: MutableState<ChatState> = mutableStateOf(
+        ChatState(
+            image = savedStateHandle["image"],
+            title = savedStateHandle["title"]!!
+        )
+    )
     val chatState: ChatState by _chatState
 
     private val _loadingAllMessages: MutableState<Boolean> = mutableStateOf(false)
@@ -61,9 +66,9 @@ class ChatViewModel @Inject constructor(
         awaitNewMessagesUseCase(chatId = chatId, token = "qwe")
             .onEach { action ->
                 when (action) {
-                    is Action.Empty -> _chatState.value = ChatState()
+                    is Action.Empty -> {}
                     is Action.Error -> {
-                        _chatState.value = ChatState()
+                        _chatState.apply { value = value.copy(isLoading = false) }
                         sendEvent(
                             Event.ShowToast(
                                 if (!(action.message ?: "").contains("Unable to resolve host")
@@ -73,9 +78,9 @@ class ChatViewModel @Inject constructor(
                             )
                         )
                     }
-                    is Action.Loading -> _chatState.value = ChatState(isLoading = true)
+                    is Action.Loading -> _chatState.apply { value = value.copy(isLoading = true) }
                     is Action.Success -> action.data?.let { messages.add(it) }.also {
-                        _chatState.value = ChatState()
+                        _chatState.apply { value = value.copy(isLoading = false) }
                     }
                 }
             }.launchIn(viewModelScope)

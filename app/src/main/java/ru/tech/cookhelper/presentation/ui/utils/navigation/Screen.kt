@@ -142,6 +142,8 @@ sealed class Screen(
 
     @Parcelize
     class Chat(
+        val chatTitle: String,
+        val imageUrl: String?,
         val chatId: String,
     ) : Screen(showTopAppBar = false)
 }

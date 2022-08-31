@@ -36,10 +36,13 @@ import androidx.core.os.bundleOf
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.*
+import ru.tech.cookhelper.presentation.app.components.Loading
+import ru.tech.cookhelper.presentation.app.components.TopAppBar
+import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
 import ru.tech.cookhelper.presentation.chat.components.MessageHeader
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
+import ru.tech.cookhelper.presentation.chat_list.components.ChatPicture
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
@@ -59,9 +62,17 @@ import java.util.*
 )
 @Composable
 fun ChatScreen(
-    chatId: String, viewModel: ChatViewModel = hiltViewModel(
-        defaultArguments = bundleOf("chatId" to chatId)
-    ), onBack: () -> Unit
+    title: String,
+    image: String?,
+    chatId: String,
+    viewModel: ChatViewModel = hiltViewModel(
+        defaultArguments = bundleOf(
+            "chatId" to chatId,
+            "title" to title,
+            "image" to image
+        )
+    ),
+    onBack: () -> Unit
 ) {
     val chatState = viewModel.chatState
     var value by remember { mutableStateOf("") }
@@ -104,7 +115,6 @@ fun ChatScreen(
                 modifier = Modifier.onSizeChanged {
                     fabTopPadding = it.height
                 },
-                topAppBarSize = TopAppBarSize.Centered,
                 scrollBehavior = scrollBehavior,
                 title = {
                     Row(
@@ -114,10 +124,15 @@ fun ChatScreen(
                             .padding(start = 8.dp)
                             .fillMaxWidth()
                     ) {
-                        Picture(model = user?.avatar, modifier = Modifier.size(40.dp))
+                        ChatPicture(
+                            modifier = Modifier
+                                .size(40.dp),
+                            image = viewModel.chatState.image,
+                            title = viewModel.chatState.title
+                        )
                         Spacer(Modifier.width(12.dp))
                         Text(
-                            text = "${user?.name?.trim()} ${user?.surname?.trim()}",
+                            text = viewModel.chatState.title,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -135,8 +150,7 @@ fun ChatScreen(
                 exit = fadeOut() + slideOutVertically()
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Spacer(Modifier.weight(1f))

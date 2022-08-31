@@ -13,6 +13,6 @@ enum class NightMode {
     DARK, LIGHT, SYSTEM
 }
 
-enum class Settings {
+enum class Setting {
     NIGHT_MODE, COLOR_SCHEME, DYNAMIC_COLORS, CART_CONNECTION
 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -42,7 +43,7 @@ import ru.tech.cookhelper.presentation.app.components.Toast
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.settings.components.*
-import ru.tech.cookhelper.presentation.settings.components.Settings.*
+import ru.tech.cookhelper.presentation.settings.components.Setting.*
 import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.colorList
@@ -72,7 +73,7 @@ fun SettingsScreen(
     LazyColumn(
         contentPadding = WindowInsets.navigationBars.asPaddingValues().addPadding(top = 20.dp)
     ) {
-        items(Settings.values(), key = { it.name }) { setting ->
+        items(Setting.values(), key = { it.name }) { setting ->
             Column(
                 modifier = Modifier.animateContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -122,44 +123,18 @@ fun SettingsScreen(
                     )
                     when (setting) {
                         CART_CONNECTION -> {
-                            Spacer(Modifier.width(8.dp))
                             Switch(
                                 checked = settingsState.cartConnection,
-                                onCheckedChange = {
-                                    viewModel.insertSetting(
-                                        setting.ordinal,
-                                        !settingsState.cartConnection
-                                    )
-                                },
-                                thumbContent = {
-                                    Icon(
-                                        Icons.Filled.Done,
-                                        null,
-                                        Modifier.size(16.dp)
-                                    )
-                                }
+                                setting = setting,
+                                viewModel = viewModel
                             )
-                            Spacer(Modifier.width(20.dp))
                         }
                         DYNAMIC_COLORS -> {
-                            Spacer(Modifier.width(8.dp))
                             Switch(
                                 checked = settingsState.dynamicColors,
-                                onCheckedChange = {
-                                    viewModel.insertSetting(
-                                        setting.ordinal,
-                                        !settingsState.dynamicColors
-                                    )
-                                },
-                                thumbContent = {
-                                    Icon(
-                                        Icons.Filled.Done,
-                                        null,
-                                        Modifier.size(16.dp)
-                                    )
-                                }
+                                setting = setting,
+                                viewModel = viewModel
                             )
-                            Spacer(Modifier.width(20.dp))
                         }
                         NIGHT_MODE -> {
                             val rotation: Float by animateFloatAsState(if (expandedNightMode) 180f else 0f)
@@ -309,7 +284,7 @@ fun SettingsScreen(
 
 }
 
-fun Settings.getIcon(nightMode: NightMode): ImageVector {
+fun Setting.getIcon(nightMode: NightMode): ImageVector {
     return when (this) {
         NIGHT_MODE -> when (nightMode) {
             NightMode.DARK -> Icons.Outlined.ModeNight
@@ -322,7 +297,7 @@ fun Settings.getIcon(nightMode: NightMode): ImageVector {
     }
 }
 
-val Settings.title: Int
+val Setting.title: Int
     get() {
         return when (this) {
             NIGHT_MODE -> R.string.app_theme_mode
@@ -332,7 +307,7 @@ val Settings.title: Int
         }
     }
 
-val Settings.subtitle: Int?
+val Setting.subtitle: Int?
     get() {
         return when (this) {
             NIGHT_MODE -> null
@@ -341,3 +316,32 @@ val Settings.subtitle: Int?
             CART_CONNECTION -> R.string.cart_connection_subtitle
         }
     }
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun RowScope.Switch(
+    checked: Boolean,
+    viewModel: SettingsViewModel,
+    setting: Setting
+) {
+    Spacer(Modifier.width(8.dp))
+    Switch(
+        checked = checked,
+        onCheckedChange = {
+            viewModel.insertSetting(
+                setting.ordinal,
+                !checked
+            )
+        },
+        thumbContent = {
+            AnimatedContent(targetState = checked) { chk ->
+                Icon(
+                    if (chk) Icons.Filled.Done else Icons.Filled.Close,
+                    null,
+                    Modifier.size(16.dp)
+                )
+            }
+        }
+    )
+    Spacer(Modifier.width(20.dp))
+}

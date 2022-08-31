@@ -12,7 +12,7 @@ import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCa
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.settings.components.NightMode
-import ru.tech.cookhelper.presentation.settings.components.Settings
+import ru.tech.cookhelper.presentation.settings.components.Setting
 import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
 import ru.tech.cookhelper.presentation.ui.theme.colorList
@@ -43,18 +43,18 @@ class MainViewModel @Inject constructor(
             var state = SettingsState()
             list.forEach { setting ->
                 when (setting.id) {
-                    Settings.DYNAMIC_COLORS.ordinal -> {
+                    Setting.DYNAMIC_COLORS.ordinal -> {
                         state = state.copy(dynamicColors = setting.option.toBoolean())
                     }
-                    Settings.COLOR_SCHEME.ordinal -> {
+                    Setting.COLOR_SCHEME.ordinal -> {
                         val index = setting.option.toIntOrNull() ?: ColorScheme.Blue.ordinal
                         state = state.copy(colorScheme = colorList[index])
                     }
-                    Settings.NIGHT_MODE.ordinal -> {
+                    Setting.NIGHT_MODE.ordinal -> {
                         val index = setting.option.toIntOrNull() ?: NightMode.SYSTEM.ordinal
                         state = state.copy(nightMode = enumValues<NightMode>()[index])
                     }
-                    Settings.CART_CONNECTION.ordinal -> {
+                    Setting.CART_CONNECTION.ordinal -> {
                         state = state.copy(
                             cartConnection = setting.option.toBoolean()
                         )

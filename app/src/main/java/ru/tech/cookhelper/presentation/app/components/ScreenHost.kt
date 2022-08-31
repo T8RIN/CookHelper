@@ -108,6 +108,8 @@ fun ScreenHost(
                 }
                 is Screen.Chat -> {
                     ChatScreen(
+                        image = screen.imageUrl,
+                        title = screen.chatTitle,
                         chatId = screen.chatId,
                         onBack = { controller.goBack() }
                     )

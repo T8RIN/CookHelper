@@ -14,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,32 +34,13 @@ fun ChatListItem(
             .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (image != null) {
-            Picture(
-                model = image,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(56.dp)
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(56.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.tertiaryContainer,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = (title.getOrNull(0)?.toString() ?: "*"),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer
-                )
-            }
-        }
+        ChatPicture(
+            modifier = Modifier
+                .padding(8.dp)
+                .size(56.dp),
+            image = image,
+            title = title
+        )
         Spacer(Modifier.width(8.dp))
         Column(
             modifier = Modifier
