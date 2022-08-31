@@ -135,4 +135,7 @@
     <string name="hello_world_answer_preview">Привет, что приготовим сегодня?</string>
     <string name="chat_preview">Чат</string>
     <string name="buttons_preview">Кнопки</string>
+    <string name="edit_status">Изменить статус</string>
+    <string name="status">Статус</string>
+    <string name="done">Готово</string>
 </resources>

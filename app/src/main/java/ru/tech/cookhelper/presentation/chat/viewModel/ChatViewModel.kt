@@ -66,7 +66,7 @@ class ChatViewModel @Inject constructor(
         awaitNewMessagesUseCase(chatId = chatId, token = "qwe")
             .onEach { action ->
                 when (action) {
-                    is Action.Empty -> {}
+                    is Action.Empty -> _chatState.apply { value = value.copy(isLoading = false) }
                     is Action.Error -> {
                         _chatState.apply { value = value.copy(isLoading = false) }
                         sendEvent(

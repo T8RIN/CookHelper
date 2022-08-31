@@ -74,7 +74,24 @@ fun ProfileScreen(
             UserInfoBlock(
                 userState = userState,
                 onEdit = { /*TODO: Edit Profile*/ },
-                onStatusUpdate = { /*TODO: UpdateStatus*/ }
+                onStatusUpdate = { currentStatus ->
+                    dialogController.show(
+                        Dialog.EditStatus(
+                            currentStatus = currentStatus,
+                            onDone = { /*TODO: UpdateStatus*/ }
+                        )
+                    )
+                },
+                onAvatarClick = { /* TODO: avatarList -> */
+                    val hasAvatar = /*avatarList?.isNotEmpty == true*/ true
+                    dialogController.show(
+                        Dialog.PickOrOpenAvatar(
+                            hasAvatar = hasAvatar,
+                            onAvatarPicked = { /*TODO: UpdateAvatar*/ },
+                            onOpenAvatar = { /*TODO: OpenAvatar*/ }
+                        )
+                    )
+                }
             )
             Spacer(Modifier.height(20.dp))
             ImageCarousel(

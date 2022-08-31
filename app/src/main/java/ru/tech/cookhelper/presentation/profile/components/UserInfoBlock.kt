@@ -29,7 +29,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun UserInfoBlock(userState: UserState, onEdit: () -> Unit, onStatusUpdate: () -> Unit) {
+fun UserInfoBlock(
+    userState: UserState,
+    onEdit: () -> Unit,
+    onAvatarClick: (/*avatarList: List<Image?>*/) -> Unit,
+    onStatusUpdate: (currentStatus: String) -> Unit
+) {
     val lastSeen by computedStateOf(userState) {
         val lastSeen = userState.user?.lastSeen ?: 0L
         val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
@@ -48,20 +53,20 @@ fun UserInfoBlock(userState: UserState, onEdit: () -> Unit, onStatusUpdate: () -
                 model = userState.user?.avatar,
                 modifier = Modifier
                     .padding(top = 15.dp)
-                    .size(80.dp),
+                    .size(80.dp)
+                    .clickable { onAvatarClick(/*TODO: Provide avatar list from user */) },
                 error = {
                     Icon(Icons.Filled.AccountCircle, null)
                 }
             )
             Spacer(Modifier.width(10.dp))
             Column(
-                Modifier
-                    .padding(top = 15.dp),
+                Modifier.padding(top = 15.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    userState.user?.let { "${it.name} ${it.surname}" }.toString(),
+                    text = userState.user?.let { "${it.name} ${it.surname}" }.toString(),
                     modifier = Modifier.padding(start = 5.dp),
                     fontSize = 20.sp,
                     fontWeight = FontWeight(450)
@@ -71,7 +76,9 @@ fun UserInfoBlock(userState: UserState, onEdit: () -> Unit, onStatusUpdate: () -
                     Row(
                         modifier = Modifier
                             .clip(CircleShape)
-                            .clickable(onClick = onStatusUpdate)
+                            .clickable(
+                                onClick = { onStatusUpdate(userState.user.status) }
+                            )
                     ) {
                         Spacer(Modifier.width(5.dp))
                         Text(
@@ -82,12 +89,22 @@ fun UserInfoBlock(userState: UserState, onEdit: () -> Unit, onStatusUpdate: () -
                         Spacer(Modifier.width(5.dp))
                     }
                 } else {
-                    Text(
-                        userState.user?.status.toString(),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Row(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable(
+                                onClick = { onStatusUpdate(userState.user?.status ?: "") }
+                            )
+                    ) {
+                        Spacer(Modifier.width(5.dp))
+                        Text(
+                            userState.user?.status.toString(),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Spacer(Modifier.width(5.dp))
+                    }
                 }
                 Spacer(Modifier.height(6.dp))
                 Row(

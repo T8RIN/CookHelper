@@ -47,4 +47,17 @@ sealed class Dialog : Parcelable {
         val allProducts: List<Product>,
         @IgnoredOnParcel val onProductsPicked: (newProducts: List<Product>) -> Unit = {}
     ) : Dialog()
+
+    @Parcelize
+    class EditStatus(
+        val currentStatus: String,
+        @IgnoredOnParcel val onDone: (newStatus: String) -> Unit = {}
+    ) : Dialog()
+
+    @Parcelize
+    class PickOrOpenAvatar(
+        val hasAvatar: Boolean,
+        @IgnoredOnParcel val onAvatarPicked: () -> Unit = {},
+        @IgnoredOnParcel val onOpenAvatar: () -> Unit = {}
+    ) : Dialog()
 }
