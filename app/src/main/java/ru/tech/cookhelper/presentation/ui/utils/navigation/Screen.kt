@@ -141,6 +141,9 @@ sealed class Screen(
     object RecipePostCreation : Screen(showTopAppBar = false)
 
     @Parcelize
+    object EditProfile : Screen(showTopAppBar = false)
+
+    @Parcelize
     class Chat(
         val chatTitle: String,
         val imageUrl: String?,

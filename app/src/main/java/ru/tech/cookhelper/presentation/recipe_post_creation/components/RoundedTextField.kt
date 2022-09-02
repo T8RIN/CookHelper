@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ fun RoundedTextField(
     formatText: String.() -> String = { this },
     textStyle: TextStyle = LocalTextStyle.current,
     onLoseFocusTransformation: String.() -> String = { this },
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     singleLine: Boolean = true,
     readOnly: Boolean = false
@@ -81,7 +83,8 @@ fun RoundedTextField(
         keyboardOptions = keyboardOptions,
         leadingIcon = { Icon(startIcon, null) },
         trailingIcon = endIcon,
-        readOnly = readOnly
+        readOnly = readOnly,
+        visualTransformation = visualTransformation
     )
 
 }

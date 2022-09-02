@@ -17,6 +17,7 @@ import ru.tech.cookhelper.presentation.chat.ChatScreen
 import ru.tech.cookhelper.presentation.chat_list.ChatListScreen
 import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
 import ru.tech.cookhelper.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
+import ru.tech.cookhelper.presentation.edit_profile.EditProfileScreen
 import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScreen
 import ru.tech.cookhelper.presentation.home_screen.HomeScreen
 import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
@@ -130,6 +131,11 @@ fun ScreenHost(
                         onBack = {
                             controller.goBack()
                         }
+                    )
+                }
+                Screen.EditProfile -> {
+                    EditProfileScreen(
+                        onBack = { controller.goBack() }
                     )
                 }
             }

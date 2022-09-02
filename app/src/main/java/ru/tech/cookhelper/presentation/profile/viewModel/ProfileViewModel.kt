@@ -19,6 +19,7 @@ class ProfileViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase,
     private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
+
     private val _userState: MutableState<UserState> = mutableStateOf(UserState())
     val userState: UserState by _userState
 

@@ -141,4 +141,8 @@
     <string name="avatar">Аватар</string>
     <string name="show_avatar">Просмотреть</string>
     <string name="edit_avatar">Добавить новый</string>
+    <string name="personal_info">Персональная информация</string>
+    <string name="account_info">Информация об аккаунте</string>
+    <string name="current_password">Текущий пароль</string>
+    <string name="new_password">Новый пароль</string>
 </resources>

@@ -73,7 +73,7 @@ fun ProfileScreen(
         item {
             UserInfoBlock(
                 userState = userState,
-                onEdit = { /*TODO: Edit Profile*/ },
+                onEdit = { screenController.navigate(Screen.EditProfile) },
                 onStatusUpdate = { currentStatus ->
                     dialogController.show(
                         Dialog.EditStatus(
