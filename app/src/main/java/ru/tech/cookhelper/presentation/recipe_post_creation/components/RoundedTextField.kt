@@ -3,14 +3,16 @@ package ru.tech.cookhelper.presentation.recipe_post_creation.components
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -20,18 +22,25 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
+import ru.tech.cookhelper.presentation.ui.utils.compose.shimmer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoundedTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
-    label: String,
+    label: String = "",
+    hint: String = "",
     shape: Shape = RoundedCornerShape(4.dp),
-    startIcon: ImageVector,
+    startIcon: ImageVector? = null,
     value: String,
+    isError: Boolean = false,
+    loading: Boolean = false,
+    error: (@Composable () -> Unit)? = null,
     endIcon: (@Composable () -> Unit)? = null,
     formatText: String.() -> String = { this },
     textStyle: TextStyle = LocalTextStyle.current,
@@ -42,112 +51,118 @@ fun RoundedTextField(
     readOnly: Boolean = false
 ) {
     val focus = LocalFocusManager.current
+
     val color = remember { Animatable(initialValue = Color.Transparent) }
     val colorScheme = MaterialTheme.colorScheme
-    val scope = rememberCoroutineScope()
-
-    TextField(
-        modifier = modifier
-            .border(
-                width = 2.dp,
-                color = color.value,
-                shape = shape
-            )
-            .onFocusChanged {
-                scope.launch {
-                    if (readOnly) {
-                        focus.clearFocus()
-                        cancel()
-                    }
-                    if (it.isFocused) color.animateTo(colorScheme.primary)
-                    else {
-                        color.animateTo(Color.Transparent)
-                        onValueChange(value.onLoseFocusTransformation())
-                    }
-                    cancel()
-                }
-            }
-            .animateContentSize(),
-        value = value,
-        textStyle = textStyle,
-        onValueChange = {
-            onValueChange(it.formatText())
-        },
-        colors = TextFieldDefaults.textFieldColors(
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent
-        ),
-        shape = shape,
-        label = { Text(label, modifier = if (singleLine) Modifier else Modifier.offset(4.dp)) },
-        singleLine = singleLine,
-        keyboardOptions = keyboardOptions,
-        leadingIcon = { Icon(startIcon, null) },
-        trailingIcon = endIcon,
-        readOnly = readOnly,
-        visualTransformation = visualTransformation
+    val colors = TextFieldDefaults.textFieldColors(
+        unfocusedIndicatorColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent,
+        cursorColor = if (isError) colorScheme.error else colorScheme.primary,
+        focusedLabelColor = if (isError) colorScheme.error else colorScheme.primary,
+        focusedLeadingIconColor = if (isError) colorScheme.error else colorScheme.onSurfaceVariant,
+        unfocusedLeadingIconColor = if (isError) colorScheme.error else colorScheme.onSurfaceVariant,
+        unfocusedLabelColor = if (isError) colorScheme.error else colorScheme.onSurfaceVariant,
     )
 
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RoundedTextField(
-    modifier: Modifier = Modifier,
-    onValueChange: (String) -> Unit,
-    hint: String,
-    shape: Shape = RoundedCornerShape(4.dp),
-    value: String,
-    endIcon: (@Composable () -> Unit)? = null,
-    formatText: String.() -> String = { this },
-    textStyle: TextStyle = LocalTextStyle.current,
-    onLoseFocusTransformation: String.() -> String = { this },
-    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-    singleLine: Boolean = true,
-    readOnly: Boolean = false
-) {
-    val focus = LocalFocusManager.current
-    val color = remember { Animatable(initialValue = Color.Transparent) }
-    val colorScheme = MaterialTheme.colorScheme
     val scope = rememberCoroutineScope()
-
-    TextField(
-        modifier = modifier
-            .border(
-                width = 2.dp,
-                color = color.value,
-                shape = shape
-            )
-            .onFocusChanged {
-                scope.launch {
-                    if (readOnly) {
-                        focus.clearFocus()
-                        cancel()
-                    }
-                    if (it.isFocused) color.animateTo(colorScheme.primary)
-                    else {
-                        color.animateTo(Color.Transparent)
-                        onValueChange(value.onLoseFocusTransformation())
-                    }
+    LaunchedEffect(isError) {
+        color.animateTo(if (isError) colorScheme.error else colorScheme.primary)
+    }
+    val mergedModifier = Modifier
+        .fillMaxWidth()
+        .border(
+            width = 2.dp,
+            color = color.value,
+            shape = shape
+        )
+        .onFocusChanged {
+            scope.launch {
+                if (readOnly) {
+                    focus.clearFocus()
                     cancel()
                 }
+                if (it.isFocused) color.animateTo(if (isError) colorScheme.error else colorScheme.primary)
+                else {
+                    if (!isError) color.animateTo(Color.Transparent)
+                    onValueChange(value.onLoseFocusTransformation())
+                }
+                cancel()
             }
-            .animateContentSize(),
-        value = value,
-        textStyle = textStyle,
-        onValueChange = {
-            onValueChange(it.formatText())
-        },
-        colors = TextFieldDefaults.textFieldColors(
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent
-        ),
-        shape = shape,
-        placeholder = { Text(hint) },
-        singleLine = singleLine,
-        keyboardOptions = keyboardOptions,
-        trailingIcon = endIcon,
-        readOnly = readOnly
-    )
+        }
+        .animateContentSize()
 
+    Column(
+        modifier = modifier
+            .animateContentSize()
+            .clip(shape)
+            .shimmer(
+                visible = loading,
+                color = MaterialTheme.colorScheme.surfaceVariant.createSecondaryColor(0.1f)
+            )
+    ) {
+        if (startIcon != null) {
+            TextField(
+                modifier = mergedModifier,
+                value = value,
+                textStyle = textStyle,
+                onValueChange = {
+                    onValueChange(it.formatText())
+                },
+                colors = colors,
+                placeholder = { Text(hint) },
+                shape = shape,
+                label = {
+                    Text(
+                        label,
+                        modifier = if (singleLine) Modifier else Modifier.offset(4.dp)
+                    )
+                },
+                singleLine = singleLine,
+                keyboardOptions = keyboardOptions,
+                leadingIcon = { Icon(startIcon, null) },
+                trailingIcon = endIcon,
+                readOnly = readOnly,
+                visualTransformation = visualTransformation
+            )
+        } else {
+            TextField(
+                modifier = mergedModifier,
+                value = value,
+                textStyle = textStyle,
+                onValueChange = {
+                    onValueChange(it.formatText())
+                },
+                isError = isError,
+                colors = colors,
+                placeholder = { Text(hint) },
+                shape = shape,
+                label = {
+                    Text(
+                        label,
+                        modifier = if (singleLine) Modifier else Modifier.offset(4.dp)
+                    )
+                },
+                singleLine = singleLine,
+                keyboardOptions = keyboardOptions,
+                trailingIcon = endIcon,
+                readOnly = readOnly,
+                visualTransformation = visualTransformation
+            )
+        }
+        if (isError && !loading && error != null) {
+            Spacer(Modifier.height(6.dp))
+            ProvideTextStyle(
+                LocalTextStyle.current.copy(
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 12.sp
+                )
+            ) {
+                Row {
+                    Spacer(modifier = Modifier.width(15.dp))
+                    error()
+                    Spacer(modifier = Modifier.width(15.dp))
+                }
+            }
+        }
+    }
 }

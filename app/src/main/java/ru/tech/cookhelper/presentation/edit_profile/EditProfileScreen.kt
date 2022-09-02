@@ -22,12 +22,19 @@ import ru.tech.cookhelper.presentation.edit_profile.components.EditProfileItem
 import ru.tech.cookhelper.presentation.edit_profile.viewModel.EditProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTextField
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.registration_screen.isNotValid
+import ru.tech.cookhelper.presentation.registration_screen.isValid
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack: () -> Unit) {
     val showPassword = remember { mutableStateOf(false) }
+    val surname = viewModel.nameAndSurname.second
+    val name = viewModel.nameAndSurname.first
+    val email = viewModel.nickAndEmail.second
+    val nickname = viewModel.nickAndEmail.first
+
     Column(
         Modifier
             .navigationBarsPadding()
@@ -49,9 +56,9 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     startIcon = Icons.Outlined.FormatColorText,
-                    onValueChange = { viewModel.setTemp(name = it) },
+                    onValueChange = { viewModel.setTemp(name = it.trim()) },
                     label = stringResource(R.string.name),
-                    value = viewModel.nameAndSurname.first
+                    value = name
                 )
                 Spacer(Modifier.height(4.dp))
                 RoundedTextField(
@@ -59,9 +66,9 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     startIcon = Icons.Outlined.ShortText,
-                    onValueChange = { viewModel.setTemp(surname = it) },
+                    onValueChange = { viewModel.setTemp(surname = it.trim()) },
                     label = stringResource(R.string.surname),
-                    value = viewModel.nameAndSurname.second
+                    value = surname
                 )
                 Spacer(Modifier.height(8.dp))
                 Button(
@@ -80,20 +87,38 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    loading = viewModel.checkLoginState.isLoading,
+                    isError = viewModel.checkLoginState.error.isNotEmpty(),
+                    error = { Text(stringResource(R.string.nickname_rejected)) },
                     startIcon = Icons.Outlined.AlternateEmail,
-                    onValueChange = { viewModel.setTemp(nickname = it) },
+                    onValueChange = {
+                        viewModel.setTemp(nickname = it)
+                        viewModel.checkLoginForAvailability(it)
+                    },
                     label = stringResource(R.string.nick),
-                    value = viewModel.nickAndEmail.first
+                    value = nickname
                 )
                 Spacer(Modifier.height(4.dp))
                 RoundedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    loading = viewModel.checkEmailState.isLoading,
+                    isError = email.isEmpty() || email.isNotValid() || viewModel.checkEmailState.error.isNotEmpty(),
+                    error = {
+                        if (email.isNotEmpty() && email.isValid()) {
+                            Text(stringResource(R.string.email_rejected))
+                        } else if (email.isNotValid()) {
+                            Text(stringResource(R.string.bad_email))
+                        }
+                    },
                     startIcon = Icons.Outlined.Email,
-                    onValueChange = { viewModel.setTemp(email = it) },
+                    onValueChange = {
+                        viewModel.setTemp(email = it)
+                        if (it.isValid()) viewModel.checkEmailForAvailability(it)
+                    },
                     label = stringResource(R.string.email),
-                    value = viewModel.nickAndEmail.second
+                    value = email
                 )
                 Spacer(Modifier.height(8.dp))
                 PasswordField(

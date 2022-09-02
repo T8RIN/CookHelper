@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.core.Action
-import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginOrEmailForAvailability
+import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginOrEmailForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
 import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckLoginOrEmailState
@@ -27,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val registrationUseCase: RegistrationUseCase,
-    private val checkLoginOrEmailForAvailability: CheckLoginOrEmailForAvailability
+    private val checkLoginOrEmailForAvailabilityUseCase: CheckLoginOrEmailForAvailabilityUseCase
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private var checkLoginJob: Job? = null
@@ -50,7 +50,7 @@ class RegistrationViewModel @Inject constructor(
         checkLoginJob = viewModelScope.launch {
             delay(500)
             _checkLoginState.value = CheckLoginOrEmailState(isLoading = true)
-            when (val result = checkLoginOrEmailForAvailability(login)) {
+            when (val result = checkLoginOrEmailForAvailabilityUseCase(login)) {
                 is Action.Empty -> _checkLoginState.value =
                     CheckLoginOrEmailState(error = UIText.StringResource(result.status.getMessage()))
                 is Action.Error -> _checkLoginState.value =
@@ -68,7 +68,7 @@ class RegistrationViewModel @Inject constructor(
         checkEmailJob = viewModelScope.launch {
             delay(500)
             _checkEmailState.value = CheckLoginOrEmailState(isLoading = true)
-            when (val result = checkLoginOrEmailForAvailability(email)) {
+            when (val result = checkLoginOrEmailForAvailabilityUseCase(email)) {
                 is Action.Empty -> _checkEmailState.value =
                     CheckLoginOrEmailState(error = UIText.StringResource(result.status.getMessage()))
                 is Action.Error -> _checkEmailState.value =

@@ -21,8 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -260,16 +258,12 @@ fun RecipePostCreationScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Row {
-                            var timeHeight by remember { mutableStateOf(56.dp) }
-                            val density = LocalDensity.current
                             RoundedTextField(
                                 value = time,
                                 startIcon = Icons.Outlined.AvTimer,
                                 onValueChange = { time = it },
                                 label = stringResource(R.string.time),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(timeHeight),
+                                modifier = Modifier.weight(1f),
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Next,
                                     keyboardType = KeyboardType.Number
@@ -290,11 +284,7 @@ fun RecipePostCreationScreen(
                                 startIcon = Icons.Outlined.Restaurant,
                                 onValueChange = { calories = it },
                                 label = stringResource(R.string.calories),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .onSizeChanged {
-                                        timeHeight = with(density) { it.height.toDp() }
-                                    },
+                                modifier = Modifier.weight(1f),
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Next,
                                     keyboardType = KeyboardType.Number

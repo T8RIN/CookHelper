@@ -7,10 +7,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TabPosition
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
@@ -53,15 +55,17 @@ fun Modifier.squareSize(): Modifier = composed {
     modifier
 }
 
-fun Modifier.shimmer(visible: Boolean) = composed {
-    then(
-        Modifier.placeholder(
-            visible = visible,
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            highlight = PlaceholderHighlight.shimmer()
-        )
+@Composable
+fun Modifier.shimmer(
+    visible: Boolean,
+    color: Color = MaterialTheme.colorScheme.surfaceVariant
+) = then(
+    Modifier.placeholder(
+        visible = visible,
+        color = color,
+        highlight = PlaceholderHighlight.shimmer()
     )
-}
+)
 
 fun Modifier.navigationBarsLandscapePadding(): Modifier = composed {
     if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
