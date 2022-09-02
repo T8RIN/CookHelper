@@ -421,7 +421,7 @@ fun RecipePostCreationScreen(
             text = { Text(stringResource(R.string.change_ingredients)) }
         )
 
-        LaunchedEffect(imageUri) {
+        LaunchedEffect(dataList) {
             doneEnabled = !dataList.contains("")
         }
 
