@@ -25,10 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.blend
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.shimmer
+import ru.tech.cookhelper.presentation.ui.utils.provide
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoundedTextField(
     modifier: Modifier = Modifier,
@@ -48,26 +49,81 @@ fun RoundedTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     singleLine: Boolean = true,
-    readOnly: Boolean = false
+    readOnly: Boolean = false,
+    colors: TextFieldColors = RoundedTextFieldColors(isError)
+) {
+    val labelImpl = @Composable {
+        Text(
+            text = label,
+            modifier = if (singleLine) Modifier else Modifier.offset(4.dp)
+        )
+    }
+    val hintImpl = @Composable {
+        Text(text = hint, modifier = Modifier.padding(start = 4.dp))
+    }
+    val leadingIconImpl = @Composable {
+        Icon(
+            imageVector = startIcon!!,
+            contentDescription = null
+        )
+    }
+
+    RoundedTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = { onValueChange(it.formatText()) },
+        textStyle = textStyle,
+        colors = colors,
+        shape = shape,
+        singleLine = singleLine,
+        readOnly = readOnly,
+        keyboardOptions = keyboardOptions,
+        visualTransformation = visualTransformation,
+        endIcon = endIcon,
+        startIcon = if (startIcon != null) leadingIconImpl else null,
+        label = if (label.isNotEmpty()) labelImpl else null,
+        hint = if (hint.isNotEmpty()) hintImpl else null,
+        isError = isError,
+        loading = loading,
+        error = error,
+        formatText = formatText,
+        onLoseFocusTransformation = onLoseFocusTransformation,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RoundedTextField(
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit,
+    label: (@Composable () -> Unit)? = null,
+    hint: (@Composable () -> Unit)? = null,
+    shape: Shape = RoundedCornerShape(4.dp),
+    startIcon: (@Composable () -> Unit)? = null,
+    value: String,
+    isError: Boolean = false,
+    loading: Boolean = false,
+    error: (@Composable () -> Unit)? = null,
+    endIcon: (@Composable () -> Unit)? = null,
+    formatText: String.() -> String = { this },
+    textStyle: TextStyle = LocalTextStyle.current,
+    onLoseFocusTransformation: String.() -> String = { this },
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    singleLine: Boolean = true,
+    readOnly: Boolean = false,
+    colors: TextFieldColors = RoundedTextFieldColors(isError)
 ) {
     val focus = LocalFocusManager.current
 
     val color = remember { Animatable(initialValue = Color.Transparent) }
     val colorScheme = MaterialTheme.colorScheme
-    val colors = TextFieldDefaults.textFieldColors(
-        unfocusedIndicatorColor = Color.Transparent,
-        focusedIndicatorColor = Color.Transparent,
-        cursorColor = if (isError) colorScheme.error else colorScheme.primary,
-        focusedLabelColor = if (isError) colorScheme.error else colorScheme.primary,
-        focusedLeadingIconColor = if (isError) colorScheme.error else colorScheme.onSurfaceVariant,
-        unfocusedLeadingIconColor = if (isError) colorScheme.error else colorScheme.onSurfaceVariant,
-        unfocusedLabelColor = if (isError) colorScheme.error else colorScheme.onSurfaceVariant,
-    )
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(isError) {
         color.animateTo(if (isError) colorScheme.error else colorScheme.primary)
     }
+
     val mergedModifier = Modifier
         .fillMaxWidth()
         .border(
@@ -100,55 +156,22 @@ fun RoundedTextField(
                 color = MaterialTheme.colorScheme.surfaceVariant.createSecondaryColor(0.1f)
             )
     ) {
-        if (startIcon != null) {
-            TextField(
-                modifier = mergedModifier,
-                value = value,
-                textStyle = textStyle,
-                onValueChange = {
-                    onValueChange(it.formatText())
-                },
-                colors = colors,
-                placeholder = { Text(hint) },
-                shape = shape,
-                label = {
-                    Text(
-                        label,
-                        modifier = if (singleLine) Modifier else Modifier.offset(4.dp)
-                    )
-                },
-                singleLine = singleLine,
-                keyboardOptions = keyboardOptions,
-                leadingIcon = { Icon(startIcon, null) },
-                trailingIcon = endIcon,
-                readOnly = readOnly,
-                visualTransformation = visualTransformation
-            )
-        } else {
-            TextField(
-                modifier = mergedModifier,
-                value = value,
-                textStyle = textStyle,
-                onValueChange = {
-                    onValueChange(it.formatText())
-                },
-                isError = isError,
-                colors = colors,
-                placeholder = { Text(hint) },
-                shape = shape,
-                label = {
-                    Text(
-                        label,
-                        modifier = if (singleLine) Modifier else Modifier.offset(4.dp)
-                    )
-                },
-                singleLine = singleLine,
-                keyboardOptions = keyboardOptions,
-                trailingIcon = endIcon,
-                readOnly = readOnly,
-                visualTransformation = visualTransformation
-            )
-        }
+        TextField(
+            modifier = mergedModifier,
+            value = value,
+            onValueChange = { onValueChange(it.formatText()) },
+            textStyle = textStyle,
+            colors = colors,
+            shape = shape,
+            singleLine = singleLine,
+            readOnly = readOnly,
+            keyboardOptions = keyboardOptions,
+            visualTransformation = visualTransformation,
+            trailingIcon = endIcon,
+            leadingIcon = startIcon,
+            label = label,
+            placeholder = hint
+        )
         if (isError && !loading && error != null) {
             Spacer(Modifier.height(6.dp))
             ProvideTextStyle(
@@ -166,3 +189,21 @@ fun RoundedTextField(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RoundedTextFieldColors(isError: Boolean): TextFieldColors =
+    MaterialTheme.colorScheme.provide {
+        TextFieldDefaults.textFieldColors(
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            cursorColor = if (isError) error else primary,
+            focusedLabelColor = if (isError) error else primary,
+            focusedLeadingIconColor = if (isError) error else onSurfaceVariant,
+            unfocusedLeadingIconColor = if (isError) error else onSurfaceVariant,
+            focusedTrailingIconColor = if (isError) error else onSurfaceVariant,
+            unfocusedTrailingIconColor = if (isError) error else onSurfaceVariant,
+            unfocusedLabelColor = if (isError) error else onSurfaceVariant,
+            containerColor = if (isError) surfaceVariant.blend(error, 0.1f) else surfaceVariant
+        )
+    }

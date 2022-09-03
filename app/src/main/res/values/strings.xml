@@ -146,4 +146,5 @@
     <string name="current_password">Текущий пароль</string>
     <string name="new_password">Новый пароль</string>
     <string name="bad_email">Некорректная почта</string>
+    <string name="passwords_doesnt_match">Пароли не совпадают</string>
 </resources>

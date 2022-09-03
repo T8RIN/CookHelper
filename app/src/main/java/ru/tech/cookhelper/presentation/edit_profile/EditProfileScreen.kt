@@ -24,6 +24,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTe
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.registration_screen.isNotValid
 import ru.tech.cookhelper.presentation.registration_screen.isValid
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,6 +77,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    enabled = name.isNotEmpty() && surname.isNotEmpty()
                 ) {
                     Text(stringResource(R.string.save))
                 }
@@ -136,6 +138,12 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    enabled = password.isNotEmpty() && email.isValid()
+                            && viewModel.checkLoginState.error.isEmpty()
+                            && viewModel.checkEmailState.error.isEmpty()
+                            && !viewModel.checkEmailState.isLoading
+                            && !viewModel.checkLoginState.isLoading
+                            && nickname.isNotEmpty()
                 ) {
                     Text(stringResource(R.string.save))
                 }
@@ -145,6 +153,9 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                 var password by rememberSaveable { mutableStateOf("") }
                 var repeatPassword by rememberSaveable { mutableStateOf("") }
                 var oldPassword by rememberSaveable { mutableStateOf("") }
+                val canSaveNewPassword by computedStateOf {
+                    password == repeatPassword && oldPassword.isNotEmpty()
+                }
                 PasswordField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -161,6 +172,10 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                         .padding(horizontal = 16.dp),
                     onValueChange = { repeatPassword = it },
                     label = stringResource(R.string.repeat_password),
+                    isError = password != repeatPassword,
+                    error = {
+                        Text(stringResource(R.string.passwords_doesnt_match))
+                    },
                     value = repeatPassword,
                     showPassword = showPassword
                 )
@@ -180,6 +195,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    enabled = canSaveNewPassword
                 ) {
                     Text(stringResource(R.string.save))
                 }
@@ -201,6 +217,8 @@ private fun PasswordField(
     modifier: Modifier = Modifier,
     value: String,
     label: String,
+    isError: Boolean = false,
+    error: (@Composable () -> Unit)? = null,
     showPassword: MutableState<Boolean>,
     onValueChange: (String) -> Unit
 ) {
@@ -218,6 +236,8 @@ private fun PasswordField(
                 )
             }
         },
+        error = error,
+        isError = isError,
         value = value
     )
 }
