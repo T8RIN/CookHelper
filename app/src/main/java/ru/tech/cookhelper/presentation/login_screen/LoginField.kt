@@ -28,7 +28,9 @@ import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Loading
+import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.login_screen.viewModel.LoginViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
@@ -79,8 +81,9 @@ fun LoginField(
         Column {
             if (isLoading) Loading(Modifier.fillMaxWidth())
             else {
-                OutlinedTextField(
+                CozyTextField(
                     value = login,
+                    appearance = TextFieldAppearance.Outlined,
                     onValueChange = { login = it },
                     label = { Text(stringResource(R.string.email_or_nick)) },
                     singleLine = true,
@@ -90,7 +93,7 @@ fun LoginField(
                         imeAction = ImeAction.Next
                     ),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
-                    trailingIcon = {
+                    endIcon = {
                         if (login.isNotBlank())
                             IconButton(onClick = { login = "" }) {
                                 Icon(Icons.Filled.Clear, null)
@@ -98,8 +101,9 @@ fun LoginField(
                     }
                 )
                 Spacer(Modifier.size(8.dp * scaleModifier))
-                OutlinedTextField(
+                CozyTextField(
                     value = password,
+                    appearance = TextFieldAppearance.Outlined,
                     onValueChange = { password = it },
                     label = { Text(stringResource(R.string.password)) },
                     singleLine = true,
@@ -114,7 +118,7 @@ fun LoginField(
                     }),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
+                    endIcon = {
                         IconButton(onClick = {
                             isPasswordVisible = !isPasswordVisible
                         }) {

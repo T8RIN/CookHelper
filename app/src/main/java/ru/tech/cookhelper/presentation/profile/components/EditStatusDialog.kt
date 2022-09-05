@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.profile.components
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
@@ -13,6 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
+import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
@@ -34,15 +35,15 @@ fun EditStatusDialog(currentStatus: String, onDone: (newStatus: String) -> Unit)
             Column {
                 Spacer(Modifier.height(4.dp))
                 CompositionLocalProvider(LocalTextStyle provides textStyle) {
-                    OutlinedTextField(
+                    CozyTextField(
                         value = status,
+                        appearance = TextFieldAppearance.Outlined,
                         onValueChange = {
                             status = it
                         },
                         label = {
                             Text(stringResource(R.string.status))
-                        },
-                        modifier = Modifier.animateContentSize()
+                        }
                     )
                 }
                 Spacer(Modifier.height(4.dp))

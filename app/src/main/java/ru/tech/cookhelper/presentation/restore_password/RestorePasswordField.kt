@@ -31,7 +31,9 @@ import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Loading
+import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
@@ -94,8 +96,9 @@ fun RestorePasswordField(
                 RestoreState.Login -> {
                     BackHandler { authController.goBack() }
 
-                    OutlinedTextField(
+                    CozyTextField(
                         value = login,
+                        appearance = TextFieldAppearance.Outlined,
                         onValueChange = { login = it },
                         label = { Text(stringResource(R.string.email_or_nick)) },
                         singleLine = true,
@@ -111,7 +114,7 @@ fun RestorePasswordField(
                             }
                         }),
                         modifier = Modifier.width(TextFieldDefaults.MinWidth),
-                        trailingIcon = {
+                        endIcon = {
                             if (login.isNotBlank())
                                 IconButton(onClick = { login = "" }) {
                                     Icon(Icons.Filled.Clear, null)
@@ -122,8 +125,9 @@ fun RestorePasswordField(
                 RestoreState.Password -> {
                     BackHandler { viewModel.goBackPasswordRestore() }
 
-                    OutlinedTextField(
+                    CozyTextField(
                         value = password,
+                        appearance = TextFieldAppearance.Outlined,
                         onValueChange = { password = it },
                         label = { Text(stringResource(R.string.password)) },
                         singleLine = true,
@@ -134,7 +138,7 @@ fun RestorePasswordField(
                         ),
                         modifier = Modifier.width(TextFieldDefaults.MinWidth),
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
+                        endIcon = {
                             IconButton(onClick = {
                                 isPasswordVisible = !isPasswordVisible
                             }) {
@@ -146,8 +150,9 @@ fun RestorePasswordField(
                         }
                     )
                     Spacer(Modifier.size(8.dp * scaleModifier))
-                    OutlinedTextField(
+                    CozyTextField(
                         value = passwordRepeat,
+                        appearance = TextFieldAppearance.Outlined,
                         onValueChange = { passwordRepeat = it },
                         label = { Text(stringResource(R.string.repeat_password)) },
                         singleLine = true,
@@ -158,7 +163,7 @@ fun RestorePasswordField(
                         ),
                         modifier = Modifier.width(TextFieldDefaults.MinWidth),
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
+                        endIcon = {
                             IconButton(onClick = {
                                 isPasswordVisible = !isPasswordVisible
                             }) {

@@ -54,7 +54,7 @@ class EditProfileViewModel @Inject constructor(
         checkLoginJob?.cancel()
         checkLoginJob = viewModelScope.launch {
             delay(500)
-            if (login != userState.user?.nickname) {
+            if (login != _userState.value.user?.nickname) {
                 _checkLoginState.value = CheckLoginOrEmailState(isLoading = true)
                 when (val result = checkLoginOrEmailForAvailabilityUseCase(login)) {
                     is Action.Empty -> _checkLoginState.value =
@@ -74,7 +74,7 @@ class EditProfileViewModel @Inject constructor(
         checkEmailJob?.cancel()
         checkEmailJob = viewModelScope.launch {
             delay(500)
-            if (email != userState.user?.email) {
+            if (email != _userState.value.user?.email) {
                 _checkEmailState.value = CheckLoginOrEmailState(isLoading = true)
                 when (val result = checkLoginOrEmailForAvailabilityUseCase(email)) {
                     is Action.Empty -> _checkEmailState.value =

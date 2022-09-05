@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Product
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
+import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
@@ -107,11 +109,13 @@ fun PickProductsWithMeasuresDialog(
                         }
                     }
                 } else {
-                    RoundedTextField(
+                    CozyTextField(
                         modifier = Modifier.fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 16.sp),
                         onValueChange = { allProductsSearch = it },
-                        hint = stringResource(R.string.search_here),
+                        hint = {
+                            Text(stringResource(R.string.search_here))
+                        },
                         value = allProductsSearch,
                         endIcon = {
                             AnimatedVisibility(
@@ -170,10 +174,11 @@ fun PickProductsWithMeasuresDialog(
                                                     .padding(12.dp)
                                                     .weight(1f)
                                             )
-                                            OutlinedTextField(
+                                            CozyTextField(
                                                 onValueChange = { str ->
                                                     localAmounts[it.id] = str.stripToDouble()
                                                 },
+                                                appearance = TextFieldAppearance.Outlined,
                                                 value = localAmounts[it.id] ?: "",
                                                 textStyle = LocalTextStyle.current.copy(
                                                     fontSize = 16.sp,
@@ -183,7 +188,6 @@ fun PickProductsWithMeasuresDialog(
                                                     keyboardType = KeyboardType.Number,
                                                     imeAction = ImeAction.Next
                                                 ),
-                                                singleLine = true,
                                                 label = { Text(it.mimeType) },
                                                 modifier = Modifier
                                                     .width(TextFieldDefaults.MinHeight * 1.5f)

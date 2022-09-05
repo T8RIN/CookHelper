@@ -3,8 +3,10 @@ package ru.tech.cookhelper.presentation.recipe_post_creation.components
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -48,14 +50,18 @@ fun RoundedTextField(
     onLoseFocusTransformation: String.() -> String = { this },
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
-    colors: TextFieldColors = RoundedTextFieldColors(isError)
+    colors: TextFieldColors = RoundedTextFieldColors(isError),
+    enabled: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     val labelImpl = @Composable {
         Text(
             text = label,
-            modifier = if (singleLine) Modifier else Modifier.offset(4.dp)
+            modifier = if (singleLine) Modifier else Modifier.offset(y = 4.dp)
         )
     }
     val hintImpl = @Composable {
@@ -88,6 +94,10 @@ fun RoundedTextField(
         error = error,
         formatText = formatText,
         onLoseFocusTransformation = onLoseFocusTransformation,
+        keyboardActions = keyboardActions,
+        enabled = enabled,
+        maxLines = maxLines,
+        interactionSource = interactionSource
     )
 }
 
@@ -110,9 +120,13 @@ fun RoundedTextField(
     onLoseFocusTransformation: String.() -> String = { this },
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
-    colors: TextFieldColors = RoundedTextFieldColors(isError)
+    colors: TextFieldColors = RoundedTextFieldColors(isError),
+    enabled: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     val focus = LocalFocusManager.current
 
@@ -170,7 +184,11 @@ fun RoundedTextField(
             trailingIcon = endIcon,
             leadingIcon = startIcon,
             label = label,
-            placeholder = hint
+            placeholder = hint,
+            keyboardActions = keyboardActions,
+            enabled = enabled,
+            maxLines = maxLines,
+            interactionSource = interactionSource
         )
         if (isError && !loading && error != null) {
             Spacer(Modifier.height(6.dp))

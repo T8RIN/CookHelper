@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTextField
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.observeExpansion
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
@@ -44,9 +44,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 
-@OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun RecipePostCreationScreen(
     viewModel: RecipePostCreationViewModel = hiltViewModel(),
@@ -179,13 +177,12 @@ fun RecipePostCreationScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(modifier = Modifier.height(8.dp))
-                        RoundedTextField(
+                        CozyTextField(
                             value = label,
                             onValueChange = { label = it },
                             startIcon = Icons.Outlined.FontDownload,
                             label = stringResource(R.string.recipe_headline),
                             modifier = Modifier.fillMaxWidth(),
-                            singleLine = false,
                             shape = RoundedCornerShape(24.dp),
                             textStyle = TextStyle(
                                 fontWeight = FontWeight.SemiBold,
@@ -243,7 +240,7 @@ fun RecipePostCreationScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        RoundedTextField(
+                        CozyTextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = viewModel.products.joinToString(
                                 separator = "\n",
@@ -252,14 +249,14 @@ fun RecipePostCreationScreen(
                             onValueChange = {},
                             shape = RoundedCornerShape(24.dp),
                             readOnly = true,
-                            singleLine = false,
                             label = stringResource(R.string.ingredients),
                             startIcon = Icons.Outlined.ProductMeasure
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Row {
-                            RoundedTextField(
+                            CozyTextField(
                                 value = time,
+                                singleLine = true,
                                 startIcon = Icons.Outlined.AvTimer,
                                 onValueChange = { time = it },
                                 label = stringResource(R.string.time),
@@ -279,8 +276,9 @@ fun RecipePostCreationScreen(
                                 }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            RoundedTextField(
+                            CozyTextField(
                                 value = calories,
+                                singleLine = true,
                                 startIcon = Icons.Outlined.Restaurant,
                                 onValueChange = { calories = it },
                                 label = stringResource(R.string.calories),
@@ -301,8 +299,9 @@ fun RecipePostCreationScreen(
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Row {
-                            RoundedTextField(
+                            CozyTextField(
                                 value = proteins,
+                                singleLine = true,
                                 startIcon = Icons.Outlined.Egg,
                                 onValueChange = { proteins = it },
                                 label = stringResource(R.string.proteins),
@@ -315,8 +314,9 @@ fun RecipePostCreationScreen(
                                 onLoseFocusTransformation = { removeSuffix(".") }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            RoundedTextField(
+                            CozyTextField(
                                 value = fats,
+                                singleLine = true,
                                 startIcon = Icons.Outlined.OilBarrel,
                                 onValueChange = { fats = it },
                                 label = stringResource(R.string.fats),
@@ -330,13 +330,12 @@ fun RecipePostCreationScreen(
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        RoundedTextField(
+                        CozyTextField(
                             value = carbohydrates,
                             startIcon = Icons.Outlined.Cake,
                             onValueChange = { carbohydrates = it },
                             label = stringResource(R.string.carbohydrates),
                             modifier = Modifier.fillMaxWidth(),
-                            singleLine = false,
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number
@@ -345,12 +344,11 @@ fun RecipePostCreationScreen(
                             onLoseFocusTransformation = { removeSuffix(".") }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        RoundedTextField(
+                        CozyTextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = category,
                             onValueChange = {},
                             readOnly = true,
-                            singleLine = false,
                             label = stringResource(R.string.category),
                             startIcon = Icons.Outlined.Category,
                             endIcon = {
@@ -370,7 +368,7 @@ fun RecipePostCreationScreen(
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        RoundedTextField(
+                        CozyTextField(
                             value = steps,
                             startIcon = Icons.Outlined.Notes,
                             onValueChange = { steps = it },
@@ -382,7 +380,6 @@ fun RecipePostCreationScreen(
                                 bottomStart = 24.dp,
                                 bottomEnd = 24.dp
                             ),
-                            singleLine = false,
                             keyboardOptions = KeyboardOptions.Default
                         )
                     }

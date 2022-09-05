@@ -5,7 +5,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +20,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -33,7 +31,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -114,7 +114,6 @@ fun PostCreationScreen(
             }
         )
 
-        val shape = RoundedCornerShape(4.dp)
         val paddingValues = PaddingValues(start = 8.dp, end = 8.dp, bottom = 16.dp)
 
         val resultLauncher = rememberLauncherForActivityResult(
@@ -133,20 +132,13 @@ fun PostCreationScreen(
             contentPadding = WindowInsets.navigationBars.asPaddingValues(),
         ) {
             item {
-                TextField(
+                CozyTextField(
                     value = label,
-                    onValueChange = {
-                        label = it
-                    },
+                    appearance = TextFieldAppearance.Rounded,
+                    onValueChange = { label = it },
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp, top = 16.dp)
-                        .fillMaxWidth()
-                        .animateContentSize(),
-                    colors = TextFieldDefaults.textFieldColors(
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent
-                    ),
-                    shape = shape,
+                        .fillMaxWidth(),
                     label = {
                         Text(
                             stringResource(R.string.enter_headline),
@@ -157,20 +149,13 @@ fun PostCreationScreen(
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                 )
 
-                TextField(
+                CozyTextField(
                     value = content,
-                    onValueChange = {
-                        content = it
-                    },
+                    appearance = TextFieldAppearance.Rounded,
+                    onValueChange = { content = it },
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 32.dp)
-                        .fillMaxWidth()
-                        .animateContentSize(),
-                    colors = TextFieldDefaults.textFieldColors(
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent
-                    ),
-                    shape = shape,
+                        .fillMaxWidth(),
                     label = {
                         Text(
                             stringResource(R.string.whats_new),

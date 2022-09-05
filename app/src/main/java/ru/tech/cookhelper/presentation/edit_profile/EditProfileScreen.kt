@@ -17,10 +17,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.edit_profile.components.EditProfileItem
 import ru.tech.cookhelper.presentation.edit_profile.viewModel.EditProfileViewModel
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTextField
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.registration_screen.isNotValid
 import ru.tech.cookhelper.presentation.registration_screen.isValid
@@ -52,7 +52,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
         )
         Column(Modifier.verticalScroll(rememberScrollState())) {
             EditProfileItem(text = stringResource(R.string.personal_info)) {
-                RoundedTextField(
+                CozyTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -62,7 +62,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     value = name
                 )
                 Spacer(Modifier.height(4.dp))
-                RoundedTextField(
+                CozyTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -85,7 +85,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
             Separator()
             EditProfileItem(text = stringResource(R.string.account_info)) {
                 var password by rememberSaveable { mutableStateOf("") }
-                RoundedTextField(
+                CozyTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -97,11 +97,12 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                         viewModel.setTemp(nickname = it)
                         viewModel.checkLoginForAvailability(it)
                     },
+                    singleLine = true,
                     label = stringResource(R.string.nick),
                     value = nickname
                 )
                 Spacer(Modifier.height(4.dp))
-                RoundedTextField(
+                CozyTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -114,6 +115,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                             Text(stringResource(R.string.bad_email))
                         }
                     },
+                    singleLine = true,
                     startIcon = Icons.Outlined.Email,
                     onValueChange = {
                         viewModel.setTemp(email = it)
@@ -222,12 +224,14 @@ private fun PasswordField(
     showPassword: MutableState<Boolean>,
     onValueChange: (String) -> Unit
 ) {
-    RoundedTextField(
+    CozyTextField(
         modifier = modifier,
-        startIcon = Icons.Outlined.Password,
+        startIcon = {
+            Icon(Icons.Outlined.Password, null)
+        },
         onValueChange = onValueChange,
         visualTransformation = if (!showPassword.value) PasswordVisualTransformation() else VisualTransformation.None,
-        label = label,
+        label = { Text(label) },
         endIcon = {
             IconButton(onClick = { showPassword.value = !showPassword.value }) {
                 Icon(

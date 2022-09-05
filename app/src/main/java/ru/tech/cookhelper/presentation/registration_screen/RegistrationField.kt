@@ -33,8 +33,9 @@ import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Loading
-import ru.tech.cookhelper.presentation.app.components.StrokeTextField
+import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.registration_screen.viewModel.RegistrationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
@@ -97,8 +98,9 @@ fun RegistrationField(
         ) {
             if (isLoading) Loading(Modifier.fillMaxWidth())
             else {
-                OutlinedTextField(
+                CozyTextField(
                     value = name,
+                    appearance = TextFieldAppearance.Outlined,
                     onValueChange = { name = it.trim() },
                     label = { Text(stringResource(R.string.name)) },
                     singleLine = true,
@@ -108,7 +110,7 @@ fun RegistrationField(
                         imeAction = ImeAction.Next
                     ),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
-                    trailingIcon = {
+                    endIcon = {
                         if (name.isNotBlank())
                             IconButton(onClick = { name = "" }) {
                                 Icon(Icons.Filled.Clear, null)
@@ -116,8 +118,9 @@ fun RegistrationField(
                     }
                 )
                 Spacer(Modifier.size(8.dp * scaleModifier))
-                OutlinedTextField(
+                CozyTextField(
                     value = surname,
+                    appearance = TextFieldAppearance.Outlined,
                     onValueChange = { surname = it.trim() },
                     label = { Text(stringResource(R.string.surname)) },
                     singleLine = true,
@@ -127,7 +130,7 @@ fun RegistrationField(
                         imeAction = ImeAction.Next
                     ),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
-                    trailingIcon = {
+                    endIcon = {
                         if (surname.isNotBlank())
                             IconButton(onClick = { surname = "" }) {
                                 Icon(Icons.Filled.Clear, null)
@@ -135,10 +138,14 @@ fun RegistrationField(
                     }
                 )
                 Spacer(Modifier.size(8.dp * scaleModifier))
-                StrokeTextField(
+                CozyTextField(
                     value = nick,
+                    appearance = TextFieldAppearance.Outlined,
                     loading = viewModel.checkLoginState.isLoading,
-                    onValueChange = { nick = it; viewModel.checkLoginForAvailability(it) },
+                    onValueChange = {
+                        nick = it
+                        if (it.isNotEmpty()) viewModel.checkLoginForAvailability(it)
+                    },
                     label = { Text(stringResource(R.string.nick)) },
                     singleLine = true,
                     isError = nick.isEmpty() || viewModel.checkLoginState.error.isNotEmpty(),
@@ -154,7 +161,7 @@ fun RegistrationField(
                         imeAction = ImeAction.Next
                     ),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
-                    trailingIcon = {
+                    endIcon = {
                         if (nick.isNotBlank()) {
                             IconButton(onClick = { nick = "" }) {
                                 Icon(Icons.Filled.Clear, null)
@@ -165,29 +172,30 @@ fun RegistrationField(
                 AnimatedVisibility(name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty()) {
                     Column {
                         Spacer(Modifier.size(8.dp * scaleModifier))
-                        StrokeTextField(
+                        CozyTextField(
                             value = email,
+                            appearance = TextFieldAppearance.Outlined,
                             loading = viewModel.checkEmailState.isLoading,
                             onValueChange = {
-                                email =
-                                    it; if (email.isValid()) viewModel.checkEmailForAvailability(it)
+                                email = it
+                                if (email.isValid()) viewModel.checkEmailForAvailability(it)
                             },
                             label = { Text(stringResource(R.string.email)) },
                             singleLine = true,
                             isError = email.isEmpty() || email.isNotValid() || viewModel.checkEmailState.error.isNotEmpty(),
                             error = {
-                                if (email.isNotEmpty() && email.isValid()) Text(
-                                    stringResource(
-                                        R.string.email_rejected
-                                    ), color = MaterialTheme.colorScheme.error, fontSize = 12.sp
-                                )
+                                if (email.isNotEmpty() && email.isValid()) {
+                                    Text(stringResource(R.string.email_rejected))
+                                } else if (email.isNotValid()) {
+                                    Text(stringResource(R.string.bad_email))
+                                }
                             },
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Next
                             ),
                             modifier = Modifier.width(TextFieldDefaults.MinWidth),
-                            trailingIcon = {
+                            endIcon = {
                                 if (email.isNotBlank()) {
                                     IconButton(onClick = { email = "" }) {
                                         Icon(Icons.Filled.Clear, null)
@@ -196,7 +204,7 @@ fun RegistrationField(
                             }
                         )
                         Spacer(Modifier.size(8.dp))
-                        StrokeTextField(
+                        CozyTextField(
                             value = password,
                             onValueChange = { password = it },
                             label = { Text(stringResource(R.string.password)) },
@@ -211,13 +219,14 @@ fun RegistrationField(
                                     )
                                 }
                             },
+                            appearance = TextFieldAppearance.Outlined,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Next
                             ),
                             modifier = Modifier.width(TextFieldDefaults.MinWidth),
                             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            trailingIcon = {
+                            endIcon = {
                                 IconButton(onClick = {
                                     isPasswordVisible = !isPasswordVisible
                                 }) {
@@ -229,8 +238,9 @@ fun RegistrationField(
                             }
                         )
                         Spacer(Modifier.size(8.dp * scaleModifier))
-                        OutlinedTextField(
+                        CozyTextField(
                             value = passwordRepeat,
+                            appearance = TextFieldAppearance.Outlined,
                             onValueChange = { passwordRepeat = it },
                             label = { Text(stringResource(R.string.repeat_password)) },
                             singleLine = true,
@@ -249,7 +259,7 @@ fun RegistrationField(
                                 )
                             }),
                             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            trailingIcon = {
+                            endIcon = {
                                 IconButton(onClick = {
                                     isPasswordVisible = !isPasswordVisible
                                 }) {
