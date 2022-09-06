@@ -3,12 +3,14 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -42,9 +44,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
-    val topAppBarActions: MutableState<(@Composable RowScope.() -> Unit)?> = remember {
-        mutableStateOf(null)
-    }
+    val topAppBarActions = rememberTopAppBarActions()
     LaunchedEffect(screenController.currentDestination) {
         topAppBarActions.clearActions()
     }
@@ -63,9 +63,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     ) {
         ProKitchenTheme {
             BackHandler {
-                dialogController.show(
-                    Dialog.Exit(onExit = { activity?.finishAffinity() })
-                )
+                dialogController.show(Dialog.Exit(onExit = { activity?.finishAffinity() }))
             }
 
             Surface(
