@@ -9,21 +9,22 @@ val LocalTopAppBarActions = compositionLocalOf {
 }
 
 @Composable
-operator fun MutableState<TopAppBarActions?>.invoke(rowScope: RowScope) {
+operator fun TopAppBarActionsState.invoke(rowScope: RowScope) {
     this.value?.invoke(rowScope)
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun MutableState<TopAppBarActions?>.setActions(actions: TopAppBarActions?) {
+fun TopAppBarActionsState.setActions(actions: TopAppBarActions?) {
     LaunchedEffect(Unit) { value = actions }
 }
 
-fun MutableState<TopAppBarActions?>.clearActions() {
+fun TopAppBarActionsState.clearActions() {
     value = null
 }
 
 typealias TopAppBarActions = @Composable RowScope.() -> Unit
+typealias TopAppBarActionsState = MutableState<TopAppBarActions?>
 
 @Composable
 fun rememberTopAppBarActions(

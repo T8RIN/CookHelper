@@ -5,13 +5,18 @@ import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.navController
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
+import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 
 val LocalDialogController = compositionLocalOf { navController<Dialog>(Dialog.None) }
 
-fun NavController<Dialog>.show(dialog: Dialog) = navigate(dialog)
+fun DialogController.show(dialog: Dialog) {
+    if (currentDialog::class.name != dialog::class.name) navigate(dialog)
+}
 
-fun NavController<Dialog>.close() = pop()
+fun DialogController.close() = pop()
 
-inline val NavController<Dialog>.currentDialog: Dialog
+inline val DialogController.currentDialog: Dialog
     get() = currentDestination ?: Dialog.None
+
+typealias DialogController = NavController<Dialog>
