@@ -13,7 +13,7 @@ An endless recipe feed will keep you entertained, chat on the forum for cooking 
 </p>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/52178347/189685955-c8bae21c-28f6-4ec2-8eed-85924fbe2b70.png"/>
+<img src="https://user-images.githubusercontent.com/52178347/189712634-ff517d5f-26e6-4097-b8fc-43a65fb3e7d7.png"/>
 </p>
 
 ## Download
