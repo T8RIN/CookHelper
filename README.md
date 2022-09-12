@@ -7,10 +7,13 @@
   <a href="https://github.com/t8rin"><img alt="Profile" src="https://img.shields.io/badge/Github-T8RIN-002200?logo=github&logoColor=white&style=for-the-badge"/></a> 
 </p>
 
-
 <p align="">  
 CookHelper is an application that will allow you to cook a delicious dish from an existing recipe book or create your own to share it with the whole world!
 An endless recipe feed will keep you entertained, chat on the forum for cooking tips, and decorate your page with colorful posts to get a ton of likes! 
+</p>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/52178347/189685955-c8bae21c-28f6-4ec2-8eed-85924fbe2b70.png"/>
 </p>
 
 ## Download
