@@ -87,17 +87,17 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.3.0-beta02")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.1-alpha")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.26.1-alpha")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.1-alpha")
-    implementation("com.google.accompanist:accompanist-pager:0.26.1-alpha")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.1-alpha")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.2-beta")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.26.2-beta")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.2-beta")
+    implementation("com.google.accompanist:accompanist-pager:0.26.2-beta")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.2-beta")
 
     //Coil
-    implementation("io.coil-kt:coil:2.2.0")
-    implementation("io.coil-kt:coil-compose:2.2.0")
-    implementation("io.coil-kt:coil-gif:2.2.0")
-    implementation("io.coil-kt:coil-svg:2.2.0")
+    implementation("io.coil-kt:coil:2.2.1")
+    implementation("io.coil-kt:coil-compose:2.2.1")
+    implementation("io.coil-kt:coil-gif:2.2.1")
+    implementation("io.coil-kt:coil-svg:2.2.1")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
