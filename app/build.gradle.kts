@@ -78,8 +78,8 @@ dependencies {
     //Compose
     implementation("androidx.activity:activity-compose:1.6.0-rc02")
     implementation("androidx.compose.ui:ui:1.3.0-beta02")
-    implementation("androidx.compose.material3:material3:1.0.0-beta02")
-    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-beta02")
+    implementation("androidx.compose.material3:material3:1.0.0-beta01")
+    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-beta01")
     implementation("androidx.compose.material:material-icons-core:1.3.0-beta02")
     implementation("androidx.compose.material:material-icons-extended:1.3.0-beta02")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha02")

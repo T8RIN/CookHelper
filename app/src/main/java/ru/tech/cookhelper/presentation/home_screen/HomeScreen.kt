@@ -13,8 +13,10 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tech.cookhelper.presentation.app.components.Placeholder
+import ru.tech.cookhelper.presentation.forum_screen.ForumScreen
 import ru.tech.cookhelper.presentation.home_screen.components.BottomNavigationBar
 import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.setPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.navBarList
@@ -41,7 +43,7 @@ fun HomeScreen(onTitleChange: (newTitle: UIText) -> Unit) {
         },
         snackbarHost = { SnackbarHost(LocalSnackbarHost.current) }
     ) { contentPadding ->
-        Box(Modifier.padding(contentPadding)) {
+        Box(Modifier.padding(contentPadding.setPadding(top = 0.dp))) {
             AnimatedNavHost(
                 controller = bottomNavigationController,
                 transitionSpec = ScaleCrossfadeTransitionSpec
@@ -66,13 +68,7 @@ fun HomeScreen(onTitleChange: (newTitle: UIText) -> Unit) {
                         )
                     }
                     is Screen.Home.Forum -> {
-                        Placeholder(
-                            bottomNavScreen.baseIcon,
-                            bottomNavScreen.title.asString(),
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 8.dp)
-                        )
+                        ForumScreen()
                     }
                     else -> {}
                 }

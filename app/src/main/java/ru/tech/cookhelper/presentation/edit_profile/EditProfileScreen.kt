@@ -176,7 +176,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     label = stringResource(R.string.repeat_password),
                     isError = password != repeatPassword,
                     error = {
-                        Text(stringResource(R.string.passwords_doesnt_match))
+                        Text(stringResource(R.string.passwords_dont_match))
                     },
                     value = repeatPassword,
                     showPassword = showPassword

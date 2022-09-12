@@ -26,7 +26,7 @@ fun TopAppBar(
 
     when (topAppBarSize) {
         TopAppBarSize.Small -> {
-            TopAppBar(
+            SmallTopAppBar(
                 title = title,
                 modifier = modifier,
                 navigationIcon = navigationIcon,

@@ -3,7 +3,7 @@ package ru.tech.cookhelper.presentation.home_screen.components
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.iconWith
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.getIcon
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 @Composable
@@ -18,7 +18,7 @@ fun <T : Screen> BottomNavigationBar(
             NavigationBarItem(
                 icon = {
                     Icon(
-                        screen iconWith (selectedItem == screen),
+                        screen.getIcon(selectedItem == screen),
                         null
                     )
                 },

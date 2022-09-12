@@ -18,7 +18,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.setPadding
-import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.iconWith
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.getIcon
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.drawerList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
@@ -74,7 +74,7 @@ fun MainModalDrawerContent(
                 val selected = item.isCurrentDestination
 
                 NavigationDrawerItem(
-                    icon = { Icon(item iconWith selected, null) },
+                    icon = { Icon(item.getIcon(selected), null) },
                     shape = SquircleShape(
                         topEnd = 36.0.dp,
                         bottomEnd = 36.0.dp,
