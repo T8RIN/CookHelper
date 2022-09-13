@@ -7,6 +7,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.cookhelper.presentation.app.components.CookHelperApp
+import ru.tech.cookhelper.presentation.ui.utils.provider.provideWindowSizeClass
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -14,6 +15,10 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        setContent { CookHelperApp() }
+        setContent {
+            provideWindowSizeClass {
+                CookHelperApp()
+            }
+        }
     }
 }

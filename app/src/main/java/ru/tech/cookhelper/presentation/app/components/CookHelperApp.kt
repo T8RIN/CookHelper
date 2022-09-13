@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,9 +61,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         )
     ) {
         ProKitchenTheme {
-            BackHandler {
-                dialogController.show(Dialog.Exit(onExit = { activity?.finishAffinity() }))
-            }
+            activity?.dialogBackHandler()
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -117,7 +114,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
                 DialogHost(controller = dialogController)
 
-                FancyToastHost(fancyToastValues.value)
+                FancyToastHost(fancyToastValues = fancyToastValues.value)
             }
         }
     }
