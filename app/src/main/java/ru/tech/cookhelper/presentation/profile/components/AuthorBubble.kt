@@ -11,12 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 
 @Composable
 fun AuthorBubble(
@@ -45,7 +45,7 @@ fun AuthorBubble(
             Spacer(Modifier.size(5.dp))
             Text(
                 text = timestamp,
-                color = Color.Gray,
+                color = Gray,
                 fontSize = 14.sp
             )
         }

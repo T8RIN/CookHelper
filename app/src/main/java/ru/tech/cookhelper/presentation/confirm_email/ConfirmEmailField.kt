@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,6 +24,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.confirm_email.viewModel.ConfirmEmailViewModel
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -103,7 +103,7 @@ fun ConfirmEmailField(
         Text(
             stringResource(R.string.mistaken),
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            color = Gray
         )
         Spacer(Modifier.size(12.dp))
         TextButton(

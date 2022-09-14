@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -45,8 +44,10 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.settings.components.*
 import ru.tech.cookhelper.presentation.settings.components.Setting.*
 import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.colorList
+import ru.tech.cookhelper.presentation.ui.theme.ordinal
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
@@ -225,7 +226,7 @@ fun SettingsScreen(
                     Text(
                         stringResource(this),
                         fontSize = 12.sp,
-                        color = Color.Gray,
+                        color = Gray,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
                 }
@@ -275,7 +276,7 @@ fun SettingsScreen(
                 Text(
                     "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                     fontSize = 12.sp,
-                    color = Color.Gray
+                    color = Gray
                 )
             }
             Spacer(Modifier.height(80.dp))

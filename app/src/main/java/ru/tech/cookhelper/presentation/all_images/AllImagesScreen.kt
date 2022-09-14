@@ -17,7 +17,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -29,6 +28,7 @@ import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.all_images.components.AdaptiveVerticalGrid
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -71,7 +71,7 @@ fun AllImagesScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(Modifier.size(5.dp))
-                    Text(images.size.toString(), color = Color.Gray)
+                    Text(images.size.toString(), color = Gray)
                 }
             },
             navigationIcon = {

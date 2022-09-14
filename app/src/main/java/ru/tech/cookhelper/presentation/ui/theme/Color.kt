@@ -1,11 +1,12 @@
 package ru.tech.cookhelper.presentation.ui.theme
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 
 @Suppress("PropertyName")
 sealed interface ColorScheme {
-    val ordinal: Int
-
     val md_theme_light_primary: Color
     val md_theme_light_onPrimary: Color
     val md_theme_light_primaryContainer: Color
@@ -63,8 +64,6 @@ sealed interface ColorScheme {
     val md_theme_dark_surfaceTint: Color
 
     object DarkBlue : ColorScheme {
-        override val ordinal: Int = 0
-
         override val md_theme_light_primary = Color(0xFF4755B6)
         override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
         override val md_theme_light_primaryContainer = Color(0xFFDFE0FF)
@@ -124,8 +123,6 @@ sealed interface ColorScheme {
     }
 
     object Blue : ColorScheme {
-        override val ordinal: Int = 1
-
         override val md_theme_light_primary = Color(0xFF00658a)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFFc2e8ff)
@@ -185,8 +182,6 @@ sealed interface ColorScheme {
     }
 
     object LightBlue : ColorScheme {
-        override val ordinal: Int = 2
-
         override val md_theme_light_primary = Color(0xFF006A68)
         override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
         override val md_theme_light_primaryContainer = Color(0xFF6FF7F4)
@@ -246,8 +241,6 @@ sealed interface ColorScheme {
     }
 
     object Mint : ColorScheme {
-        override val ordinal: Int = 3
-
         override val md_theme_light_primary = Color(0xFF006d3c)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFF60fea6)
@@ -306,8 +299,6 @@ sealed interface ColorScheme {
     }
 
     object Green : ColorScheme {
-        override val ordinal: Int = 4
-
         override val md_theme_light_primary = Color(0xFF006e00)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFF76ff66)
@@ -366,8 +357,6 @@ sealed interface ColorScheme {
     }
 
     object Yellow : ColorScheme {
-        override val ordinal: Int = 5
-
         override val md_theme_light_primary = Color(0xFF606200)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFFe7eb00)
@@ -426,8 +415,6 @@ sealed interface ColorScheme {
     }
 
     object Carrot : ColorScheme {
-        override val ordinal: Int = 6
-
         override val md_theme_light_primary = Color(0xFF6E5D00)
         override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
         override val md_theme_light_primaryContainer = Color(0xFFFFE25F)
@@ -487,8 +474,6 @@ sealed interface ColorScheme {
     }
 
     object Orange : ColorScheme {
-        override val ordinal: Int = 7
-
         override val md_theme_light_primary = Color(0xFF944b00)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFFffdcc3)
@@ -547,8 +532,6 @@ sealed interface ColorScheme {
     }
 
     object Red : ColorScheme {
-        override val ordinal: Int = 8
-
         override val md_theme_light_primary = Color(0xFFc10000)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFFffdad3)
@@ -607,8 +590,6 @@ sealed interface ColorScheme {
     }
 
     object Pink : ColorScheme {
-        override val ordinal: Int = 9
-
         override val md_theme_light_primary = Color(0xFFb70071)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFFffd8e7)
@@ -667,8 +648,6 @@ sealed interface ColorScheme {
     }
 
     object Violet : ColorScheme {
-        override val ordinal: Int = 10
-
         override val md_theme_light_primary = Color(0xFF7149AE)
         override val md_theme_light_onPrimary = Color(0xFFFFFFFF)
         override val md_theme_light_primaryContainer = Color(0xFFECDCFF)
@@ -728,8 +707,6 @@ sealed interface ColorScheme {
     }
 
     object VioletVariant : ColorScheme {
-        override val ordinal: Int = 11
-
         override val md_theme_light_primary = Color(0xFFa200bb)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFFffd5ff)
@@ -789,7 +766,7 @@ sealed interface ColorScheme {
 
 }
 
-val colorList = listOf<ColorScheme>(
+val colorList: List<ColorScheme> = listOf(
     ColorScheme.DarkBlue,
     ColorScheme.Blue,
     ColorScheme.LightBlue,
@@ -800,8 +777,16 @@ val colorList = listOf<ColorScheme>(
     ColorScheme.Orange,
     ColorScheme.Red,
     ColorScheme.Pink,
-    ColorScheme.Violet,
     ColorScheme.VioletVariant,
+    ColorScheme.Violet,
 )
 
-val LikeColor = Color(0xFFff4e3a)
+val ColorScheme.ordinal get() = colorList.indexOf(this)
+
+inline val LikeColor: Color
+    @Composable
+    get() = Color(0xFFff4e3a).harmonizeWithPrimary()
+
+inline val Gray: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.outline

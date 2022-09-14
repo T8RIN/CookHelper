@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,7 +20,7 @@ fun PostActionButton(
     icon: ImageVector,
     text: String,
     containerColor: Color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.25f),
-    contentColor: Color = Color.Gray
+    contentColor: Color = Gray
 ) {
     Surface(
         modifier = Modifier.defaultMinSize(32.dp, 32.dp),

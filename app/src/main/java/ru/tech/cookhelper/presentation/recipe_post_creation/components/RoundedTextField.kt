@@ -4,6 +4,7 @@ import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -130,19 +131,21 @@ fun RoundedTextField(
 ) {
     val focus = LocalFocusManager.current
 
-    val color = remember { Animatable(initialValue = Color.Transparent) }
+    val borderColor = remember { Animatable(initialValue = Color.Transparent) }
     val colorScheme = MaterialTheme.colorScheme
+
+    val focused = interactionSource.collectIsFocusedAsState().value
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(isError) {
-        color.animateTo(if (isError) colorScheme.error else colorScheme.primary)
+        borderColor.animateTo(if (isError && focused) colorScheme.error else if (focused) colorScheme.primary else Color.Transparent)
     }
 
     val mergedModifier = Modifier
         .fillMaxWidth()
         .border(
             width = 2.dp,
-            color = color.value,
+            color = borderColor.value,
             shape = shape
         )
         .onFocusChanged {
@@ -151,9 +154,9 @@ fun RoundedTextField(
                     focus.clearFocus()
                     cancel()
                 }
-                if (it.isFocused) color.animateTo(if (isError) colorScheme.error else colorScheme.primary)
+                if (it.isFocused) borderColor.animateTo(if (isError) colorScheme.error else colorScheme.primary)
                 else {
-                    if (!isError) color.animateTo(Color.Transparent)
+                    if (!isError) borderColor.animateTo(Color.Transparent)
                     onValueChange(value.onLoseFocusTransformation())
                 }
                 cancel()

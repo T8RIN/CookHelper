@@ -14,7 +14,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,6 +26,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
@@ -69,7 +69,7 @@ fun ImageCarousel(
                 fontSize = 14.sp
             )
             Spacer(Modifier.size(5.dp))
-            Text(data.size.toString(), color = Color.Gray, fontSize = 14.sp)
+            Text(data.size.toString(), color = Gray, fontSize = 14.sp)
             Spacer(Modifier.weight(1f))
             IconButton(onClick = onExpand) {
                 Icon(Icons.Rounded.KeyboardArrowRight, null)

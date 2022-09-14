@@ -17,7 +17,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -38,6 +37,7 @@ import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
 import ru.tech.cookhelper.presentation.restore_password.viewModel.RestorePasswordViewModel
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
@@ -208,7 +208,7 @@ fun RestorePasswordField(
                 Text(
                     stringResource(if (state.state == RestoreState.Login) R.string.have_account else R.string.wrong_credentials_question),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = Gray
                 )
                 Spacer(Modifier.size(12.dp))
                 TextButton(

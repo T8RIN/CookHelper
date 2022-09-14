@@ -16,6 +16,7 @@ import ru.tech.cookhelper.presentation.settings.components.Setting
 import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
 import ru.tech.cookhelper.presentation.ui.theme.colorList
+import ru.tech.cookhelper.presentation.ui.theme.ordinal
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents

@@ -48,6 +48,10 @@ class ConfirmEmailViewModel @Inject constructor(
     private val _codeState: MutableState<CodeState> = mutableStateOf(CodeState())
     val codeState: CodeState by _codeState
 
+    init {
+        reloadTimer()
+    }
+
     fun checkVerificationCode(code: String) {
         checkCodeUseCase(code, token).onEach { result ->
             when (result) {

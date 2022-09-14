@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.android.ShareUtils.shareWith
@@ -119,7 +119,7 @@ fun ProfileRecipeItem(
                     onClick = { /*TODO: Like feature */ },
                     icon = if (recipePost.liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
                     text = recipePost.likeCount.toString(),
-                    contentColor = if (recipePost.liked) LikeColor else Color.Gray,
+                    contentColor = if (recipePost.liked) LikeColor else Gray,
                     containerColor = if (recipePost.liked) LikeColor.copy(alpha = 0.3f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(
                         alpha = 0.1f
                     )

@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.UserState
+import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import java.text.SimpleDateFormat
 import java.util.*
@@ -116,13 +116,13 @@ fun UserInfoBlock(
                         Icons.Rounded.PhoneAndroid,
                         null,
                         modifier = Modifier.size(12.dp),
-                        tint = Color.Gray
+                        tint = Gray
                     )
                     Spacer(Modifier.width(3.dp))
                     Text(
                         text = lastSeen,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = Gray
                     )
                 }
             }
