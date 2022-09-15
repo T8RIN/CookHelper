@@ -1,12 +1,17 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,3 +111,18 @@ fun AnimatedTopAppBar(
         )
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarScrollBehavior.containerColorWithScroll(
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    scrolledContainerColor: Color = MaterialTheme.colorScheme
+        .surfaceColorAtElevation(3.dp)
+) = animateColorAsState(
+    targetValue = lerp(
+        containerColor,
+        scrolledContainerColor,
+        FastOutLinearInEasing.transform(if (state.overlappedFraction > 0.01f) 1f else 0f)
+    ),
+    animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+)

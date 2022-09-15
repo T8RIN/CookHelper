@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,7 +27,10 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.navigateAndPopAll
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun HomeScreen(onTitleChange: (newTitle: UIText) -> Unit) {
+fun HomeScreen(
+    onTitleChange: (newTitle: UIText) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
+) {
     val bottomNavigationController =
         rememberNavController<Screen.Home>(startDestination = Screen.Home.Recipes)
     Scaffold(
@@ -68,7 +72,7 @@ fun HomeScreen(onTitleChange: (newTitle: UIText) -> Unit) {
                         )
                     }
                     is Screen.Home.Forum -> {
-                        ForumScreen()
+                        ForumScreen(scrollBehavior = scrollBehavior)
                     }
                     else -> {}
                 }

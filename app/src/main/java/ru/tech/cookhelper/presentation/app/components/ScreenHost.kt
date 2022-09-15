@@ -2,9 +2,10 @@ package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
@@ -31,11 +32,11 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenHost(
     controller: NavController<Screen>,
-    nestedScrollConnection: NestedScrollConnection,
+    scrollBehavior: TopAppBarScrollBehavior,
     transitionSpec: AnimatedNavHostTransitionSpec<Any?>,
     onTitleChange: (newTitle: UIText) -> Unit,
 ) {
@@ -44,10 +45,10 @@ fun ScreenHost(
         controller = controller,
         transitionSpec = transitionSpec
     ) { screen ->
-        Box(modifier = Modifier.nestedScroll(nestedScrollConnection)) {
+        Box(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
             when (screen) {
                 is Screen.Home -> {
-                    HomeScreen(onTitleChange = onTitleChange)
+                    HomeScreen(onTitleChange = onTitleChange, scrollBehavior = scrollBehavior)
                 }
                 is Screen.Favourites -> Placeholder(
                     screen.baseIcon,

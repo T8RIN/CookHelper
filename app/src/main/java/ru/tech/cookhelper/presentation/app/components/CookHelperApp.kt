@@ -62,7 +62,6 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     ) {
         ProKitchenTheme {
             activity?.dialogBackHandler()
-
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
@@ -104,7 +103,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                             scrollBehavior = scrollBehavior
                         )
                         ScreenHost(
-                            nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+                            scrollBehavior = scrollBehavior,
                             controller = screenController,
                             transitionSpec = ScaleCrossfadeTransitionSpec,
                             onTitleChange = { viewModel.updateTitle(it) }
