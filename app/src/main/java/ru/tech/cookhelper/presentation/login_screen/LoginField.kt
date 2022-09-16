@@ -87,7 +87,6 @@ fun LoginField(
                     onValueChange = { login = it },
                     label = { Text(stringResource(R.string.email_or_nick)) },
                     singleLine = true,
-                    isError = login.isEmpty(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
@@ -107,7 +106,6 @@ fun LoginField(
                     onValueChange = { password = it },
                     label = { Text(stringResource(R.string.password)) },
                     singleLine = true,
-                    isError = password.isEmpty(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done

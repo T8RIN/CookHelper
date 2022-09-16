@@ -24,7 +24,7 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
         TabRow(
             containerColor = tabColor,
             selectedTabIndex = selectedTabIndex,
-            tabs = listOf(stringResource(R.string.posts), stringResource(R.string.recipes)),
+            tabs = listOf(stringResource(R.string.all_topics), stringResource(R.string.my_topics)),
             divider = { Separator() },
             onTabClick = { selectedTabIndex = it }
         )

@@ -147,4 +147,7 @@
     <string name="passwords_dont_match">Пароли не совпадают</string>
     <string name="feed">Лента</string>
     <string name="feed_long">Лента рецептов</string>
+    <string name="all_topics">Все темы</string>
+    <string name="my_topics">Со мной</string>
+    <string name="required_field">*Обязательное поле</string>
 </resources>

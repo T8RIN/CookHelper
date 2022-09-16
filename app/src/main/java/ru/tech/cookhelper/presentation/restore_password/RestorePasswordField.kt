@@ -102,7 +102,6 @@ fun RestorePasswordField(
                         onValueChange = { login = it },
                         label = { Text(stringResource(R.string.email_or_nick)) },
                         singleLine = true,
-                        isError = login.isEmpty(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Done

@@ -109,6 +109,9 @@ fun RegistrationField(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
+                    error = {
+                        Text(stringResource(R.string.required_field))
+                    },
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
                     endIcon = {
                         if (name.isNotBlank())
@@ -129,6 +132,9 @@ fun RegistrationField(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
+                    error = {
+                        Text(stringResource(R.string.required_field))
+                    },
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
                     endIcon = {
                         if (surname.isNotBlank())
@@ -150,11 +156,15 @@ fun RegistrationField(
                     singleLine = true,
                     isError = nick.isEmpty() || viewModel.checkLoginState.error.isNotEmpty(),
                     error = {
-                        if (nick.isNotEmpty()) Text(
-                            stringResource(R.string.nickname_rejected),
-                            color = MaterialTheme.colorScheme.error,
-                            fontSize = 12.sp
-                        )
+                        if (nick.isNotEmpty() && viewModel.checkLoginState.error.isNotEmpty()) {
+                            Text(
+                                stringResource(R.string.nickname_rejected),
+                                color = MaterialTheme.colorScheme.error,
+                                fontSize = 12.sp
+                            )
+                        } else if (nick.isEmpty()) {
+                            Text(stringResource(R.string.required_field))
+                        }
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -186,6 +196,8 @@ fun RegistrationField(
                             error = {
                                 if (email.isNotEmpty() && email.isValid()) {
                                     Text(stringResource(R.string.email_rejected))
+                                } else if (email.isEmpty()) {
+                                    Text(stringResource(R.string.required_field))
                                 } else if (email.isNotValid()) {
                                     Text(stringResource(R.string.bad_email))
                                 }
@@ -211,12 +223,16 @@ fun RegistrationField(
                             singleLine = true,
                             isError = !isPasswordValid,
                             error = {
+                                //Replace this logic with TextValidator
+                                //https://medium.com/vmlyrpoland-tech/chain-of-validators-with-kotlin-49329559620b
                                 if (password.isNotEmpty()) {
                                     Text(
                                         stringResource(if (password.length < 8) R.string.password_too_short else R.string.password_must_contain_one_number),
                                         color = MaterialTheme.colorScheme.error,
                                         fontSize = 12.sp
                                     )
+                                } else {
+                                    Text(stringResource(R.string.required_field))
                                 }
                             },
                             appearance = TextFieldAppearance.Outlined,
@@ -244,11 +260,14 @@ fun RegistrationField(
                             onValueChange = { passwordRepeat = it },
                             label = { Text(stringResource(R.string.repeat_password)) },
                             singleLine = true,
-                            isError = passwordRepeat.isEmpty() || passwordRepeat != password,
+                            isError = passwordRepeat.isNotEmpty() && passwordRepeat != password,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Done
                             ),
+                            error = {
+                                Text(stringResource(R.string.passwords_dont_match))
+                            },
                             modifier = Modifier.width(TextFieldDefaults.MinWidth),
                             keyboardActions = KeyboardActions(onDone = {
                                 focusManager.clearFocus()

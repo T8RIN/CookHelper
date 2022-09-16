@@ -149,4 +149,7 @@
     <string name="passwords_dont_match">Passwords don\'t match</string>
     <string name="feed">Feed</string>
     <string name="feed_long">Feed</string>
+    <string name="all_topics">All Topics</string>
+    <string name="my_topics">My Topics</string>
+    <string name="required_field">*Required field</string>
 </resources>
