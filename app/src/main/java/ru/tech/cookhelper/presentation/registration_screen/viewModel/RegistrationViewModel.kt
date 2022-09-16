@@ -11,9 +11,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginOrEmailForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
+import ru.tech.cookhelper.domain.utils.text.ChainTextValidator
+import ru.tech.cookhelper.domain.utils.text.TextValidator
+import ru.tech.cookhelper.domain.utils.text.ValidatorResult
+import ru.tech.cookhelper.domain.utils.text.validators.HasNumberTextValidator
+import ru.tech.cookhelper.domain.utils.text.validators.LengthTextValidator
+import ru.tech.cookhelper.domain.utils.text.validators.NonEmptyTextValidator
 import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckLoginOrEmailState
 import ru.tech.cookhelper.presentation.registration_screen.components.RegistrationState
@@ -32,6 +39,15 @@ class RegistrationViewModel @Inject constructor(
 
     private var checkLoginJob: Job? = null
     private var checkEmailJob: Job? = null
+
+    private val passwordValidator: TextValidator<UIText> = ChainTextValidator(
+        NonEmptyTextValidator(UIText.StringResource(R.string.required_field)),
+        HasNumberTextValidator(UIText.StringResource(R.string.password_must_contain_one_number)),
+        LengthTextValidator(
+            minLength = 9,
+            message = UIText.StringResource(R.string.password_too_short)
+        )
+    )
 
     private val _registrationState: MutableState<RegistrationState> =
         mutableStateOf(RegistrationState())
@@ -115,6 +131,18 @@ class RegistrationViewModel @Inject constructor(
                 else -> {}
             }
         }.launchIn(viewModelScope)
+    }
+
+    private val _isPasswordValid: MutableState<Boolean> = mutableStateOf(false)
+    val isPasswordValid: Boolean by _isPasswordValid
+
+    private val _passwordValidationError: MutableState<UIText> = mutableStateOf(UIText.StringResource(R.string.required_field))
+    val passwordValidationError: UIText by _passwordValidationError
+
+    fun validatePassword(password: String) {
+        val result = passwordValidator.validate(password)
+        _isPasswordValid.value = result is ValidatorResult.Success
+        if (result is ValidatorResult.Error) _passwordValidationError.value = result.message
     }
 
 }

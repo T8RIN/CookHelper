@@ -68,12 +68,9 @@ fun RegistrationField(
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
-    val isPasswordValid by computedStateOf {
-        password.length >= 8 && password.toCharArray().any { it.isDigit() }
-    }
 
     val isFormValid by computedStateOf {
-        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password && viewModel.checkLoginState.error.isEmpty() && isPasswordValid
+        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password && viewModel.checkLoginState.error.isEmpty() && viewModel.isPasswordValid
     }
 
     val focusManager = LocalFocusManager.current
@@ -218,22 +215,15 @@ fun RegistrationField(
                         Spacer(Modifier.size(8.dp))
                         CozyTextField(
                             value = password,
-                            onValueChange = { password = it },
+                            onValueChange = {
+                                password = it
+                                viewModel.validatePassword(it)
+                            },
                             label = { Text(stringResource(R.string.password)) },
                             singleLine = true,
-                            isError = !isPasswordValid,
+                            isError = !viewModel.isPasswordValid,
                             error = {
-                                //Replace this logic with TextValidator
-                                //https://medium.com/vmlyrpoland-tech/chain-of-validators-with-kotlin-49329559620b
-                                if (password.isNotEmpty()) {
-                                    Text(
-                                        stringResource(if (password.length < 8) R.string.password_too_short else R.string.password_must_contain_one_number),
-                                        color = MaterialTheme.colorScheme.error,
-                                        fontSize = 12.sp
-                                    )
-                                } else {
-                                    Text(stringResource(R.string.required_field))
-                                }
+                                Text(viewModel.passwordValidationError.asString())
                             },
                             appearance = TextFieldAppearance.Outlined,
                             keyboardOptions = KeyboardOptions(
