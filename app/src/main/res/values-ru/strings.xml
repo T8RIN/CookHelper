@@ -145,4 +145,6 @@
     <string name="new_password">Новый пароль</string>
     <string name="bad_email">Некорректная почта</string>
     <string name="passwords_dont_match">Пароли не совпадают</string>
+    <string name="feed">Лента</string>
+    <string name="feed_long">Лента рецептов</string>
 </resources>

@@ -147,4 +147,6 @@
     <string name="new_password">New password</string>
     <string name="bad_email">Bad email</string>
     <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="feed">Feed</string>
+    <string name="feed_long">Feed</string>
 </resources>

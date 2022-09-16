@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
-    private val _title: MutableState<UIText> = mutableStateOf(Screen.Home.Recipes.title)
+    private val _title: MutableState<UIText> = mutableStateOf(Screen.Home.Feed.title)
     val title: UIText by _title
 
     private val _settingsState: MutableState<SettingsState> = mutableStateOf(SettingsState())

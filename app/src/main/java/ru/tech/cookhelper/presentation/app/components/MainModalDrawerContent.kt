@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import dev.olshevski.navigation.reimagined.navigate
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
@@ -70,26 +69,27 @@ fun MainModalDrawerContent(
                 )
             }
 
-            items(drawerList, key = { it::class.name }) { item ->
-                val selected = item.isCurrentDestination
-
-                NavigationDrawerItem(
-                    icon = { Icon(item.getIcon(selected), null) },
-                    shape = SquircleShape(
-                        topEnd = 36.0.dp,
-                        bottomEnd = 36.0.dp,
-                    ),
-                    colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = containerColor),
-                    modifier = Modifier.padding(end = 12.dp),
-                    label = { Text(item.title.asString()) },
-                    selected = selected,
-                    onClick = {
-                        onClick(item)
-                        scope.launch { drawerState.close() }
-                    }
-                )
-                if (item is Screen.Home || item is Screen.BlockList) {
+            items(drawerList) { item ->
+                if (item == null) {
                     Separator(Modifier.padding(vertical = 10.dp))
+                } else {
+                    val selected = item.isCurrentDestination
+
+                    NavigationDrawerItem(
+                        icon = { Icon(item.getIcon(selected), null) },
+                        shape = SquircleShape(
+                            topEnd = 36.0.dp,
+                            bottomEnd = 36.0.dp,
+                        ),
+                        colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = containerColor),
+                        modifier = Modifier.padding(end = 12.dp),
+                        label = { Text(item.title.asString()) },
+                        selected = selected,
+                        onClick = {
+                            onClick(item)
+                            scope.launch { drawerState.close() }
+                        }
+                    )
                 }
             }
         }

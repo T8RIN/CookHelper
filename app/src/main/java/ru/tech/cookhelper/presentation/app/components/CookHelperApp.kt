@@ -73,7 +73,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                             drawerState = drawerState,
                             onClick = {
                                 viewModel.updateTitle(
-                                    if (it is Screen.Home) Screen.Home.Recipes.title
+                                    if (it is Screen.Home) Screen.Home.Feed.title
                                     else it.title
                                 )
                                 screenController.navigateAndPopAll(it)

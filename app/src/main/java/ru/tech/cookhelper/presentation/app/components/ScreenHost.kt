@@ -139,6 +139,12 @@ fun ScreenHost(
                         onBack = { controller.goBack() }
                     )
                 }
+                Screen.Recipes -> {
+                    Placeholder(
+                        screen.baseIcon,
+                        screen.title.asString()
+                    )
+                }
             }
         }
     }

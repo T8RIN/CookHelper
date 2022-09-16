@@ -32,12 +32,12 @@ fun HomeScreen(
     scrollBehavior: TopAppBarScrollBehavior
 ) {
     val bottomNavigationController =
-        rememberNavController<Screen.Home>(startDestination = Screen.Home.Recipes)
+        rememberNavController<Screen.Home>(startDestination = Screen.Home.Feed)
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
                 selectedItem = bottomNavigationController.currentDestination
-                    ?: Screen.Home.Recipes,
+                    ?: Screen.Home.Feed,
                 items = navBarList,
                 onClick = { screen ->
                     bottomNavigationController.navigateAndPopAll(screen)
@@ -53,7 +53,7 @@ fun HomeScreen(
                 transitionSpec = ScaleCrossfadeTransitionSpec
             ) { bottomNavScreen ->
                 when (bottomNavScreen) {
-                    is Screen.Home.Recipes -> {
+                    is Screen.Home.Feed -> {
                         Placeholder(
                             icon = bottomNavScreen.baseIcon,
                             text = bottomNavScreen.title.asString(),

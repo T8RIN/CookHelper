@@ -44,6 +44,15 @@ sealed class Screen(
         selectedIcon = Icons.Filled.Report
     )
 
+    @Parcelize
+    object Recipes : Screen(
+        title = UIText.StringResource(R.string.recipe_bank),
+        shortTitle = UIText.StringResource(R.string.recipes),
+        baseIcon = Icons.Outlined.DinnerDining,
+        selectedIcon = Icons.Filled.DinnerDining
+    )
+
+
     sealed class Home(
         override val title: UIText = UIText.StringResource(R.string.home),
         override val shortTitle: UIText = UIText.StringResource(R.string.home),
@@ -51,11 +60,11 @@ sealed class Screen(
         override val selectedIcon: ImageVector = Icons.Filled.Home
     ) : Screen() {
         @Parcelize
-        object Recipes : Home(
-            title = UIText.StringResource(R.string.recipe_bank),
-            shortTitle = UIText.StringResource(R.string.recipes),
-            baseIcon = Icons.Outlined.DinnerDining,
-            selectedIcon = Icons.Filled.DinnerDining
+        object Feed : Home(
+            title = UIText.StringResource(R.string.feed_long),
+            shortTitle = UIText.StringResource(R.string.feed),
+            baseIcon = Icons.Outlined.AutoAwesomeMosaic,
+            selectedIcon = Icons.Filled.AutoAwesomeMosaic
         )
 
         @Parcelize
@@ -153,16 +162,21 @@ sealed class Screen(
 
 val drawerList = listOf(
     Screen.Home.None,
+    null,
     Screen.Profile,
     Screen.ChatList,
+    null,
     Screen.Cart,
     Screen.Favourites,
     Screen.BlockList,
+    null,
+    Screen.Recipes,
+    null,
     Screen.Settings
 )
 
 val navBarList = listOf(
-    Screen.Home.Recipes,
+    Screen.Home.Feed,
     Screen.Home.Forum,
     Screen.Home.Fridge
 )
