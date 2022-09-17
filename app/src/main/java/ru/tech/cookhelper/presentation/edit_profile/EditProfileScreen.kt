@@ -22,14 +22,15 @@ import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.edit_profile.components.EditProfileItem
 import ru.tech.cookhelper.presentation.edit_profile.viewModel.EditProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.registration_screen.isNotValid
-import ru.tech.cookhelper.presentation.registration_screen.isValid
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack: () -> Unit) {
+fun EditProfileScreen(
+    viewModel: EditProfileViewModel = hiltViewModel(),
+    onBack: () -> Unit
+) {
     val showPassword = remember { mutableStateOf(false) }
     val surname = viewModel.nameAndSurname.second
     val name = viewModel.nameAndSurname.first
@@ -89,13 +90,13 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    loading = viewModel.checkLoginState.isLoading,
-                    isError = viewModel.checkLoginState.error.isNotEmpty(),
-                    error = { Text(stringResource(R.string.nickname_rejected)) },
+                    loading = viewModel.loginState.isLoading,
+                    isError = !viewModel.loginState.isValid,
+                    error = { Text(viewModel.loginState.error.asString()) },
                     startIcon = Icons.Outlined.AlternateEmail,
                     onValueChange = {
                         viewModel.setTemp(nickname = it)
-                        viewModel.checkLoginForAvailability(it)
+                        viewModel.validateLogin(it)
                     },
                     singleLine = true,
                     label = stringResource(R.string.nick),
@@ -106,20 +107,16 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    loading = viewModel.checkEmailState.isLoading,
-                    isError = email.isEmpty() || email.isNotValid() || viewModel.checkEmailState.error.isNotEmpty(),
+                    loading = viewModel.emailState.isLoading,
+                    isError = !viewModel.emailState.isValid,
                     error = {
-                        if (email.isNotEmpty() && email.isValid()) {
-                            Text(stringResource(R.string.email_rejected))
-                        } else if (email.isNotValid()) {
-                            Text(stringResource(R.string.bad_email))
-                        }
+                        Text(viewModel.emailState.error.asString())
                     },
                     singleLine = true,
                     startIcon = Icons.Outlined.Email,
                     onValueChange = {
                         viewModel.setTemp(email = it)
-                        if (it.isValid()) viewModel.checkEmailForAvailability(it)
+                        viewModel.validateEmail(it)
                     },
                     label = stringResource(R.string.email),
                     value = email
@@ -140,11 +137,10 @@ fun EditProfileScreen(viewModel: EditProfileViewModel = hiltViewModel(), onBack:
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    enabled = password.isNotEmpty() && email.isValid()
-                            && viewModel.checkLoginState.error.isEmpty()
-                            && viewModel.checkEmailState.error.isEmpty()
-                            && !viewModel.checkEmailState.isLoading
-                            && !viewModel.checkLoginState.isLoading
+                    enabled = password.isNotEmpty() && viewModel.emailState.isValid
+                            && viewModel.loginState.error.isEmpty()
+                            && !viewModel.emailState.isLoading
+                            && !viewModel.loginState.isLoading
                             && nickname.isNotEmpty()
                 ) {
                     Text(stringResource(R.string.save))

@@ -225,6 +225,6 @@ fun RoundedTextFieldColors(isError: Boolean): TextFieldColors =
             focusedTrailingIconColor = if (isError) error else onSurfaceVariant,
             unfocusedTrailingIconColor = if (isError) error else onSurfaceVariant,
             unfocusedLabelColor = if (isError) error else onSurfaceVariant,
-            containerColor = if (isError) surfaceVariant.blend(error, 0.1f) else surfaceVariant
+            containerColor = if (isError) surfaceVariant.blend(error, 0.2f) else surfaceVariant
         )
     }

@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.registration_screen
 
-import android.util.Patterns
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -27,7 +26,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import dev.olshevski.navigation.reimagined.navigate
@@ -70,7 +68,7 @@ fun RegistrationField(
     }
 
     val isFormValid by computedStateOf {
-        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && email.isValid() && passwordRepeat == password && viewModel.checkLoginState.error.isEmpty() && viewModel.isPasswordValid
+        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && viewModel.emailState.isValid && passwordRepeat == password && viewModel.loginState.isValid && viewModel.isPasswordValid
     }
 
     val focusManager = LocalFocusManager.current
@@ -144,24 +142,16 @@ fun RegistrationField(
                 CozyTextField(
                     value = nick,
                     appearance = TextFieldAppearance.Outlined,
-                    loading = viewModel.checkLoginState.isLoading,
+                    loading = viewModel.loginState.isLoading,
                     onValueChange = {
                         nick = it
-                        if (it.isNotEmpty()) viewModel.checkLoginForAvailability(it)
+                        viewModel.validateLogin(it)
                     },
                     label = { Text(stringResource(R.string.nick)) },
                     singleLine = true,
-                    isError = nick.isEmpty() || viewModel.checkLoginState.error.isNotEmpty(),
+                    isError = !viewModel.loginState.isValid,
                     error = {
-                        if (nick.isNotEmpty() && viewModel.checkLoginState.error.isNotEmpty()) {
-                            Text(
-                                stringResource(R.string.nickname_rejected),
-                                color = MaterialTheme.colorScheme.error,
-                                fontSize = 12.sp
-                            )
-                        } else if (nick.isEmpty()) {
-                            Text(stringResource(R.string.required_field))
-                        }
+                        Text(viewModel.loginState.error.asString())
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -182,22 +172,16 @@ fun RegistrationField(
                         CozyTextField(
                             value = email,
                             appearance = TextFieldAppearance.Outlined,
-                            loading = viewModel.checkEmailState.isLoading,
+                            loading = viewModel.emailState.isLoading,
                             onValueChange = {
                                 email = it
-                                if (email.isValid()) viewModel.checkEmailForAvailability(it)
+                                viewModel.validateEmail(it)
                             },
                             label = { Text(stringResource(R.string.email)) },
                             singleLine = true,
-                            isError = email.isEmpty() || email.isNotValid() || viewModel.checkEmailState.error.isNotEmpty(),
+                            isError = !viewModel.emailState.isValid,
                             error = {
-                                if (email.isNotEmpty() && email.isValid()) {
-                                    Text(stringResource(R.string.email_rejected))
-                                } else if (email.isEmpty()) {
-                                    Text(stringResource(R.string.required_field))
-                                } else if (email.isNotValid()) {
-                                    Text(stringResource(R.string.bad_email))
-                                }
+                                Text(viewModel.emailState.error.asString())
                             },
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
@@ -331,5 +315,3 @@ fun RegistrationField(
 }
 
 fun String.capitalize() = lowercase().replaceFirstChar { it.titlecase() }
-fun String.isValid(): Boolean = Patterns.EMAIL_ADDRESS.matcher(this).matches()
-fun String.isNotValid() = !isValid()
