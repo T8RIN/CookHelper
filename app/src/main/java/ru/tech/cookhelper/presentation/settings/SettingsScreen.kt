@@ -83,6 +83,13 @@ fun SettingsScreen(
                 var expandedColorScheme by rememberSaveable { mutableStateOf(false) }
                 var onClick by remember { mutableStateOf({}) }
 
+                val alphaModifier = Modifier.alpha(
+                    if (setting == COLOR_SCHEME) {
+                        if (!settingsState.dynamicColors) 1f
+                        else 0.5f
+                    } else 1f
+                )
+
                 Spacer(Modifier.height(10.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -92,20 +99,13 @@ fun SettingsScreen(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onClick() }
+                        .then(alphaModifier)
                 ) {
                     Spacer(Modifier.width(20.dp))
-                    val alphaModifier = Modifier.alpha(
-                        if (setting == COLOR_SCHEME) {
-                            if (!settingsState.dynamicColors) 1f
-                            else 0.5f
-                        } else 1f
-                    )
                     Surface(
                         color = MaterialTheme.colorScheme.secondaryContainer,
                         shape = SquircleShape(14.dp),
-                        modifier = Modifier
-                            .size(42.dp)
-                            .then(alphaModifier)
+                        modifier = Modifier.size(42.dp)
                     ) {
                         Box(Modifier.fillMaxSize()) {
                             Icon(
@@ -118,9 +118,7 @@ fun SettingsScreen(
                     Spacer(Modifier.width(16.dp))
                     Text(
                         stringResource(setting.title),
-                        modifier = Modifier
-                            .weight(1f)
-                            .then(alphaModifier)
+                        modifier = Modifier.weight(1f)
                     )
                     when (setting) {
                         CART_CONNECTION -> {

@@ -12,6 +12,6 @@ sealed class Event {
 
     @Suppress("UNCHECKED_CAST")
     class SendData(val data: Map<String, Any>) : Event() {
-        operator fun <T> get(key: String): T = data[key]!! as T
+        operator fun <T> get(key: String): T? = data[key] as? T
     }
 }

@@ -49,7 +49,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 fun RegistrationField(
     scaleModifier: Float,
     authController: NavController<Screen>,
-    onGetCredentials: (name: String, email: String, token: String) -> Unit,
+    onGetCredentials: (name: String?, email: String?, token: String?) -> Unit,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
 

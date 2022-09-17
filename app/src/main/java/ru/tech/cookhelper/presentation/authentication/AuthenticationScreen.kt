@@ -107,9 +107,9 @@ fun AuthenticationScreen() {
                                 LoginField(
                                     scaleModifier = scaleModifier,
                                     onGetCredentials = { n, e, t ->
-                                        name = n
-                                        email = e
-                                        token = t
+                                        name = n ?: ""
+                                        email = e ?: ""
+                                        token = t ?: ""
                                     },
                                     authController = authController
                                 )
@@ -119,9 +119,9 @@ fun AuthenticationScreen() {
                                     scaleModifier = scaleModifier,
                                     authController = authController,
                                     onGetCredentials = { n, e, t ->
-                                        name = n
-                                        email = e
-                                        token = t
+                                        name = n ?: ""
+                                        email = e ?: ""
+                                        token = t ?: ""
                                     }
                                 )
                             }

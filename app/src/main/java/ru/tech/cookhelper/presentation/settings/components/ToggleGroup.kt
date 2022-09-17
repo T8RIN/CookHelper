@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import ru.tech.cookhelper.presentation.app.components.MarqueeText
 
 @Composable
 fun ToggleGroup(items: List<Int>, selectedIndex: Int, indexChanged: (Int) -> Unit) {
@@ -67,7 +69,8 @@ fun ToggleGroup(items: List<Int>, selectedIndex: Int, indexChanged: (Int) -> Uni
                     text = stringResource(item),
                     color = if (selectedIndex == index) MaterialTheme.colorScheme.onTertiaryContainer
                     else MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

@@ -44,7 +44,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 @Composable
 fun LoginField(
     scaleModifier: Float,
-    onGetCredentials: (name: String, email: String, token: String) -> Unit,
+    onGetCredentials: (name: String?, email: String?, token: String?) -> Unit,
     authController: NavController<Screen>,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
