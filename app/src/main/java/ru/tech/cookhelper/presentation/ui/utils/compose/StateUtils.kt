@@ -1,9 +1,6 @@
 package ru.tech.cookhelper.presentation.ui.utils.compose
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 
 object StateUtils {
     @Composable
@@ -16,4 +13,8 @@ object StateUtils {
     fun <T> computedStateOf(
         calculation: () -> T
     ): State<T> = remember { derivedStateOf(calculation) }
+
+    inline fun <T> MutableState<T>.update(transform: T.() -> T) {
+        this.value = transform(this.value)
+    }
 }

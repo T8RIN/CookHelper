@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.containerColorWithScroll
+import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 
 @OptIn(ExperimentalMaterial3Api::class)

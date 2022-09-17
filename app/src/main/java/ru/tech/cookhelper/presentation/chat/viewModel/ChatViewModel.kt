@@ -20,6 +20,7 @@ import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.send_message.SendMessagesUseCase
 import ru.tech.cookhelper.domain.use_case.stop_awaiting_messages.StopAwaitingMessagesUseCase
 import ru.tech.cookhelper.presentation.chat.components.ChatState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -56,7 +57,7 @@ class ChatViewModel @Inject constructor(
 
     init {
         getUserUseCase().onEach {
-            _user.value = it?.copy(id = 1)
+            it?.let { _user.update { it.copy(id = 1) } }
         }.launchIn(viewModelScope)
         chatId = savedStateHandle["chatId"]!!
         awaitAndGetMessages(chatId)
@@ -66,9 +67,9 @@ class ChatViewModel @Inject constructor(
         awaitNewMessagesUseCase(chatId = chatId, token = "qwe")
             .onEach { action ->
                 when (action) {
-                    is Action.Empty -> _chatState.apply { value = value.copy(isLoading = false) }
+                    is Action.Empty -> _chatState.update { copy(isLoading = false) }
                     is Action.Error -> {
-                        _chatState.apply { value = value.copy(isLoading = false) }
+                        _chatState.update { copy(isLoading = false) }
                         sendEvent(
                             Event.ShowToast(
                                 if (!(action.message ?: "").contains("Unable to resolve host")
@@ -78,9 +79,9 @@ class ChatViewModel @Inject constructor(
                             )
                         )
                     }
-                    is Action.Loading -> _chatState.apply { value = value.copy(isLoading = true) }
+                    is Action.Loading -> _chatState.update { copy(isLoading = true) }
                     is Action.Success -> action.data?.let { messages.add(it) }.also {
-                        _chatState.apply { value = value.copy(isLoading = false) }
+                        _chatState.update { copy(isLoading = false) }
                     }
                 }
             }.launchIn(viewModelScope)

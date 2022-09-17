@@ -7,7 +7,7 @@ class ChainTextValidator<S>(
     override fun validate(stringToValidate: String): ValidatorResult<S> {
         validators.forEach { validator ->
             validatorResult = validator.validate(stringToValidate)
-            if (validatorResult is ValidatorResult.Error) return validatorResult
+            if (validatorResult is ValidatorResult.Failure) return validatorResult
         }
         return validatorResult
     }

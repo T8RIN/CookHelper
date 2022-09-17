@@ -19,6 +19,7 @@ import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.log_in.LoginUseCase
 import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.login_screen.components.LoginState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -38,9 +39,9 @@ class LoginViewModel @Inject constructor(
     fun logInWith(login: String, password: String) {
         loginUseCase(login, password).onEach { result ->
             when (result) {
-                is Action.Loading -> _loginState.value = LoginState(isLoading = true)
+                is Action.Loading -> _loginState.update { LoginState(isLoading = true) }
                 is Action.Empty -> {
-                    _loginState.value = LoginState()
+                    _loginState.update { LoginState() }
                     sendEvent(
                         Event.ShowToast(
                             UIText.StringResource(result.status.getMessage()),
@@ -49,7 +50,7 @@ class LoginViewModel @Inject constructor(
                     )
                 }
                 is Action.Error -> {
-                    _loginState.value = LoginState()
+                    _loginState.update { LoginState() }
                     sendEvent(
                         Event.ShowToast(
                             UIText.DynamicString(result.message.toString()),
@@ -83,7 +84,7 @@ class LoginViewModel @Inject constructor(
                             cacheUser(it)
                         }
                     }
-                    _loginState.value = LoginState(user = result.data)
+                    _loginState.update { LoginState(user = result.data) }
                 }
             }
         }.launchIn(viewModelScope)

@@ -17,6 +17,7 @@ import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
 import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.presentation.ui.theme.ordinal
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -62,7 +63,7 @@ class MainViewModel @Inject constructor(
                     }
                 }
             }
-            _settingsState.value = state
+            _settingsState.update { state }
         }.launchIn(viewModelScope)
 
         getUserUseCase().onEach { user ->
@@ -74,13 +75,13 @@ class MainViewModel @Inject constructor(
                         screen = Screen.Home.None
                     )
                 )
-                _userState.value = UserState(user, user.token)
+                _userState.update { UserState(user, user.token) }
             }
         }.launchIn(viewModelScope)
     }
 
     fun updateTitle(newTitle: UIText) {
-        _title.value = newTitle
+        _title.update { newTitle }
     }
 }
 

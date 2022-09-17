@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.forum_screen
+package ru.tech.cookhelper.presentation.forum_screen.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

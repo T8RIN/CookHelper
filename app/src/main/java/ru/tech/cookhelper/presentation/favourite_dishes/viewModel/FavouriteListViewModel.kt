@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.get_favourites.GetFavouriteDishesUseCase
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -28,14 +29,14 @@ class FavouriteListViewModel @Inject constructor(
         getFavouriteDishesUseCase().onEach { result ->
             when (result) {
                 is Action.Success -> {
-                    _favState.value = RecipeState(recipeList = result.data)
+                    _favState.update { RecipeState(recipeList = result.data) }
                 }
                 is Action.Error -> {
-                    _favState.value = _favState.value.copy(isLoading = false)
+                    _favState.update { copy(isLoading = false) }
                     sendEvent(Event.ShowToast(UIText.DynamicString(result.message ?: "")))
                 }
                 is Action.Loading -> {
-                    _favState.value = RecipeState(isLoading = true)
+                    _favState.update { RecipeState(isLoading = true) }
                 }
                 is Action.Empty -> TODO()
             }

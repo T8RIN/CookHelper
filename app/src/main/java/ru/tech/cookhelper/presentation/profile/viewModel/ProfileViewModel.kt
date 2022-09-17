@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +26,7 @@ class ProfileViewModel @Inject constructor(
 
     init {
         getUserUseCase().onEach { user ->
-            user?.let { _userState.value = UserState(it, it.token) }
+            user?.let { _userState.update { UserState(it, it.token) } }
         }.launchIn(viewModelScope)
     }
 

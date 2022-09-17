@@ -12,6 +12,7 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.check_favourite.CheckFavouriteUseCase
 import ru.tech.cookhelper.domain.use_case.get_dish_by_id.GetDishByIdUseCase
 import ru.tech.cookhelper.presentation.dish_details.components.DishDetailsState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -40,14 +41,14 @@ class DishDetailsViewModel @Inject constructor(
 
             when (result) {
                 is Action.Success -> {
-                    _dishState.value = DishDetailsState(dish = result.data)
+                    _dishState.update { DishDetailsState(dish = result.data) }
                 }
                 is Action.Error -> {
-                    _dishState.value = _dishState.value.copy(isLoading = false)
+                    _dishState.update { copy(isLoading = false) }
                     sendEvent(Event.ShowToast(UIText.DynamicString(result.message ?: "")))
                 }
                 is Action.Loading -> {
-                    _dishState.value = DishDetailsState(isLoading = true)
+                    _dishState.update { DishDetailsState(isLoading = true) }
                 }
                 is Action.Empty -> TODO()
             }

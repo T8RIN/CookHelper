@@ -12,9 +12,9 @@ class LengthTextValidator<S>(
     override fun validate(stringToValidate: String): ValidatorResult<S> {
         validatorResult = when {
             minLength != null && stringToValidate.count() < minLength ->
-                ValidatorResult.Error(message)
+                ValidatorResult.Failure(message)
             maxLength != null && stringToValidate.count() > maxLength ->
-                ValidatorResult.Error(message)
+                ValidatorResult.Failure(message)
             else -> ValidatorResult.Success()
         }
         return validatorResult

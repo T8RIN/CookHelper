@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import ru.tech.cookhelper.presentation.app.components.MarqueeText
 
 @Composable
 fun ToggleGroup(items: List<Int>, selectedIndex: Int, indexChanged: (Int) -> Unit) {

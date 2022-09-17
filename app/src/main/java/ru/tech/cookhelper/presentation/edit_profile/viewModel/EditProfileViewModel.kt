@@ -19,13 +19,15 @@ import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginForAvailabilityU
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.utils.text.ChainTextValidator
 import ru.tech.cookhelper.domain.utils.text.TextValidator
-import ru.tech.cookhelper.domain.utils.text.ValidatorResult
+import ru.tech.cookhelper.domain.utils.text.onFailure
+import ru.tech.cookhelper.domain.utils.text.onSuccess
 import ru.tech.cookhelper.domain.utils.text.validators.EmailTextValidator
 import ru.tech.cookhelper.domain.utils.text.validators.NonEmptyTextValidator
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckEmailState
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckLoginState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
@@ -71,12 +73,14 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun validateLogin(login: String) {
-        val result = nicknameValidator.validate(login)
-        _loginState.value = CheckLoginState(isValid = result is ValidatorResult.Success)
-        if (result is ValidatorResult.Error) _loginState.value =
-            CheckLoginState(error = result.message)
-
-        if (loginState.isValid) checkLoginForAvailability(login)
+        nicknameValidator.validate(login)
+            .onSuccess {
+                _loginState.update { CheckLoginState(isValid = true) }
+                checkLoginForAvailability(login)
+            }
+            .onFailure {
+                _loginState.update { CheckLoginState(error = it, isValid = false) }
+            }
     }
 
     private fun checkLoginForAvailability(login: String) {
@@ -84,24 +88,27 @@ class EditProfileViewModel @Inject constructor(
         if (login != userState.user?.nickname) {
             checkLoginJob = viewModelScope.launch {
                 delay(500)
-                _loginState.value = _loginState.value.copy(isLoading = true)
+                _loginState.update { copy(isLoading = true) }
                 when (val action = checkLoginForAvailabilityUseCase(login)) {
                     is Action.Empty -> {
-                        _loginState.value = CheckLoginState(
-                            isValid = false,
-                            error = UIText(action.status.getMessage())
-                        )
+                        _loginState.update {
+                            CheckLoginState(
+                                isValid = false,
+                                error = UIText(action.status.getMessage())
+                            )
+                        }
                     }
                     is Action.Error -> {
-                        _loginState.value = CheckLoginState(
-                            isValid = false,
-                            error = UIText(R.string.nickname_rejected)
-                        )
+                        _loginState.update {
+                            CheckLoginState(
+                                isValid = false,
+                                error = UIText(R.string.nickname_rejected)
+                            )
+                        }
                     }
                     is Action.Success -> {
-                        if (loginState.isValid) _loginState.value =
-                            CheckLoginState(isValid = true)
-                        else _loginState.value = _loginState.value.copy(isLoading = false)
+                        if (loginState.isValid) _loginState.update { CheckLoginState(isValid = true) }
+                        else _loginState.update { copy(isLoading = false) }
                     }
                     else -> {}
                 }
@@ -110,12 +117,14 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun validateEmail(email: String) {
-        val result = emailValidator.validate(email)
-        _emailState.value = CheckEmailState(isValid = result is ValidatorResult.Success)
-        if (result is ValidatorResult.Error) _emailState.value =
-            CheckEmailState(error = result.message)
-
-        if (emailState.isValid) checkEmailForAvailability(email)
+        emailValidator.validate(email)
+            .onSuccess {
+                _emailState.update { CheckEmailState(isValid = true) }
+                checkEmailForAvailability(email)
+            }
+            .onFailure {
+                _emailState.update { CheckEmailState(error = it, isValid = false) }
+            }
     }
 
     private fun checkEmailForAvailability(email: String) {
@@ -123,24 +132,27 @@ class EditProfileViewModel @Inject constructor(
         if (email != userState.user?.email) {
             checkEmailJob = viewModelScope.launch {
                 delay(500)
-                _emailState.value = _emailState.value.copy(isLoading = true)
+                _emailState.update { copy(isLoading = true) }
                 when (val action = checkEmailForAvailabilityUseCase(email)) {
                     is Action.Empty -> {
-                        _emailState.value = CheckEmailState(
-                            isValid = false,
-                            error = UIText(action.status.getMessage())
-                        )
+                        _emailState.update {
+                            CheckEmailState(
+                                isValid = false,
+                                error = UIText(action.status.getMessage())
+                            )
+                        }
                     }
                     is Action.Error -> {
-                        _emailState.value = CheckEmailState(
-                            isValid = false,
-                            error = UIText(R.string.email_rejected)
-                        )
+                        _emailState.update {
+                            CheckEmailState(
+                                isValid = false,
+                                error = UIText(R.string.email_rejected)
+                            )
+                        }
                     }
                     is Action.Success -> {
-                        if (emailState.isValid) _emailState.value =
-                            CheckEmailState(isValid = true)
-                        else _emailState.value = _emailState.value.copy(isLoading = false)
+                        if (emailState.isValid) _emailState.update { CheckEmailState(isValid = true) }
+                        else _emailState.update { copy(isLoading = false) }
                     }
                     else -> {}
                 }
@@ -172,9 +184,9 @@ class EditProfileViewModel @Inject constructor(
     init {
         getUserUseCase().onEach { user ->
             user?.let {
-                _userState.value = UserState(it, it.token)
-                _nameAndSurname.value = it.name to it.surname
-                _nickAndEmail.value = it.nickname to it.email
+                _userState.update { UserState(it, it.token) }
+                _nameAndSurname.update { it.name to it.surname }
+                _nickAndEmail.update { it.nickname to it.email }
             }
         }.launchIn(viewModelScope)
     }

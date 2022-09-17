@@ -12,7 +12,7 @@ class HasNumberTextValidator<S>(
         val count = stringToValidate.count { it.isDigit() }
         validatorResult = if (count >= countOfNumbers) {
             ValidatorResult.Success()
-        } else ValidatorResult.Error(message)
+        } else ValidatorResult.Failure(message)
 
         return validatorResult
     }

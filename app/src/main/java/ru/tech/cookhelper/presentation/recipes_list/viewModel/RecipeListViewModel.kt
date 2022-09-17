@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.use_case.get_recipes_list.GetRecipeListUseCase
 import ru.tech.cookhelper.presentation.recipes_list.components.RecipeState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -28,14 +29,14 @@ class RecipeListViewModel @Inject constructor(
         getRecipeListUseCase().onEach { result ->
             when (result) {
                 is Action.Success -> {
-                    _recipeState.value = RecipeState(recipeList = result.data)
+                    _recipeState.update { RecipeState(recipeList = result.data) }
                 }
                 is Action.Error -> {
-                    _recipeState.value = _recipeState.value.copy(isLoading = false)
+                    _recipeState.update { copy(isLoading = false) }
                     sendEvent(Event.ShowToast(UIText.DynamicString(result.message ?: "")))
                 }
                 is Action.Loading -> {
-                    _recipeState.value = RecipeState(isLoading = true)
+                    _recipeState.update { RecipeState(isLoading = true) }
                 }
                 is Action.Empty -> TODO()
             }

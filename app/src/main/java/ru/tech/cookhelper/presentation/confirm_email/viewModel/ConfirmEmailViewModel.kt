@@ -23,6 +23,7 @@ import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.check_code.CheckCodeUseCase
 import ru.tech.cookhelper.domain.use_case.request_code.RequestCodeUseCase
 import ru.tech.cookhelper.presentation.confirm_email.components.CodeState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -55,9 +56,9 @@ class ConfirmEmailViewModel @Inject constructor(
     fun checkVerificationCode(code: String) {
         checkCodeUseCase(code, token).onEach { result ->
             when (result) {
-                is Action.Loading -> _codeState.value = CodeState(isLoading = true)
+                is Action.Loading -> _codeState.update { CodeState(isLoading = true) }
                 is Action.Error -> {
-                    _codeState.value = CodeState(error = true)
+                    _codeState.update { CodeState(error = true) }
                     sendEvent(
                         Event.ShowToast(
                             UIText.DynamicString(result.message.toString()),
@@ -79,7 +80,7 @@ class ConfirmEmailViewModel @Inject constructor(
                     }
                 }
                 is Action.Empty -> {
-                    _codeState.value = CodeState(error = true)
+                    _codeState.update { CodeState(error = true) }
                     sendEvent(
                         Event.ShowToast(
                             UIText.StringResource(R.string.wrong_code),

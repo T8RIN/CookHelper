@@ -15,6 +15,7 @@ import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.get_chat_list.GetChatListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.presentation.chat_list.components.ChatListState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
@@ -34,7 +35,7 @@ class ChatListViewModel @Inject constructor(
 
     init {
         getUserUseCase().onEach {
-            _user.value = it
+            _user.update { it }
         }.launchIn(viewModelScope)
 
         viewModelScope.launch {

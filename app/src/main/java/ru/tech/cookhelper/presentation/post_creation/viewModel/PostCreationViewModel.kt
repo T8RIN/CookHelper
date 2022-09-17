@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +24,7 @@ class PostCreationViewModel @Inject constructor(
 
     init {
         getUserUseCase()
-            .onEach { _user.value = it }
+            .onEach { _user.update { it } }
             .launchIn(viewModelScope)
     }
 

@@ -12,7 +12,7 @@ class EmailTextValidator<S>(
     override fun validate(stringToValidate: String): ValidatorResult<S> {
         validatorResult = when {
             pattern.matcher(stringToValidate).matches() -> ValidatorResult.Success()
-            else -> ValidatorResult.Error(message)
+            else -> ValidatorResult.Failure(message)
         }
         return validatorResult
     }

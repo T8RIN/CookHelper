@@ -19,7 +19,8 @@ import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginForAvailabilityU
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
 import ru.tech.cookhelper.domain.utils.text.ChainTextValidator
 import ru.tech.cookhelper.domain.utils.text.TextValidator
-import ru.tech.cookhelper.domain.utils.text.ValidatorResult
+import ru.tech.cookhelper.domain.utils.text.onFailure
+import ru.tech.cookhelper.domain.utils.text.onSuccess
 import ru.tech.cookhelper.domain.utils.text.validators.EmailTextValidator
 import ru.tech.cookhelper.domain.utils.text.validators.HasNumberTextValidator
 import ru.tech.cookhelper.domain.utils.text.validators.LengthTextValidator
@@ -28,6 +29,7 @@ import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckEmailState
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckLoginState
 import ru.tech.cookhelper.presentation.registration_screen.components.RegistrationState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
@@ -78,36 +80,41 @@ class RegistrationViewModel @Inject constructor(
 
 
     fun validateLogin(login: String) {
-        val result = nicknameValidator.validate(login)
-        _loginState.value = CheckLoginState(isValid = result is ValidatorResult.Success)
-        if (result is ValidatorResult.Error) _loginState.value =
-            CheckLoginState(error = result.message)
-
-        if (loginState.isValid) checkLoginForAvailability(login)
+        nicknameValidator.validate(login)
+            .onSuccess {
+                _loginState.value = CheckLoginState(isValid = true)
+                checkLoginForAvailability(login)
+            }
+            .onFailure {
+                _loginState.value = CheckLoginState(error = it, isValid = false)
+            }
     }
 
     private fun checkLoginForAvailability(login: String) {
         checkLoginJob?.cancel()
         checkLoginJob = viewModelScope.launch {
             delay(500)
-            _loginState.value = _loginState.value.copy(isLoading = true)
+            _loginState.update { copy(isLoading = true) }
             when (val action = checkLoginForAvailabilityUseCase(login)) {
                 is Action.Empty -> {
-                    _loginState.value = CheckLoginState(
-                        isValid = false,
-                        error = UIText(action.status.getMessage())
-                    )
+                    _loginState.update {
+                        CheckLoginState(
+                            isValid = false,
+                            error = UIText(action.status.getMessage())
+                        )
+                    }
                 }
                 is Action.Error -> {
-                    _loginState.value = CheckLoginState(
-                        isValid = false,
-                        error = UIText(R.string.nickname_rejected)
-                    )
+                    _loginState.update {
+                        CheckLoginState(
+                            isValid = false,
+                            error = UIText(R.string.nickname_rejected)
+                        )
+                    }
                 }
                 is Action.Success -> {
-                    if (loginState.isValid) _loginState.value =
-                        CheckLoginState(isValid = true)
-                    else _loginState.value = _loginState.value.copy(isLoading = false)
+                    if (loginState.isValid) _loginState.update { CheckLoginState(isValid = true) }
+                    else _loginState.update { copy(isLoading = false) }
                 }
                 else -> {}
             }
@@ -115,36 +122,41 @@ class RegistrationViewModel @Inject constructor(
     }
 
     fun validateEmail(email: String) {
-        val result = emailValidator.validate(email)
-        _emailState.value = CheckEmailState(isValid = result is ValidatorResult.Success)
-        if (result is ValidatorResult.Error) _emailState.value =
-            CheckEmailState(error = result.message)
-
-        if (emailState.isValid) checkEmailForAvailability(email)
+        emailValidator.validate(email)
+            .onSuccess {
+                _emailState.value = CheckEmailState(isValid = true)
+                checkEmailForAvailability(email)
+            }
+            .onFailure {
+                _emailState.value = CheckEmailState(error = it, isValid = false)
+            }
     }
 
     private fun checkEmailForAvailability(email: String) {
         checkEmailJob?.cancel()
         checkEmailJob = viewModelScope.launch {
             delay(500)
-            _emailState.value = _emailState.value.copy(isLoading = true)
+            _emailState.update { copy(isLoading = true) }
             when (val action = checkEmailForAvailabilityUseCase(email)) {
                 is Action.Empty -> {
-                    _emailState.value = CheckEmailState(
-                        isValid = false,
-                        error = UIText(action.status.getMessage())
-                    )
+                    _emailState.update {
+                        CheckEmailState(
+                            isValid = false,
+                            error = UIText(action.status.getMessage())
+                        )
+                    }
                 }
                 is Action.Error -> {
-                    _emailState.value = CheckEmailState(
-                        isValid = false,
-                        error = UIText(R.string.email_rejected)
-                    )
+                    _emailState.update {
+                        CheckEmailState(
+                            isValid = false,
+                            error = UIText(R.string.email_rejected)
+                        )
+                    }
                 }
                 is Action.Success -> {
-                    if (emailState.isValid) _emailState.value =
-                        CheckEmailState(isValid = true)
-                    else _emailState.value = _emailState.value.copy(isLoading = false)
+                    if (emailState.isValid) _emailState.update { CheckEmailState(isValid = true) }
+                    else _emailState.update { copy(isLoading = false) }
                 }
                 else -> {}
             }
@@ -158,7 +170,13 @@ class RegistrationViewModel @Inject constructor(
         email: String,
         password: String
     ) {
-        registrationUseCase(name, surname, nickname, email, password).onEach { result ->
+        registrationUseCase(
+            name.capitalize(),
+            surname.capitalize(),
+            nickname,
+            email,
+            password
+        ).onEach { result ->
             when (result) {
                 is Action.Loading -> _registrationState.value = RegistrationState(isLoading = true)
                 is Action.Error -> {
@@ -195,9 +213,14 @@ class RegistrationViewModel @Inject constructor(
     val passwordValidationError: UIText by _passwordValidationError
 
     fun validatePassword(password: String) {
-        val result = passwordValidator.validate(password)
-        _isPasswordValid.value = result is ValidatorResult.Success
-        if (result is ValidatorResult.Error) _passwordValidationError.value = result.message
+        passwordValidator.validate(password)
+            .onSuccess { _isPasswordValid.value = true }
+            .onFailure {
+                _passwordValidationError.value = it
+                _isPasswordValid.value = false
+            }
     }
+
+    private fun String.capitalize() = lowercase().replaceFirstChar { it.titlecase() }
 
 }

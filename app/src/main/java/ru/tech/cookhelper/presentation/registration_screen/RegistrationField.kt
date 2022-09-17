@@ -234,21 +234,21 @@ fun RegistrationField(
                             onValueChange = { passwordRepeat = it },
                             label = { Text(stringResource(R.string.repeat_password)) },
                             singleLine = true,
-                            isError = passwordRepeat.isNotEmpty() && passwordRepeat != password,
+                            isError = passwordRepeat.isEmpty() || passwordRepeat != password,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Done
                             ),
                             error = {
-                                Text(stringResource(R.string.passwords_dont_match))
+                                if (passwordRepeat.isEmpty()) Text(stringResource(R.string.required_field))
+                                else Text(stringResource(R.string.passwords_dont_match))
                             },
                             modifier = Modifier.width(TextFieldDefaults.MinWidth),
                             keyboardActions = KeyboardActions(onDone = {
                                 focusManager.clearFocus()
                                 if (isFormValid) viewModel.registerWith(
-                                    name.capitalize(),
-                                    surname.capitalize(),
-                                    nick, email, password
+                                    name, surname, nick,
+                                    email, password
                                 )
                             }),
                             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -274,9 +274,8 @@ fun RegistrationField(
         enabled = if (!viewModel.registrationState.isLoading) isFormValid else false,
         onClick = {
             viewModel.registerWith(
-                name.capitalize(),
-                surname.capitalize(),
-                nick, email, password
+                name, surname, nick,
+                email, password
             )
         },
         modifier = Modifier.defaultMinSize(
@@ -293,7 +292,8 @@ fun RegistrationField(
         Spacer(Modifier.size(12.dp))
         TextButton(
             onClick = { authController.navigate(Screen.Authentication.Login) },
-            content = { Text(stringResource(R.string.log_in_have_acc)) })
+            content = { Text(stringResource(R.string.log_in_have_acc)) }
+        )
     }
     Spacer(Modifier.size(16.dp * scaleModifier))
 
@@ -313,5 +313,3 @@ fun RegistrationField(
         }
     }
 }
-
-fun String.capitalize() = lowercase().replaceFirstChar { it.titlecase() }

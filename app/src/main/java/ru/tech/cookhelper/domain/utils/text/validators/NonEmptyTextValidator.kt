@@ -9,7 +9,7 @@ class NonEmptyTextValidator<S>(
     override var validatorResult: ValidatorResult<S> = ValidatorResult.NoResult()
     override fun validate(stringToValidate: String): ValidatorResult<S> {
         validatorResult = if (stringToValidate.trim().isEmpty())
-            ValidatorResult.Error(message)
+            ValidatorResult.Failure(message)
         else ValidatorResult.Success()
 
         return validatorResult

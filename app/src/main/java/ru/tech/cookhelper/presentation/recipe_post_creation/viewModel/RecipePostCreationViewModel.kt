@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +33,7 @@ class RecipePostCreationViewModel @Inject constructor(
 
     init {
         getUserUseCase()
-            .onEach { _user.value = it }
+            .onEach { _user.update { it } }
             .launchIn(viewModelScope)
 
         _categories.value = List(15) { "Категория блюда с порядковым номером $it" }
@@ -54,7 +55,7 @@ class RecipePostCreationViewModel @Inject constructor(
     }
 
     fun setProducts(newProducts: List<Product>) {
-        _products.value = newProducts
+        _products.update { newProducts }
     }
 
 }

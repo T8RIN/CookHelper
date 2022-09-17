@@ -21,6 +21,7 @@ import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.confirm_email.components.CodeState
 import ru.tech.cookhelper.presentation.restore_password.components.RestorePasswordState
 import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -45,8 +46,8 @@ class RestorePasswordViewModel @Inject constructor(
 
     fun restorePasswordBy(login: String) {
         viewModelScope.launch {
-            _restorePasswordState.value = _restorePasswordState.value.copy(isLoading = true)
-            _restorePasswordCodeState.value = CodeState(isLoading = true)
+            _restorePasswordState.update { copy(isLoading = true) }
+            _restorePasswordCodeState.update { CodeState(isLoading = true) }
             when (val result = sendRestoreCodeUseCase(login)) {
                 is Action.Empty -> {
                     sendEvent(
@@ -55,14 +56,12 @@ class RestorePasswordViewModel @Inject constructor(
                             Icons.Rounded.ErrorOutline
                         )
                     )
-                    _restorePasswordCodeState.value = CodeState(error = true)
-                    _restorePasswordState.value =
-                        _restorePasswordState.value.copy(isLoading = false)
+                    _restorePasswordCodeState.update { CodeState(error = true) }
+                    _restorePasswordState.update { copy(isLoading = false) }
                 }
                 is Action.Error -> {
-                    _restorePasswordCodeState.value = CodeState(error = true)
-                    _restorePasswordState.value =
-                        _restorePasswordState.value.copy(isLoading = false)
+                    _restorePasswordCodeState.update { CodeState(error = true) }
+                    _restorePasswordState.update { copy(isLoading = false) }
                     sendEvent(
                         Event.ShowToast(
                             UIText.DynamicString(result.message.toString()),
@@ -71,9 +70,8 @@ class RestorePasswordViewModel @Inject constructor(
                     )
                 }
                 is Action.Success -> {
-                    _restorePasswordState.value =
-                        RestorePasswordState(state = RestoreState.Password)
-                    _restorePasswordCodeState.value = CodeState()
+                    _restorePasswordState.update { RestorePasswordState(state = RestoreState.Password) }
+                    _restorePasswordCodeState.update { CodeState() }
                     restoreLogin = login
                 }
                 else -> {}
@@ -84,14 +82,14 @@ class RestorePasswordViewModel @Inject constructor(
     fun applyPasswordByCode(code: String, password: String) {
         applyPasswordByCodeUseCase(restoreLogin, code, password).onEach { result ->
             when (result) {
-                is Action.Loading -> _restorePasswordState.value =
+                is Action.Loading -> _restorePasswordState.update {
                     RestorePasswordState(
                         isLoading = true,
                         state = RestoreState.Password
                     )
+                }
                 is Action.Error -> {
-                    _restorePasswordState.value =
-                        RestorePasswordState(state = RestoreState.Password)
+                    _restorePasswordState.update { RestorePasswordState(state = RestoreState.Password) }
                     sendEvent(
                         Event.ShowToast(
                             UIText.DynamicString(result.message.toString()),
@@ -101,10 +99,12 @@ class RestorePasswordViewModel @Inject constructor(
                 }
                 is Action.Success -> {
                     result.data?.let {
-                        _restorePasswordState.value = RestorePasswordState(
-                            user = it,
-                            state = RestoreState.Password
-                        )
+                        _restorePasswordState.update {
+                            RestorePasswordState(
+                                user = it,
+                                state = RestoreState.Password
+                            )
+                        }
                         sendEvent(Event.NavigateTo(Screen.Authentication.Login))
                         sendEvent(
                             Event.ShowToast(
@@ -115,8 +115,7 @@ class RestorePasswordViewModel @Inject constructor(
                     }
                 }
                 is Action.Empty -> {
-                    _restorePasswordState.value =
-                        RestorePasswordState(state = RestoreState.Password)
+                    _restorePasswordState.update { RestorePasswordState(state = RestoreState.Password) }
                     sendEvent(
                         Event.ShowToast(
                             UIText.StringResource(R.string.wrong_code),
@@ -129,7 +128,7 @@ class RestorePasswordViewModel @Inject constructor(
     }
 
     fun goBackPasswordRestore() {
-        _restorePasswordState.value = _restorePasswordState.value.copy(state = RestoreState.Login)
+        _restorePasswordState.update { copy(state = RestoreState.Login) }
     }
 
 }
