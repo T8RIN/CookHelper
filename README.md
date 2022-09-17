@@ -27,7 +27,7 @@ Go to the [Releases](https://github.com/t8rin/CookHelper/releases) to download t
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) for asynchronous work
 
 - [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) to emit values from data layer reactively.
-- 
+
 - [Accompanist](https://github.com/google/accompanist) to expand jetpack compose opportunities.
 
 - [Hilt](https://dagger.dev/hilt/) for dependency injection.
