@@ -87,11 +87,11 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.3.0-beta02")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.2-beta")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.26.2-beta")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.2-beta")
-    implementation("com.google.accompanist:accompanist-pager:0.26.2-beta")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.2-beta")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.26.3-beta")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.3-beta")
+    implementation("com.google.accompanist:accompanist-pager:0.26.3-beta")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.3-beta")
 
     //Coil
     implementation("io.coil-kt:coil:2.2.1")

@@ -14,7 +14,11 @@ object StateUtils {
         calculation: () -> T
     ): State<T> = remember { derivedStateOf(calculation) }
 
-    inline fun <T> MutableState<T>.update(transform: T.() -> T) {
-        this.value = transform(this.value)
+    inline fun <T> MutableState<T>.update(
+        transform: T.() -> T
+    ) = apply { setValue(value = transform(this.value)) }
+
+    fun <T> MutableState<T>.setValue(value: T) {
+        this.value = value
     }
 }

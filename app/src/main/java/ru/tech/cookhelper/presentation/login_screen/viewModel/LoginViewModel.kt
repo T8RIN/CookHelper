@@ -62,11 +62,9 @@ class LoginViewModel @Inject constructor(
                     result.data?.let {
                         sendEvent(
                             Event.SendData(
-                                mapOf(
-                                    "email" to it.email,
-                                    "name" to it.name,
-                                    "token" to it.token
-                                )
+                                "email" to it.email,
+                                "name" to it.name,
+                                "token" to it.token
                             )
                         )
                         if (!it.verified) sendEvent(

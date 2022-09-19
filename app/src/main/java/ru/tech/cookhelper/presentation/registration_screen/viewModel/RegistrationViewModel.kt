@@ -171,34 +171,32 @@ class RegistrationViewModel @Inject constructor(
         password: String
     ) {
         registrationUseCase(
-            name.capitalize(),
-            surname.capitalize(),
-            nickname,
-            email,
-            password
+            name = name.capitalize(),
+            surname = surname.capitalize(),
+            nickname = nickname,
+            email = email,
+            password = password
         ).onEach { result ->
             when (result) {
-                is Action.Loading -> _registrationState.value = RegistrationState(isLoading = true)
+                is Action.Loading -> _registrationState.update { RegistrationState(isLoading = true) }
                 is Action.Error -> {
-                    _registrationState.value = RegistrationState()
+                    _registrationState.update { RegistrationState() }
                     sendEvent(Event.ShowToast(UIText.DynamicString(result.message.toString())))
                 }
                 is Action.Success -> {
                     result.data?.let {
                         sendEvent(
                             Event.SendData(
-                                mapOf(
-                                    "email" to it.email,
-                                    "name" to it.name,
-                                    "token" to it.token
-                                )
+                                "email" to it.email,
+                                "name" to it.name,
+                                "token" to it.token
                             )
                         )
                         if (!it.verified) sendEvent(
                             Event.NavigateTo(Screen.Authentication.Confirmation)
                         )
                     }
-                    _registrationState.value = RegistrationState(user = result.data)
+                    _registrationState.update { RegistrationState(user = result.data) }
                 }
                 else -> {}
             }

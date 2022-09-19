@@ -10,8 +10,8 @@ sealed class Event {
     class NavigateTo(val screen: Screen) : Event()
     class NavigateIf(val predicate: (Screen?) -> Boolean, val screen: Screen) : Event()
 
-    @Suppress("UNCHECKED_CAST")
-    class SendData(val data: Map<String, Any>) : Event() {
-        operator fun <T> get(key: String): T? = data[key] as? T
+    class SendData(vararg val data: Pair<String, Any>) : Event() {
+        val mappedData = data.toMap()
+        inline operator fun <reified T> get(key: String): T? = mappedData[key] as? T
     }
 }

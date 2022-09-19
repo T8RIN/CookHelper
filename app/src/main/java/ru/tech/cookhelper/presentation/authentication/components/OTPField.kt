@@ -124,7 +124,6 @@ fun OTPField(
                     if (focusRequesters[index].freeFocus()) {
                         if (value == "" && code.size > index) {
                             code.removeAt(index = index)
-                            focusRequesters.getOrNull(index - 1)?.requestFocus()
                         } else {
                             if (code.size > index) {
                                 value.lastOrNull().let {
@@ -148,7 +147,7 @@ fun OTPField(
                     }
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(cursorColor = Color.Transparent),
-                keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
@@ -159,7 +158,7 @@ fun OTPField(
     }
 
     if (codeState.error) {
-        LaunchedEffect(codeState.error) {
+        LaunchedEffect(codeState) {
             onChange("")
 
             otpPos = OtpPos.Right
