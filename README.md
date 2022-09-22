@@ -52,7 +52,7 @@ Go to the [Releases](https://github.com/t8rin/CookHelper/releases) to download t
 - Architecture
   - Clean Architecture (UI - ViewModel - Use Cases - Repository)
   - Repository Pattern
-  - MVVM
+  - MVVM+
 
 ## Find this repository useful? :heart:
 Support it by joining __[stargazers](https://github.com/t8rin/cookhelper/stargazers)__ for this repository. :star: <br>
