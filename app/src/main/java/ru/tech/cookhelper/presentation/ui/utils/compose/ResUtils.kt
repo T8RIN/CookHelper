@@ -10,7 +10,7 @@ object ResUtils {
         return context.getString(this, formatArgs)
     }
 
-     fun Screen.getIcon(selected: Boolean): ImageVector =
+    fun Screen.getIcon(selected: Boolean): ImageVector =
         if (selected) this.selectedIcon else this.baseIcon
 
 }

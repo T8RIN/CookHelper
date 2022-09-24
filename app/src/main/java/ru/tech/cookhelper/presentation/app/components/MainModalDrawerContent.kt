@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
-import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
@@ -22,6 +21,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.drawerList
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.isCurrentDestination
+import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

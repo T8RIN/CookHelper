@@ -171,7 +171,6 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-
     override fun restorePasswordBy(
         login: String,
         code: String,
@@ -188,8 +187,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
+    private suspend fun <T> io(
+        function: suspend () -> T
+    ): T = withContext(Dispatchers.IO) { function() }
 }
-
-private suspend fun <T> io(
-    function: suspend () -> T
-): T = withContext(Dispatchers.IO) { function() }
