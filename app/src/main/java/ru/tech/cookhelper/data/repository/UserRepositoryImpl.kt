@@ -21,7 +21,6 @@ import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
 import javax.inject.Inject
 
-@Suppress("BlockingMethodInNonBlockingContext")
 class UserRepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val userApi: UserApi,
@@ -108,8 +107,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun getFeed(token: String): Flow<Action<List<RecipePost>>> = flow {
-        feedService
-            .awaitFeed(token)
+        feedService(token = token)
             .catch { emit(Action.Error(message = it.message)) }
             .collect { state ->
                 when (state) {

@@ -14,6 +14,7 @@ import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
 import ru.tech.cookhelper.data.repository.SettingsRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
+import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.data.utils.MoshiParser
 import ru.tech.cookhelper.domain.repository.MessageRepository
 import ru.tech.cookhelper.domain.repository.SettingsRepository
@@ -37,23 +38,28 @@ object RepositoryModule {
         userApi: UserApi,
         db: CookHelperDatabase,
         feedService: FeedService,
+        jsonParser: JsonParser
     ): UserRepository = UserRepositoryImpl(
         authService = authService,
         userApi = userApi,
         userDao = db.userDao,
         feedService = feedService,
-        jsonParser = MoshiParser(Moshi.Builder().build())
+        jsonParser = jsonParser
     )
 
     @Provides
     @Singleton
     fun provideMessageRepository(
         messageService: MessageService,
-        chatApi: ChatApi
+        chatApi: ChatApi,
+        jsonParser: JsonParser
     ): MessageRepository = MessageRepositoryImpl(
-        jsonParser = MoshiParser(Moshi.Builder().build()),
+        jsonParser = jsonParser,
         messageService = messageService,
         chatApi = chatApi
     )
+
+    @Provides
+    fun provideJsonParser(): JsonParser = MoshiParser(Moshi.Builder().build())
 
 }

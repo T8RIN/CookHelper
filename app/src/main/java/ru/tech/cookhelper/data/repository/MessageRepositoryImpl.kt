@@ -30,8 +30,7 @@ class MessageRepositoryImpl @Inject constructor(
     }.catch { emit(Action.Error(message = it.message)) }
 
     override fun awaitNewMessages(chatId: String, token: String): Flow<Action<Message>> = flow {
-        messageService
-            .awaitNewMessages(chatId, token)
+        messageService(chatId = chatId, token = token)
             .catch { emit(Action.Error(message = it.message)) }
             .collect { state ->
                 when (state) {
