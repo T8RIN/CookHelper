@@ -120,7 +120,7 @@
     <string name="apply">Применить</string>
     <string name="search_here">Ищите тут</string>
     <string name="write_a_message">Написать сообщение…</string>
-    <string name="waiting_for_connection">Ожидание подключения</string>
+    <string name="waiting_for_connection">Ожидание подключения…</string>
     <string name="new_chat">Новый чат</string>
     <string name="no_existing_chats">У вас нет активных чатов, создайте новый прямо сейчас!</string>
     <string name="t8rin">T8RIN - мобильный разработчик</string>

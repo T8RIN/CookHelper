@@ -1,5 +1,7 @@
 package ru.tech.cookhelper.domain.model
 
+import ru.tech.cookhelper.domain.utils.Domain
+
 data class RecipePost(
     val postId: String,
     val authorId: String,
@@ -7,6 +9,7 @@ data class RecipePost(
     val liked: Boolean,
     val likeCount: Int,
     val commentsCount: Int,
-    val recipe: Recipe
-)
+    val recipe: Recipe,
+    val author: User?
+) : Domain
 

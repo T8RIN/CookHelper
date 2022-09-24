@@ -11,13 +11,10 @@ import androidx.compose.ui.platform.LocalContext
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.AnimatedNavHostTransitionSpec
 import dev.olshevski.navigation.reimagined.NavController
-import dev.olshevski.navigation.reimagined.navigate
 import ru.tech.cookhelper.presentation.all_images.AllImagesScreen
 import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
 import ru.tech.cookhelper.presentation.chat.ChatScreen
 import ru.tech.cookhelper.presentation.chat_list.ChatListScreen
-import ru.tech.cookhelper.presentation.dish_details.DishDetailsScreen
-import ru.tech.cookhelper.presentation.dishes_based_on_fridge.OnFridgeBasedDishes
 import ru.tech.cookhelper.presentation.edit_profile.EditProfileScreen
 import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScreen
 import ru.tech.cookhelper.presentation.home_screen.HomeScreen
@@ -54,21 +51,14 @@ fun ScreenHost(
                     screen.baseIcon,
                     screen.title.asString()
                 )
-                is Screen.RecipeDetails -> {
-                    DishDetailsScreen(
-                        id = screen.id,
-                        onBack = { controller.goBack() })
-                }
-                is Screen.MatchedRecipes -> {
-                    OnFridgeBasedDishes(
-                        onRecipeClicked = {
-                            controller.navigate(
-                                Screen.RecipeDetails(it)
-                            )
-                        },
-                        onBack = { controller.goBack() }
-                    )
-                }
+                is Screen.RecipeDetails -> Placeholder(
+                    screen.baseIcon,
+                    screen.title.asString()
+                )
+                is Screen.MatchedRecipes -> Placeholder(
+                    screen.baseIcon,
+                    screen.title.asString()
+                )
                 is Screen.FullscreenImagePager -> {
                     FullScreenPagerScreen(
                         images = screen.images,

@@ -117,4 +117,6 @@ dependencies {
     //SplashScreenApi
     implementation("androidx.core:core-splashscreen:1.0.0")
 
+    implementation("com.github.skydoves:retrofit-adapters-result:1.0.3")
+
 }

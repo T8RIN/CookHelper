@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
@@ -131,11 +132,29 @@ fun ChatScreen(
                             title = viewModel.chatState.title
                         )
                         Spacer(Modifier.width(12.dp))
-                        Text(
-                            text = viewModel.chatState.title,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        Column(verticalArrangement = Arrangement.Center) {
+                            Text(
+                                text = viewModel.chatState.title,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            if (chatState.isLoading) {
+                                Text(
+                                    text = stringResource(R.string.waiting_for_connection),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    color = MaterialTheme.colorScheme.outlineVariant
+                                )
+                            }
+                        }
+                        if (chatState.isLoading) {
+                            Spacer(Modifier.width(10.dp))
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 1.dp
+                            )
+                        }
                     }
                 },
                 navigationIcon = {
@@ -144,29 +163,6 @@ fun ChatScreen(
                     }
                 },
             )
-            AnimatedVisibility(
-                visible = chatState.isLoading,
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Spacer(Modifier.weight(1f))
-                    Spacer(Modifier.width(16.dp))
-                    Text(stringResource(R.string.waiting_for_connection), fontSize = 18.sp)
-                    Spacer(Modifier.width(16.dp))
-                    Loading(
-                        Modifier
-                            .wrapContentWidth()
-                            .padding(vertical = 8.dp)
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    Spacer(Modifier.weight(1f))
-                }
-            }
-
             AnimatedContent(
                 targetState = viewModel.loadingAllMessages,
                 modifier = Modifier.weight(1f),

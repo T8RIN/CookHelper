@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.flow
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.dto.MessageDto
-import ru.tech.cookhelper.data.remote.webSocket.WebSocketState
-import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
+import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
 import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.domain.model.Chat
 import ru.tech.cookhelper.domain.model.Message
@@ -24,7 +24,8 @@ class MessageRepositoryImpl @Inject constructor(
     override fun getAllMessages(chatId: String, token: String): Flow<Action<List<Message>>> = flow {
         emit(Action.Loading())
         val response = chatApi.getAllMessages(chatId, token)
-        if (response.status == 400) emit(Action.Success(data = response.chat.map { it.asDomain() }))
+        if (response.status == 400) emit(Action.Success(data = response.data?.map { it.asDomain() }
+            ?: emptyList()))
         else emit(Action.Error(message = response.message))
     }.catch { emit(Action.Error(message = it.message)) }
 

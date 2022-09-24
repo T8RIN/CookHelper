@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.data.remote.webSocket
+package ru.tech.cookhelper.data.remote.web_socket
 
 import okhttp3.Response
 

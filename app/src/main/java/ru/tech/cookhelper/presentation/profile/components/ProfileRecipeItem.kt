@@ -15,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.domain.model.RecipePost
-import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
@@ -29,12 +28,10 @@ import java.util.*
 @Composable
 fun ProfileRecipeItem(
     recipePost: RecipePost,
-    authorLoader: (authorId: String) -> User,
     onAuthorClick: (authorId: String) -> Unit,
     onRecipeClick: (id: String) -> Unit
 ) {
     val context = LocalContext.current
-    val author = authorLoader(recipePost.authorId)
 
     val timestamp by StateUtils.computedStateOf {
         val df =
@@ -60,7 +57,7 @@ fun ProfileRecipeItem(
     ) {
         AuthorBubble(
             modifier = Modifier.padding(top = 12.dp, start = 12.dp),
-            author = author,
+            author = recipePost.author,
             timestamp = timestamp,
             onClick = { onAuthorClick(recipePost.authorId) }
         )

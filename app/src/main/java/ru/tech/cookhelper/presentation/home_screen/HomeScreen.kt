@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tech.cookhelper.presentation.app.components.Placeholder
+import ru.tech.cookhelper.presentation.feed.FeedScreen
 import ru.tech.cookhelper.presentation.forum_screen.ForumScreen
 import ru.tech.cookhelper.presentation.home_screen.components.BottomNavigationBar
 import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
@@ -54,13 +55,7 @@ fun HomeScreen(
             ) { bottomNavScreen ->
                 when (bottomNavScreen) {
                     is Screen.Home.Feed -> {
-                        Placeholder(
-                            icon = bottomNavScreen.baseIcon,
-                            text = bottomNavScreen.title.asString(),
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 8.dp)
-                        )
+                        FeedScreen()
                     }
                     is Screen.Home.Fridge -> {
                         Placeholder(

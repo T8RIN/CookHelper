@@ -305,15 +305,7 @@ fun ProfileScreen(
                             "",
                             "Big and hard to cook recipe with very very very long label",
                             "https://koelov.ru/wp-content/uploads/2013/10/kabachkovyj-tort-recept-prigotovleniya.jpg"
-                        )
-                    ),
-                    onRecipeClick = {
-                        //TODO: Open Recipe fullscreen like a post
-                    },
-                    onAuthorClick = {
-                        //TODO: Open Author page
-                    },
-                    authorLoader = {
+                        ),
                         User(
                             id = 1,
                             avatar = "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
@@ -325,7 +317,13 @@ fun ProfileScreen(
                             verified = true,
                             lastSeen = 0L
                         )
-                    }
+                    ),
+                    onRecipeClick = {
+                        //TODO: Open Recipe fullscreen like a post
+                    },
+                    onAuthorClick = {
+                        //TODO: Open Author page
+                    },
                 )
             }
         }

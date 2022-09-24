@@ -88,8 +88,6 @@ class LoginViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun cacheUser(user: User) {
-        viewModelScope.launch { cacheUserUseCase(user) }
-    }
+    private fun cacheUser(user: User) = viewModelScope.launch { cacheUserUseCase(user) }
 
 }

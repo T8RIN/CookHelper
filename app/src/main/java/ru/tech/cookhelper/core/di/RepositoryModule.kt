@@ -8,7 +8,9 @@ import dagger.hilt.components.SingletonComponent
 import ru.tech.cookhelper.data.local.database.CookHelperDatabase
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
-import ru.tech.cookhelper.data.remote.webSocket.message.MessageService
+import ru.tech.cookhelper.data.remote.api.user.UserApi
+import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
+import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
 import ru.tech.cookhelper.data.repository.SettingsRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
@@ -32,8 +34,16 @@ object RepositoryModule {
     @Singleton
     fun provideUserRepository(
         authService: AuthService,
-        db: CookHelperDatabase
-    ): UserRepository = UserRepositoryImpl(authService, db.userDao)
+        userApi: UserApi,
+        db: CookHelperDatabase,
+        feedService: FeedService,
+    ): UserRepository = UserRepositoryImpl(
+        authService = authService,
+        userApi = userApi,
+        userDao = db.userDao,
+        feedService = feedService,
+        jsonParser = MoshiParser(Moshi.Builder().build())
+    )
 
     @Provides
     @Singleton

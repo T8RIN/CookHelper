@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.data.remote.utils
 
-interface Response {
-    val status: Int
-    val message: String
-}
+data class Response<T>(
+    val status: Int,
+    val message: String,
+    val data: T?
+)

@@ -21,7 +21,7 @@ import ru.tech.cookhelper.presentation.ui.theme.Gray
 @Composable
 fun AuthorBubble(
     modifier: Modifier = Modifier,
-    author: User,
+    author: User?,
     timestamp: String,
     onClick: () -> Unit
 ) {
@@ -32,13 +32,13 @@ fun AuthorBubble(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Picture(
-            model = author.avatar,
+            model = author?.avatar,
             modifier = Modifier.size(54.dp)
         )
         Spacer(Modifier.size(8.dp))
         Column {
             Text(
-                text = "${author.name} ${author.surname}",
+                text = "${author?.name} ${author?.surname}",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp
             )

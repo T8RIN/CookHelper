@@ -2,6 +2,7 @@ package ru.tech.cookhelper.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
 
 interface UserRepository {
@@ -18,7 +19,11 @@ interface UserRepository {
 
     suspend fun requestPasswordRestoreCode(login: String): Action<User?>
 
-    fun restorePasswordBy(login: String, code: String, newPassword: String): Flow<Action<User?>>
+    fun restorePasswordBy(
+        login: String,
+        code: String,
+        newPassword: String
+    ): Flow<Action<User?>>
 
     suspend fun requestCode(token: String): Result<User?>
 
@@ -33,5 +38,11 @@ interface UserRepository {
     suspend fun checkEmailForAvailability(email: String): Action<User?>
 
     suspend fun logOut()
+
+    suspend fun loadUserById(id: String): User?
+
+    fun getFeed(token: String): Flow<Action<List<RecipePost>>>
+
+    fun stopAwaitingFeed()
 
 }

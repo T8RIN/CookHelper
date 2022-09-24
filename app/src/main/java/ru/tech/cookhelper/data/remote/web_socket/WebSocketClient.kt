@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.data.remote.webSocket
+package ru.tech.cookhelper.data.remote.web_socket
 
 
 import android.util.Log
@@ -6,7 +6,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import okhttp3.*
-import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 
 abstract class WebSocketClient : WebSocketListener() {
     protected abstract val okHttpClient: OkHttpClient
@@ -47,7 +46,8 @@ abstract class WebSocketClient : WebSocketListener() {
         Log.d(SOCKET_TAG, "opening")
 
         opening = true
-        socketOpen = false
+
+        if (socketOpen) closeWebSocket()
 
         _webSocketState.trySend(WebSocketState.Opening)
 
@@ -130,11 +130,7 @@ abstract class WebSocketClient : WebSocketListener() {
         Log.d(SOCKET_TAG, "onFailure: ${t.message}")
         _webSocketState.trySend(WebSocketState.Error(t.message.toString()))
         // Переоткрываем
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(500L)
-            restartWebSocket()
-            cancel()
-        }
+        restartWebSocket()
     }
 
     /**
@@ -157,5 +153,5 @@ abstract class WebSocketClient : WebSocketListener() {
 
     private val CLOSE_REASON: String = "Normal closure"
     private val CLOSE_CODE: Int = 1000
-    private val SOCKET_TAG: String = "WEB_SOCKET_CLIENT - ${this::class.name}"
+    private val SOCKET_TAG: String = this.toString().split(".").lastOrNull() ?: ""
 }

@@ -1,12 +1,12 @@
-package ru.tech.cookhelper.data.remote.webSocket.message
+package ru.tech.cookhelper.data.remote.web_socket.message
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import okhttp3.OkHttpClient
 import ru.tech.cookhelper.core.constants.Constants
 import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
-import ru.tech.cookhelper.data.remote.webSocket.WebSocketClient
-import ru.tech.cookhelper.data.remote.webSocket.WebSocketState
+import ru.tech.cookhelper.data.remote.web_socket.WebSocketClient
+import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
 import java.util.concurrent.TimeUnit
 
 class MessageService : WebSocketClient() {
