@@ -12,13 +12,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.material.icons.rounded.Send
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -38,6 +34,7 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
+import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
@@ -93,17 +90,10 @@ fun ChatScreen(
             state.animateScrollToItem(viewModel.messages.size - 1)
         }
     }
-    var newMessages by rememberSaveable { mutableStateOf(0) }
-
     val user = viewModel.user
-
-    LaunchedEffect(isAtTheBottom) {
-        if (isAtTheBottom) newMessages = 0
-    }
 
     LaunchedEffect(viewModel.messages.size) {
         if (viewModel.messages.lastOrNull()?.userId == user?.id) scrollToBottom()
-        if (!isAtTheBottom) newMessages++
     }
 
     Box(Modifier.navigationBarsLandscapePadding()) {
@@ -170,49 +160,62 @@ fun ChatScreen(
             ) { loading ->
                 if (loading) Loading()
                 else {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .nestedScroll(scrollBehavior.nestedScrollConnection),
-                        state = state,
-                        verticalArrangement = Arrangement.Bottom,
-                        contentPadding = PaddingValues(vertical = 12.dp)
-                    ) {
-                        viewModel.messages.forEachIndexed { index, message ->
-                            val higherMessage = viewModel.messages.getOrNull(index - 1)
-                            val lowerMessage = viewModel.messages.getOrNull(index + 1)
+                    AnimatedContent(
+                        targetState = viewModel.messages.isNotEmpty(),
+                        modifier = Modifier.weight(1f),
+                        transitionSpec = { fadeIn() with fadeOut() }
+                    ) { notEmpty ->
+                        if (notEmpty) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                                state = state,
+                                verticalArrangement = Arrangement.Bottom,
+                                contentPadding = PaddingValues(vertical = 12.dp)
+                            ) {
+                                viewModel.messages.forEachIndexed { index, message ->
+                                    val higherMessage = viewModel.messages.getOrNull(index - 1)
+                                    val lowerMessage = viewModel.messages.getOrNull(index + 1)
 
-                            val topDay = formatOrNull(higherMessage?.timestamp, "d")
-                            val currentDay = formatOrNull(message.timestamp, "d")
+                                    val topDay = formatOrNull(higherMessage?.timestamp, "d")
+                                    val currentDay = formatOrNull(message.timestamp, "d")
 
-                            if (topDay != currentDay) stickyHeader(key = message.timestamp) {
-                                MessageHeader(
-                                    text = formatOrNull(
-                                        message.timestamp,
-                                        "d MMMM"
-                                    ).toString()
-                                )
+                                    if (topDay != currentDay) stickyHeader(key = message.timestamp) {
+                                        MessageHeader(
+                                            text = formatOrNull(
+                                                message.timestamp,
+                                                "d MMMM"
+                                            ).toString()
+                                        )
+                                    }
+
+                                    item(key = message.id) {
+                                        val topTime = formatOrNull(higherMessage?.timestamp)
+                                        val currentTime = formatOrNull(message.timestamp)
+                                        val bottomTime = formatOrNull(lowerMessage?.timestamp)
+
+                                        val cutTopCorner =
+                                            higherMessage?.userId != message.userId || topTime != currentTime
+                                        val showPointingArrow =
+                                            lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
+
+                                        MessageBubbleItem(
+                                            isMessageFromCurrentUser = (viewModel.user?.id
+                                                ?: 0) == message.userId,
+                                            text = message.text,
+                                            timestamp = message.timestamp,
+                                            cutTopCorner = cutTopCorner,
+                                            showPointingArrow = showPointingArrow
+                                        )
+                                    }
+                                }
                             }
-
-                            item(key = message.id) {
-                                val topTime = formatOrNull(higherMessage?.timestamp)
-                                val currentTime = formatOrNull(message.timestamp)
-                                val bottomTime = formatOrNull(lowerMessage?.timestamp)
-
-                                val cutTopCorner =
-                                    higherMessage?.userId != message.userId || topTime != currentTime
-                                val showPointingArrow =
-                                    lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
-
-                                MessageBubbleItem(
-                                    isMessageFromCurrentUser = (viewModel.user?.id
-                                        ?: 0) == message.userId,
-                                    text = message.text,
-                                    timestamp = message.timestamp,
-                                    cutTopCorner = cutTopCorner,
-                                    showPointingArrow = showPointingArrow
-                                )
-                            }
+                        } else {
+                            Placeholder(
+                                icon = Icons.Rounded.SpeakerNotesOff,
+                                text = stringResource(R.string.no_messages)
+                            )
                         }
                     }
                 }
@@ -287,7 +290,7 @@ fun ChatScreen(
         }
 
         AnimatedVisibility(
-            visible = !isAtTheBottom && newMessages != 0,
+            visible = !isAtTheBottom && viewModel.chatState.newMessages != 0,
             modifier = Modifier
                 .padding(8.dp)
                 .padding(
@@ -313,7 +316,7 @@ fun ChatScreen(
                     containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
                     contentColor = MaterialTheme.colorScheme.tertiaryContainer
                 ) {
-                    Text(newMessages.toString())
+                    Text(viewModel.chatState.newMessages.toString())
                 }
             }
         }

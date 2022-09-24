@@ -153,4 +153,5 @@
     <string name="my_topics">My Topics</string>
     <string name="required_field">*Required field</string>
     <string name="feed_error">No one published recipes yet or something went wrong</string>
+    <string name="no_messages">No messages found, write your first!</string>
 </resources>

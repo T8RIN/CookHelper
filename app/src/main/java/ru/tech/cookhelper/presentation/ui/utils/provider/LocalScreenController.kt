@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import dev.olshevski.navigation.reimagined.NavController
-import dev.olshevski.navigation.reimagined.navigate
+import dev.olshevski.navigation.reimagined.navigate as libNavigate
 import dev.olshevski.navigation.reimagined.pop
 import dev.olshevski.navigation.reimagined.popAll
+import ru.tech.cookhelper.core.utils.ReflectionUtils.name
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
 val LocalScreenController = compositionLocalOf<NavController<Screen>> {
@@ -20,9 +21,13 @@ inline val <T> T.isCurrentDestination: Boolean
 
 inline val <T> NavController<T>.currentDestination: T? get() = this.backstack.entries.lastOrNull()?.destination
 
+fun <T: Any> NavController<T>.navigate(destination: T) = apply {
+    if ((currentDestination ?: "")::class.name != destination::class.name) libNavigate(destination)
+}
+
 fun <T> NavController<T>.navigateAndPopAll(destination: T) = apply {
     popAll()
-    navigate(destination)
+    libNavigate(destination)
 }
 
 fun <T> NavController<T>.goBack(): Boolean {
