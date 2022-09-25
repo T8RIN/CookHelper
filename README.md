@@ -19,6 +19,10 @@ An endless recipe feed will keep you entertained, chat on the forum for cooking 
 ## Download
 Go to the [Releases](https://github.com/t8rin/CookHelper/releases) to download the latest APK.
 
+## Other parts of project
+
+- [CookHelper API](https://github.com/tannec/cookhelper) repository of [Tannec](https://github.com/tannec)
+
 ## Tech stack & Open-source libraries
 - Minimum SDK level 21
 
