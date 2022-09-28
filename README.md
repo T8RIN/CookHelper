@@ -53,6 +53,11 @@ Go to the [Releases](https://github.com/t8rin/CookHelper/releases) to download t
   - Clean Architecture (UI - ViewModel - Use Cases - Repository)
   - Repository Pattern
   - MVVM+
+  
+## Other parts of project
+
+- [CookHelper API](https://github.com/tannec/cookhelper) repository of [Tannec](https://github.com/tannec)
+
 
 ## Find this repository useful? :heart:
 Support it by joining __[stargazers](https://github.com/t8rin/cookhelper/stargazers)__ for this repository. :star: <br>
