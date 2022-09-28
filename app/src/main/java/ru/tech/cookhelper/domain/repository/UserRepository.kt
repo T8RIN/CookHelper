@@ -7,7 +7,7 @@ import ru.tech.cookhelper.domain.model.User
 
 interface UserRepository {
 
-    fun loginWith(login: String, password: String): Flow<Action<User?>>
+    fun loginWith(login: String, password: String): Flow<Action<User>>
 
     fun registerWith(
         name: String,
@@ -15,7 +15,7 @@ interface UserRepository {
         nickname: String,
         email: String,
         password: String
-    ): Flow<Action<User?>>
+    ): Flow<Action<User>>
 
     suspend fun requestPasswordRestoreCode(login: String): Action<User?>
 
@@ -23,11 +23,11 @@ interface UserRepository {
         login: String,
         code: String,
         newPassword: String
-    ): Flow<Action<User?>>
+    ): Flow<Action<User>>
 
     suspend fun requestCode(token: String): Result<User?>
 
-    fun checkCode(code: String, token: String): Flow<Action<User?>>
+    fun checkCode(code: String, token: String): Flow<Action<User>>
 
     suspend fun cacheUser(user: User)
 

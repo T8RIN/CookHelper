@@ -14,10 +14,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.check_code.CheckCodeUseCase
@@ -54,42 +56,40 @@ class ConfirmEmailViewModel @Inject constructor(
     }
 
     fun checkVerificationCode(code: String) {
-        checkCodeUseCase(code, token).onEach { result ->
-            when (result) {
-                is Action.Loading -> _codeState.update { CodeState(isLoading = true) }
-                is Action.Error -> {
-                    _codeState.update { CodeState(error = true) }
+        checkCodeUseCase(code, token)
+            .onLoading { _codeState.update { CodeState(isLoading = true) } }
+            .onError {
+                _codeState.update { CodeState(error = true) }
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.DynamicString(this),
+                        Icons.Rounded.ErrorOutline
+                    ),
+                )
+            }
+            .onSuccess {
+                this?.let {
                     sendEvent(
                         Event.ShowToast(
-                            UIText.DynamicString(result.message.toString()),
-                            Icons.Rounded.ErrorOutline
-                        ),
-                    )
-                }
-                is Action.Success -> {
-                    result.data?.let {
-                        sendEvent(
-                            Event.ShowToast(
-                                UIText.StringResource(
-                                    R.string.welcome_user,
-                                    it.name
-                                ), Icons.Outlined.Face
-                            )
-                        )
-                        cacheUser(it)
-                    }
-                }
-                is Action.Empty -> {
-                    _codeState.update { CodeState(error = true) }
-                    sendEvent(
-                        Event.ShowToast(
-                            UIText.StringResource(R.string.wrong_code),
-                            Icons.Rounded.ErrorOutline
+                            UIText.StringResource(
+                                R.string.welcome_user,
+                                it.name
+                            ), Icons.Outlined.Face
                         )
                     )
+                    cacheUser(it)
                 }
             }
-        }.launchIn(viewModelScope)
+            .onEmpty {
+                _codeState.update { CodeState(error = true) }
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.StringResource(R.string.wrong_code),
+                        Icons.Rounded.ErrorOutline
+                    )
+                )
+            }
+            .launchIn(viewModelScope)
     }
 
     fun askForVerificationCode() {

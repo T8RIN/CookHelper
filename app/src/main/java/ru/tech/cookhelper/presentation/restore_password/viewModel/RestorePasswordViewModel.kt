@@ -11,10 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.*
 import ru.tech.cookhelper.domain.use_case.restore_password.ApplyPasswordByCodeUseCase
 import ru.tech.cookhelper.domain.use_case.restore_password.SendRestoreCodeUseCase
 import ru.tech.cookhelper.presentation.authentication.components.getMessage
@@ -80,51 +79,50 @@ class RestorePasswordViewModel @Inject constructor(
     }
 
     fun applyPasswordByCode(code: String, password: String) {
-        applyPasswordByCodeUseCase(restoreLogin, code, password).onEach { result ->
-            when (result) {
-                is Action.Loading -> _restorePasswordState.update {
+        applyPasswordByCodeUseCase(restoreLogin, code, password)
+            .onLoading {
+                _restorePasswordState.update {
                     RestorePasswordState(
                         isLoading = true,
                         state = RestoreState.Password
                     )
                 }
-                is Action.Error -> {
-                    _restorePasswordState.update { RestorePasswordState(state = RestoreState.Password) }
-                    sendEvent(
-                        Event.ShowToast(
-                            UIText.DynamicString(result.message.toString()),
-                            Icons.Outlined.ErrorOutline
-                        )
+            }
+            .onError {
+                _restorePasswordState.update { RestorePasswordState(state = RestoreState.Password) }
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.DynamicString(this),
+                        Icons.Outlined.ErrorOutline
                     )
-                }
-                is Action.Success -> {
-                    result.data?.let {
-                        _restorePasswordState.update {
-                            RestorePasswordState(
-                                user = it,
-                                state = RestoreState.Password
-                            )
-                        }
-                        sendEvent(Event.NavigateTo(Screen.Authentication.Login))
-                        sendEvent(
-                            Event.ShowToast(
-                                UIText.StringResource(R.string.password_changed),
-                                Icons.Rounded.Password
-                            )
+                )
+            }
+            .onSuccess {
+                this?.apply {
+                    _restorePasswordState.update {
+                        RestorePasswordState(
+                            user = this@apply,
+                            state = RestoreState.Password
                         )
                     }
-                }
-                is Action.Empty -> {
-                    _restorePasswordState.update { RestorePasswordState(state = RestoreState.Password) }
+                    sendEvent(Event.NavigateTo(Screen.Authentication.Login))
                     sendEvent(
                         Event.ShowToast(
-                            UIText.StringResource(R.string.wrong_code),
-                            Icons.Outlined.ErrorOutline
+                            UIText.StringResource(R.string.password_changed),
+                            Icons.Rounded.Password
                         )
                     )
                 }
             }
-        }.launchIn(viewModelScope)
+            .onEmpty {
+                _restorePasswordState.update { RestorePasswordState(state = RestoreState.Password) }
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.StringResource(R.string.wrong_code),
+                        Icons.Outlined.ErrorOutline
+                    )
+                )
+            }.launchIn(viewModelScope)
     }
 
     fun goBackPasswordRestore() {

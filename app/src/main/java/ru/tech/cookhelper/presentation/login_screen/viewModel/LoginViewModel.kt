@@ -10,10 +10,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.log_in.LoginUseCase
@@ -37,55 +39,53 @@ class LoginViewModel @Inject constructor(
     val loginState: LoginState by _loginState
 
     fun logInWith(login: String, password: String) {
-        loginUseCase(login, password).onEach { result ->
-            when (result) {
-                is Action.Loading -> _loginState.update { LoginState(isLoading = true) }
-                is Action.Empty -> {
-                    _loginState.update { LoginState() }
-                    sendEvent(
-                        Event.ShowToast(
-                            UIText.StringResource(result.status.getMessage()),
-                            Icons.Rounded.ErrorOutline
-                        )
+        loginUseCase(login, password)
+            .onLoading { _loginState.update { LoginState(isLoading = true) } }
+            .onEmpty {
+                _loginState.update { LoginState() }
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.StringResource(getMessage()),
+                        Icons.Rounded.ErrorOutline
                     )
-                }
-                is Action.Error -> {
-                    _loginState.update { LoginState() }
-                    sendEvent(
-                        Event.ShowToast(
-                            UIText.DynamicString(result.message.toString()),
-                            Icons.Rounded.ErrorOutline
-                        )
-                    )
-                }
-                is Action.Success -> {
-                    result.data?.let {
-                        sendEvent(
-                            Event.SendData(
-                                "email" to it.email,
-                                "name" to it.name,
-                                "token" to it.token
-                            )
-                        )
-                        if (!it.verified) sendEvent(
-                            Event.NavigateTo(Screen.Authentication.Confirmation)
-                        )
-                        else {
-                            sendEvent(
-                                Event.ShowToast(
-                                    UIText.StringResource(
-                                        R.string.welcome_user,
-                                        it.name
-                                    ), Icons.Outlined.Face
-                                )
-                            )
-                            cacheUser(it)
-                        }
-                    }
-                    _loginState.update { LoginState(user = result.data) }
-                }
+                )
             }
-        }.launchIn(viewModelScope)
+            .onError {
+                _loginState.update { LoginState() }
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.DynamicString(this),
+                        Icons.Rounded.ErrorOutline
+                    )
+                )
+            }
+            .onSuccess {
+                this?.apply {
+                    sendEvent(
+                        Event.SendData(
+                            "email" to email,
+                            "name" to name,
+                            "token" to token
+                        )
+                    )
+                    if (!verified) sendEvent(
+                        Event.NavigateTo(Screen.Authentication.Confirmation)
+                    )
+                    else {
+                        sendEvent(
+                            Event.ShowToast(
+                                UIText.StringResource(
+                                    R.string.welcome_user,
+                                    name
+                                ), Icons.Outlined.Face
+                            )
+                        )
+                        cacheUser(this)
+                    }
+                }
+                _loginState.update { LoginState(user = this@onSuccess) }
+
+            }.launchIn(viewModelScope)
     }
 
     private fun cacheUser(user: User) = viewModelScope.launch { cacheUserUseCase(user) }

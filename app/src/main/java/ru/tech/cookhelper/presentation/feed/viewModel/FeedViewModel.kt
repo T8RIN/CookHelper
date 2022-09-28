@@ -9,7 +9,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.get_feed.GetFeedUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.stop_awaiting_feed.StopAwaitingFeedUseCase
@@ -41,29 +44,29 @@ class FeedViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         getFeedUseCase(user.token)
-            .onEach { action ->
-                when (action) {
-                    is Action.Empty -> _feedState.update { copy(isLoading = false) }
-                    is Action.Error -> {
-                        _feedState.update { copy(isLoading = false) }
-                        sendEvent(
-                            Event.ShowToast(
-                                //TODO: Move this to repo layer
-                                if (!(action.message ?: "").contains("Unable to resolve host")
-                                ) UIText.DynamicString(action.message) else UIText.StringResource(R.string.no_connection)
-                            )
-                        )
-                    }
-                    is Action.Loading -> _feedState.update {
-                        if (this.data.isEmpty()) copy(isLoading = true)
-                        else this
-                    }
-                    is Action.Success -> _feedState.update {
-                        copy(
-                            data = (action.data ?: emptyList()) + this.data,
-                            isLoading = false
-                        )
-                    }
+            .onEmpty { _feedState.update { copy(isLoading = false) } }
+            .onError {
+                _feedState.update { copy(isLoading = false) }
+                sendEvent(
+                    Event.ShowToast(
+                        //TODO: Move this to repo layer
+                        if (!this.contains("Unable to resolve host")
+                        ) UIText.DynamicString(this) else UIText.StringResource(R.string.no_connection)
+                    )
+                )
+            }
+            .onLoading {
+                _feedState.update {
+                    if (this.data.isEmpty()) copy(isLoading = true)
+                    else this
+                }
+            }
+            .onSuccess {
+                _feedState.update {
+                    copy(
+                        data = (this@onSuccess ?: emptyList()) + this.data,
+                        isLoading = false
+                    )
                 }
             }.launchIn(viewModelScope)
 

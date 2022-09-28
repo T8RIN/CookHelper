@@ -29,7 +29,7 @@ class UserRepositoryImpl @Inject constructor(
     private val jsonParser: JsonParser
 ) : UserRepository {
 
-    override fun loginWith(login: String, password: String): Flow<Action<User?>> = flow {
+    override fun loginWith(login: String, password: String): Flow<Action<User>> = flow {
         emit(Action.Loading())
         val response = io { authService.loginWith(login, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
@@ -47,7 +47,7 @@ class UserRepositoryImpl @Inject constructor(
         nickname: String,
         email: String,
         password: String
-    ): Flow<Action<User?>> = flow {
+    ): Flow<Action<User>> = flow {
         emit(Action.Loading())
         val response =
             io { authService.registerWith(name, surname, nickname, email, password).execute() }
@@ -64,7 +64,7 @@ class UserRepositoryImpl @Inject constructor(
         authService.requestCode(token).data?.asDomain()
     }
 
-    override fun checkCode(code: String, token: String): Flow<Action<User?>> = flow {
+    override fun checkCode(code: String, token: String): Flow<Action<User>> = flow {
         emit(Action.Loading())
         val response = io { authService.verifyEmail(code, token).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
@@ -175,7 +175,7 @@ class UserRepositoryImpl @Inject constructor(
         login: String,
         code: String,
         newPassword: String
-    ): Flow<Action<User?>> = flow {
+    ): Flow<Action<User>> = flow {
         emit(Action.Loading())
         val response = io { authService.restorePasswordBy(login, code, newPassword).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }

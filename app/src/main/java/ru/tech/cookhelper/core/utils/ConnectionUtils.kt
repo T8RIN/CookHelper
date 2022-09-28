@@ -8,19 +8,19 @@ import android.os.Build
 
 object ConnectionUtils {
     fun Context.isOnline(): Boolean {
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            when {
-                capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> true
-                capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> true
-                capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) == true -> true
-                else -> false
+        (getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager).apply {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                getNetworkCapabilities(activeNetwork)
+                    ?.run {
+                        listOf(
+                            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR),
+                            hasTransport(NetworkCapabilities.TRANSPORT_WIFI),
+                            hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET),
+                        ).any { it }
+                    } ?: false
+            } else @Suppress("DEPRECATION") {
+                activeNetworkInfo != null && activeNetworkInfo?.isConnected == true
             }
-        } else @Suppress("DEPRECATION") {
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-            activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
     }
 }

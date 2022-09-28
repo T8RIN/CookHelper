@@ -10,10 +10,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.check_email.CheckEmailForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
@@ -176,30 +178,25 @@ class RegistrationViewModel @Inject constructor(
             nickname = nickname,
             email = email,
             password = password
-        ).onEach { result ->
-            when (result) {
-                is Action.Loading -> _registrationState.update { RegistrationState(isLoading = true) }
-                is Action.Error -> {
-                    _registrationState.update { RegistrationState() }
-                    sendEvent(Event.ShowToast(UIText.DynamicString(result.message.toString())))
-                }
-                is Action.Success -> {
-                    result.data?.let {
-                        sendEvent(
-                            Event.SendData(
-                                "email" to it.email,
-                                "name" to it.name,
-                                "token" to it.token
-                            )
-                        )
-                        if (!it.verified) sendEvent(
-                            Event.NavigateTo(Screen.Authentication.Confirmation)
-                        )
-                    }
-                    _registrationState.update { RegistrationState(user = result.data) }
-                }
-                else -> {}
+        ).onSuccess {
+            this?.apply {
+                sendEvent(
+                    Event.SendData(
+                        "email" to email,
+                        "name" to name,
+                        "token" to this.token
+                    )
+                )
+                if (!verified) sendEvent(
+                    Event.NavigateTo(Screen.Authentication.Confirmation)
+                )
             }
+            _registrationState.update { RegistrationState(user = this@onSuccess) }
+        }.onError {
+            _registrationState.update { RegistrationState() }
+            sendEvent(Event.ShowToast(UIText.DynamicString(this)))
+        }.onLoading {
+            _registrationState.update { RegistrationState(isLoading = true) }
         }.launchIn(viewModelScope)
     }
 
