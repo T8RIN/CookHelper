@@ -5,19 +5,21 @@ import android.util.Log
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import okhttp3.*
 import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import java.util.concurrent.TimeUnit
 
-abstract class WebSocketClient : WebSocketListener() {
+abstract class WebSocketClient(
+    protected var baseUrl: String = ""
+) : WebSocketListener() {
 
     protected open val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .setTimeout()
         .pingInterval(40, TimeUnit.SECONDS)
         .hostnameVerifier { _, _ -> true }
         .build()
-
-    protected abstract val baseUrl: String
 
     /**
      * Открывается ли в данный момент сокет
@@ -49,8 +51,11 @@ abstract class WebSocketClient : WebSocketListener() {
      * Открываем веб-сокет
      */
     @Synchronized
-    fun openWebSocket() {
-        if (opening) return
+    fun openWebSocket() = apply {
+        if (opening) return this
+
+        if (baseUrl.isEmpty()) throw IllegalStateException("Base url cannot be empty")
+
         Log.d(SOCKET_TAG, "opening")
 
         opening = true
@@ -158,6 +163,12 @@ abstract class WebSocketClient : WebSocketListener() {
         _webSocketState.trySend(WebSocketState.Message(text))
         Log.d(SOCKET_TAG, "received: $text")
     }
+
+    fun updateBaseUrl(newBaseUrl: String) = apply {
+        baseUrl = newBaseUrl
+    }
+
+    fun receiveAsFlow(): Flow<WebSocketState> = webSocketState.receiveAsFlow()
 
     private val CLOSE_REASON: String = "Normal closure"
     private val CLOSE_CODE: Int = 1000

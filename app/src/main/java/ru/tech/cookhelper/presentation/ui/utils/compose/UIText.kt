@@ -37,11 +37,12 @@ sealed class UIText {
 
     @Suppress("FunctionName")
     companion object {
-        fun Empty() = DynamicString("")
-        fun String.asUIText() = DynamicString(this)
-        fun Int.asUIText() = StringResource(this)
-        fun UIText(value: String) = DynamicString(value)
-        fun UIText(@StringRes value: Int) = StringResource(value)
+        fun Empty() = UIText.DynamicString("")
+        fun String.asUIText() = UIText.DynamicString(this)
+        fun Int.asUIText() = UIText.StringResource(this)
+        fun UIText(value: String) = UIText.DynamicString(value)
+        fun UIText(@StringRes value: Int) = UIText.StringResource(value)
+        fun DynamicString(value: String?) = UIText.DynamicString(value ?: "")
     }
 
 }

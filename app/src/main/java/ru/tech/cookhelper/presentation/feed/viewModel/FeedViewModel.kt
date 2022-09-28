@@ -48,10 +48,9 @@ class FeedViewModel @Inject constructor(
                         _feedState.update { copy(isLoading = false) }
                         sendEvent(
                             Event.ShowToast(
+                                //TODO: Move this to repo layer
                                 if (!(action.message ?: "").contains("Unable to resolve host")
-                                ) UIText.DynamicString(
-                                    action.message ?: ""
-                                ) else UIText.StringResource(R.string.no_connection)
+                                ) UIText.DynamicString(action.message) else UIText.StringResource(R.string.no_connection)
                             )
                         )
                     }
