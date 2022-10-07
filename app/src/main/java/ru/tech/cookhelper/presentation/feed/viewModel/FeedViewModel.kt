@@ -19,6 +19,7 @@ import ru.tech.cookhelper.domain.use_case.stop_awaiting_feed.StopAwaitingFeedUse
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.feed.components.FeedState
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.updateIf
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
@@ -56,10 +57,9 @@ class FeedViewModel @Inject constructor(
                 )
             }
             .onLoading {
-                _feedState.update {
-                    if (this.data.isEmpty()) copy(isLoading = true)
-                    else this
-                }
+                _feedState.updateIf(
+                    predicate = { this.data.isEmpty() }
+                ) { copy(isLoading = true) }
             }
             .onSuccess {
                 _feedState.update {

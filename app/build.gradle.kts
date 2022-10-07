@@ -54,7 +54,7 @@ dependencies {
 
     //Android Essentials
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.0-rc01")
+    implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
     implementation("com.google.android.material:material:1.8.0-alpha01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02")
     implementation("androidx.window:window:1.1.0-alpha03")
@@ -77,14 +77,14 @@ dependencies {
 
     //Compose
     implementation("androidx.activity:activity-compose:1.6.0")
-    implementation("androidx.compose.ui:ui:1.3.0-beta03")
-    implementation("androidx.compose.material3:material3:1.0.0-beta03")
-    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-beta03")
-    implementation("androidx.compose.material:material-icons-core:1.3.0-beta03")
-    implementation("androidx.compose.material:material-icons-extended:1.3.0-beta03")
+    implementation("androidx.compose.ui:ui:1.3.0-rc01")
+    implementation("androidx.compose.material3:material3:1.0.0-rc01")
+    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-rc01")
+    implementation("androidx.compose.material:material-icons-core:1.3.0-rc01")
+    implementation("androidx.compose.material:material-icons-extended:1.3.0-rc01")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha02")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha04")
-    implementation("androidx.compose.foundation:foundation:1.3.0-beta03")
+    implementation("androidx.compose.foundation:foundation:1.3.0-rc01")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
@@ -106,9 +106,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
 
     //Room
-    implementation("androidx.room:room-runtime:2.5.0-alpha03")
-    implementation("androidx.room:room-ktx:2.5.0-alpha03")
-    kapt("androidx.room:room-compiler:2.5.0-alpha03")
+    implementation("androidx.room:room-runtime:2.5.0-beta01")
+    implementation("androidx.room:room-ktx:2.5.0-beta01")
+    kapt("androidx.room:room-compiler:2.5.0-beta01")
 
     //Navigation
     implementation("dev.olshevski.navigation:reimagined:1.2.0")
