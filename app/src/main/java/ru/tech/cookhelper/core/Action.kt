@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.core
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 
 sealed class Action<T>(val data: T? = null, val message: String? = null) {
@@ -10,30 +11,41 @@ sealed class Action<T>(val data: T? = null, val message: String? = null) {
     class Empty<T>(val status: Int? = null) : Action<T>()
 }
 
-inline fun <T> Flow<Action<T>>.onSuccess(
-    crossinline action: suspend T?.() -> Unit
-): Flow<Action<T>> = transform { value ->
-    if (value is Action.Success) action(value.data)
+typealias BindableFlow<S, T> = Flow<BindableAction<S, T>>
+typealias BindableAction<S, T> = Pair<S, Action<T>>
+
+val <S, T> BindableAction<S, T>.state: S
+    get() = this.first
+
+val <S, T> BindableAction<S, T>.action: Action<T>
+    get() = this.second
+
+fun <S, T> Flow<Action<T>>.bindTo(data: S): BindableFlow<S, T> = map { data to it }
+
+inline fun <S, T> BindableFlow<S, T>.onSuccess(
+    crossinline action: suspend T?.(S) -> Unit
+): BindableFlow<S, T> = transform { value ->
+    if (value.action is Action.Success) value.action.data?.action(value.state)
     return@transform emit(value)
 }
 
-inline fun <T> Flow<Action<T>>.onLoading(
-    crossinline action: suspend T?.() -> Unit
-): Flow<Action<T>> = transform { value ->
-    if (value is Action.Loading) action(value.data)
+inline fun <S, T> BindableFlow<S, T>.onLoading(
+    crossinline action: suspend T?.(S) -> Unit
+): BindableFlow<S, T> = transform { value ->
+    if (value.action is Action.Loading) value.action.data?.action(value.state)
     return@transform emit(value)
 }
 
-inline fun <T> Flow<Action<T>>.onError(
-    crossinline action: suspend String.() -> Unit
-): Flow<Action<T>> = transform { value ->
-    if (value is Action.Error) action(value.message ?: "")
+inline fun <S, T> BindableFlow<S, T>.onError(
+    crossinline action: suspend String.(S) -> Unit
+): BindableFlow<S, T> = transform { value ->
+    if (value.action is Action.Error) (value.action.message ?: "").action(value.state)
     return@transform emit(value)
 }
 
-inline fun <T> Flow<Action<T>>.onEmpty(
-    crossinline action: suspend Int?.() -> Unit
-): Flow<Action<T>> = transform { value ->
-    if (value is Action.Empty) action(value.status)
+inline fun <S, T> BindableFlow<S, T>.onEmpty(
+    crossinline action: suspend Int?.(S) -> Unit
+): BindableFlow<S, T> = transform { value ->
+    if (value.action is Action.Empty) (value.action as Action.Empty<T>).status.action(value.state)
     return@transform emit(value)
 }

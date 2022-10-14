@@ -12,10 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.Action
-import ru.tech.cookhelper.core.onError
-import ru.tech.cookhelper.core.onLoading
-import ru.tech.cookhelper.core.onSuccess
+import ru.tech.cookhelper.core.*
 import ru.tech.cookhelper.domain.use_case.check_email.CheckEmailForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
@@ -178,26 +175,27 @@ class RegistrationViewModel @Inject constructor(
             nickname = nickname,
             email = email,
             password = password
-        ).onSuccess {
-            this?.apply {
-                sendEvent(
-                    Event.SendData(
-                        "email" to email,
-                        "name" to name,
-                        "token" to this.token
+        ).bindTo(_registrationState)
+            .onSuccess {
+                this?.apply {
+                    sendEvent(
+                        Event.SendData(
+                            "email" to email,
+                            "name" to name,
+                            "token" to this.token
+                        )
                     )
-                )
-                if (!verified) sendEvent(
-                    Event.NavigateTo(Screen.Authentication.Confirmation)
-                )
-            }
-            _registrationState.update { RegistrationState(user = this@onSuccess) }
-        }.onError {
-            _registrationState.update { RegistrationState() }
-            sendEvent(Event.ShowToast(UIText.DynamicString(this)))
-        }.onLoading {
-            _registrationState.update { RegistrationState(isLoading = true) }
-        }.launchIn(viewModelScope)
+                    if (!verified) sendEvent(
+                        Event.NavigateTo(Screen.Authentication.Confirmation)
+                    )
+                }
+                it.update { RegistrationState(user = this@onSuccess) }
+            }.onError {
+                it.update { RegistrationState() }
+                sendEvent(Event.ShowToast(UIText.DynamicString(this)))
+            }.onLoading {
+                it.update { RegistrationState(isLoading = true) }
+            }.launchIn(viewModelScope)
     }
 
     private val _isPasswordValid: MutableState<Boolean> = mutableStateOf(false)

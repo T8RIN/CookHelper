@@ -16,10 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.onEmpty
-import ru.tech.cookhelper.core.onError
-import ru.tech.cookhelper.core.onLoading
-import ru.tech.cookhelper.core.onSuccess
+import ru.tech.cookhelper.core.*
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.check_code.CheckCodeUseCase
@@ -57,9 +54,10 @@ class ConfirmEmailViewModel @Inject constructor(
 
     fun checkVerificationCode(code: String) {
         checkCodeUseCase(code, token)
-            .onLoading { _codeState.update { CodeState(isLoading = true) } }
+            .bindTo(_codeState)
+            .onLoading { it.update { CodeState(isLoading = true) } }
             .onError {
-                _codeState.update { CodeState(error = true) }
+                it.update { CodeState(error = true) }
                 sendEvent(
                     Event.ShowToast(
                         UIText.DynamicString(this),
@@ -81,7 +79,7 @@ class ConfirmEmailViewModel @Inject constructor(
                 }
             }
             .onEmpty {
-                _codeState.update { CodeState(error = true) }
+                it.update { CodeState(error = true) }
                 sendEvent(
                     Event.ShowToast(
                         UIText.StringResource(R.string.wrong_code),

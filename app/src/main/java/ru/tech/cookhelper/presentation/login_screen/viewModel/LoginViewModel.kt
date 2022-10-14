@@ -12,10 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.onEmpty
-import ru.tech.cookhelper.core.onError
-import ru.tech.cookhelper.core.onLoading
-import ru.tech.cookhelper.core.onSuccess
+import ru.tech.cookhelper.core.*
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.log_in.LoginUseCase
@@ -40,9 +37,10 @@ class LoginViewModel @Inject constructor(
 
     fun logInWith(login: String, password: String) {
         loginUseCase(login, password)
-            .onLoading { _loginState.update { LoginState(isLoading = true) } }
+            .bindTo(_loginState)
+            .onLoading { it.update { LoginState(isLoading = true) } }
             .onEmpty {
-                _loginState.update { LoginState() }
+                it.update { LoginState() }
                 sendEvent(
                     Event.ShowToast(
                         UIText.StringResource(getMessage()),
@@ -51,7 +49,7 @@ class LoginViewModel @Inject constructor(
                 )
             }
             .onError {
-                _loginState.update { LoginState() }
+                it.update { LoginState() }
                 sendEvent(
                     Event.ShowToast(
                         UIText.DynamicString(this),
@@ -83,7 +81,7 @@ class LoginViewModel @Inject constructor(
                         cacheUser(this)
                     }
                 }
-                _loginState.update { LoginState(user = this@onSuccess) }
+                it.update { LoginState(user = this@onSuccess) }
 
             }.launchIn(viewModelScope)
     }
