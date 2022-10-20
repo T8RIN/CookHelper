@@ -126,7 +126,10 @@ fun RecipePostCreationScreen(
                             .padding(start = 8.dp)
                             .fillMaxWidth()
                     ) {
-                        Picture(model = user?.avatar, modifier = Modifier.size(40.dp))
+                        Picture(
+                            model = user?.avatar?.firstOrNull(),
+                            modifier = Modifier.size(40.dp)
+                        )
                         Spacer(Modifier.width(12.dp))
                         Text(
                             text = "${user?.name?.trim()} ${user?.surname?.trim()}",

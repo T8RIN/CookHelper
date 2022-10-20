@@ -33,9 +33,9 @@ interface UserRepository {
 
     fun getUser(): Flow<User?>
 
-    suspend fun checkLoginForAvailability(login: String): Action<User?>
+    suspend fun checkLoginForAvailability(login: String): Action<Boolean>
 
-    suspend fun checkEmailForAvailability(email: String): Action<User?>
+    suspend fun checkEmailForAvailability(email: String): Action<Boolean>
 
     suspend fun logOut()
 

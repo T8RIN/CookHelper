@@ -8,6 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.tech.cookhelper.data.local.database.CookHelperDatabase
+import ru.tech.cookhelper.data.local.database.TypeConverters
+import ru.tech.cookhelper.data.utils.JsonParser
 import javax.inject.Singleton
 
 
@@ -18,11 +20,15 @@ object RoomModule {
     @Provides
     @Singleton
     fun provideDatabase(
-        @ApplicationContext applicationContext: Context
+        @ApplicationContext applicationContext: Context,
+        jsonParser: JsonParser
     ): CookHelperDatabase = Room.databaseBuilder(
         applicationContext,
         CookHelperDatabase::class.java,
         "cook_helper_db"
-    ).fallbackToDestructiveMigration().fallbackToDestructiveMigration().build()
+    ).addTypeConverter(TypeConverters(jsonParser))
+        .fallbackToDestructiveMigration()
+        .fallbackToDestructiveMigrationOnDowngrade()
+        .build()
 
 }

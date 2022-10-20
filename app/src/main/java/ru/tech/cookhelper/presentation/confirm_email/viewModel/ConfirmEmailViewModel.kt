@@ -16,8 +16,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.*
-import ru.tech.cookhelper.domain.model.User
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.check_code.CheckCodeUseCase
 import ru.tech.cookhelper.domain.use_case.request_code.RequestCodeUseCase
@@ -54,10 +56,9 @@ class ConfirmEmailViewModel @Inject constructor(
 
     fun checkVerificationCode(code: String) {
         checkCodeUseCase(code, token)
-            .bindTo(_codeState)
-            .onLoading { it.update { CodeState(isLoading = true) } }
+            .onLoading { _codeState.update { CodeState(isLoading = true) } }
             .onError {
-                it.update { CodeState(error = true) }
+                _codeState.update { CodeState(error = true) }
                 sendEvent(
                     Event.ShowToast(
                         UIText.DynamicString(this),
@@ -66,20 +67,18 @@ class ConfirmEmailViewModel @Inject constructor(
                 )
             }
             .onSuccess {
-                this?.let {
-                    sendEvent(
-                        Event.ShowToast(
-                            UIText.StringResource(
-                                R.string.welcome_user,
-                                it.name
-                            ), Icons.Outlined.Face
-                        )
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.StringResource(
+                            R.string.welcome_user,
+                            name
+                        ), Icons.Outlined.Face
                     )
-                    cacheUser(it)
-                }
+                )
+                cacheUserUseCase(this)
             }
             .onEmpty {
-                it.update { CodeState(error = true) }
+                _codeState.update { CodeState(error = true) }
                 sendEvent(
                     Event.ShowToast(
                         UIText.StringResource(R.string.wrong_code),
@@ -103,8 +102,6 @@ class ConfirmEmailViewModel @Inject constructor(
             } else reloadTimer()
         }
     }
-
-    private fun cacheUser(user: User) = viewModelScope.launch { cacheUserUseCase(user) }
 
     private fun reloadTimer() {
         codeTimeout = 60

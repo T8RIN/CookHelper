@@ -77,9 +77,9 @@ fun LoginField(
         textAlign = TextAlign.Center
     )
     Spacer(Modifier.size(64.dp * scaleModifier))
-    AnimatedContent(viewModel.loginState.isLoading) { isLoading ->
+    AnimatedContent(viewModel.loginState) { state ->
         Column {
-            if (isLoading) Loading(Modifier.fillMaxWidth())
+            if (state.isLoading) Loading(Modifier.fillMaxWidth())
             else {
                 CozyTextField(
                     value = login,

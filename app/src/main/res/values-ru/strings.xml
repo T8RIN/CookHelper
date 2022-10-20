@@ -66,7 +66,7 @@
     <string name="mistaken">Ошиблись?</string>
     <string name="wrong_code">Неправильный код</string>
     <string name="welcome_user">Добро пожаловать, %s</string>
-    <string name="type_your_email">Мы вышлем инструкции на вышу почту</string>
+    <string name="type_your_email">Мы вышлем инструкции на вашу почту</string>
     <string name="password_restore">Восстановление пароля</string>
     <string name="send_email">Отправить письмо</string>
     <string name="check_email_to_restore">Проверьте почту и следуйте инструкциям, чтобы восстановть пароль</string>

@@ -1,6 +1,8 @@
 package ru.tech.cookhelper.presentation.registration_screen.viewModel
 
 import android.util.Patterns
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Face
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +14,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.*
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
+import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.check_email.CheckEmailForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.registration.RegistrationUseCase
@@ -40,6 +46,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val registrationUseCase: RegistrationUseCase,
+    private val cacheUserUseCase: CacheUserUseCase,
     private val checkLoginForAvailabilityUseCase: CheckLoginForAvailabilityUseCase,
     private val checkEmailForAvailabilityUseCase: CheckEmailForAvailabilityUseCase
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
@@ -52,7 +59,7 @@ class RegistrationViewModel @Inject constructor(
         HasNumberTextValidator(UIText(R.string.password_must_contain_one_number)),
         LengthTextValidator(
             minLength = 8,
-            message = UIText(R.string.password_too_short)
+            message = { _, _ -> UIText(R.string.password_too_short) }
         )
     )
 
@@ -61,8 +68,12 @@ class RegistrationViewModel @Inject constructor(
         EmailTextValidator(UIText(R.string.bad_email), Patterns.EMAIL_ADDRESS)
     )
 
-    private val nicknameValidator: TextValidator<UIText> = NonEmptyTextValidator(
-        UIText(R.string.required_field)
+    private val nicknameValidator: TextValidator<UIText> = ChainTextValidator(
+        NonEmptyTextValidator(UIText(R.string.required_field)),
+        LengthTextValidator(
+            maxLength = 30,
+            message = { _, _ -> UIText(R.string.nickname_too_long) }
+        )
     )
 
     private val _registrationState: MutableState<RegistrationState> =
@@ -94,29 +105,27 @@ class RegistrationViewModel @Inject constructor(
         checkLoginJob = viewModelScope.launch {
             delay(500)
             _loginState.update { copy(isLoading = true) }
-            when (val action = checkLoginForAvailabilityUseCase(login)) {
-                is Action.Empty -> {
+            checkLoginForAvailabilityUseCase(login)
+                .onError {
                     _loginState.update {
                         CheckLoginState(
                             isValid = false,
-                            error = UIText(action.status.getMessage())
+                            error = UIText(this@onError)
                         )
                     }
-                }
-                is Action.Error -> {
-                    _loginState.update {
+                }.onEmpty {
+                    if (loginState.isValid) _loginState.update {
                         CheckLoginState(
                             isValid = false,
-                            error = UIText(R.string.nickname_rejected)
+                            error = UIText(getMessage())
                         )
                     }
+                    else _loginState.update { copy(isLoading = false) }
                 }
-                is Action.Success -> {
+                .onSuccess {
                     if (loginState.isValid) _loginState.update { CheckLoginState(isValid = true) }
                     else _loginState.update { copy(isLoading = false) }
                 }
-                else -> {}
-            }
         }
     }
 
@@ -136,29 +145,28 @@ class RegistrationViewModel @Inject constructor(
         checkEmailJob = viewModelScope.launch {
             delay(500)
             _emailState.update { copy(isLoading = true) }
-            when (val action = checkEmailForAvailabilityUseCase(email)) {
-                is Action.Empty -> {
+            checkEmailForAvailabilityUseCase(email)
+                .onEmpty {
+                    if (emailState.isValid) _emailState.update {
+                        CheckEmailState(
+                            isValid = false,
+                            error = UIText(getMessage())
+                        )
+                    }
+                    else _emailState.update { copy(isLoading = false) }
+                }
+                .onError {
                     _emailState.update {
                         CheckEmailState(
                             isValid = false,
-                            error = UIText(action.status.getMessage())
+                            error = UIText(this@onError)
                         )
                     }
                 }
-                is Action.Error -> {
-                    _emailState.update {
-                        CheckEmailState(
-                            isValid = false,
-                            error = UIText(R.string.email_rejected)
-                        )
-                    }
-                }
-                is Action.Success -> {
+                .onSuccess {
                     if (emailState.isValid) _emailState.update { CheckEmailState(isValid = true) }
                     else _emailState.update { copy(isLoading = false) }
                 }
-                else -> {}
-            }
         }
     }
 
@@ -175,27 +183,34 @@ class RegistrationViewModel @Inject constructor(
             nickname = nickname,
             email = email,
             password = password
-        ).bindTo(_registrationState)
-            .onSuccess {
-                this?.apply {
-                    sendEvent(
-                        Event.SendData(
-                            "email" to email,
-                            "name" to name,
-                            "token" to this.token
-                        )
+        ).onSuccess {
+            sendEvent(
+                Event.SendData(
+                    "email" to email,
+                    "name" to name,
+                    "token" to this.token
+                )
+            )
+            if (!verified) sendEvent(
+                Event.NavigateTo(Screen.Authentication.Confirmation)
+            ) else {
+                sendEvent(
+                    Event.ShowToast(
+                        UIText.StringResource(
+                            R.string.welcome_user,
+                            name
+                        ), Icons.Outlined.Face
                     )
-                    if (!verified) sendEvent(
-                        Event.NavigateTo(Screen.Authentication.Confirmation)
-                    )
-                }
-                it.update { RegistrationState(user = this@onSuccess) }
-            }.onError {
-                it.update { RegistrationState() }
-                sendEvent(Event.ShowToast(UIText.DynamicString(this)))
-            }.onLoading {
-                it.update { RegistrationState(isLoading = true) }
-            }.launchIn(viewModelScope)
+                )
+                cacheUserUseCase(this)
+            }
+            _registrationState.update { RegistrationState(user = this@onSuccess) }
+        }.onError {
+            _registrationState.update { RegistrationState() }
+            sendEvent(Event.ShowToast(UIText.DynamicString(this)))
+        }.onLoading {
+            _registrationState.update { RegistrationState(isLoading = true) }
+        }.launchIn(viewModelScope)
     }
 
     private val _isPasswordValid: MutableState<Boolean> = mutableStateOf(false)

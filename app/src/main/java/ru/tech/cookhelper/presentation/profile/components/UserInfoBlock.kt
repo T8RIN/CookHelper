@@ -50,7 +50,7 @@ fun UserInfoBlock(
     Column(Modifier.padding(horizontal = 15.dp)) {
         Row(Modifier.fillMaxWidth()) {
             Picture(
-                model = userState.user?.avatar,
+                model = userState.user?.avatar?.firstOrNull(),
                 modifier = Modifier
                     .padding(top = 15.dp)
                     .size(80.dp)

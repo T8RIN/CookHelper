@@ -9,7 +9,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.*
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.get_feed.GetFeedUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.stop_awaiting_feed.StopAwaitingFeedUseCase
@@ -42,10 +45,9 @@ class FeedViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         getFeedUseCase(user.token)
-            .bindTo(_feedState)
-            .onEmpty { it.update { copy(isLoading = false) } }
+            .onEmpty { _feedState.update { copy(isLoading = false) } }
             .onError {
-                it.update { copy(isLoading = false) }
+                _feedState.update { copy(isLoading = false) }
                 sendEvent(
                     Event.ShowToast(
                         //TODO: Move this to repo layer
@@ -55,14 +57,14 @@ class FeedViewModel @Inject constructor(
                 )
             }
             .onLoading {
-                it.updateIf(
+                _feedState.updateIf(
                     predicate = { this.data.isEmpty() }
                 ) { copy(isLoading = true) }
             }
             .onSuccess {
-                it.update {
+                _feedState.update {
                     copy(
-                        data = (this@onSuccess ?: emptyList()) + this.data,
+                        data = this@onSuccess + this.data,
                         isLoading = false
                     )
                 }

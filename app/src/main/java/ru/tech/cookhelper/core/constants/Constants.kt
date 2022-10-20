@@ -4,7 +4,7 @@ object Constants {
 
     const val DELIMITER = "*"
 
-    const val BASE_URL = "https://cook-helper-itl.herokuapp.com/"
+    const val BASE_URL = "https://cookhelper-inc.herokuapp.com/"
 
     const val WS_BASE_URL = "ws://cookhelper-ws.herokuapp.com/"
 

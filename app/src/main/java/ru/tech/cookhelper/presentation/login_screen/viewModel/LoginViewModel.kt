@@ -10,10 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.*
-import ru.tech.cookhelper.domain.model.User
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.log_in.LoginUseCase
 import ru.tech.cookhelper.presentation.authentication.components.getMessage
@@ -37,10 +38,11 @@ class LoginViewModel @Inject constructor(
 
     fun logInWith(login: String, password: String) {
         loginUseCase(login, password)
-            .bindTo(_loginState)
-            .onLoading { it.update { LoginState(isLoading = true) } }
+            .onLoading {
+                _loginState.update { LoginState(isLoading = true) }
+            }
             .onEmpty {
-                it.update { LoginState() }
+                _loginState.update { LoginState() }
                 sendEvent(
                     Event.ShowToast(
                         UIText.StringResource(getMessage()),
@@ -49,7 +51,7 @@ class LoginViewModel @Inject constructor(
                 )
             }
             .onError {
-                it.update { LoginState() }
+                _loginState.update { LoginState() }
                 sendEvent(
                     Event.ShowToast(
                         UIText.DynamicString(this),
@@ -58,34 +60,30 @@ class LoginViewModel @Inject constructor(
                 )
             }
             .onSuccess {
-                this?.apply {
+                sendEvent(
+                    Event.SendData(
+                        "email" to email,
+                        "name" to name,
+                        "token" to token
+                    )
+                )
+                if (!verified) sendEvent(
+                    Event.NavigateTo(Screen.Authentication.Confirmation)
+                )
+                else {
                     sendEvent(
-                        Event.SendData(
-                            "email" to email,
-                            "name" to name,
-                            "token" to token
+                        Event.ShowToast(
+                            UIText.StringResource(
+                                R.string.welcome_user,
+                                name
+                            ), Icons.Outlined.Face
                         )
                     )
-                    if (!verified) sendEvent(
-                        Event.NavigateTo(Screen.Authentication.Confirmation)
-                    )
-                    else {
-                        sendEvent(
-                            Event.ShowToast(
-                                UIText.StringResource(
-                                    R.string.welcome_user,
-                                    name
-                                ), Icons.Outlined.Face
-                            )
-                        )
-                        cacheUser(this)
-                    }
+                    cacheUserUseCase(this)
                 }
-                it.update { LoginState(user = this@onSuccess) }
-
-            }.launchIn(viewModelScope)
+                _loginState.update { LoginState(user = this@onSuccess) }
+            }
+            .launchIn(viewModelScope)
     }
-
-    private fun cacheUser(user: User) = viewModelScope.launch { cacheUserUseCase(user) }
 
 }

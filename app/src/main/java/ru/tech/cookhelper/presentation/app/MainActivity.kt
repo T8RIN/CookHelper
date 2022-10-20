@@ -20,5 +20,8 @@ class MainActivity : ComponentActivity() {
                 CookHelperApp()
             }
         }
+//        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+//TODO
+//        }
     }
 }

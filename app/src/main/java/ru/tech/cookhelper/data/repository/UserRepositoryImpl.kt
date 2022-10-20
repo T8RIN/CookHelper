@@ -35,9 +35,8 @@ class UserRepositoryImpl @Inject constructor(
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
-            101, 102 -> emit(Action.Empty(body.status))
             100, 103 -> emit(Action.Success(data = body.data?.asDomain()))
-            else -> emit(Action.Error(message = body.message))
+            else -> emit(Action.Empty(body.status))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
@@ -70,9 +69,8 @@ class UserRepositoryImpl @Inject constructor(
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
-            102 -> emit(Action.Empty())
             100 -> emit(Action.Success(data = body.data?.asDomain()))
-            else -> emit(Action.Error(message = body.message))
+            else -> emit(Action.Empty(body.status))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
 
@@ -82,20 +80,20 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun checkLoginForAvailability(
         login: String
-    ): Action<User?> = try {
-        val response = authService.checkLoginOrEmailForAvailability(login)
-        if (response.status == 100) Action.Success(data = response.data?.asDomain())
-        else Action.Error(message = response.message)
+    ): Action<Boolean> = try {
+        val response = authService.checkNicknameForAvailability(login)
+        if (response.status == 100) Action.Success(data = response.data)
+        else Action.Empty(response.status)
     } catch (t: Throwable) {
         Action.Error(message = t.message.toString())
     }
 
     override suspend fun checkEmailForAvailability(
         email: String
-    ): Action<User?> = try {
-        val response = authService.checkLoginOrEmailForAvailability(email)
-        if (response.status == 100) Action.Success(data = response.data?.asDomain())
-        else Action.Error(message = response.message)
+    ): Action<Boolean> = try {
+        val response = authService.checkEmailForAvailability(email)
+        if (response.status == 100) Action.Success(data = response.data)
+        else Action.Empty(response.status)
     } catch (t: Throwable) {
         Action.Error(message = t.message.toString())
     }
@@ -154,7 +152,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun requestPasswordRestoreCode(
         login: String
     ): Action<User?> {
-        val result = kotlin.runCatching { authService.requestPasswordRestoreCode(login) }
+        val result = runCatching { authService.requestPasswordRestoreCode(login) }
         if (result.isFailure) {
             return Action.Error(message = result.exceptionOrNull()?.message)
         } else {
@@ -162,9 +160,7 @@ class UserRepositoryImpl @Inject constructor(
             if (authInfo != null) {
                 return when (authInfo.status) {
                     100 -> Action.Success(authInfo.data?.asDomain())
-                    else -> {
-                        Action.Empty(status = authInfo.status)
-                    }
+                    else -> Action.Empty(status = authInfo.status)
                 }
             }
             return Action.Empty()

@@ -49,9 +49,13 @@ interface AuthService {
         @Part("password") password: String
     ): Call<Response<UserDto?>>
 
-    @GET("api/user/get/login-availability/")
-    suspend fun checkLoginOrEmailForAvailability(
-        @Query("login") query: String
-    ): Response<UserDto?>
+    @GET("api/user/get/nickname-availability/")
+    suspend fun checkNicknameForAvailability(
+        @Query("nickname") nickname: String
+    ): Response<Boolean>
 
+    @GET("api/user/get/email-availability/")
+    suspend fun checkEmailForAvailability(
+        @Query("email") email: String
+    ): Response<Boolean>
 }

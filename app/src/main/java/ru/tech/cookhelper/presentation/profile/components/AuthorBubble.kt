@@ -32,7 +32,7 @@ fun AuthorBubble(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Picture(
-            model = author?.avatar,
+            model = author?.avatar?.firstOrNull(),
             modifier = Modifier.size(54.dp)
         )
         Spacer(Modifier.size(8.dp))

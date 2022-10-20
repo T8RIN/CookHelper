@@ -17,6 +17,14 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "0.1-alpha"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+                arg("room.incremental", "true")
+                arg("room.expandProjection", "true")
+            }
+        }
     }
 
     buildTypes {
