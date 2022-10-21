@@ -24,7 +24,6 @@ import ru.tech.cookhelper.domain.utils.text.onSuccess
 import ru.tech.cookhelper.domain.utils.text.validators.EmailTextValidator
 import ru.tech.cookhelper.domain.utils.text.validators.NonEmptyTextValidator
 import ru.tech.cookhelper.presentation.app.components.UserState
-import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckEmailState
 import ru.tech.cookhelper.presentation.registration_screen.components.CheckLoginState
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
@@ -33,6 +32,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
+import ru.tech.cookhelper.presentation.ui.utils.getMessage
 import javax.inject.Inject
 
 @HiltViewModel

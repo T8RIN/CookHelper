@@ -10,7 +10,7 @@ object Status {
     const val USER_NOT_FOUND: Int = 101
     const val WRONG_CREDENTIALS: Int = 102
     const val USER_NOT_VERIFIED: Int = 103
-    const val USER_PARAMETER_MISSED: Int = 104
+    const val USER_TOKEN_INVALID: Int = 104
     const val USER_DELETED: Int = 105
     const val NICKNAME_REJECTED: Int = 106
     const val EMAIL_REJECTED: Int = 107

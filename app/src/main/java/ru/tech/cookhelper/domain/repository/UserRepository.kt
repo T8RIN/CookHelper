@@ -2,8 +2,10 @@ package ru.tech.cookhelper.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
+import java.io.File
 
 interface UserRepository {
 
@@ -44,5 +46,12 @@ interface UserRepository {
     fun getFeed(token: String): Flow<Action<List<RecipePost>>>
 
     fun stopAwaitingFeed()
+
+    fun createPost(
+        token: String,
+        label: String,
+        content: String,
+        imageFile: File?
+    ): Flow<Action<Post>>
 
 }

@@ -17,13 +17,13 @@ import ru.tech.cookhelper.core.onLoading
 import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.log_in.LoginUseCase
-import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.login_screen.components.LoginState
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
+import ru.tech.cookhelper.presentation.ui.utils.getMessage
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import javax.inject.Inject
 

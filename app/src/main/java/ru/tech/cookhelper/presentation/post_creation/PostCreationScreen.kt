@@ -21,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -31,14 +32,17 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
+import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
+import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
+import ru.tech.cookhelper.presentation.ui.utils.event.Event
+import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -47,6 +51,8 @@ fun PostCreationScreen(
     initialImageUri: String = "",
     onBack: () -> Unit
 ) {
+    val context = LocalContext.current
+    val toastHost = LocalToastHost.current
     val focus = LocalFocusManager.current
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
 
@@ -104,7 +110,7 @@ fun PostCreationScreen(
             actions = {
                 IconButton(
                     onClick = {
-                        viewModel.createPost(content, label, imageUri.toUri())
+                        viewModel.createPost(content, label, context.getFile(imageUri.toUri()))
                     },
                     enabled = doneEnabled,
                     colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
@@ -214,7 +220,30 @@ fun PostCreationScreen(
             doneEnabled = imageUri.isNotEmpty() || content.isNotEmpty()
         }
 
+        if (viewModel.postCreationState.isLoading) {
+            LoadingDialog()
+        }
+
+        if (viewModel.postCreationState.post != null) {
+            SideEffect {
+                toastHost.sendToast(
+                    Icons.Rounded.Done, UIText(R.string.post_created).asString(context)
+                )
+            }
+            onBack()
+        }
+
     }
 
     BackHandler { goBack() }
+
+    viewModel.eventFlow.collectWithLifecycle {
+        when (it) {
+            is Event.ShowToast -> toastHost.sendToast(
+                it.icon,
+                it.text.asString(context)
+            )
+            else -> {}
+        }
+    }
 }

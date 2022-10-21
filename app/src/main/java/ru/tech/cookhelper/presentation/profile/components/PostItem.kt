@@ -29,9 +29,10 @@ import java.util.*
 @Composable
 fun PostItem(
     post: Post,
-    authorLoader: (authorId: String) -> User,
+    clientUserId: Long,
+    authorLoader: (authorId: Long) -> User,
     onImageClick: (imageId: String) -> Unit,
-    onAuthorClick: (authorId: String) -> Unit,
+    onAuthorClick: (authorId: Long) -> Unit,
     onPostClick: (postId: String) -> Unit,
     onLikeClick: (postId: String) -> Unit,
     onCommentsClick: (postId: String) -> Unit = onPostClick
@@ -55,7 +56,7 @@ fun PostItem(
     Column(
         Modifier
             .fillMaxWidth()
-            .clickable { onPostClick(post.postId) }
+            .clickable { onPostClick(post.id) }
     ) {
         Spacer(Modifier.size(15.dp))
         AuthorBubble(
@@ -66,7 +67,7 @@ fun PostItem(
         )
         Spacer(Modifier.size(16.dp))
 
-        post.title?.let { title ->
+        post.label.let { title ->
             Text(
                 text = title,
                 Modifier.padding(horizontal = 20.dp),
@@ -76,12 +77,12 @@ fun PostItem(
             Spacer(Modifier.size(5.dp))
         }
 
-        post.text?.let { text ->
+        post.text.let { text ->
             Text(text = text, Modifier.padding(horizontal = 20.dp), fontSize = 16.sp)
             Spacer(Modifier.size(10.dp))
         }
 
-        post.image?.let { image ->
+        post.images[0].let { image ->
             val shape = RoundedCornerShape(4.dp)
             Box(Modifier.fillMaxWidth()) {
                 Picture(
@@ -99,20 +100,21 @@ fun PostItem(
         }
 
         Row(Modifier.padding(horizontal = 15.dp)) {
+            val liked = post.likes.contains(clientUserId)
             PostActionButton(
-                onClick = { onLikeClick(post.postId) },
-                icon = if (post.liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                text = post.likeCount.toString(),
-                contentColor = if (post.liked) LikeColor else Gray,
-                containerColor = (if (post.liked) LikeColor else MaterialTheme.colorScheme.secondaryContainer).copy(
+                onClick = { onLikeClick(post.id) },
+                icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                text = post.likes.size.toString(),
+                contentColor = if (liked) LikeColor else Gray,
+                containerColor = (if (liked) LikeColor else MaterialTheme.colorScheme.secondaryContainer).copy(
                     alpha = 0.25f
                 )
             )
             Spacer(Modifier.size(8.dp))
             PostActionButton(
-                onClick = { onCommentsClick(post.postId) },
+                onClick = { onCommentsClick(post.id) },
                 icon = Icons.Rounded.ChatBubbleOutline,
-                text = post.commentsCount.toString()
+                text = post.comments.size.toString()
             )
         }
         Spacer(Modifier.size(15.dp))

@@ -11,7 +11,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -133,104 +132,7 @@ fun ProfileScreen(
         }
 
         if (selectedTabIndex.toTab() == SelectedTab.Posts) {
-            val posts = listOf(
-                Post(
-                    "1",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = "Мем года",
-                    liked = false,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 122,
-                    commentsCount = 32,
-                    image = null
-                ),
-                Post(
-                    "2",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = "Мем года",
-                    liked = true,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 233,
-                    commentsCount = 1535,
-                    image = Image(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "6"
-                    )
-                ),
-                Post(
-                    "3",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = null,
-                    liked = true,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 156,
-                    commentsCount = 12,
-                    image = Image(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "7"
-                    )
-                ),
-                Post(
-                    "4",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = "Мем года",
-                    liked = true,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 233,
-                    commentsCount = 1535,
-                    image = Image(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "6"
-                    )
-                ),
-                Post(
-                    "5",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = "Мем года",
-                    liked = true,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 233,
-                    commentsCount = 1535,
-                    image = Image(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "6"
-                    )
-                ),
-                Post(
-                    "6",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = "Мем года",
-                    liked = true,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 233,
-                    commentsCount = 1535,
-                    image = Image(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "6"
-                    )
-                ),
-                Post(
-                    "7",
-                    "2",
-                    timestamp = System.currentTimeMillis(),
-                    title = "Мем года",
-                    liked = true,
-                    text = "Вампиры суициндики долбят чеснок",
-                    likeCount = 233,
-                    commentsCount = 1535,
-                    image = Image(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "6"
-                    )
-                ),
-            )
-            itemsIndexed(posts, key = { _, post -> post.postId }) { index, post ->
+            itemsIndexed(emptyList<Post>(), key = { _, post -> post.id }) { index, post ->
                 PostItem(
                     post = post,
                     authorLoader = {
@@ -250,7 +152,7 @@ fun ProfileScreen(
                         screenController.navigate(
                             Screen.FullscreenImagePager(
                                 id = id,
-                                images = post.image?.let { listOf(it) } ?: emptyList(),
+                                images = post.images
                             )
                         )
                     },
@@ -262,11 +164,13 @@ fun ProfileScreen(
                     },
                     onLikeClick = {
                         //TODO: Like post feature
-                    }
+                    },
+                    clientUserId = userState.user?.id ?: 0L
                 )
-                if (posts.lastIndex != index) {
-                    Separator(thickness = 8.dp, modifier = Modifier.alpha(0.2f))
-                }
+//                TODO(Get posts)
+//                if (posts.lastIndex != index) {
+//                    Separator(thickness = 8.dp, modifier = Modifier.alpha(0.2f))
+//                }
             }
         } else {
             items(6, key = { /*TODO: set normal key*/ it }) {

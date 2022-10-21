@@ -7,7 +7,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.constants.Status.SUCCESS
+import ru.tech.cookhelper.core.constants.Status.USER_NOT_VERIFIED
 import ru.tech.cookhelper.data.local.dao.UserDao
 import ru.tech.cookhelper.data.local.entity.asDatabaseEntity
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
@@ -16,10 +21,13 @@ import ru.tech.cookhelper.data.remote.dto.RecipePostDto
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
 import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
 import ru.tech.cookhelper.data.utils.JsonParser
+import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
+import java.io.File
 import javax.inject.Inject
+
 
 class UserRepositoryImpl @Inject constructor(
     private val authService: AuthService,
@@ -35,7 +43,7 @@ class UserRepositoryImpl @Inject constructor(
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
-            100, 103 -> emit(Action.Success(data = body.data?.asDomain()))
+            SUCCESS, USER_NOT_VERIFIED -> emit(Action.Success(data = body.data?.asDomain()))
             else -> emit(Action.Empty(body.status))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
@@ -52,7 +60,7 @@ class UserRepositoryImpl @Inject constructor(
             io { authService.registerWith(name, surname, nickname, email, password).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
-        if (body.status == 100) emit(Action.Success(data = body.data?.asDomain()))
+        if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()))
         else emit(Action.Error(message = body.message))
 
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
@@ -69,7 +77,7 @@ class UserRepositoryImpl @Inject constructor(
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
-            100 -> emit(Action.Success(data = body.data?.asDomain()))
+            SUCCESS -> emit(Action.Success(data = body.data?.asDomain()))
             else -> emit(Action.Empty(body.status))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
@@ -82,7 +90,7 @@ class UserRepositoryImpl @Inject constructor(
         login: String
     ): Action<Boolean> = try {
         val response = authService.checkNicknameForAvailability(login)
-        if (response.status == 100) Action.Success(data = response.data)
+        if (response.status == SUCCESS) Action.Success(data = response.data)
         else Action.Empty(response.status)
     } catch (t: Throwable) {
         Action.Error(message = t.message.toString())
@@ -92,7 +100,7 @@ class UserRepositoryImpl @Inject constructor(
         email: String
     ): Action<Boolean> = try {
         val response = authService.checkEmailForAvailability(email)
-        if (response.status == 100) Action.Success(data = response.data)
+        if (response.status == SUCCESS) Action.Success(data = response.data)
         else Action.Empty(response.status)
     } catch (t: Throwable) {
         Action.Error(message = t.message.toString())
@@ -159,7 +167,7 @@ class UserRepositoryImpl @Inject constructor(
             val authInfo = result.getOrNull()
             if (authInfo != null) {
                 return when (authInfo.status) {
-                    100 -> Action.Success(authInfo.data?.asDomain())
+                    SUCCESS -> Action.Success(authInfo.data?.asDomain())
                     else -> Action.Empty(status = authInfo.status)
                 }
             }
@@ -177,11 +185,36 @@ class UserRepositoryImpl @Inject constructor(
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
 
         when (body.status) {
-            102 -> emit(Action.Empty())
-            100 -> emit(Action.Success(data = body.data?.asDomain()))
-            else -> emit(Action.Error(message = body.message))
+            SUCCESS -> emit(Action.Success(data = body.data?.asDomain()))
+            else -> emit(Action.Empty(body.status))
         }
     }.catch { t -> emit(Action.Error(message = t.message.toString())) }
+
+    override fun createPost(
+        token: String,
+        label: String,
+        content: String,
+        imageFile: File?
+    ): Flow<Action<Post>> = flow {
+        emit(Action.Loading())
+
+        var image: MultipartBody.Part? = null
+        imageFile?.let {
+            image = MultipartBody.Part.createFormData(
+                name = "image",
+                filename = it.name,
+                body = it.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            )
+        }
+
+        val response = io { userApi.createPost(token, label, content, image).execute() }
+        val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
+
+        if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()))
+        else emit(Action.Empty(body.status))
+
+    }.catch { t -> emit(Action.Error(message = t.message.toString())) }
+
 
     private suspend fun <T> io(
         function: suspend () -> T

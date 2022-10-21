@@ -32,6 +32,11 @@ abstract class WebSocketClient(
     protected open var restarting: Boolean = false
 
     /**
+     * Закрывается ли в данный момент сокет
+     */
+    protected open var closing: Boolean = false
+
+    /**
      * Открыт ли в данный момент сокет
      */
     open var socketOpen: Boolean = false
@@ -52,6 +57,8 @@ abstract class WebSocketClient(
      */
     @Synchronized
     fun openWebSocket() = apply {
+        closing = false
+
         if (opening) return this
 
         if (baseUrl.isEmpty()) throw IllegalStateException("Base url cannot be empty")
@@ -88,7 +95,7 @@ abstract class WebSocketClient(
             delay(4000L)
             restarting = false
             opening = false
-            openWebSocket()
+            if (!closing) openWebSocket()
             cancel()
         }
     }
@@ -107,6 +114,7 @@ abstract class WebSocketClient(
     private fun closeWebSocket() {
         Log.d(SOCKET_TAG, "closing")
         _webSocketState.trySend(WebSocketState.Closing)
+        closing = true
         try {
             webSocket?.close(CLOSE_CODE, CLOSE_REASON)
             socketOpen = false

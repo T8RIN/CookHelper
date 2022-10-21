@@ -81,7 +81,7 @@ private val ColorScheme.DarkThemeColors: Material3ColorScheme
     )
 
 @Composable
-fun ProKitchenTheme(
+fun CookHelperTheme(
     dynamicColor: Boolean = LocalSettingsProvider.current.dynamicColors,
     content: @Composable () -> Unit
 ) {

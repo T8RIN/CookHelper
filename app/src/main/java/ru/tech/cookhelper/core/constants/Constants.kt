@@ -6,7 +6,7 @@ object Constants {
 
     const val BASE_URL = "https://cookhelper-inc.herokuapp.com/"
 
-    const val WS_BASE_URL = "ws://cookhelper-ws.herokuapp.com/"
+    const val WS_BASE_URL = "ws://cookhelper-inc.herokuapp.com/"
 
     private const val IMG_URL = "https://kastybiy.herokuapp.com/static/img/recipe_${DELIMITER}.jpg"
 

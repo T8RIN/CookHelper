@@ -17,7 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.olshevski.navigation.reimagined.rememberNavController
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.app.viewModel.MainViewModel
-import ru.tech.cookhelper.presentation.ui.theme.ProKitchenTheme
+import ru.tech.cookhelper.presentation.ui.theme.CookHelperTheme
 import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
@@ -59,7 +59,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalTopAppBarActions provides topAppBarActions
         )
     ) {
-        ProKitchenTheme {
+        CookHelperTheme {
             activity?.dialogBackHandler()
             Surface(
                 modifier = Modifier.fillMaxSize(),

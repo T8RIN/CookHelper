@@ -155,4 +155,25 @@
     <string name="feed_error">No one published recipes yet or something went wrong</string>
     <string name="no_messages">No messages found, write your first!</string>
     <string name="nickname_too_long">Nickname too long</string>
+    <string name="success">Success</string>
+    <string name="wrong_data">Client sent wrong data</string>
+    <string name="permission_denied">Client can\'t perform this operation</string>
+    <string name="malformed_request">Malformed request</string>
+    <string name="user_not_verified">User not verified</string>
+    <string name="user_token_invalid">User token invalid</string>
+    <string name="user_deleted">User deleted</string>
+    <string name="password_rejected">Password does not meet the requirements</string>
+    <string name="token_expired">Token expired</string>
+    <string name="user_upload_failed">User upload failed</string>
+    <string name="recipe_not_found">Recipe not found</string>
+    <string name="recipe_deleted">Recipe deleted</string>
+    <string name="topic_not_found">Topic not found</string>
+    <string name="topic_deleted">Topic deleted</string>
+    <string name="answer_not_added">Answer not added</string>
+    <string name="comment_not_found">Comment not found</string>
+    <string name="comment_deleted">Comment deleted</string>
+    <string name="post_not_found">Post not found</string>
+    <string name="post_deleted">Post deleted</string>
+    <string name="restart_app">Restart App</string>
+    <string name="post_created">Post created successfully</string>
 </resources>

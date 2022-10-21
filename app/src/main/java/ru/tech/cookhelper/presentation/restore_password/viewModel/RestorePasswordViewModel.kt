@@ -19,7 +19,6 @@ import ru.tech.cookhelper.core.onLoading
 import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.restore_password.ApplyPasswordByCodeUseCase
 import ru.tech.cookhelper.domain.use_case.restore_password.SendRestoreCodeUseCase
-import ru.tech.cookhelper.presentation.authentication.components.getMessage
 import ru.tech.cookhelper.presentation.confirm_email.components.CodeState
 import ru.tech.cookhelper.presentation.restore_password.components.RestorePasswordState
 import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
@@ -28,6 +27,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
+import ru.tech.cookhelper.presentation.ui.utils.getMessage
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import javax.inject.Inject
 

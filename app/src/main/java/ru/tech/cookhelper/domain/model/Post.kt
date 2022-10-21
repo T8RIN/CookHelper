@@ -1,13 +1,16 @@
 package ru.tech.cookhelper.domain.model
 
+import ru.tech.cookhelper.domain.utils.Domain
+
 data class Post(
-    val postId: String,
-    val authorId: String,
+    val id: String,
+    val authorId: Long,
     val timestamp: Long,
-    val title: String?,
-    val text: String?,
-    val liked: Boolean,
-    val likeCount: Int,
-    val commentsCount: Int,
-    val image: Image?
-)
+    val label: String,
+    val text: String,
+    val likes: List<Long>,
+    val comments: List<String>,
+    val reposts: List<Long>,
+    val attachments: List<String>,
+    val images: List<Image>
+) : Domain
