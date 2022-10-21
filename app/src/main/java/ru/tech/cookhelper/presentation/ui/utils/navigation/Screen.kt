@@ -9,6 +9,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 
@@ -143,7 +144,8 @@ sealed class Screen(
 
     @Parcelize
     class PostCreation(
-        val imageUri: String = ""
+        val imageUri: String = "",
+        @IgnoredOnParcel /*TODO: Remove this shit*/ val todoRemoveThisFuckingCostyl: (Post?) -> Unit = {}
     ) : Screen(showTopAppBar = false)
 
     @Parcelize

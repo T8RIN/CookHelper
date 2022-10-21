@@ -7,12 +7,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.core.constants.Status.SUCCESS
 import ru.tech.cookhelper.core.constants.Status.USER_NOT_VERIFIED
+import ru.tech.cookhelper.core.utils.RetrofitUtils.toMultipartFormData
 import ru.tech.cookhelper.data.local.dao.UserDao
 import ru.tech.cookhelper.data.local.entity.asDatabaseEntity
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
@@ -198,14 +196,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Flow<Action<Post>> = flow {
         emit(Action.Loading())
 
-        var image: MultipartBody.Part? = null
-        imageFile?.let {
-            image = MultipartBody.Part.createFormData(
-                name = "image",
-                filename = it.name,
-                body = it.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-            )
-        }
+        val image = imageFile.toMultipartFormData()
 
         val response = io { userApi.createPost(token, label, content, image).execute() }
         val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }

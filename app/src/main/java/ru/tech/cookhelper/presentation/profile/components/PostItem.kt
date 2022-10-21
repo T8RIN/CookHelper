@@ -67,7 +67,7 @@ fun PostItem(
         )
         Spacer(Modifier.size(16.dp))
 
-        post.label.let { title ->
+        post.label.letNotEmpty { title ->
             Text(
                 text = title,
                 Modifier.padding(horizontal = 20.dp),
@@ -77,7 +77,7 @@ fun PostItem(
             Spacer(Modifier.size(5.dp))
         }
 
-        post.text.let { text ->
+        post.text.letNotEmpty { text ->
             Text(text = text, Modifier.padding(horizontal = 20.dp), fontSize = 16.sp)
             Spacer(Modifier.size(10.dp))
         }
@@ -104,7 +104,7 @@ fun PostItem(
             PostActionButton(
                 onClick = { onLikeClick(post.id) },
                 icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                text = post.likes.size.toString(),
+                text = post.likes.size.run { if (this != 0) toString() else "" },
                 contentColor = if (liked) LikeColor else Gray,
                 containerColor = (if (liked) LikeColor else MaterialTheme.colorScheme.secondaryContainer).copy(
                     alpha = 0.25f
@@ -114,9 +114,13 @@ fun PostItem(
             PostActionButton(
                 onClick = { onCommentsClick(post.id) },
                 icon = Icons.Rounded.ChatBubbleOutline,
-                text = post.comments.size.toString()
+                text = post.comments.size.run { if (this != 0) toString() else "" }
             )
         }
         Spacer(Modifier.size(15.dp))
     }
+}
+
+private inline fun String?.letNotEmpty(block: (String) -> Unit) {
+    if (this?.isNotEmpty() == true) return block(this)
 }

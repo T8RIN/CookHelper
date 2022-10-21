@@ -114,6 +114,8 @@ fun ScreenHost(
                         onBack = {
                             controller.goBack()
                         },
+                        /*TODO: Remove this shit*/
+                        todoRemoveThisFuckingCostyl = screen.todoRemoveThisFuckingCostyl,
                         initialImageUri = screen.imageUri
                     )
                 }

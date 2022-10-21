@@ -11,13 +11,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
-import ru.tech.cookhelper.domain.model.*
+import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.Recipe
+import ru.tech.cookhelper.domain.model.RecipePost
+import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
@@ -118,7 +122,9 @@ fun ProfileScreen(
                 onCreateRecipe = {
                     screenController.navigate(Screen.RecipePostCreation)
                 }, onCreatePost = { imageUri ->
-                    screenController.navigate(Screen.PostCreation(imageUri))
+                    screenController.navigate(Screen.PostCreation(imageUri) {
+                        /*TODO: Remove this shit*/ it?.let { viewModel.posts.add(it) }
+                    })
                 }
             )
             Spacer(Modifier.height(10.dp))
@@ -132,7 +138,7 @@ fun ProfileScreen(
         }
 
         if (selectedTabIndex.toTab() == SelectedTab.Posts) {
-            itemsIndexed(emptyList<Post>(), key = { _, post -> post.id }) { index, post ->
+            itemsIndexed(viewModel.posts, key = { _, post -> post.id }) { index, post ->
                 PostItem(
                     post = post,
                     authorLoader = {
@@ -168,9 +174,10 @@ fun ProfileScreen(
                     clientUserId = userState.user?.id ?: 0L
                 )
 //                TODO(Get posts)
-//                if (posts.lastIndex != index) {
-//                    Separator(thickness = 8.dp, modifier = Modifier.alpha(0.2f))
-//                }
+                /*TODO: Remove this shit*/
+                if (viewModel.posts.lastIndex != index) {
+                    Separator(thickness = 8.dp, modifier = Modifier.alpha(0.2f))
+                }
             }
         } else {
             items(6, key = { /*TODO: set normal key*/ it }) {

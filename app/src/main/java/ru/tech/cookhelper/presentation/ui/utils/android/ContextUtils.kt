@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.net.Uri
 import android.provider.OpenableColumns
+import androidx.core.net.toUri
 import ru.tech.cookhelper.core.utils.kotlin.applyCatching
 import java.io.File
 import java.io.FileOutputStream
@@ -17,11 +18,11 @@ object ContextUtils {
         else -> null
     }
 
-    fun Context.getFile(uri: Uri?): File? {
-        if (uri?.toString()?.isEmpty() == true) return null
+    fun Context.getFile(uri: String?): File? {
+        if (uri?.isEmpty() == true) return null
 
-        return File("${filesDir.path}${File.separatorChar}${queryName(uri)}").applyCatching {
-            contentResolver.openInputStream(uri!!)?.use { ins ->
+        return File("${filesDir.path}${File.separatorChar}${queryName(uri?.toUri())}").applyCatching {
+            contentResolver.openInputStream(uri!!.toUri())?.use { ins ->
                 createFileFromStream(ins, this)
             }
         }

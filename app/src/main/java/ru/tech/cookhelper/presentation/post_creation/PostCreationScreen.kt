@@ -29,9 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
@@ -49,7 +49,8 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.show
 fun PostCreationScreen(
     viewModel: PostCreationViewModel = hiltViewModel(),
     initialImageUri: String = "",
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    /*TODO: Remove this shit*/ todoRemoveThisFuckingCostyl: (Post?) -> Unit
 ) {
     val context = LocalContext.current
     val toastHost = LocalToastHost.current
@@ -110,7 +111,7 @@ fun PostCreationScreen(
             actions = {
                 IconButton(
                     onClick = {
-                        viewModel.createPost(content, label, context.getFile(imageUri.toUri()))
+                        viewModel.createPost(content, label, context.getFile(imageUri))
                     },
                     enabled = doneEnabled,
                     colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
@@ -229,8 +230,10 @@ fun PostCreationScreen(
                 toastHost.sendToast(
                     Icons.Rounded.Done, UIText(R.string.post_created).asString(context)
                 )
+                onBack()
+                todoRemoveThisFuckingCostyl(viewModel.postCreationState.post)
             }
-            onBack()
+
         }
 
     }

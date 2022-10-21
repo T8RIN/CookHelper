@@ -29,7 +29,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.crash_screen.CrashActivity" />
+        <activity
+            android:name=".presentation.crash_screen.CrashActivity"
+            android:theme="@style/Theme.CookHelper.Launcher" />
     </application>
 
 </manifest>
