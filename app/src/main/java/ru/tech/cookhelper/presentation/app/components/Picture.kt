@@ -21,6 +21,8 @@ import coil.compose.SubcomposeAsyncImageScope
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
+import coil.disk.DiskCache
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.hideSystemBars
@@ -54,7 +56,7 @@ fun Picture(
     shimmerEnabled: Boolean = true,
     crossfadeEnabled: Boolean = true
 ) {
-    val activity = if (zoomParams.zoomEnabled) LocalContext.current.findActivity() else null
+    val activity = LocalContext.current.findActivity()
 
     var errorOccurred by rememberSaveable { mutableStateOf(false) }
 
@@ -66,10 +68,18 @@ fun Picture(
         if (SDK_INT >= 28) add(ImageDecoderDecoder.Factory())
         else add(GifDecoder.Factory())
         add(SvgDecoder.Factory())
+    }.diskCache {
+        DiskCache.Builder()
+            .run {
+                if (activity != null) directory(activity.cacheDir.resolve("image_cache"))
+                else this
+            }
+            .build()
     }.build()
 
     val request = manualImageRequest ?: ImageRequest.Builder(LocalContext.current)
         .data(model)
+        .diskCachePolicy(CachePolicy.ENABLED)
         .crossfade(crossfadeEnabled)
         .build()
 

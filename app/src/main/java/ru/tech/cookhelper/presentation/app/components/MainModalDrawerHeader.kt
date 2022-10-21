@@ -22,7 +22,7 @@ fun MainModalDrawerHeader(userState: UserState, onClick: () -> Unit) {
         )
     ) {
         Picture(
-            model = "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
+            model = userState.user?.avatar?.firstOrNull(),
             modifier = Modifier
                 .padding(start = 15.dp, top = 15.dp)
                 .size(64.dp)

@@ -75,6 +75,7 @@ class MainViewModel @Inject constructor(
                         screen = Screen.Home.None
                     )
                 )
+                updateTitle(Screen.Home.Feed.title)
                 _userState.update { UserState(user, user.token) }
             }
         }.launchIn(viewModelScope)

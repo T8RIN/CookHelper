@@ -82,7 +82,7 @@ fun PostItem(
             Spacer(Modifier.size(10.dp))
         }
 
-        post.images[0].let { image ->
+        post.images.getOrNull(0)?.let { image ->
             val shape = RoundedCornerShape(4.dp)
             Box(Modifier.fillMaxWidth()) {
                 Picture(
