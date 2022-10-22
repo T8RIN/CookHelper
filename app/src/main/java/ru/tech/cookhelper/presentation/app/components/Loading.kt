@@ -22,7 +22,8 @@ fun Loading(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoadingDialog() {
+fun LoadingDialog(visible: Boolean = true) {
+    //TODO: Create dismiss feature
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false)

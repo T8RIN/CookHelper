@@ -122,9 +122,16 @@ fun ProfileScreen(
                 onCreateRecipe = {
                     screenController.navigate(Screen.RecipePostCreation)
                 }, onCreatePost = { imageUri ->
-                    screenController.navigate(Screen.PostCreation(imageUri) {
-                        /*TODO: Remove this shit*/ it?.let { viewModel.posts.add(it) }
-                    })
+                    screenController.navigate(
+                        Screen.PostCreation(imageUri) {
+                            /*TODO: Remove this shit*/
+                            it?.let {
+                                val l = listOf(it) + viewModel.posts
+                                viewModel.posts.clear()
+                                viewModel.posts.addAll(l)
+                            }
+                        }
+                    )
                 }
             )
             Spacer(Modifier.height(10.dp))

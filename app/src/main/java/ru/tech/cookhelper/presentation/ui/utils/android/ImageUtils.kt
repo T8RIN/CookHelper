@@ -1,9 +1,23 @@
 package ru.tech.cookhelper.presentation.ui.utils.android
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Extensions.GIF
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Extensions.SVG
+import java.io.File
+import java.io.FileOutputStream
 
 
 object ImageUtils {
+
+    object Extensions {
+        const val SVG = ".svg"
+        const val GIF = ".gif"
+    }
 
     infix fun ExifInterface.copyTo(newExif: ExifInterface) {
         listOf(
@@ -33,4 +47,36 @@ object ImageUtils {
         }
         newExif.saveAttributes()
     }
+
+    val File?.isSvg: Boolean
+        get() {
+            return this?.name?.endsWith(SVG) == true
+        }
+
+    val File?.isGif: Boolean
+        get() {
+            return this?.name?.endsWith(GIF) == true
+        }
+
+    suspend fun File.compress(
+        saveExif: Boolean = true,
+        quality: Int = 50,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+        condition: (File) -> Boolean = { true }
+    ): Boolean = withContext(dispatcher) {
+        val oldExif = ExifInterface(this@compress)
+        return@withContext runCatching {
+            if (condition(this@compress)) {
+                BitmapFactory.decodeFile(path)
+                    .compress(
+                        format, quality,
+                        FileOutputStream(this@compress)
+                    ).also {
+                        if (saveExif) oldExif copyTo ExifInterface(this@compress)
+                    }
+            } else false
+        }.getOrNull() ?: false
+    }
+
 }

@@ -1,8 +1,5 @@
 package ru.tech.cookhelper.data.repository
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.exifinterface.media.ExifInterface
 import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,9 +23,10 @@ import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
-import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.copyTo
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.compress
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.isGif
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.isSvg
 import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 
@@ -201,16 +199,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Flow<Action<Post>> = flow {
         emit(Action.Loading())
 
-        imageFile?.let {
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    val oldExif = ExifInterface(imageFile)
-                    BitmapFactory.decodeFile(imageFile.path)
-                        .compress(Bitmap.CompressFormat.JPEG, 50, FileOutputStream(imageFile))
-                    oldExif copyTo ExifInterface(imageFile)
-                }
-            }
-        }
+        imageFile?.compress { !it.isSvg && !it.isGif }
 
         val image = imageFile.toMultipartFormData()
 
