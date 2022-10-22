@@ -78,15 +78,15 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02")
 
     //Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.43.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.43.2")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
     //Desugaring
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
 
     //Compose
-    implementation("androidx.activity:activity-compose:1.6.0")
+    implementation("androidx.activity:activity-compose:1.7.0-alpha01")
     implementation("androidx.compose.ui:ui:1.3.0-rc01")
     implementation("androidx.compose.material3:material3:1.0.0-rc01")
     implementation("androidx.compose.material3:material3-window-size-class:1.0.0-rc01")
@@ -97,17 +97,17 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.3.0-rc01")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.26.3-beta")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.3-beta")
-    implementation("com.google.accompanist:accompanist-pager:0.26.3-beta")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.3-beta")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.5-rc")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.26.5-rc")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.5-rc")
+    implementation("com.google.accompanist:accompanist-pager:0.26.5-rc")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.5-rc")
 
     //Coil
-    implementation("io.coil-kt:coil:2.2.1")
-    implementation("io.coil-kt:coil-compose:2.2.1")
-    implementation("io.coil-kt:coil-gif:2.2.1")
-    implementation("io.coil-kt:coil-svg:2.2.1")
+    implementation("io.coil-kt:coil:2.2.2")
+    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-gif:2.2.2")
+    implementation("io.coil-kt:coil-svg:2.2.2")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -128,6 +128,6 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.0")
 
     //Result Retrofit Adapter
-    implementation("com.github.skydoves:retrofit-adapters-result:1.0.3")
+    implementation("com.github.skydoves:retrofit-adapters-result:1.0.4")
 
 }
