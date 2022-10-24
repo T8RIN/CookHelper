@@ -174,4 +174,8 @@
     <string name="post_deleted">Публикация удалена</string>
     <string name="restart_app">Перепустить приложение</string>
     <string name="post_created">Публикация успешно создана</string>
+    <string name="interrupt">Прервать</string>
+    <string name="loading">Загрузка</string>
+    <string name="loading_description">Операция в процессе, вы можете прервать ее или подождать завершения</string>
+    <string name="wait">Ждать</string>
 </resources>

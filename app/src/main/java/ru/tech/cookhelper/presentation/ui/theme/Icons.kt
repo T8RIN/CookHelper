@@ -176,7 +176,7 @@ val Icons.Outlined.ProductMeasure: ImageVector
             return _scale!!
         }
         _scale = ImageVector.Builder(
-            name = "Scale", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
+            name = "ProductMeasure", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
             viewportWidth = 24.0f, viewportHeight = 24.0f
         ).apply {
             path(
@@ -249,7 +249,7 @@ val Icons.Filled.MessageDraw: ImageVector
             return _messageDraw!!
         }
         _messageDraw = ImageVector.Builder(
-            name = "Message-draw", defaultWidth = 24.0.dp, defaultHeight =
+            name = "MessageDraw", defaultWidth = 24.0.dp, defaultHeight =
             24.0.dp, viewportWidth = 24.0f, viewportHeight = 24.0f
         ).apply {
             path(
@@ -297,3 +297,92 @@ val Icons.Filled.MessageDraw: ImageVector
     }
 
 private var _messageDraw: ImageVector? = null
+
+val Icons.Filled.Loading: ImageVector
+    get() {
+        if (_loading != null) {
+            return _loading!!
+        }
+        _loading = ImageVector.Builder(
+            name = "Loading", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
+            viewportWidth = 24.0f, viewportHeight = 24.0f
+        ).apply {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(4.0f, 12.0f)
+                lineToRelative(-2.0f, 0.0f)
+                curveToRelative(0.0f, 5.5f, 4.5f, 10.0f, 10.0f, 10.0f)
+                lineToRelative(0.0f, -2.0f)
+                curveTo(7.6f, 20.0f, 4.0f, 16.4f, 4.0f, 12.0f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(12.0f, 20.0f)
+                lineToRelative(0.0f, 2.0f)
+                curveToRelative(5.5f, 0.0f, 10.0f, -4.5f, 10.0f, -10.0f)
+                lineToRelative(-2.0f, 0.0f)
+                curveTo(20.0f, 16.4f, 16.4f, 20.0f, 12.0f, 20.0f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(20.0f, 12.0f)
+                lineToRelative(2.0f, 0.0f)
+                curveToRelative(0.0f, -5.5f, -4.5f, -10.0f, -10.0f, -10.0f)
+                lineToRelative(0.0f, 2.0f)
+                curveTo(16.4f, 4.0f, 20.0f, 7.6f, 20.0f, 12.0f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(4.7f, 8.6f)
+                lineTo(2.9f, 7.8f)
+                curveToRelative(-2.3f, 5.0f, -0.2f, 11.0f, 4.9f, 13.3f)
+                lineToRelative(0.8f, -1.8f)
+                curveTo(4.6f, 17.4f, 2.9f, 12.6f, 4.7f, 8.6f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(8.6f, 19.2f)
+                lineTo(7.8f, 21.0f)
+                curveToRelative(5.0f, 2.3f, 11.0f, 0.2f, 13.3f, -4.9f)
+                lineToRelative(-1.8f, -0.8f)
+                curveTo(17.4f, 19.4f, 12.6f, 21.1f, 8.6f, 19.2f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(19.2f, 15.4f)
+                lineToRelative(1.8f, 0.8f)
+                curveToRelative(2.3f, -5.0f, 0.2f, -11.0f, -4.9f, -13.3f)
+                lineToRelative(-0.8f, 1.8f)
+                curveTo(19.4f, 6.6f, 21.1f, 11.4f, 19.2f, 15.4f)
+                close()
+            }
+        }
+            .build()
+        return _loading!!
+    }
+
+private var _loading: ImageVector? = null
+

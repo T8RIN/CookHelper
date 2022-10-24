@@ -176,4 +176,8 @@
     <string name="post_deleted">Post deleted</string>
     <string name="restart_app">Restart App</string>
     <string name="post_created">Post created successfully</string>
+    <string name="interrupt">Interrupt</string>
+    <string name="loading">Loading</string>
+    <string name="loading_description">Loading in progress, you can stop it or wait until it ends</string>
+    <string name="wait">Wait</string>
 </resources>

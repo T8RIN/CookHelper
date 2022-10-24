@@ -179,8 +179,8 @@ enum class OptionsGravity { Start, Center, End }
 fun Scrim(
     showing: Boolean,
     onTap: () -> Unit,
-    fraction: () -> Float = { 1f },
-    color: Color = MaterialTheme.colorScheme.scrim.copy(0.32f)
+    fraction: () -> Float = { 0.5f },
+    color: Color = MaterialTheme.colorScheme.scrim
 ) {
     AnimatedVisibility(
         visible = showing,
