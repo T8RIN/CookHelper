@@ -1,16 +1,17 @@
 package ru.tech.cookhelper.data.repository
 
 import com.squareup.moshi.Types
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.core.constants.Status.SUCCESS
 import ru.tech.cookhelper.core.constants.Status.USER_NOT_VERIFIED
+import ru.tech.cookhelper.core.utils.RetrofitUtils.bodyOrThrow
 import ru.tech.cookhelper.core.utils.RetrofitUtils.toMultipartFormData
+import ru.tech.cookhelper.core.utils.kotlin.getOrExceptionAndNull
+import ru.tech.cookhelper.core.utils.kotlin.runIo
 import ru.tech.cookhelper.data.local.dao.UserDao
 import ru.tech.cookhelper.data.local.entity.asDatabaseEntity
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
@@ -26,6 +27,7 @@ import ru.tech.cookhelper.domain.repository.UserRepository
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.compress
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.isGif
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.isSvg
+import ru.tech.cookhelper.presentation.ui.utils.toAction
 import java.io.File
 import javax.inject.Inject
 
@@ -40,14 +42,15 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun loginWith(login: String, password: String): Flow<Action<User>> = flow {
         emit(Action.Loading())
-        val response = io { authService.loginWith(login, password).execute() }
-        val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
+
+        val response = runIo { authService.loginWith(login, password).execute() }
+        val body = response.bodyOrThrow()
 
         when (body.status) {
             SUCCESS, USER_NOT_VERIFIED -> emit(Action.Success(data = body.data?.asDomain()))
             else -> emit(Action.Empty(body.status))
         }
-    }.catch { t -> emit(Action.Error(message = t.message.toString())) }
+    }.catch { emit(it.toAction()) }
 
     override fun registerWith(
         name: String,
@@ -58,30 +61,28 @@ class UserRepositoryImpl @Inject constructor(
     ): Flow<Action<User>> = flow {
         emit(Action.Loading())
         val response =
-            io { authService.registerWith(name, surname, nickname, email, password).execute() }
-        val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
+            runIo { authService.registerWith(name, surname, nickname, email, password).execute() }
+        val body = response.bodyOrThrow()
 
         if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()))
-        else emit(Action.Error(message = body.message))
+        else emit(Action.Empty(body.status))
 
-    }.catch { t -> emit(Action.Error(message = t.message.toString())) }
+    }.catch { emit(it.toAction()) }
 
     override suspend fun requestCode(
         token: String
-    ): Result<User?> = runCatching {
-        authService.requestCode(token).data?.asDomain()
-    }
+    ): Result<User?> = authService.requestCode(token).map { it.data?.asDomain() }
 
     override fun checkCode(code: String, token: String): Flow<Action<User>> = flow {
         emit(Action.Loading())
-        val response = io { authService.verifyEmail(code, token).execute() }
-        val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
+        val response = runIo { authService.verifyEmail(code, token).execute() }
+        val body = response.bodyOrThrow()
 
         when (body.status) {
             SUCCESS -> emit(Action.Success(data = body.data?.asDomain()))
             else -> emit(Action.Empty(body.status))
         }
-    }.catch { t -> emit(Action.Error(message = t.message.toString())) }
+    }.catch { emit(it.toAction()) }
 
     override suspend fun cacheUser(user: User) = userDao.cacheUser(user.asDatabaseEntity())
 
@@ -89,22 +90,34 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun checkLoginForAvailability(
         login: String
-    ): Action<Boolean> = try {
-        val response = authService.checkNicknameForAvailability(login)
-        if (response.status == SUCCESS) Action.Success(data = response.data)
-        else Action.Empty(response.status)
-    } catch (t: Throwable) {
-        Action.Error(message = t.message.toString())
+    ): Action<Boolean> {
+        authService
+            .checkNicknameForAvailability(login)
+            .getOrExceptionAndNull {
+                it.toAction<Boolean>()
+            }?.let {
+                return when (it.status) {
+                    SUCCESS -> Action.Success(data = it.data)
+                    else -> Action.Empty(status = it.status)
+                }
+            }
+        return Action.Empty()
     }
 
     override suspend fun checkEmailForAvailability(
         email: String
-    ): Action<Boolean> = try {
-        val response = authService.checkEmailForAvailability(email)
-        if (response.status == SUCCESS) Action.Success(data = response.data)
-        else Action.Empty(response.status)
-    } catch (t: Throwable) {
-        Action.Error(message = t.message.toString())
+    ): Action<Boolean> {
+        authService
+            .checkEmailForAvailability(email)
+            .getOrExceptionAndNull {
+                it.toAction<Boolean>()
+            }?.let {
+                return when (it.status) {
+                    SUCCESS -> Action.Success(data = it.data)
+                    else -> Action.Empty(status = it.status)
+                }
+            }
+        return Action.Empty()
     }
 
     override suspend fun logOut() = userDao.clearUser()
@@ -142,17 +155,12 @@ class UserRepositoryImpl @Inject constructor(
                 }
             }
         emit(Action.Loading())
-        val response = userApi.getFeed(token)
-        when {
-            response.isFailure -> {
-                emit(Action.Error(response.exceptionOrNull()?.message ?: ""))
-            }
-            response.isSuccess -> {
-                val result = response.getOrNull()
-                if (result?.status == 100) emit(Action.Success(data = result.data?.map { it.asDomain() }
-                    ?: emptyList()))
-                else emit(Action.Empty(result?.status))
-            }
+        userApi.getFeed(token).getOrExceptionAndNull {
+            it.toAction<Boolean>()
+        }?.let {
+            if (it.status == SUCCESS) emit(Action.Success(data = it.data?.map { it.asDomain() }
+                ?: emptyList()))
+            else emit(Action.Empty(it.status))
         }
     }
 
@@ -161,19 +169,17 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun requestPasswordRestoreCode(
         login: String
     ): Action<User?> {
-        val result = runCatching { authService.requestPasswordRestoreCode(login) }
-        if (result.isFailure) {
-            return Action.Error(message = result.exceptionOrNull()?.message)
-        } else {
-            val authInfo = result.getOrNull()
-            if (authInfo != null) {
-                return when (authInfo.status) {
-                    SUCCESS -> Action.Success(authInfo.data?.asDomain())
-                    else -> Action.Empty(status = authInfo.status)
+        authService
+            .requestPasswordRestoreCode(login)
+            .getOrExceptionAndNull {
+                it.toAction<Boolean>()
+            }?.let {
+                return when (it.status) {
+                    SUCCESS -> Action.Success(it.data?.asDomain())
+                    else -> Action.Empty(status = it.status)
                 }
             }
-            return Action.Empty()
-        }
+        return Action.Empty()
     }
 
     override fun restorePasswordBy(
@@ -182,14 +188,14 @@ class UserRepositoryImpl @Inject constructor(
         newPassword: String
     ): Flow<Action<User>> = flow {
         emit(Action.Loading())
-        val response = io { authService.restorePasswordBy(login, code, newPassword).execute() }
-        val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
+        val response = runIo { authService.restorePasswordBy(login, code, newPassword).execute() }
+        val body = response.bodyOrThrow()
 
         when (body.status) {
             SUCCESS -> emit(Action.Success(data = body.data?.asDomain()))
             else -> emit(Action.Empty(body.status))
         }
-    }.catch { t -> emit(Action.Error(message = t.message.toString())) }
+    }.catch { emit(it.toAction()) }
 
     override fun createPost(
         token: String,
@@ -203,8 +209,8 @@ class UserRepositoryImpl @Inject constructor(
 
         val image = imageFile.toMultipartFormData()
 
-        val response = io { userApi.createPost(token, label, content, image).execute() }
-        val body = response.let { it.body() ?: throw Exception("${it.code()} ${it.message()}") }
+        val response = runIo { userApi.createPost(token, label, content, image).execute() }
+        val body = response.bodyOrThrow()
 
         if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()?.let {
             if (it.images[0].id == "") it.copy(images = emptyList(), comments = emptyList())
@@ -212,10 +218,5 @@ class UserRepositoryImpl @Inject constructor(
         }))
         else emit(Action.Empty(body.status))
 
-    }.catch { t -> emit(Action.Error(message = t.message.toString())) }
-
-
-    private suspend fun <T> io(
-        function: suspend () -> T
-    ): T = withContext(Dispatchers.IO) { function() }
+    }.catch { emit(it.toAction()) }
 }

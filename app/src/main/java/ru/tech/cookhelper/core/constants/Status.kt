@@ -6,6 +6,9 @@ object Status {
     const val PERMISSION_DENIED: Int = 98
     const val PARAMETER_MISSED: Int = 97
     const val EXCEPTION: Int = 0
+    const val NO_INTERNET = -1
+    const val CONNECTION_TIMED_OUT = -2
+    const val READ_TIMEOUT = -3
 
     const val USER_NOT_FOUND: Int = 101
     const val WRONG_CREDENTIALS: Int = 102

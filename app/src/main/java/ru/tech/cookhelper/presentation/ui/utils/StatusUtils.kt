@@ -1,17 +1,22 @@
 package ru.tech.cookhelper.presentation.ui.utils
 
+import androidx.annotation.StringRes
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.core.constants.Status.ANSWER_NOT_ADDED
 import ru.tech.cookhelper.core.constants.Status.COMMENT_DELETED
 import ru.tech.cookhelper.core.constants.Status.COMMENT_NOT_FOUND
+import ru.tech.cookhelper.core.constants.Status.CONNECTION_TIMED_OUT
 import ru.tech.cookhelper.core.constants.Status.EMAIL_REJECTED
 import ru.tech.cookhelper.core.constants.Status.EXCEPTION
 import ru.tech.cookhelper.core.constants.Status.NICKNAME_REJECTED
+import ru.tech.cookhelper.core.constants.Status.NO_INTERNET
 import ru.tech.cookhelper.core.constants.Status.PARAMETER_MISSED
 import ru.tech.cookhelper.core.constants.Status.PASSWORD_REJECTED
 import ru.tech.cookhelper.core.constants.Status.PERMISSION_DENIED
 import ru.tech.cookhelper.core.constants.Status.POST_DELETED
 import ru.tech.cookhelper.core.constants.Status.POST_NOT_FOUND
+import ru.tech.cookhelper.core.constants.Status.READ_TIMEOUT
 import ru.tech.cookhelper.core.constants.Status.RECIPE_DELETED
 import ru.tech.cookhelper.core.constants.Status.RECIPE_NOT_FOUND
 import ru.tech.cookhelper.core.constants.Status.SUCCESS
@@ -25,9 +30,16 @@ import ru.tech.cookhelper.core.constants.Status.USER_TOKEN_INVALID
 import ru.tech.cookhelper.core.constants.Status.USER_UPLOAD_FAILED
 import ru.tech.cookhelper.core.constants.Status.WRONG_CREDENTIALS
 import ru.tech.cookhelper.core.constants.Status.WRONG_DATA
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
+@StringRes
 fun Int?.getMessage(): Int = when (this) {
     SUCCESS -> R.string.success
+    NO_INTERNET -> R.string.no_connection
+    CONNECTION_TIMED_OUT -> R.string.connection_timed_out
+    READ_TIMEOUT -> R.string.read_timeout
     WRONG_DATA -> R.string.wrong_data
     PERMISSION_DENIED -> R.string.permission_denied
     PARAMETER_MISSED -> R.string.malformed_request
@@ -52,4 +64,11 @@ fun Int?.getMessage(): Int = when (this) {
     POST_NOT_FOUND -> R.string.post_not_found
     POST_DELETED -> R.string.post_deleted
     else -> R.string.unexpected_error
+}
+
+fun <T> Throwable?.toAction(): Action<T> = when (this) {
+    is UnknownHostException -> Action.Empty(NO_INTERNET)
+    is ConnectException -> Action.Empty(CONNECTION_TIMED_OUT)
+    is SocketTimeoutException -> Action.Empty(READ_TIMEOUT)
+    else -> Action.Error(this?.message)
 }

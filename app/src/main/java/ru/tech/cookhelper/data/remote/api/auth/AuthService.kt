@@ -34,12 +34,12 @@ interface AuthService {
     @GET("api/user/get/verification/")
     suspend fun requestCode(
         @Query("token") token: String
-    ): Response<UserDto?>
+    ): Result<Response<UserDto?>>
 
     @GET("api/user/get/recover-password/")
     suspend fun requestPasswordRestoreCode(
         @Query("login") login: String
-    ): Response<UserDto?>
+    ): Result<Response<UserDto?>>
 
     @Multipart
     @POST("api/user/post/recover-password/")
@@ -52,10 +52,10 @@ interface AuthService {
     @GET("api/user/get/nickname-availability/")
     suspend fun checkNicknameForAvailability(
         @Query("nickname") nickname: String
-    ): Response<Boolean>
+    ): Result<Response<Boolean>>
 
     @GET("api/user/get/email-availability/")
     suspend fun checkEmailForAvailability(
         @Query("email") email: String
-    ): Response<Boolean>
+    ): Result<Response<Boolean>>
 }

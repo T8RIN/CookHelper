@@ -178,4 +178,6 @@
     <string name="loading">Загрузка</string>
     <string name="loading_description">Операция в процессе, вы можете прервать ее или подождать завершения</string>
     <string name="wait">Ждать</string>
+    <string name="read_timeout">Время чтения истекло</string>
+    <string name="connection_timed_out">Время соединения истекло</string>
 </resources>

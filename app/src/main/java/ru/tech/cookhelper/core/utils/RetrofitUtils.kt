@@ -50,6 +50,9 @@ object RetrofitUtils {
     ): OkHttpClient.Builder = readTimeout(timeout, timeUnit)
         .connectTimeout(timeout, timeUnit)
 
+    fun <T> retrofit2.Response<T>.bodyOrThrow(): T =
+        body() ?: throw Throwable("${code()} ${message()}")
+
     class RetryInterceptor(
         private val tryCount: Int = 3,
         private val reason: (Response) -> Boolean

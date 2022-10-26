@@ -180,4 +180,6 @@
     <string name="loading">Loading</string>
     <string name="loading_description">Loading in progress, you can stop it or wait until it ends</string>
     <string name="wait">Wait</string>
+    <string name="connection_timed_out">Connection timed out</string>
+    <string name="read_timeout">Read timeout</string>
 </resources>
