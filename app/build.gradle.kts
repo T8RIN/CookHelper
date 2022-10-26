@@ -64,9 +64,9 @@ dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
     implementation("com.google.android.material:material:1.8.0-alpha01")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03")
     implementation("androidx.window:window:1.1.0-alpha03")
-    implementation("androidx.exifinterface:exifinterface:1.3.4")
+    implementation("androidx.exifinterface:exifinterface:1.3.5")
 
 
     // Coroutines
@@ -74,8 +74,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Coroutine Lifecycle Scopes
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03")
 
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.44")
@@ -86,22 +86,22 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
 
     //Compose
-    implementation("androidx.activity:activity-compose:1.7.0-alpha01")
-    implementation("androidx.compose.ui:ui:1.3.0-rc01")
-    implementation("androidx.compose.material3:material3:1.0.0-rc01")
-    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-rc01")
-    implementation("androidx.compose.material:material-icons-core:1.3.0-rc01")
-    implementation("androidx.compose.material:material-icons-extended:1.3.0-rc01")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha02")
+    implementation("androidx.activity:activity-compose:1.7.0-alpha02")
+    implementation("androidx.compose.ui:ui:1.4.0-alpha01")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha01")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha01")
+    implementation("androidx.compose.material:material-icons-core:1.4.0-alpha01")
+    implementation("androidx.compose.material:material-icons-extended:1.4.0-alpha01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha03")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha04")
-    implementation("androidx.compose.foundation:foundation:1.3.0-rc01")
+    implementation("androidx.compose.foundation:foundation:1.4.0-alpha01")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.5-rc")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.26.5-rc")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.26.5-rc")
-    implementation("com.google.accompanist:accompanist-pager:0.26.5-rc")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.26.5-rc")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.27.0")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.27.0")
+    implementation("com.google.accompanist:accompanist-pager:0.27.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.27.0")
 
     //Coil
     implementation("io.coil-kt:coil:2.2.2")
