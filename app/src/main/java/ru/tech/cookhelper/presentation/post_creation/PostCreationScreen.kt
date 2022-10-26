@@ -221,7 +221,13 @@ fun PostCreationScreen(
             doneEnabled = imageUri.isNotEmpty() || content.isNotEmpty()
         }
 
-        LoadingDialog(visible = viewModel.postCreationState.isLoading)
+        LoadingDialog(
+            visible = viewModel.postCreationState.isLoading,
+            isCancelable = true,
+            onDismiss = {
+
+            }
+        )
 
         if (viewModel.postCreationState.post != null) {
             SideEffect {

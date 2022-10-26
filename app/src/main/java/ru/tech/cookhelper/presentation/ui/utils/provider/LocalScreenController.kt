@@ -11,7 +11,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import dev.olshevski.navigation.reimagined.navigate as libNavigate
 
 val LocalScreenController = compositionLocalOf<NavController<Screen>> {
-    error("NoScreenController provided")
+    error("ScreenController not present")
 }
 
 inline val <T> T.isCurrentDestination: Boolean

@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 
-val LocalSnackbarHost = compositionLocalOf { SnackbarHostState() }
+val LocalSnackbarHost =
+    compositionLocalOf<SnackbarHostState> { error("SnackbarHostState not present") }
 
 @Composable
 fun rememberSnackbarHostState() = remember { SnackbarHostState() }

@@ -9,12 +9,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.containerColorWithScroll
 import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.stringResourceListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +25,7 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
         TabRow(
             containerColor = tabColor,
             selectedTabIndex = selectedTabIndex,
-            tabs = listOf(stringResource(R.string.all_topics), stringResource(R.string.my_topics)),
+            tabs = stringResourceListOf(R.string.all_topics, R.string.my_topics),
             divider = { Separator() },
             onTabClick = { selectedTabIndex = it }
         )

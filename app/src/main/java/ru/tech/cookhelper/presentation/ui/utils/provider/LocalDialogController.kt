@@ -5,11 +5,11 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import dev.olshevski.navigation.reimagined.NavController
-import dev.olshevski.navigation.reimagined.navController
 import dev.olshevski.navigation.reimagined.pop
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 
-val LocalDialogController = compositionLocalOf { navController<Dialog>(Dialog.None) }
+val LocalDialogController =
+    compositionLocalOf<NavController<Dialog>> { error("DialogController not present") }
 
 fun DialogController.show(dialog: Dialog) = navigate(dialog)
 

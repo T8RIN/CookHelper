@@ -6,10 +6,12 @@ import androidx.exifinterface.media.ExifInterface
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Dimensions.MAX_DIMEN
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Extensions.GIF
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Extensions.SVG
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.Integer.max
 
 
 object ImageUtils {
@@ -17,6 +19,10 @@ object ImageUtils {
     object Extensions {
         const val SVG = ".svg"
         const val GIF = ".gif"
+    }
+
+    object Dimensions {
+        const val MAX_DIMEN = 1280
     }
 
     infix fun ExifInterface.copyTo(newExif: ExifInterface) {
@@ -60,7 +66,7 @@ object ImageUtils {
 
     suspend fun File.compress(
         saveExif: Boolean = true,
-        quality: Int = 50,
+        quality: Int = 75,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
         condition: (File) -> Boolean = { true }
@@ -69,6 +75,11 @@ object ImageUtils {
         return@withContext runCatching {
             if (condition(this@compress)) {
                 BitmapFactory.decodeFile(path)
+                    .run {
+                        if (max(width, height) >= MAX_DIMEN) {
+                            resizeBitmap(maxLength = MAX_DIMEN)
+                        } else this
+                    }
                     .compress(
                         format, quality,
                         FileOutputStream(this@compress)
@@ -77,6 +88,22 @@ object ImageUtils {
                     }
             } else false
         }.getOrNull() ?: false
+    }
+
+    fun Bitmap.resizeBitmap(maxLength: Int): Bitmap {
+        return try {
+            if (height >= width) {
+                val aspectRatio = width.toDouble() / height.toDouble()
+                val targetWidth = (maxLength * aspectRatio).toInt()
+                Bitmap.createScaledBitmap(this, targetWidth, maxLength, false)
+            } else {
+                val aspectRatio = height.toDouble() / width.toDouble()
+                val targetHeight = (maxLength * aspectRatio).toInt()
+                Bitmap.createScaledBitmap(this, maxLength, targetHeight, false)
+            }
+        } catch (_: Exception) {
+            this
+        }
     }
 
 }
