@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.onEmpty
 import ru.tech.cookhelper.core.onError
 import ru.tech.cookhelper.core.onLoading
@@ -20,10 +19,11 @@ import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.feed.components.FeedState
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.updateIf
-import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
+import ru.tech.cookhelper.presentation.ui.utils.getMessage
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,16 +45,13 @@ class FeedViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         getFeedUseCase(user.token)
-            .onEmpty { _feedState.update { copy(isLoading = false) } }
+            .onEmpty {
+                _feedState.update { copy(isLoading = false) }
+                sendEvent(Event.ShowToast(UIText(getMessage())))
+            }
             .onError {
                 _feedState.update { copy(isLoading = false) }
-                sendEvent(
-                    Event.ShowToast(
-                        //TODO: Move this to repo layer
-                        if (!this.contains("Unable to resolve host")
-                        ) UIText.DynamicString(this) else UIText.StringResource(R.string.no_connection)
-                    )
-                )
+                sendEvent(Event.ShowToast(UIText(this)))
             }
             .onLoading {
                 _feedState.updateIf(

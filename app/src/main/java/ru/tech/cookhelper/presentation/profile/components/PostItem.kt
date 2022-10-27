@@ -58,7 +58,7 @@ fun PostItem(
             .fillMaxWidth()
             .clickable { onPostClick(post.id) }
     ) {
-        Spacer(Modifier.size(15.dp))
+        Spacer(Modifier.size(16.dp))
         AuthorBubble(
             modifier = Modifier.padding(start = 20.dp),
             author = author,

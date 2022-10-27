@@ -18,7 +18,7 @@ import ru.tech.cookhelper.presentation.ui.theme.Gray
 fun PostActionButton(
     onClick: () -> Unit,
     icon: ImageVector,
-    text: String,
+    text: String = "",
     containerColor: Color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.25f),
     contentColor: Color = Gray
 ) {

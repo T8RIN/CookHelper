@@ -16,6 +16,7 @@ import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
 import ru.tech.cookhelper.presentation.chat.ChatScreen
 import ru.tech.cookhelper.presentation.chat_list.ChatListScreen
 import ru.tech.cookhelper.presentation.edit_profile.EditProfileScreen
+import ru.tech.cookhelper.presentation.forum_discussion.ForumDiscussion
 import ru.tech.cookhelper.presentation.fullscreen_image_pager.FullScreenPagerScreen
 import ru.tech.cookhelper.presentation.home_screen.HomeScreen
 import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
@@ -135,6 +136,13 @@ fun ScreenHost(
                     Placeholder(
                         screen.baseIcon,
                         screen.title.asString()
+                    )
+                }
+                is Screen.ForumDiscussion -> {
+                    ForumDiscussion(
+                        id = screen.id,
+                        title = screen.label,
+                        onBack = { controller.goBack() }
                     )
                 }
             }

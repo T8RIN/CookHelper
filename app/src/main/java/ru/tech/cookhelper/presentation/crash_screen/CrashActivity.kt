@@ -52,41 +52,47 @@ class CrashActivity : ComponentActivity() {
                     val conf = LocalConfiguration.current
                     val size = min(conf.screenWidthDp.dp, conf.screenHeightDp.dp)
                     Surface(modifier = Modifier.fillMaxSize()) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .verticalScroll(rememberScrollState()),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Icon(
-                                imageVector = Icons.TwoTone.ErrorOutline,
-                                contentDescription = null,
+                        Box {
+                            Column(
                                 modifier = Modifier
-                                    .size(size * 0.3f)
-                                    .statusBarsPadding()
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = stringResource(R.string.something_went_wrong),
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 26.sp
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Card(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                shape = SquircleShape(24.dp)
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState()),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Icon(
+                                    imageVector = Icons.TwoTone.ErrorOutline,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(size * 0.3f)
+                                        .statusBarsPadding()
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
                                 Text(
-                                    text = crashReason,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.padding(16.dp)
+                                    text = stringResource(R.string.something_went_wrong),
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 26.sp
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Card(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
+                                    shape = SquircleShape(24.dp)
+                                ) {
+                                    Text(
+                                        text = crashReason,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(16.dp)
+                                    )
+                                }
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(80.dp)
+                                        .navigationBarsPadding()
                                 )
                             }
-                            Spacer(modifier = Modifier.height(16.dp))
                             Button(
                                 onClick = {
                                     startActivity(
@@ -96,7 +102,10 @@ class CrashActivity : ComponentActivity() {
                                         )
                                     )
                                 },
-                                modifier = Modifier.navigationBarsPadding()
+                                modifier = Modifier
+                                    .padding(bottom = 16.dp)
+                                    .navigationBarsPadding()
+                                    .align(Alignment.BottomCenter)
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.RestartAlt,
@@ -105,7 +114,6 @@ class CrashActivity : ComponentActivity() {
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(text = stringResource(R.string.restart_app))
                             }
-                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }

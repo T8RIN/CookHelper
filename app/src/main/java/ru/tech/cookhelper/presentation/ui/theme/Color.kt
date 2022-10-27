@@ -785,7 +785,15 @@ val ColorScheme.ordinal get() = colorList.indexOf(this)
 
 inline val LikeColor: Color
     @Composable
+    get() = Red
+
+inline val Red: Color
+    @Composable
     get() = Color(0xFFff4e3a).harmonizeWithPrimary()
+
+inline val Green: Color
+    @Composable
+    get() = Color(0xFF56CA5B).harmonizeWithPrimary()
 
 inline val Gray: Color
     @Composable

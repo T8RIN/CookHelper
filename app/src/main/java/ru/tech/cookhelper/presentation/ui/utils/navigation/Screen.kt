@@ -155,6 +155,9 @@ sealed class Screen(
     object EditProfile : Screen(showTopAppBar = false)
 
     @Parcelize
+    class ForumDiscussion(val id: Int, val label: String) : Screen(showTopAppBar = false)
+
+    @Parcelize
     class Chat(
         val chatTitle: String,
         val imageUrl: String?,

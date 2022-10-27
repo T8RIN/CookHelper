@@ -47,6 +47,7 @@ class PostCreationViewModel @Inject constructor(
     }
 
     fun createPost(content: String, label: String, imageFile: File?) {
+        //TODO: Create cancel feature
         createPostUseCase(user?.token ?: "", label, content, imageFile)
             .onSuccess {
                 _postCreationState.update { PostCreationState(post = this@onSuccess) }
