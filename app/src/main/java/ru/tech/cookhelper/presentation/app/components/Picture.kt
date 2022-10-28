@@ -54,7 +54,8 @@ fun Picture(
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
     zoomParams: ZoomParams = ZoomParams(),
     shimmerEnabled: Boolean = true,
-    crossfadeEnabled: Boolean = true
+    crossfadeEnabled: Boolean = true,
+    allowHardware: Boolean = true,
 ) {
     val activity = LocalContext.current.findActivity()
     val context = LocalContext.current
@@ -73,6 +74,7 @@ fun Picture(
     val request = manualImageRequest ?: ImageRequest.Builder(context)
         .data(model)
         .crossfade(crossfadeEnabled)
+        .allowHardware(allowHardware)
         .build()
 
     val image: @Composable () -> Unit = {

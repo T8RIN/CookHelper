@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.presentation.forum_discussion
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,13 +13,11 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.PlaylistAdd
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -26,6 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
+import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.constants.Constants.LOREM_IPSUM
 import ru.tech.cookhelper.domain.model.Image
@@ -41,6 +42,7 @@ import ru.tech.cookhelper.presentation.profile.components.AuthorBubble
 import ru.tech.cookhelper.presentation.profile.components.PostActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.ForumRemove
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.blur
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.pluralStringResource
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
@@ -57,6 +59,7 @@ import kotlin.math.min
 fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
     val scrollBehavior = topAppBarScrollBehavior()
     val screenController = LocalScreenController.current
+    val scope = rememberCoroutineScope()
 
     val user = User(
         id = 1,
@@ -122,6 +125,8 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
     val placeholderSize = LocalConfiguration.current.minScreenDp or 460.dp
 
 
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+
     Column {
         TopAppBar(
             title = { Text(title, fontWeight = FontWeight.SemiBold) },
@@ -152,6 +157,13 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                 Spacer(Modifier.size(10.dp))
                 Box(Modifier.fillMaxWidth()) {
                     Picture(
+                        model = bitmap,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(LocalConfiguration.current.minScreenDp),
+                        shape = RectangleShape
+                    )
+                    Picture(
                         model = "https://media-cldnry.s-nbcnews.com/image/upload/rockcms/2022-03/plant-based-food-mc-220323-02-273c7b.jpg",
                         modifier = Modifier
                             .squareSize()
@@ -164,6 +176,12 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                                     )
                                 )
                             },
+                        allowHardware = false,
+                        onSuccess = {
+                            scope.launch {
+                                bitmap = it.result.drawable.toBitmap().blur(scale = 2f, 50)
+                            }
+                        },
                         shape = RoundedCornerShape(4.dp)
                     )
                 }
