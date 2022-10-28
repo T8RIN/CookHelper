@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.constants.Constants.LOREM_IPSUM
@@ -59,7 +61,15 @@ import kotlin.math.min
 fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
     val scrollBehavior = topAppBarScrollBehavior()
     val screenController = LocalScreenController.current
+    val configuration = LocalConfiguration.current
     val scope = rememberCoroutineScope()
+
+    var job by remember { mutableStateOf<Job?>(null) }
+    DisposableEffect(Unit) {
+        onDispose { job?.cancel() }
+    }
+
+    //TODO: Create Picture.kt with blurred background
 
     val user = User(
         id = 1,
@@ -122,7 +132,7 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
     )
     val answerCount = 10
 
-    val placeholderSize = LocalConfiguration.current.minScreenDp or 460.dp
+    val placeholderSize = configuration.minScreenDp or 460.dp
 
 
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -160,7 +170,7 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                         model = bitmap,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(LocalConfiguration.current.minScreenDp),
+                            .height(configuration.minScreenDp),
                         shape = RectangleShape
                     )
                     Picture(
@@ -178,8 +188,12 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                             },
                         allowHardware = false,
                         onSuccess = {
-                            scope.launch {
-                                bitmap = it.result.drawable.toBitmap().blur(scale = 2f, 50)
+                            job?.cancel()
+                            if (configuration.isLandscape) {
+                                job = scope.launch {
+                                    delay(300)
+                                    bitmap = it.result.drawable.toBitmap().blur(scale = 0.5f, 60)
+                                }
                             }
                         },
                         shape = RoundedCornerShape(4.dp)
@@ -281,6 +295,11 @@ private infix fun Dp.or(dp: Dp): Dp {
     return if (this >= dp) dp
     else this
 }
+
+private val Configuration.isLandscape: Boolean
+    get() {
+        return orientation == Configuration.ORIENTATION_LANDSCAPE
+    }
 
 private val Configuration.minScreenDp: Dp
     get() {
