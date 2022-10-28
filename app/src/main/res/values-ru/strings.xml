@@ -172,7 +172,7 @@
     <string name="comment_deleted">Комментарий удален</string>
     <string name="post_not_found">Публикация не найдена</string>
     <string name="post_deleted">Публикация удалена</string>
-    <string name="restart_app">Перепустить приложение</string>
+    <string name="restart_app">Перезапустить приложение</string>
     <string name="post_created">Публикация успешно создана</string>
     <string name="interrupt">Прервать</string>
     <string name="loading">Загрузка</string>
@@ -180,4 +180,11 @@
     <string name="wait">Ждать</string>
     <string name="read_timeout">Время чтения истекло</string>
     <string name="connection_timed_out">Время соединения истекло</string>
+    <plurals name="answers">
+        <item quantity="many">%d Ответов</item>
+        <item quantity="few">%d Ответа</item>
+        <item quantity="one">%d Ответ</item>
+        <item quantity="other">%d Ответов</item>
+    </plurals>
+    <string name="no_answers">Нет ответов</string>
 </resources>

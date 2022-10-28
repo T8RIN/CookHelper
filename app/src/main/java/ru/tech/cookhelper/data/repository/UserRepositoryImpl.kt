@@ -128,7 +128,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun getFeed(token: String): Flow<Action<List<RecipePost>>> = flow {
         feedService(token = token)
-            .catch { emit(Action.Error(message = it.message)) }
+            .catch { emit(it.toAction()) }
             .collect { state ->
                 when (state) {
                     is WebSocketState.Error -> emit(Action.Error(message = state.message))

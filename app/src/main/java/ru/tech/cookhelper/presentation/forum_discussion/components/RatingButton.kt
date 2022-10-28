@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.Green
@@ -47,7 +48,7 @@ fun RatingButton(
                 )
             }
             Spacer(Modifier.width(4.dp))
-            Text(currentRating)
+            Text(currentRating, textAlign = TextAlign.Center)
             Spacer(Modifier.width(4.dp))
             FilledIconButton(
                 onClick = onRateDown,

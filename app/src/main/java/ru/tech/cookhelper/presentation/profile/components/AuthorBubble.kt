@@ -21,6 +21,7 @@ import ru.tech.cookhelper.presentation.ui.theme.Gray
 @Composable
 fun AuthorBubble(
     modifier: Modifier = Modifier,
+    pictureModifier: Modifier = Modifier.size(54.dp),
     author: User?,
     timestamp: String,
     onClick: () -> Unit
@@ -33,7 +34,7 @@ fun AuthorBubble(
     ) {
         Picture(
             model = author?.avatar?.firstOrNull(),
-            modifier = Modifier.size(54.dp)
+            modifier = pictureModifier
         )
         Spacer(Modifier.size(8.dp))
         Column {

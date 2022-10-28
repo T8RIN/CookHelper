@@ -182,4 +182,12 @@
     <string name="wait">Wait</string>
     <string name="connection_timed_out">Connection timed out</string>
     <string name="read_timeout">Read timeout</string>
+    <plurals name="answers">
+        <item quantity="one">%d Answer</item>
+        <item quantity="other">%d Answers</item>
+    </plurals>
+    <string name="no_answers">No answers</string>
+    <string name="no_answers_placeholder">No one answered to this topic yet, you can be the first!</string>
+    <string name="answer">Answer</string>
+    <string name="open_replies">Open replies: %d</string>
 </resources>

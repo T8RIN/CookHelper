@@ -1,8 +1,10 @@
 package ru.tech.cookhelper.presentation.ui.utils.compose
 
 import android.content.Context
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -22,5 +24,31 @@ object ResUtils {
     ): List<String> = ids.map {
         stringResource(it)
     }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Composable
+    fun pluralStringResource(
+        @PluralsRes id: Int,
+        count: Int,
+        onZero: @Composable () -> String,
+    ): String = if (count == 0) {
+        onZero()
+    } else {
+        androidx.compose.ui.res.pluralStringResource(id, count, count)
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Composable
+    fun pluralStringResource(
+        @PluralsRes id: Int,
+        count: Int,
+        onZero: @Composable () -> String,
+        vararg formatArgs: Any
+    ): String = if (count == 0) {
+        onZero()
+    } else {
+        androidx.compose.ui.res.pluralStringResource(id, count, formatArgs)
+    }
+
 
 }

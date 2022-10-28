@@ -1,42 +1,127 @@
 package ru.tech.cookhelper.presentation.forum_discussion
 
+import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ChatBubbleOutline
 import androidx.compose.material.icons.rounded.PlaylistAdd
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.constants.Constants.LOREM_IPSUM
+import ru.tech.cookhelper.domain.model.Image
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.forum_discussion.components.ChipGroup
+import ru.tech.cookhelper.presentation.forum_discussion.components.ForumReplyItem
 import ru.tech.cookhelper.presentation.forum_discussion.components.RatingButton
+import ru.tech.cookhelper.presentation.forum_discussion.components.Reply
 import ru.tech.cookhelper.presentation.profile.components.AuthorBubble
 import ru.tech.cookhelper.presentation.profile.components.PostActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.ui.theme.ForumRemove
+import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.pluralStringResource
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import kotlin.math.min
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForumDiscussion(id: Int, title: String, onBack: () -> Boolean) {
+fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
     val scrollBehavior = topAppBarScrollBehavior()
     val screenController = LocalScreenController.current
+
+    val user = User(
+        id = 1,
+        avatar = listOf("https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album"),
+        name = "Малик",
+        surname = "Мухаметзянов",
+        token = "",
+        email = "",
+        nickname = "t8rin",
+        verified = true,
+        lastSeen = 0L
+    )
+    val answerList: List<Reply>? = listOf(
+        Reply(
+            user, System.currentTimeMillis(), null, "cock", "+19", 0, listOf(
+                Reply(
+                    user,
+                    System.currentTimeMillis(),
+                    Image(
+                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
+                        "1"
+                    ),
+                    "cock",
+                    "+110",
+                    1,
+                    listOf(
+                        Reply(
+                            user, System.currentTimeMillis(), null, "cock", "-23", -1, listOf(
+                                Reply(
+                                    user,
+                                    System.currentTimeMillis(),
+                                    null,
+                                    "cock",
+                                    "0",
+                                    0,
+                                    emptyList()
+                                ),
+                                Reply(
+                                    user,
+                                    System.currentTimeMillis(),
+                                    null,
+                                    "cock",
+                                    "+199",
+                                    1,
+                                    emptyList()
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
+        Reply(
+            user, System.currentTimeMillis(), null, "cock", "+19", 1, listOf(
+                Reply(user, System.currentTimeMillis(), null, "cock", "+19", -1, emptyList()),
+                Reply(user, System.currentTimeMillis(), null, "cock", "+19", -1, emptyList()),
+                Reply(user, System.currentTimeMillis(), null, "cock", "+19", -1, emptyList())
+            )
+        ),
+    )
+    val answerCount = 10
+
+    val placeholderSize = LocalConfiguration.current.minScreenDp or 460.dp
+
+
     Column {
         TopAppBar(
             title = { Text(title, fontWeight = FontWeight.SemiBold) },
@@ -47,21 +132,15 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Boolean) {
             },
             scrollBehavior = scrollBehavior
         )
-        LazyColumn(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+        LazyColumn(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                .addPadding(bottom = 16.dp)
+        ) {
             item {
                 Spacer(Modifier.size(16.dp))
                 AuthorBubble(
-                    author = User(
-                        id = 1,
-                        avatar = listOf("https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album"),
-                        name = "Малик",
-                        surname = "Мухаметзянов",
-                        token = "",
-                        email = "",
-                        nickname = "t8rin",
-                        verified = true,
-                        lastSeen = 0L
-                    ),
+                    author = user,
                     modifier = Modifier.padding(start = 20.dp),
                     timestamp = "today 21:20",
                     onClick = {
@@ -69,13 +148,6 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Boolean) {
                     }
                 )
                 Spacer(Modifier.size(16.dp))
-                Text(
-                    text = "How to cook an dinner?",
-                    Modifier.padding(horizontal = 20.dp),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-                Spacer(Modifier.size(5.dp))
                 Text(text = LOREM_IPSUM, Modifier.padding(horizontal = 20.dp), fontSize = 16.sp)
                 Spacer(Modifier.size(10.dp))
                 Box(Modifier.fillMaxWidth()) {
@@ -125,13 +197,7 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Boolean) {
                         onRateUp = {},
                         onRateDown = {}
                     )
-                    Spacer(Modifier.width(8.dp))
-                    PostActionButton(
-                        onClick = { /*TODO*/ },
-                        icon = Icons.Rounded.ChatBubbleOutline,
-                        text = "253",
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.45f)
-                    )
+                    Spacer(Modifier.weight(1f))
                     Spacer(Modifier.width(8.dp))
                     PostActionButton(
                         onClick = { /*TODO*/ },
@@ -145,8 +211,60 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Boolean) {
                         containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.45f)
                     )
                 }
+                Spacer(Modifier.size(4.dp))
+                Separator(Modifier.padding(horizontal = 6.dp))
+                Spacer(Modifier.size(4.dp))
+                Text(
+                    text = pluralStringResource(
+                        id = R.plurals.answers,
+                        count = answerCount,
+                        onZero = { stringResource(R.string.no_answers) }
+                    ),
+                    Modifier.padding(horizontal = 10.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Spacer(Modifier.size(16.dp))
+                if (answerCount == 0) {
+                    Placeholder(
+                        icon = Icons.Outlined.ForumRemove,
+                        text = stringResource(R.string.no_answers_placeholder),
+                        modifier = Modifier
+                            .height(placeholderSize)
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                            .navigationBarsLandscapePadding()
+                    )
+                }
+            }
+            answerList?.let {
+                items(answerList) {
+                    var hideReplies by rememberSaveable { mutableStateOf(true) }
+                    ForumReplyItem(
+                        reply = it,
+                        modifier = Modifier.padding(end = 12.dp, start = 4.dp),
+                        showDivider = false,
+                        isFirst = true,
+                        hideReplies = hideReplies,
+                        onShowReplies = { hideReplies = false },
+                        onAuthorClick = {
 
+                        }
+                    )
+                }
             }
         }
     }
+
+    BackHandler(onBack = onBack)
 }
+
+private infix fun Dp.or(dp: Dp): Dp {
+    return if (this >= dp) dp
+    else this
+}
+
+private val Configuration.minScreenDp: Dp
+    get() {
+        return min(screenHeightDp, screenWidthDp).dp
+    }
