@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 
 object PaddingUtils {
+
     @Composable
     fun PaddingValues.addPadding(
         bottom: Dp = 0.dp,

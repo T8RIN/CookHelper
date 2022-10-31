@@ -7,7 +7,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,7 +22,6 @@ import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.android.ShareUtils.shareWith
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,18 +34,20 @@ fun ProfileRecipeItem(
 ) {
     val context = LocalContext.current
 
-    val timestamp by StateUtils.computedStateOf {
-        val df =
-            if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
-                    "yyyy",
-                    Locale.getDefault()
-                )
-                    .format(recipePost.timestamp)
-                    .toInt()
-            ) {
-                SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-            } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
-        df.format(recipePost.timestamp)
+    val timestamp by remember {
+        derivedStateOf {
+            val df =
+                if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
+                        "yyyy",
+                        Locale.getDefault()
+                    )
+                        .format(recipePost.timestamp)
+                        .toInt()
+                ) {
+                    SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
+                } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
+            df.format(recipePost.timestamp)
+        }
     }
 
     Card(

@@ -35,7 +35,6 @@ import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.registration_screen.viewModel.RegistrationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -67,8 +66,10 @@ fun RegistrationField(
         mutableStateOf(false)
     }
 
-    val isFormValid by computedStateOf {
-        name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && viewModel.emailState.isValid && passwordRepeat == password && viewModel.loginState.isValid && viewModel.isPasswordValid
+    val isFormValid by remember {
+        derivedStateOf {
+            name.isNotEmpty() && surname.isNotEmpty() && nick.isNotEmpty() && password.isNotEmpty() && viewModel.emailState.isValid && passwordRepeat == password && viewModel.loginState.isValid && viewModel.isPasswordValid
+        }
     }
 
     val focusManager = LocalFocusManager.current

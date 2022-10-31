@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.ui.theme.Gray
@@ -35,7 +35,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 @Composable
 fun ImageCarousel(
     imageSize: Dp = 100.dp,
-    data: List<Image>,
+    data: List<FileData>,
     onImageClick: (id: String) -> Unit,
     onAddImage: (imageUri: String) -> Unit,
     onExpand: () -> Unit

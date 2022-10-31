@@ -10,7 +10,7 @@ class MessageService : WebSocketClient() {
     operator fun invoke(
         chatId: String, token: String
     ): Flow<WebSocketState> = updateBaseUrl(
-        newBaseUrl = "${Constants.WS_BASE_URL}ws/chat/$chatId/?token=$token"
+        newBaseUrl = "${Constants.WS_BASE_URL}websocket/chat/?token=$token&id=$chatId"
     ).openWebSocket().receiveAsFlow()
 
 }

@@ -1,18 +1,17 @@
 package ru.tech.cookhelper.data.remote.dto
 
-import com.squareup.moshi.Json
 import ru.tech.cookhelper.data.remote.utils.Dto
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Message
+import ru.tech.cookhelper.domain.model.User
 
 data class MessageDto(
     val id: Long,
-    @field:Json(name = "time_stamp")
-    val timestamp: Long,
     val text: String,
-    @field:Json(name = "attachment_id")
-    val attachmentId: String?,
-    @field:Json(name = "user_id")
-    val userId: Long
+    val attachments: List<FileData>,
+    val replyToId: Long,
+    val timestamp: Long,
+    val author: User
 ) : Dto {
-    override fun asDomain(): Message = Message(id, timestamp, text, attachmentId, userId)
+    override fun asDomain(): Message = Message(id, text, attachments, replyToId, timestamp, author)
 }

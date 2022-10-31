@@ -10,8 +10,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onLoading
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.await_new_messages.AwaitNewMessagesUseCase
@@ -21,7 +23,7 @@ import ru.tech.cookhelper.domain.use_case.send_message.SendMessagesUseCase
 import ru.tech.cookhelper.domain.use_case.stop_awaiting_messages.StopAwaitingMessagesUseCase
 import ru.tech.cookhelper.presentation.chat.components.ChatState
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
-import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
@@ -64,49 +66,21 @@ class ChatViewModel @Inject constructor(
     }
 
     private fun awaitAndGetMessages(chatId: String) {
-        awaitNewMessagesUseCase(chatId = chatId, token = "qwe")
-            .onEach { action ->
-                when (action) {
-                    is Action.Empty -> _chatState.update { copy(isLoading = false) }
-                    is Action.Error -> {
-                        _chatState.update { copy(isLoading = false) }
-                        sendEvent(
-                            Event.ShowToast(
-                                if (!(action.message ?: "").contains("Unable to resolve host")
-                                ) UIText.DynamicString(
-                                    action.message ?: ""
-                                ) else UIText.StringResource(R.string.no_connection)
-                            )
-                        )
-                    }
-                    is Action.Loading -> _chatState.update { copy(isLoading = true) }
-                    is Action.Success -> action.data?.let { messages.add(it) }.also {
-                        _chatState.update { copy(isLoading = false) }
-                    }
-                }
-            }.launchIn(viewModelScope)
-
-        getAllMessagesUseCase(chatId = chatId, token = "qwe")
-            .onEach { action ->
-                when (action) {
-                    is Action.Empty -> _loadingAllMessages.value = false
-                    is Action.Error -> {
-                        sendEvent(
-                            Event.ShowToast(
-                                if (!(action.message ?: "").contains("Unable to resolve host")
-                                ) UIText.DynamicString(
-                                    action.message ?: ""
-                                ) else UIText.StringResource(R.string.no_connection)
-                            )
-                        )
-                    }
-                    is Action.Loading -> _loadingAllMessages.value = true
-                    is Action.Success -> {
-                        action.data?.let { messages.addAll(it) }
-                        _loadingAllMessages.value = false
-                    }
-                }
-            }.launchIn(viewModelScope)
+        awaitNewMessagesUseCase(
+            chatId = chatId,
+            token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcmczIjoxNjY3MjUyNzMwNTE5LCJzdWIiOiJpby5rdG9yLnNlcnZlci5jb25maWcuSG9jb25BcHBsaWNhdGlvbkNvbmZpZyRIb2NvbkFwcGxpY2F0aW9uQ29uZmlnVmFsdWVAMmZmZGIyZCIsImFyZzIiOiJzdXJuYW1lIiwiYXJnNCI6IltCQDRmNTcxMGQ3IiwiYXJnMSI6Im5hbWUiLCJpc3MiOiJpby5rdG9yLnNlcnZlci5jb25maWcuSG9jb25BcHBsaWNhdGlvbkNvbmZpZyRIb2NvbkFwcGxpY2F0aW9uQ29uZmlnVmFsdWVANDIzYzJiNzQiLCJleHAiOjE2NjcyNTc5MTR9.GA70GqcXN9hgI0CqeIPdlQs6AKxKv7uKHxfhV_bMA6Q"
+        ).onEmpty {
+            _chatState.update { copy(isLoading = false) }
+        }.onError {
+            _chatState.update { copy(isLoading = false) }
+            sendEvent(Event.ShowToast(UIText(this)))
+        }.onLoading {
+            _chatState.update { copy(isLoading = true) }
+        }.onSuccess {
+            messages.add(this).also {
+                _chatState.update { copy(isLoading = false) }
+            }
+        }.launchIn(viewModelScope)
     }
 
     override fun onCleared() {

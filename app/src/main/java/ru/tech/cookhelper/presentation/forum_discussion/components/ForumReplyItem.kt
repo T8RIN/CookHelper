@@ -15,11 +15,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.profile.components.AuthorBubble
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,18 +57,20 @@ fun ForumReplyItem(
                     height = with(density) { it.size.height.toDp() }
                 }
         ) {
-            val timestamp by StateUtils.computedStateOf {
-                val df =
-                    if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
-                            "yyyy",
-                            Locale.getDefault()
-                        )
-                            .format(reply.timestamp)
-                            .toInt()
-                    ) {
-                        SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-                    } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
-                df.format(reply.timestamp)
+            val timestamp by remember {
+                derivedStateOf {
+                    val df =
+                        if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
+                                "yyyy",
+                                Locale.getDefault()
+                            )
+                                .format(reply.timestamp)
+                                .toInt()
+                        ) {
+                            SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
+                        } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
+                    df.format(reply.timestamp)
+                }
             }
             if (isFirst) Spacer(Modifier.height(16.dp))
             AuthorBubble(
@@ -143,7 +144,7 @@ fun ForumReplyItem(
 data class Reply(
     val author: User,
     val timestamp: Long,
-    val image: Image? = null,
+    val image: FileData? = null,
     val text: String,
     val rating: String,
     val userRate: Int,

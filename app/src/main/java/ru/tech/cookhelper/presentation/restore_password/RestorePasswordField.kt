@@ -37,7 +37,6 @@ import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
 import ru.tech.cookhelper.presentation.restore_password.viewModel.RestorePasswordViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -69,8 +68,10 @@ fun RestorePasswordField(
         mutableStateOf(false)
     }
 
-    val isFormValid by computedStateOf {
-        password.isNotEmpty() && passwordRepeat == password
+    val isFormValid by remember {
+        derivedStateOf {
+            password.isNotEmpty() && passwordRepeat == password
+        }
     }
 
     Text(

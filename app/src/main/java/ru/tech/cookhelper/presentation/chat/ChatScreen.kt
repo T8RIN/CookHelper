@@ -8,7 +8,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -44,7 +43,7 @@ import ru.tech.cookhelper.presentation.chat_list.components.ChatPicture
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
+import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isLastItemVisible
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
@@ -81,7 +80,7 @@ fun ChatScreen(
 
     val scrollBehavior = topAppBarScrollBehavior()
 
-    val isAtTheBottom by computedStateOf { state.isLastItemVisible }
+    val isAtTheBottom = state.isLastItemVisible()
     var fabBottomPadding by remember { mutableStateOf(0) }
     var fabTopPadding by remember { mutableStateOf(0) }
 
@@ -93,7 +92,7 @@ fun ChatScreen(
     val user = viewModel.user
 
     LaunchedEffect(viewModel.messages.size) {
-        if (viewModel.messages.lastOrNull()?.userId == user?.id) scrollToBottom()
+        if (viewModel.messages.lastOrNull()?.author?.id == user?.id) scrollToBottom()
     }
 
     Box(Modifier.navigationBarsLandscapePadding()) {
@@ -196,13 +195,13 @@ fun ChatScreen(
                                         val bottomTime = formatOrNull(lowerMessage?.timestamp)
 
                                         val cutTopCorner =
-                                            higherMessage?.userId != message.userId || topTime != currentTime
+                                            higherMessage?.author?.id != message.author.id || topTime != currentTime
                                         val showPointingArrow =
-                                            lowerMessage?.userId != message.userId || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
+                                            lowerMessage?.author?.id != message.author.id || (topTime != currentTime && currentTime != bottomTime) || (topTime == currentTime && bottomTime != currentTime)
 
                                         MessageBubbleItem(
                                             isMessageFromCurrentUser = (viewModel.user?.id
-                                                ?: 0) == message.userId,
+                                                ?: 0) == message.author.id,
                                             text = message.text,
                                             timestamp = message.timestamp,
                                             cutTopCorner = cutTopCorner,
@@ -345,6 +344,3 @@ fun formatOrNull(
     val formatter = SimpleDateFormat(pattern, Locale.getDefault())
     return if (timestamp == null) null else formatter.format(timestamp)
 }
-
-private val LazyListState.isLastItemVisible: Boolean
-    get() = layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1

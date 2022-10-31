@@ -155,13 +155,13 @@ class UserRepositoryImpl @Inject constructor(
                 }
             }
         emit(Action.Loading())
-        userApi.getFeed(token).getOrExceptionAndNull {
-            it.toAction<Boolean>()
-        }?.let {
-            if (it.status == SUCCESS) emit(Action.Success(data = it.data?.map { it.asDomain() }
-                ?: emptyList()))
-            else emit(Action.Empty(it.status))
-        }
+//        userApi.getFeed(token).getOrExceptionAndNull {
+//            it.toAction<Boolean>()
+//        }?.let {
+//            if (it.status == SUCCESS) emit(Action.Success(data = it.data?.map { it.asDomain() }
+//                ?: emptyList()))
+//            else emit(Action.Empty(it.status))
+//        }
     }
 
     override fun stopAwaitingFeed() = feedService.close()

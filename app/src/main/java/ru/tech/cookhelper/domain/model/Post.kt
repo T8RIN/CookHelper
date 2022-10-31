@@ -12,5 +12,5 @@ data class Post(
     val comments: List<String>,
     val reposts: List<Long>,
     val attachments: List<String>,
-    val images: List<Image>
+    val images: List<FileData>
 ) : Domain

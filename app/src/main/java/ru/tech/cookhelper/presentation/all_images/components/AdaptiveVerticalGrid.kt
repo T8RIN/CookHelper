@@ -10,12 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 
 @Composable
-fun AdaptiveVerticalGrid(images: List<Image>, onImageClick: (id: String) -> Unit) {
+fun AdaptiveVerticalGrid(images: List<FileData>, onImageClick: (id: String) -> Unit) {
     val configuration = LocalConfiguration.current
 
     val portrait = configuration.screenWidthDp < configuration.screenHeightDp

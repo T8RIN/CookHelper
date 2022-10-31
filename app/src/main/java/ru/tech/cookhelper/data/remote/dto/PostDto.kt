@@ -1,7 +1,7 @@
 package ru.tech.cookhelper.data.remote.dto
 
 import ru.tech.cookhelper.data.remote.utils.Dto
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Post
 
 data class PostDto(
@@ -14,7 +14,7 @@ data class PostDto(
     val comments: List<String>,
     val reposts: List<Long>,
     val attachments: List<String>,
-    val images: List<Image>,
+    val images: List<FileData>,
 ) : Dto {
     override fun asDomain(): Post = Post(
         id = id,

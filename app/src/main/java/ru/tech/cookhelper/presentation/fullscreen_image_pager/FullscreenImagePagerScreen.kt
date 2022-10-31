@@ -26,7 +26,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.app.components.AnimatedTopAppBar
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Picture
@@ -35,7 +35,7 @@ import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun FullScreenPagerScreen(images: List<Image>, initialId: String, onBack: () -> Unit) {
+fun FullScreenPagerScreen(images: List<FileData>, initialId: String, onBack: () -> Unit) {
     val pagerState =
         rememberPagerState(images.indexOfFirst { it.id == initialId })
 

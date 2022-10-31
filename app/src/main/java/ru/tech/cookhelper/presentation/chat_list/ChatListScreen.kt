@@ -12,10 +12,6 @@ import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,9 +26,9 @@ import ru.tech.cookhelper.presentation.chat_list.components.ChatListItem
 import ru.tech.cookhelper.presentation.chat_list.viewModel.ChatListViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.observeExpansion
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -46,9 +42,6 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
     val screenController = LocalScreenController.current
     val chatListState = viewModel.chatListState
     val lazyListState = rememberLazyListState()
-    var fabExpanded by rememberSaveable { mutableStateOf(true) }
-
-    observeExpansion(lazyListState = lazyListState) { fabExpanded = it }
 
     Box {
         AnimatedContent(
@@ -94,7 +87,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
 
         ExpandableFloatingActionButton(
             onClick = { /*TODO*/ },
-            expanded = fabExpanded,
+            expanded = lazyListState.isScrollingUp(),
             icon = {
                 Icon(Icons.Rounded.Edit, null)
             },

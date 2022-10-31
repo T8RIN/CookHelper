@@ -39,7 +39,6 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
@@ -68,8 +67,10 @@ fun PickProductsWithMeasuresDialog(
     var addingProducts by rememberSaveable { mutableStateOf(false) }
     val selectedProducts = remember { mutableStateListOf<Int>() }
 
-    val combinedAllProducts by computedStateOf(addingProducts) {
-        allProducts.filter { !localProducts.contains(it) }
+    val combinedAllProducts by remember(addingProducts) {
+        derivedStateOf {
+            allProducts.filter { !localProducts.contains(it) }
+        }
     }
 
     var allProductsSearch by remember { mutableStateOf("") }
@@ -226,11 +227,13 @@ fun PickProductsWithMeasuresDialog(
                         }
                     }
                 } else {
-                    val list by computedStateOf(allProductsSearch) {
-                        combinedAllProducts.filter {
-                            if (allProductsSearch.isNotEmpty()) it.name.lowercase()
-                                .contains(allProductsSearch.lowercase())
-                            else true
+                    val list by remember(allProductsSearch) {
+                        derivedStateOf {
+                            combinedAllProducts.filter {
+                                if (allProductsSearch.isNotEmpty()) it.name.lowercase()
+                                    .contains(allProductsSearch.lowercase())
+                                else true
+                            }
                         }
                     }
                     if (list.isNotEmpty()) {

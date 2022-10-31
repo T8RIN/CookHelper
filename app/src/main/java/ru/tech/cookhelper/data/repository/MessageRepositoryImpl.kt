@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -33,7 +32,7 @@ class MessageRepositoryImpl @Inject constructor(
 
     override fun awaitNewMessages(chatId: String, token: String): Flow<Action<Message>> = flow {
         messageService(chatId = chatId, token = token)
-            .catch { emit(Action.Error(message = it.message)) }
+            .catch { it.toAction<Message>() }
             .collect { state ->
                 when (state) {
                     is WebSocketState.Error -> emit(Action.Error(message = state.message))
@@ -58,7 +57,6 @@ class MessageRepositoryImpl @Inject constructor(
 
     override fun getChatList(token: String): Flow<Action<List<Chat>>> = flow {
         val response = chatApi.getChatList(token)
-        Log.d("COCK", response)
     }
 
 }

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
@@ -238,17 +238,17 @@ fun ProfileScreen(
 }
 
 private val testList = listOf(
-    Image("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "1"),
-    Image(
+    FileData("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "1"),
+    FileData(
         "https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg",
         "2"
     ),
-    Image(
+    FileData(
         "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
         "3"
     ),
-    Image("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "4"),
-    Image(
+    FileData("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "4"),
+    FileData(
         "https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg",
         "5"
     )

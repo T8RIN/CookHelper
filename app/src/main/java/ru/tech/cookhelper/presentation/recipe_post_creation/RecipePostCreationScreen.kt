@@ -36,10 +36,10 @@ import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.observeExpansion
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
@@ -54,11 +54,8 @@ fun RecipePostCreationScreen(
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
 
     val lazyListState = rememberLazyListState()
-    var fabExpanded by rememberSaveable { mutableStateOf(false) }
 
     val dialogController = LocalDialogController.current
-
-    observeExpansion(lazyListState = lazyListState, byOffset = true) { fabExpanded = it }
 
     val user = viewModel.user
 
@@ -406,7 +403,7 @@ fun RecipePostCreationScreen(
                 .padding(16.dp)
                 .navigationBarsPadding()
                 .align(Alignment.BottomEnd),
-            expanded = fabExpanded,
+            expanded = lazyListState.isScrollingUp(),
             icon = { Icon(Icons.Outlined.EggAlt, null) },
             text = { Text(stringResource(R.string.change_ingredients)) }
         )

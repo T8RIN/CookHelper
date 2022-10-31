@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
@@ -131,13 +131,13 @@ sealed class Screen(
     @Parcelize
     class FullscreenImagePager(
         val id: String = "0",
-        val images: List<Image> = emptyList()
+        val images: List<FileData> = emptyList()
     ) : Screen(showTopAppBar = false)
 
 
     @Parcelize
     class AllImages(
-        val images: List<Image> = emptyList(),
+        val images: List<FileData> = emptyList(),
         val canAddImages: Boolean = false,
         @IgnoredOnParcel val onAddImage: (uri: String) -> Unit = {}
     ) : Screen(showTopAppBar = false)

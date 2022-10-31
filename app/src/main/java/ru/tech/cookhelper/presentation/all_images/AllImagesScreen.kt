@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.domain.model.Image
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.all_images.components.AdaptiveVerticalGrid
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.app.components.sendToast
@@ -38,7 +38,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllImagesScreen(
-    images: List<Image>,
+    images: List<FileData>,
     canAddImages: Boolean,
     onBack: () -> Unit,
     onAddImage: (uri: String) -> Unit

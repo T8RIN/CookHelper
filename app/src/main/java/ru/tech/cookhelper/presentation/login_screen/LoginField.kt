@@ -32,7 +32,6 @@ import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.login_screen.viewModel.LoginViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -58,8 +57,10 @@ fun LoginField(
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
-    val isFormValid by computedStateOf {
-        login.isNotEmpty() && password.isNotEmpty()
+    val isFormValid by remember {
+        derivedStateOf {
+            login.isNotEmpty() && password.isNotEmpty()
+        }
     }
 
     val focusManager = LocalFocusManager.current

@@ -22,7 +22,6 @@ import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.edit_profile.components.EditProfileItem
 import ru.tech.cookhelper.presentation.edit_profile.viewModel.EditProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -151,8 +150,10 @@ fun EditProfileScreen(
                 var password by rememberSaveable { mutableStateOf("") }
                 var repeatPassword by rememberSaveable { mutableStateOf("") }
                 var oldPassword by rememberSaveable { mutableStateOf("") }
-                val canSaveNewPassword by computedStateOf {
-                    password == repeatPassword && oldPassword.isNotEmpty()
+                val canSaveNewPassword by remember {
+                    derivedStateOf {
+                        password == repeatPassword && oldPassword.isNotEmpty()
+                    }
                 }
                 PasswordField(
                     modifier = Modifier

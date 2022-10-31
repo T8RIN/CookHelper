@@ -10,7 +10,9 @@ import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -21,7 +23,6 @@ import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,18 +40,20 @@ fun PostItem(
 ) {
     val author = authorLoader(post.authorId)
 
-    val timestamp by computedStateOf {
-        val df =
-            if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
-                    "yyyy",
-                    Locale.getDefault()
-                )
-                    .format(post.timestamp)
-                    .toInt()
-            ) {
-                SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-            } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
-        df.format(post.timestamp)
+    val timestamp by remember {
+        derivedStateOf {
+            val df =
+                if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
+                        "yyyy",
+                        Locale.getDefault()
+                    )
+                        .format(post.timestamp)
+                        .toInt()
+                ) {
+                    SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
+                } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
+            df.format(post.timestamp)
+        }
     }
 
     Column(

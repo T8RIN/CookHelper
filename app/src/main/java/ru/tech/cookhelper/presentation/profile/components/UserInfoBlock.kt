@@ -11,7 +11,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +26,6 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.ui.theme.Gray
-import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.computedStateOf
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,19 +33,21 @@ import java.util.*
 fun UserInfoBlock(
     userState: UserState,
     onEdit: () -> Unit,
-    onAvatarClick: (/*avatarList: List<Image?>*/) -> Unit,
+    onAvatarClick: (/*avatarList: List<FileData?>*/) -> Unit,
     onStatusUpdate: (currentStatus: String) -> Unit
 ) {
-    val lastSeen by computedStateOf(userState) {
-        val lastSeen = userState.user?.lastSeen ?: 0L
-        val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
-                "yyyy",
-                Locale.getDefault()
-            ).format(lastSeen).toInt()
-        ) {
-            SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
-        } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
-        df.format(lastSeen)
+    val lastSeen by remember(userState) {
+        derivedStateOf {
+            val lastSeen = userState.user?.lastSeen ?: 0L
+            val df = if (Calendar.getInstance()[Calendar.YEAR] != SimpleDateFormat(
+                    "yyyy",
+                    Locale.getDefault()
+                ).format(lastSeen).toInt()
+            ) {
+                SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
+            } else SimpleDateFormat("d MMMM HH:mm", Locale.getDefault())
+            df.format(lastSeen)
+        }
     }
 
     Column(Modifier.padding(horizontal = 15.dp)) {

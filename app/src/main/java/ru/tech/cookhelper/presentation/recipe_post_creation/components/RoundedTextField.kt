@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.blend
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.shimmer
-import ru.tech.cookhelper.presentation.ui.utils.provide
 
 @Composable
 fun RoundedTextField(
@@ -214,7 +213,7 @@ fun RoundedTextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoundedTextFieldColors(isError: Boolean): TextFieldColors =
-    MaterialTheme.colorScheme.provide {
+    MaterialTheme.colorScheme.run {
         TextFieldDefaults.textFieldColors(
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
