@@ -68,8 +68,8 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
                             },
                             image = chat.images?.lastOrNull()?.link,
                             title = chat.title,
-                            lastMessageText = chat.lastMessage.text,
-                            lastMessageTimestamp = chat.lastMessage.timestamp,
+                            lastMessageText = chat.lastMessage?.text ?: "",
+                            lastMessageTimestamp = chat.lastMessage?.timestamp ?: 0L,
                             newMessagesCount = chat.newMessagesCount
                         )
                         if (index != state.chatList.lastIndex) Separator()

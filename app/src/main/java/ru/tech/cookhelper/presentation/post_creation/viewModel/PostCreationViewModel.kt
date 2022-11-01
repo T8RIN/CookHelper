@@ -23,7 +23,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
-import ru.tech.cookhelper.presentation.ui.utils.getMessage
+import ru.tech.cookhelper.presentation.ui.utils.getUIText
 import java.io.File
 import javax.inject.Inject
 
@@ -57,7 +57,7 @@ class PostCreationViewModel @Inject constructor(
                 _postCreationState.update { PostCreationState(isLoading = false) }
                 sendEvent(
                     Event.ShowToast(
-                        UIText(getMessage()),
+                        getUIText(),
                         Icons.Outlined.ErrorOutline
                     )
                 )

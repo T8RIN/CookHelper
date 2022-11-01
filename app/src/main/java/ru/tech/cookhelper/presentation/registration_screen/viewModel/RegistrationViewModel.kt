@@ -39,7 +39,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
-import ru.tech.cookhelper.presentation.ui.utils.getMessage
+import ru.tech.cookhelper.presentation.ui.utils.getUIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import javax.inject.Inject
 
@@ -117,7 +117,7 @@ class RegistrationViewModel @Inject constructor(
                     if (loginState.isValid) _loginState.update {
                         CheckLoginState(
                             isValid = false,
-                            error = UIText(getMessage())
+                            error = getUIText()
                         )
                     }
                     else _loginState.update { copy(isLoading = false) }
@@ -150,7 +150,7 @@ class RegistrationViewModel @Inject constructor(
                     if (emailState.isValid) _emailState.update {
                         CheckEmailState(
                             isValid = false,
-                            error = UIText(getMessage())
+                            error = getUIText()
                         )
                     }
                     else _emailState.update { copy(isLoading = false) }

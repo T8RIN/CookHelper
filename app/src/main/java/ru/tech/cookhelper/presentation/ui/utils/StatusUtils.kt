@@ -30,12 +30,17 @@ import ru.tech.cookhelper.core.constants.Status.USER_TOKEN_INVALID
 import ru.tech.cookhelper.core.constants.Status.USER_UPLOAD_FAILED
 import ru.tech.cookhelper.core.constants.Status.WRONG_CREDENTIALS
 import ru.tech.cookhelper.core.constants.Status.WRONG_DATA
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
+
+fun Int?.getUIText(): UIText = UIText(getStatusString())
+
 @StringRes
-fun Int?.getMessage(): Int = when (this) {
+fun Int?.getStatusString(): Int = when (this) {
     SUCCESS -> R.string.success
     NO_INTERNET -> R.string.no_connection
     CONNECTION_TIMED_OUT -> R.string.connection_timed_out

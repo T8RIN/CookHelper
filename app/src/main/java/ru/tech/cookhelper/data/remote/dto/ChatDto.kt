@@ -9,7 +9,7 @@ data class ChatDto(
     val id: Long,
     val images: List<FileData>?,
     val title: String,
-    val lastMessage: Message,
+    val lastMessage: Message?,
     val newMessagesCount: Int,
     val members: List<Long>,
     val messages: List<Message>,

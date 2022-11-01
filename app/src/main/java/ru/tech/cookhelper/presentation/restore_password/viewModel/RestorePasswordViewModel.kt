@@ -27,7 +27,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
-import ru.tech.cookhelper.presentation.ui.utils.getMessage
+import ru.tech.cookhelper.presentation.ui.utils.getUIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import javax.inject.Inject
 
@@ -54,7 +54,7 @@ class RestorePasswordViewModel @Inject constructor(
                 .onEmpty {
                     sendEvent(
                         Event.ShowToast(
-                            UIText.StringResource(getMessage()),
+                            getUIText(),
                             Icons.Rounded.ErrorOutline
                         )
                     )

@@ -23,7 +23,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
-import ru.tech.cookhelper.presentation.ui.utils.getMessage
+import ru.tech.cookhelper.presentation.ui.utils.getUIText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,7 +47,7 @@ class FeedViewModel @Inject constructor(
         getFeedUseCase(user.token)
             .onEmpty {
                 _feedState.update { copy(isLoading = false) }
-                sendEvent(Event.ShowToast(UIText(getMessage())))
+                sendEvent(Event.ShowToast(getUIText()))
             }
             .onError {
                 _feedState.update { copy(isLoading = false) }

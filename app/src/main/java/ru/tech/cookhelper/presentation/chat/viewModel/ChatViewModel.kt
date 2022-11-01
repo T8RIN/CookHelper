@@ -28,7 +28,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
-import ru.tech.cookhelper.presentation.ui.utils.getMessage
+import ru.tech.cookhelper.presentation.ui.utils.getUIText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -75,8 +75,8 @@ class ChatViewModel @Inject constructor(
             chatId = chatId,
             token = token
         ).onEmpty {
-            this?.getMessage()?.let {
-                sendEvent(Event.ShowToast(UIText(it)))
+            this?.getUIText()?.let {
+                sendEvent(Event.ShowToast(it))
             }
             _loadingAllMessages.value = false
         }.onError {

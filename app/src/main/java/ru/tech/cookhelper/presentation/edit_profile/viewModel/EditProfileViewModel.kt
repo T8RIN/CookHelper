@@ -13,7 +13,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.core.Action
+import ru.tech.cookhelper.core.onEmpty
+import ru.tech.cookhelper.core.onError
+import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.check_email.CheckEmailForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.check_login.CheckLoginForAvailabilityUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
@@ -32,7 +34,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
-import ru.tech.cookhelper.presentation.ui.utils.getMessage
+import ru.tech.cookhelper.presentation.ui.utils.getUIText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -89,29 +91,25 @@ class EditProfileViewModel @Inject constructor(
             checkLoginJob = viewModelScope.launch {
                 delay(500)
                 _loginState.update { copy(isLoading = true) }
-                when (val action = checkLoginForAvailabilityUseCase(login)) {
-                    is Action.Empty -> {
+                checkLoginForAvailabilityUseCase(login)
+                    .onEmpty {
                         _loginState.update {
                             CheckLoginState(
                                 isValid = false,
-                                error = UIText(action.status.getMessage())
+                                error = this@onEmpty.getUIText()
                             )
                         }
-                    }
-                    is Action.Error -> {
+                    }.onError {
                         _loginState.update {
                             CheckLoginState(
                                 isValid = false,
                                 error = UIText(R.string.nickname_rejected)
                             )
                         }
-                    }
-                    is Action.Success -> {
+                    }.onSuccess {
                         if (loginState.isValid) _loginState.update { CheckLoginState(isValid = true) }
                         else _loginState.update { copy(isLoading = false) }
                     }
-                    else -> {}
-                }
             }
         }
     }
@@ -133,28 +131,23 @@ class EditProfileViewModel @Inject constructor(
             checkEmailJob = viewModelScope.launch {
                 delay(500)
                 _emailState.update { copy(isLoading = true) }
-                when (val action = checkEmailForAvailabilityUseCase(email)) {
-                    is Action.Empty -> {
-                        _emailState.update {
-                            CheckEmailState(
-                                isValid = false,
-                                error = UIText(action.status.getMessage())
-                            )
-                        }
+                checkEmailForAvailabilityUseCase(email).onEmpty {
+                    _emailState.update {
+                        CheckEmailState(
+                            isValid = false,
+                            error = this@onEmpty.getUIText()
+                        )
                     }
-                    is Action.Error -> {
-                        _emailState.update {
-                            CheckEmailState(
-                                isValid = false,
-                                error = UIText(R.string.email_rejected)
-                            )
-                        }
+                }.onError {
+                    _emailState.update {
+                        CheckEmailState(
+                            isValid = false,
+                            error = UIText(R.string.email_rejected)
+                        )
                     }
-                    is Action.Success -> {
-                        if (emailState.isValid) _emailState.update { CheckEmailState(isValid = true) }
-                        else _emailState.update { copy(isLoading = false) }
-                    }
-                    else -> {}
+                }.onSuccess {
+                    if (emailState.isValid) _emailState.update { CheckEmailState(isValid = true) }
+                    else _emailState.update { copy(isLoading = false) }
                 }
             }
         }
