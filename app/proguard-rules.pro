@@ -46,3 +46,7 @@
 -keepnames @kotlin.Metadata class ru.tech.cookhelper.data.**
 -keep class ru.tech.cookhelper.data.** { *; }
 -keepclassmembers class ru.tech.cookhelper.data.** { *; }
+
+-keepnames @kotlin.Metadata class ru.tech.cookhelper.domain.**
+-keep class ru.tech.cookhelper.domain.** { *; }
+-keepclassmembers class ru.tech.cookhelper.domain.** { *; }

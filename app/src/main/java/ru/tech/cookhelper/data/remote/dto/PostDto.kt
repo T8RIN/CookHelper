@@ -13,8 +13,7 @@ data class PostDto(
     val likes: List<Long>,
     val comments: List<String>,
     val reposts: List<Long>,
-    val attachments: List<String>,
-    val images: List<FileData>,
+    val attachments: List<FileData>
 ) : Dto {
     override fun asDomain(): Post = Post(
         id = id,
@@ -26,6 +25,6 @@ data class PostDto(
         comments = comments,
         reposts = reposts,
         attachments = attachments,
-        images = images
+        images = attachments
     )
 }

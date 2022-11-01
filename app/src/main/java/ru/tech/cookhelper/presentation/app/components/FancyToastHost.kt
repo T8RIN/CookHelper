@@ -1,7 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
@@ -22,8 +21,6 @@ import kotlinx.coroutines.*
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import kotlin.math.min
 
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
 @Composable
 fun FancyToastHost(fancyToastValues: FancyToastValues) {
     val showToast = remember { MutableTransitionState(false) }

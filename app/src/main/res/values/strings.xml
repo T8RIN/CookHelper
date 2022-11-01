@@ -191,4 +191,5 @@
     <string name="open_replies">Open replies: %d</string>
     <string name="reply">Reply</string>
     <string name="comment">Comment</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 </resources>

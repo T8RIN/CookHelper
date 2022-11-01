@@ -1,5 +1,8 @@
 package ru.tech.cookhelper.presentation.crash_screen
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.twotone.ErrorOutline
 import androidx.compose.material3.*
@@ -27,11 +31,17 @@ import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.MainActivity
+import ru.tech.cookhelper.presentation.app.components.FancyToastHost
 import ru.tech.cookhelper.presentation.app.components.GlobalExceptionHandler.Companion.getExceptionString
+import ru.tech.cookhelper.presentation.app.components.Toast
+import ru.tech.cookhelper.presentation.app.components.rememberFancyToastValues
+import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.crash_screen.viewModel.CrashViewModel
 import ru.tech.cookhelper.presentation.ui.theme.CookHelperTheme
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+
 
 @AndroidEntryPoint
 class CrashActivity : ComponentActivity() {
@@ -45,8 +55,11 @@ class CrashActivity : ComponentActivity() {
         val crashReason = getExceptionString()
 
         setContent {
+            val fancyToastValues = rememberFancyToastValues()
+
             CompositionLocalProvider(
-                LocalSettingsProvider provides viewModel.settingsState
+                LocalSettingsProvider provides viewModel.settingsState,
+                LocalToastHost provides fancyToastValues
             ) {
                 CookHelperTheme {
                     val conf = LocalConfiguration.current
@@ -78,7 +91,8 @@ class CrashActivity : ComponentActivity() {
                                 Card(
                                     Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 16.dp),
+                                        .padding(horizontal = 16.dp)
+                                        .navigationBarsPadding(),
                                     shape = SquircleShape(24.dp)
                                 ) {
                                     Text(
@@ -87,35 +101,54 @@ class CrashActivity : ComponentActivity() {
                                         modifier = Modifier.padding(16.dp)
                                     )
                                 }
-                                Spacer(
-                                    modifier = Modifier
-                                        .height(80.dp)
-                                        .navigationBarsPadding()
-                                )
+                                Spacer(modifier = Modifier.height(80.dp))
                             }
-                            Button(
-                                onClick = {
-                                    startActivity(
-                                        Intent(
-                                            this@CrashActivity,
-                                            MainActivity::class.java
-                                        )
-                                    )
-                                },
-                                modifier = Modifier
+                            Row(
+                                Modifier
                                     .padding(bottom = 16.dp)
                                     .navigationBarsPadding()
                                     .align(Alignment.BottomCenter)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.RestartAlt,
-                                    contentDescription = null
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = stringResource(R.string.restart_app))
+                                Button(
+                                    onClick = {
+                                        startActivity(
+                                            Intent(
+                                                this@CrashActivity,
+                                                MainActivity::class.java
+                                            )
+                                        )
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.RestartAlt,
+                                        contentDescription = null
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(text = stringResource(R.string.restart_app))
+                                }
+                                Spacer(Modifier.width(8.dp))
+                                FilledIconButton(onClick = {
+                                    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).apply {
+                                        setPrimaryClip(
+                                            ClipData.newPlainText(
+                                                "Exception",
+                                                crashReason
+                                            )
+                                        )
+                                    }
+                                    fancyToastValues.sendToast(
+                                        icon = Icons.Rounded.ContentCopy,
+                                        message = getString(R.string.copied_to_clipboard),
+                                        length = Toast.Short.time
+                                    )
+                                }) {
+                                    Icon(Icons.Rounded.ContentCopy, null)
+                                }
                             }
                         }
                     }
+
+                    FancyToastHost(fancyToastValues = fancyToastValues.value)
                 }
             }
         }
