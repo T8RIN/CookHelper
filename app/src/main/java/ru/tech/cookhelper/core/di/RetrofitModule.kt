@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.core.di
 
+import com.skydoves.retrofit.adapters.result.ResultCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +25,7 @@ object RetrofitModule {
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create())
+        .addCallAdapterFactory(ResultCallAdapterFactory.create())
         .let {
             val httpClient = OkHttpClient.Builder()
                 .setTimeout(60, TimeUnit.SECONDS)
