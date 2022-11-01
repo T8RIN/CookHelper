@@ -110,7 +110,7 @@ fun ForumReplyItem(
                     contentPadding = PaddingValues(horizontal = 4.dp)
                 ) {
                     Text(
-                        stringResource(R.string.answer),
+                        stringResource(R.string.reply),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp
                     )

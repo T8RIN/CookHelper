@@ -10,7 +10,7 @@ class AwaitNewMessagesUseCase @Inject constructor(
     private val repository: MessageRepository
 ) {
     operator fun invoke(
-        chatId: String,
+        chatId: Long,
         token: String
     ): Flow<Action<Message>> = repository.awaitNewMessages(chatId, token)
 }

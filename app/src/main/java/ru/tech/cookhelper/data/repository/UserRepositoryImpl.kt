@@ -131,7 +131,7 @@ class UserRepositoryImpl @Inject constructor(
             .catch { emit(it.toAction()) }
             .collect { state ->
                 when (state) {
-                    is WebSocketState.Error -> emit(Action.Error(message = state.message))
+                    is WebSocketState.Error -> emit(state.t.toAction())
                     is WebSocketState.Message -> jsonParser.fromJson<List<RecipePostDto>>(
                         json = state.text,
                         type = Types.newParameterizedType(

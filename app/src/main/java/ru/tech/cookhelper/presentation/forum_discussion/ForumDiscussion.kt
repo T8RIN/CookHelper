@@ -47,7 +47,6 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.ForumRemove
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.blur
-import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.blend
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.pluralStringResource
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isLastItemVisible
@@ -342,21 +341,21 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                     Spacer(Modifier.width(8.dp))
                     CozyTextField(
                         value = commentText,
-                        appearance = TextFieldAppearance.Filled,
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer.blend(
-                                MaterialTheme.colorScheme.background,
-                                0.25f
-                            ),
-                            focusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
+                        appearance = TextFieldAppearance.Outlined,
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                            focusedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         ),
                         shape = SquircleShape(8.dp),
                         onValueChange = { commentText = it.trim() },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(bottom = 8.dp),
                         textStyle = textStyle,
                         maxLines = 5,
-                        hint = stringResource(R.string.comment)
+                        label = stringResource(R.string.comment)
                     )
                     Spacer(Modifier.width(8.dp))
                     FilledIconButton(onClick = { /*TODO*/ }, colors = colors) {

@@ -188,7 +188,6 @@
     </plurals>
     <string name="no_answers">No answers</string>
     <string name="no_answers_placeholder">No one answered to this topic yet, you can be the first!</string>
-    <string name="answer">Answer</string>
     <string name="open_replies">Open replies: %d</string>
     <string name="reply">Reply</string>
     <string name="comment">Comment</string>

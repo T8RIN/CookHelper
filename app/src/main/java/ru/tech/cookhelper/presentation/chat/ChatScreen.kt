@@ -61,7 +61,7 @@ import java.util.*
 fun ChatScreen(
     title: String,
     image: String?,
-    chatId: String,
+    chatId: Long,
     viewModel: ChatViewModel = hiltViewModel(
         defaultArguments = bundleOf(
             "chatId" to chatId,

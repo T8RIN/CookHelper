@@ -10,8 +10,16 @@ data class MessageDto(
     val text: String,
     val attachments: List<FileData>,
     val replyToId: Long,
+    val views: List<Long>,
     val timestamp: Long,
     val author: User
 ) : Dto {
-    override fun asDomain(): Message = Message(id, text, attachments, replyToId, timestamp, author)
+    override fun asDomain(): Message = Message(
+        id = id,
+        text = text,
+        attachments = attachments,
+        replyToId = replyToId,
+        timestamp = timestamp,
+        author = author
+    )
 }

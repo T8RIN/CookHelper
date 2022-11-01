@@ -161,24 +161,26 @@ sealed class Screen(
     class Chat(
         val chatTitle: String,
         val imageUrl: String?,
-        val chatId: String,
+        val chatId: Long,
     ) : Screen(showTopAppBar = false)
 }
 
 val drawerList = listOf(
     Screen.Home.None,
-    null,
+    divider(),
     Screen.Profile,
     Screen.ChatList,
-    null,
+    divider(),
     Screen.Cart,
     Screen.Favourites,
     Screen.BlockList,
-    null,
+    divider(),
     Screen.Recipes,
-    null,
+    divider(),
     Screen.Settings
 )
+
+private fun <T> divider(): T? = null
 
 val navBarList = listOf(
     Screen.Home.Feed,

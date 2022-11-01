@@ -97,7 +97,8 @@ abstract class WebSocketClient(
      * Отправка данных в сокет
      */
     fun send(data: String) {
-        webSocket?.send(data)
+        val sent = webSocket?.send(data)
+        Log.d(SOCKET_TAG, "sent is $sent: $data")
     }
 
     /**
@@ -111,7 +112,7 @@ abstract class WebSocketClient(
             webSocket?.close(CLOSE_CODE, CLOSE_REASON)
             socketOpen = false
         } catch (e: Exception) {
-            _webSocketState.trySend(WebSocketState.Error("closeWebSocket error"))
+            _webSocketState.trySend(WebSocketState.Error(Throwable("closeWebSocket error")))
             Log.d(SOCKET_TAG, "closeWebSocket error")
             e.printStackTrace()
         }
@@ -140,8 +141,8 @@ abstract class WebSocketClient(
      */
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
-        Log.d(SOCKET_TAG, "onFailure: ${t.message}")
-        _webSocketState.trySend(WebSocketState.Error(t.message.toString()))
+        Log.d(SOCKET_TAG, "onFailure: $t")
+        _webSocketState.trySend(WebSocketState.Error(t))
         // Переоткрываем
         restartWebSocket()
     }

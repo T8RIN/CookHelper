@@ -12,6 +12,7 @@ import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
 import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
 import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.domain.model.Chat
+import ru.tech.cookhelper.domain.model.FormMessage
 import ru.tech.cookhelper.domain.model.Message
 import ru.tech.cookhelper.domain.repository.MessageRepository
 import ru.tech.cookhelper.presentation.ui.utils.toAction
@@ -23,19 +24,19 @@ class MessageRepositoryImpl @Inject constructor(
     private val jsonParser: JsonParser
 ) : MessageRepository {
 
-    override fun getAllMessages(chatId: String, token: String): Flow<Action<List<Message>>> = flow {
+    override fun getChat(chatId: Long, token: String): Flow<Action<Chat>> = flow {
         emit(Action.Loading())
-        val response = runIo { chatApi.getAllMessages(chatId, token) }
-        if (response.status == SUCCESS) emit(Action.Success(data = response.data?.map { it.asDomain() }))
+        val response = runIo { chatApi.getChat(chatId, token) }
+        if (response.status == SUCCESS) emit(Action.Success(data = response.data?.asDomain()))
         else emit(Action.Empty(status = response.status))
     }.catch { emit(it.toAction()) }
 
-    override fun awaitNewMessages(chatId: String, token: String): Flow<Action<Message>> = flow {
+    override fun awaitNewMessages(chatId: Long, token: String): Flow<Action<Message>> = flow {
         messageService(chatId = chatId, token = token)
             .catch { it.toAction<Message>() }
             .collect { state ->
                 when (state) {
-                    is WebSocketState.Error -> emit(Action.Error(message = state.message))
+                    is WebSocketState.Error -> emit(state.t.toAction())
                     is WebSocketState.Message -> jsonParser.fromJson<MessageDto>(
                         json = state.text,
                         type = MessageDto::class.java
@@ -44,13 +45,13 @@ class MessageRepositoryImpl @Inject constructor(
                     is WebSocketState.Opened -> emit(Action.Empty())
                     WebSocketState.Opening -> emit(Action.Loading())
                     WebSocketState.Restarting -> emit(Action.Loading())
-                    else -> {}
+                    WebSocketState.Closed -> Unit
                 }
             }
     }
 
-    override fun sendMessage(message: String) {
-        messageService.send(message)
+    override fun sendMessage(message: FormMessage) {
+        messageService.send(jsonParser.toJson(message, FormMessage::class.java) ?: "")
     }
 
     override fun stopAwaitingMessages() = messageService.close()

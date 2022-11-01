@@ -151,7 +151,7 @@
     <string name="my_topics">Со мной</string>
     <string name="required_field">*Обязательное поле</string>
     <string name="feed_error">Никто еще не выложил рецептов или что-то пошло не так</string>
-    <string name="no_messages">Сообщений не надо, напишите первым!</string>
+    <string name="no_messages">Сообщений не найдено, напишите первым!</string>
     <string name="nickname_too_long">Никнейм слишком длинный</string>
     <string name="success">Успех</string>
     <string name="wrong_data">Клиент отправил неправильные данные</string>
@@ -187,4 +187,8 @@
         <item quantity="other">%d Ответов</item>
     </plurals>
     <string name="no_answers">Нет ответов</string>
+    <string name="no_answers_placeholder">Никто пока не ответил, станьте первыми!</string>
+    <string name="open_replies">Открыть ответы: %d</string>
+    <string name="reply">Ответить</string>
+    <string name="comment">Комментарий</string>
 </resources>

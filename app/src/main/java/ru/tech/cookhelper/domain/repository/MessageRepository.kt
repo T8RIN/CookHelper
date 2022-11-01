@@ -3,15 +3,16 @@ package ru.tech.cookhelper.domain.repository
 import kotlinx.coroutines.flow.Flow
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.model.Chat
+import ru.tech.cookhelper.domain.model.FormMessage
 import ru.tech.cookhelper.domain.model.Message
 
 interface MessageRepository {
 
-    fun getAllMessages(chatId: String, token: String): Flow<Action<List<Message>>>
+    fun getChat(chatId: Long, token: String): Flow<Action<Chat>>
 
-    fun awaitNewMessages(chatId: String, token: String): Flow<Action<Message>>
+    fun awaitNewMessages(chatId: Long, token: String): Flow<Action<Message>>
 
-    fun sendMessage(message: String)
+    fun sendMessage(message: FormMessage)
 
     fun stopAwaitingMessages()
 
