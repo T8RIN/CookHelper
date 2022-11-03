@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
-import dev.olshevski.navigation.reimagined.AnimatedNavHostTransitionSpec
 import dev.olshevski.navigation.reimagined.NavController
+import dev.olshevski.navigation.reimagined.NavTransitionSpec
 import ru.tech.cookhelper.presentation.all_images.AllImagesScreen
 import ru.tech.cookhelper.presentation.authentication.AuthenticationScreen
 import ru.tech.cookhelper.presentation.chat.ChatScreen
@@ -35,7 +35,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 fun ScreenHost(
     controller: NavController<Screen>,
     scrollBehavior: TopAppBarScrollBehavior,
-    transitionSpec: AnimatedNavHostTransitionSpec<Any?>,
+    transitionSpec: NavTransitionSpec<Any?>,
     onTitleChange: (newTitle: UIText) -> Unit,
 ) {
     val activity = LocalContext.current.findActivity()

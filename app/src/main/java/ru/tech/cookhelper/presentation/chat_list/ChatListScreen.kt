@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,6 +25,7 @@ import ru.tech.cookhelper.presentation.chat_list.components.ChatListItem
 import ru.tech.cookhelper.presentation.chat_list.viewModel.ChatListViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.ui.theme.CreateAlt
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
@@ -89,7 +89,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
             onClick = { /*TODO*/ },
             expanded = lazyListState.isScrollingUp(),
             icon = {
-                Icon(Icons.Rounded.Edit, null)
+                Icon(Icons.Rounded.CreateAlt, null)
             },
             text = { Text(stringResource(R.string.new_chat)) },
             modifier = Modifier

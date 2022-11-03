@@ -15,8 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.domain.model.FileData
-import ru.tech.cookhelper.domain.model.User
+import ru.tech.cookhelper.domain.model.Reply
+import ru.tech.cookhelper.domain.model.getRating
+import ru.tech.cookhelper.domain.model.userRate
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.profile.components.AuthorBubble
 import java.text.SimpleDateFormat
@@ -79,16 +80,16 @@ fun ForumReplyItem(
                 onClick = { onAuthorClick(reply.author.id) },
                 pictureModifier = Modifier.size(40.dp)
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(reply.text, Modifier.padding(start = 4.dp), fontSize = 18.sp)
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            reply.image?.let {
+            reply.attachments.takeIf { it.isNotEmpty() }?.let {
                 Spacer(modifier = Modifier.height(4.dp))
                 Picture(
-                    model = reply.image.link,
+                    model = it.firstOrNull()?.link,
                     modifier = Modifier
                         .clickable {
 //                        screenController.navigate(
@@ -112,14 +113,14 @@ fun ForumReplyItem(
                     Text(
                         stringResource(R.string.reply),
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp
+                        fontSize = 14.sp
                     )
                 }
                 Spacer(Modifier.weight(1f))
                 Spacer(Modifier.width(8.dp))
                 RatingButton(
-                    userRate = reply.userRate,
-                    currentRating = reply.rating,
+                    userRate = reply.userRate(reply.author),
+                    currentRating = reply.getRating(),
                     modifier = Modifier.height(32.dp),
                     onRateUp = {},
                     onRateDown = {}
@@ -140,13 +141,3 @@ fun ForumReplyItem(
         }
     }
 }
-
-data class Reply(
-    val author: User,
-    val timestamp: Long,
-    val image: FileData? = null,
-    val text: String,
-    val rating: String,
-    val userRate: Int,
-    val replies: List<Reply>
-)

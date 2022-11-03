@@ -28,7 +28,7 @@ class GlobalExceptionHandler private constructor(
         exception: Throwable
     ) {
         val crashedIntent = Intent(applicationContext, activity).also {
-            it.putExtra(INTENT_DATA_NAME, Log.getStackTraceString(exception))
+            it.putExtra(INTENT_DATA_NAME, "$exception\n${Log.getStackTraceString(exception)}")
         }
         crashedIntent.addFlags(
             Intent.FLAG_ACTIVITY_CLEAR_TOP or

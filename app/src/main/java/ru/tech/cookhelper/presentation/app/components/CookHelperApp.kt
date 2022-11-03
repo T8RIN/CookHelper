@@ -23,6 +23,7 @@ import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivit
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
@@ -40,6 +41,8 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
     val dialogController = rememberNavController<Dialog>(startDestination = Dialog.None)
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
+    val bottomSheetController =
+        rememberNavController<BottomSheet>(initialBackstack = emptyList())
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarActions = rememberTopAppBarActions()
@@ -53,6 +56,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         values = arrayOf(
             LocalScreenController provides screenController,
             LocalDialogController provides dialogController,
+            LocalBottomSheetController provides bottomSheetController,
             LocalSnackbarHost provides snackbarHostState,
             LocalToastHost provides fancyToastValues,
             LocalSettingsProvider provides viewModel.settingsState,
@@ -82,31 +86,33 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     drawerState = drawerState,
                     gesturesEnabled = showTopAppBar
                 ) {
-                    Column {
-                        AnimatedTopAppBar(
-                            topAppBarSize = TopAppBarSize.Centered,
-                            navigationIcon = {
-                                IconButton(
-                                    onClick = { scope.launch { drawerState.open() } },
-                                    content = { Icon(Icons.Rounded.Menu, null) }
-                                )
-                            },
-                            actions = { topAppBarActions(this) },
-                            title = {
-                                Text(
-                                    viewModel.title.asString(),
-                                    fontWeight = FontWeight.Medium
-                                )
-                            },
-                            visible = showTopAppBar,
-                            scrollBehavior = scrollBehavior
-                        )
-                        ScreenHost(
-                            scrollBehavior = scrollBehavior,
-                            controller = screenController,
-                            transitionSpec = ScaleCrossfadeTransitionSpec,
-                            onTitleChange = { viewModel.updateTitle(it) }
-                        )
+                    BottomSheetHost(controller = bottomSheetController) {
+                        Column {
+                            AnimatedTopAppBar(
+                                topAppBarSize = TopAppBarSize.Centered,
+                                navigationIcon = {
+                                    IconButton(
+                                        onClick = { scope.launch { drawerState.open() } },
+                                        content = { Icon(Icons.Rounded.Menu, null) }
+                                    )
+                                },
+                                actions = { topAppBarActions(this) },
+                                title = {
+                                    Text(
+                                        viewModel.title.asString(),
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                },
+                                visible = showTopAppBar,
+                                scrollBehavior = scrollBehavior
+                            )
+                            ScreenHost(
+                                scrollBehavior = scrollBehavior,
+                                controller = screenController,
+                                transitionSpec = ScaleCrossfadeTransitionSpec,
+                                onTitleChange = { viewModel.updateTitle(it) }
+                            )
+                        }
                     }
                 }
 

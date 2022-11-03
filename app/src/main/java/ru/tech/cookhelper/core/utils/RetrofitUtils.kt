@@ -14,12 +14,15 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitUtils {
 
-    fun File?.toMultipartFormData(filename: String = this?.name ?: ""): MultipartBody.Part? =
+    fun File?.toMultipartFormData(
+        type: String,
+        filename: String = this?.name ?: ""
+    ): MultipartBody.Part? =
         this?.let {
             MultipartBody.Part.createFormData(
                 name = "image",
                 filename = filename,
-                body = it.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                body = it.asRequestBody(type.toMediaTypeOrNull())
             )
         }
 

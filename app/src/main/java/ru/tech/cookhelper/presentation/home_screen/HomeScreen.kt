@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
@@ -22,9 +23,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.setPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.navBarList
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
-import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
-import ru.tech.cookhelper.presentation.ui.utils.provider.navigateAndPopAll
+import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -32,8 +31,12 @@ fun HomeScreen(
     onTitleChange: (newTitle: UIText) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
+    val topAppBarActions = LocalTopAppBarActions.current
     val bottomNavigationController =
         rememberNavController<Screen.Home>(startDestination = Screen.Home.Feed)
+    LaunchedEffect(bottomNavigationController.currentDestination) {
+        topAppBarActions.clearActions()
+    }
     Scaffold(
         bottomBar = {
             BottomNavigationBar(

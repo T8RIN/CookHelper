@@ -201,13 +201,14 @@ class UserRepositoryImpl @Inject constructor(
         token: String,
         label: String,
         content: String,
-        imageFile: File?
+        imageFile: File?,
+        type: String
     ): Flow<Action<Post>> = flow {
         emit(Action.Loading())
 
         imageFile?.compress { !it.isSvg && !it.isGif }
 
-        val image = imageFile.toMultipartFormData()
+        val image = imageFile.toMultipartFormData(type)
 
         val response = runIo { userApi.createPost(token, label, content, image).execute() }
         val body = response.bodyOrThrow()

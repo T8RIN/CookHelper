@@ -95,6 +95,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha03")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha04")
     implementation("androidx.compose.foundation:foundation:1.4.0-alpha01")
+    implementation("androidx.compose.ui:ui-util:1.4.0-alpha01")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
@@ -121,8 +122,8 @@ dependencies {
     kapt("androidx.room:room-compiler:2.5.0-beta01")
 
     //Navigation
-    implementation("dev.olshevski.navigation:reimagined:1.2.0")
-    implementation("dev.olshevski.navigation:reimagined-hilt:1.2.0")
+    implementation("dev.olshevski.navigation:reimagined:1.3.0")
+    implementation("dev.olshevski.navigation:reimagined-hilt:1.3.0")
 
     //SplashScreenApi
     implementation("androidx.core:core-splashscreen:1.0.0")

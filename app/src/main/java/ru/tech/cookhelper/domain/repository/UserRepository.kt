@@ -51,7 +51,8 @@ interface UserRepository {
         token: String,
         label: String,
         content: String,
-        imageFile: File?
+        imageFile: File?,
+        type: String
     ): Flow<Action<Post>>
 
 }

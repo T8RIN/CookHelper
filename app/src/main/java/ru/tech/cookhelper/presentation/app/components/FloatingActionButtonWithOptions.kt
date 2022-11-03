@@ -61,11 +61,15 @@ fun FloatingActionButtonWithOptions(
         OptionsGravity.Center -> FlowCrossAxisAlignment.Center
         OptionsGravity.End -> FlowCrossAxisAlignment.End
     }
-    Scrim(
-        showing = isShowingOptions,
-        onTap = { isShowingOptions = false },
-        color = scrimColor
-    )
+
+    if (scrimEnabled) {
+        Scrim(
+            showing = isShowingOptions,
+            onTap = { isShowingOptions = false },
+            color = scrimColor
+        )
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = horizontalAlignment

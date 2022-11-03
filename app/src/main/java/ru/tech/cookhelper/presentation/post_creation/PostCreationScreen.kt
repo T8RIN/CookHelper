@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Post
@@ -111,7 +112,9 @@ fun PostCreationScreen(
             actions = {
                 IconButton(
                     onClick = {
-                        viewModel.createPost(content, label, context.getFile(imageUri))
+                        val file = context.getFile(imageUri)
+                        val type = context.contentResolver.getType(imageUri.toUri())
+                        viewModel.createPost(content, label, file, type ?: "")
                     },
                     enabled = doneEnabled,
                     colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)

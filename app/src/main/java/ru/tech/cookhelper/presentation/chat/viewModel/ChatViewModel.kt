@@ -62,7 +62,7 @@ class ChatViewModel @Inject constructor(
     init {
         getUserUseCase().onEach {
             it?.let {
-                _user.update { it.copy(id = 1) }
+                _user.update { it }
                 chatId = savedStateHandle["chatId"]!!
                 awaitAndGetMessages(chatId, it.token)
             }

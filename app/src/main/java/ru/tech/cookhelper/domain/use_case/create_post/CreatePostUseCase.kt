@@ -11,11 +11,13 @@ class CreatePostUseCase @Inject constructor(
         token: String,
         label: String,
         content: String,
-        imageFile: File?
+        imageFile: File?,
+        type: String
     ) = userRepository.createPost(
         token = token,
         label = label,
         content = content,
-        imageFile = imageFile
+        imageFile = imageFile,
+        type = type
     )
 }

@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import dev.olshevski.navigation.reimagined.DialogNavHost
-import dev.olshevski.navigation.reimagined.NavController
 import ru.tech.cookhelper.presentation.profile.components.EditStatusDialog
 import ru.tech.cookhelper.presentation.profile.components.LogoutDialog
 import ru.tech.cookhelper.presentation.profile.components.PickOrOpenAvatarDialog
@@ -12,10 +11,11 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsa
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.PickProductsWithMeasuresDialog
 import ru.tech.cookhelper.presentation.settings.components.AboutAppDialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
+import ru.tech.cookhelper.presentation.ui.utils.provider.DialogController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun DialogHost(controller: NavController<Dialog>) {
+fun DialogHost(controller: DialogController) {
     DialogNavHost(controller = controller) { dialog ->
         when (dialog) {
             is Dialog.Exit -> {

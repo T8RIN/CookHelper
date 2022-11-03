@@ -53,7 +53,6 @@ sealed class Screen(
         selectedIcon = Icons.Filled.DinnerDining
     )
 
-
     sealed class Home(
         override val title: UIText = UIText.StringResource(R.string.home),
         override val shortTitle: UIText = UIText.StringResource(R.string.home),
@@ -70,7 +69,7 @@ sealed class Screen(
 
         @Parcelize
         object Forum : Home(
-            title = UIText.StringResource(R.string.forum_title),
+            title = UIText.StringResource(R.string.forum),
             shortTitle = UIText.StringResource(R.string.forum),
             baseIcon = Icons.Outlined.Forum,
             selectedIcon = Icons.Filled.Forum

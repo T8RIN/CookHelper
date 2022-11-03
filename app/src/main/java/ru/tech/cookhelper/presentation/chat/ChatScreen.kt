@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -23,12 +25,15 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
@@ -52,10 +57,11 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalFoundationApi::class,
-    ExperimentalAnimationApi::class
+    ExperimentalAnimationApi::class, ExperimentalLayoutApi::class
 )
 @Composable
 fun ChatScreen(
@@ -73,26 +79,43 @@ fun ChatScreen(
 ) {
     val chatState = viewModel.chatState
     var value by remember { mutableStateOf("") }
-    val state = rememberLazyListState()
+    val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
     val textBoxColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
 
     val scrollBehavior = topAppBarScrollBehavior()
 
-    val isAtTheBottom = state.isLastItemVisible()
+    val isAtTheBottom = lazyListState.isLastItemVisible()
     var fabBottomPadding by remember { mutableStateOf(0) }
     var fabTopPadding by remember { mutableStateOf(0) }
 
     val scrollToBottom = {
         if (viewModel.messages.isNotEmpty()) scope.launch {
-            state.animateScrollToItem(viewModel.messages.size - 1)
+            lazyListState.animateScrollToItem(viewModel.messages.size - 1)
         }
     }
     val user = viewModel.user
 
     LaunchedEffect(viewModel.messages.size) {
         if (viewModel.messages.lastOrNull()?.author?.id == user?.id) scrollToBottom()
+        else if (isAtTheBottom) scrollToBottom()
+    }
+
+    var keyboardHeight by rememberSaveable { mutableStateOf(0f) }
+    val isImeVisible = WindowInsets.isImeVisible
+    val view = LocalView.current
+
+    LaunchedEffect(isImeVisible) {
+        val _keyboardHeight = ViewCompat.getRootWindowInsets(view)
+            ?.getInsets(WindowInsetsCompat.Type.ime())?.bottom?.toFloat() ?: 0f
+        if (_keyboardHeight != 0f) keyboardHeight = _keyboardHeight
+
+        if (isImeVisible) {
+            lazyListState.animateScrollBy(keyboardHeight)
+        } else {
+            lazyListState.animateScrollBy(-keyboardHeight)
+        }
     }
 
     Box(Modifier.navigationBarsLandscapePadding()) {
@@ -169,7 +192,7 @@ fun ChatScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .nestedScroll(scrollBehavior.nestedScrollConnection),
-                                state = state,
+                                state = lazyListState,
                                 verticalArrangement = Arrangement.Bottom,
                                 contentPadding = PaddingValues(vertical = 12.dp)
                             ) {

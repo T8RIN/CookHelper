@@ -34,19 +34,24 @@ import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.constants.Constants.LOREM_IPSUM
 import ru.tech.cookhelper.domain.model.FileData
+import ru.tech.cookhelper.domain.model.Reply
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
-import ru.tech.cookhelper.presentation.forum_discussion.components.*
+import ru.tech.cookhelper.presentation.forum_discussion.components.ChipGroup
+import ru.tech.cookhelper.presentation.forum_discussion.components.ExpandableFloatingActionButtonWithExtra
+import ru.tech.cookhelper.presentation.forum_discussion.components.ForumReplyItem
+import ru.tech.cookhelper.presentation.forum_discussion.components.RatingButton
 import ru.tech.cookhelper.presentation.profile.components.AuthorBubble
 import ru.tech.cookhelper.presentation.profile.components.PostActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.ForumRemove
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.blur
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.pluralStringResource
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isLastItemVisible
@@ -64,7 +69,6 @@ import kotlin.math.min
 @Composable
 fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
     BackHandler(onBack = onBack)
-
 
     val scrollBehavior = topAppBarScrollBehavior()
     val screenController = LocalScreenController.current
@@ -102,36 +106,53 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
 
     val answerList: List<Reply>? = listOf(
         Reply(
-            user, System.currentTimeMillis(), null, "cock", "+19", 0, listOf(
+            user,
+            System.currentTimeMillis(),
+            emptyList(),
+            "Lorem ipsum dolor sit amet",
+            1,
+            0,
+            emptyList(),
+            emptyList(),
+            listOf(
                 Reply(
-                    user,
-                    System.currentTimeMillis(),
-                    FileData(
-                        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                        "1"
-                    ),
-                    "cock",
-                    "+110",
-                    1,
+                    user, System.currentTimeMillis(), listOf(
+                        FileData(
+                            "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
+                            "1"
+                        )
+                    ), "Lorem ipsum dolor sit amet", 2, 0, emptyList(), emptyList(),
                     listOf(
                         Reply(
-                            user, System.currentTimeMillis(), null, "cock", "-23", -1, listOf(
+                            user,
+                            System.currentTimeMillis(),
+                            emptyList(),
+                            "Lorem ipsum dolor sit amet",
+                            3,
+                            0,
+                            emptyList(),
+                            emptyList(),
+                            listOf(
                                 Reply(
                                     user,
                                     System.currentTimeMillis(),
-                                    null,
-                                    "cock",
-                                    "0",
+                                    emptyList(),
+                                    "Lorem ipsum dolor sit amet",
+                                    4,
                                     0,
+                                    emptyList(),
+                                    emptyList(),
                                     emptyList()
                                 ),
                                 Reply(
                                     user,
                                     System.currentTimeMillis(),
-                                    null,
-                                    "cock",
-                                    "+199",
-                                    1,
+                                    emptyList(),
+                                    "Lorem ipsum dolor sit amet",
+                                    5,
+                                    0,
+                                    emptyList(),
+                                    emptyList(),
                                     emptyList()
                                 )
                             )
@@ -141,14 +162,52 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
             )
         ),
         Reply(
-            user, System.currentTimeMillis(), null, "cock", "+19", 1, listOf(
-                Reply(user, System.currentTimeMillis(), null, "cock", "+19", -1, emptyList()),
-                Reply(user, System.currentTimeMillis(), null, "cock", "+19", -1, emptyList()),
-                Reply(user, System.currentTimeMillis(), null, "cock", "+19", -1, emptyList())
+            user,
+            System.currentTimeMillis(),
+            emptyList(),
+            "Lorem ipsum dolor sit amet",
+            6,
+            0,
+            emptyList(),
+            emptyList(),
+            listOf(
+                Reply(
+                    user,
+                    System.currentTimeMillis(),
+                    emptyList(),
+                    "Lorem ipsum dolor sit amet",
+                    7,
+                    0,
+                    emptyList(),
+                    emptyList(),
+                    emptyList()
+                ),
+                Reply(
+                    user,
+                    System.currentTimeMillis(),
+                    emptyList(),
+                    "Lorem ipsum dolor sit amet",
+                    8,
+                    0,
+                    emptyList(),
+                    emptyList(),
+                    emptyList()
+                ),
+                Reply(
+                    user,
+                    System.currentTimeMillis(),
+                    emptyList(),
+                    "Lorem ipsum dolor sit amet",
+                    9,
+                    0,
+                    emptyList(),
+                    emptyList(),
+                    emptyList()
+                ),
             )
         ),
     )
-    val answerCount = 10
+    val answerCount = 9
 
 
     Box(Modifier.fillMaxSize()) {
@@ -287,7 +346,7 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                     }
                 }
                 answerList?.let {
-                    items(answerList) {
+                    items(answerList, key = { it.id }) {
                         var hideReplies by rememberSaveable { mutableStateOf(true) }
                         ForumReplyItem(
                             reply = it,
@@ -344,8 +403,12 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                         appearance = TextFieldAppearance.Outlined,
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.secondaryContainer.harmonizeWithPrimary(
+                                0.7f
+                            ),
+                            unfocusedLabelColor = MaterialTheme.colorScheme.secondaryContainer.harmonizeWithPrimary(
+                                0.7f
+                            ),
                             focusedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         ),
                         shape = SquircleShape(8.dp),
