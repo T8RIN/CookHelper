@@ -1,10 +1,12 @@
 package ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet
 
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
@@ -14,14 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.presentation.app.components.Scrim
+import ru.tech.cookhelper.presentation.ui.utils.android.Logger.makeLog
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -145,22 +149,20 @@ fun rememberBottomSheetState(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetLayout(
-    sheetContent: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
+    state: BottomSheetState,
+    sheetContent: @Composable ColumnScope.() -> Unit,
     onDismiss: () -> Unit,
-    state: BottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed),
     gesturesEnabled: Boolean = true,
-    shape: Shape = MaterialTheme.shapes.extraLarge.copy(
-        bottomEnd = CornerSize(0.dp),
-        bottomStart = CornerSize(0.dp)
-    ),
+    shape: Shape = BottomSheetDefaults.ContainerShape,
     elevation: Dp = 1.dp,
-    sheetBackgroundColor: Color = MaterialTheme.colorScheme.surface,
-    sheetContentColor: Color = contentColorFor(sheetBackgroundColor),
+    sheetContainerColor: Color = MaterialTheme.colorScheme.surface,
+    sheetContentColor: Color = contentColorFor(sheetContainerColor),
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     BoxWithConstraints(modifier) {
+        val fullWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
         val fullHeight = constraints.maxHeight.toFloat()
         var bottomSheetHeight by remember { mutableStateOf(fullHeight) }
 
@@ -172,70 +174,99 @@ fun BottomSheetLayout(
                     fullHeight to BottomSheetValue.Collapsed,
                     fullHeight - bottomSheetHeight to BottomSheetValue.Expanded
                 ),
+                thresholds = { _, _ -> FractionalThreshold(0.5f) },
+                velocityThreshold = 400.dp,
                 orientation = Orientation.Vertical,
                 enabled = gesturesEnabled,
                 resistance = null
             )
 
+        val sheetHorizontalPadding: Modifier
+        val sheetWidth: Dp
+        if (fullWidth > 640.dp) {
+            sheetHorizontalPadding = Modifier.padding(horizontal = 56.dp)
+            sheetWidth = 640.dp
+        } else {
+            sheetHorizontalPadding = Modifier
+            sheetWidth = fullWidth
+        }
+
         BottomSheetStack(
             body = {
                 Box {
-                    content()
-                    Scrim(
-                        showing = state.isExpanded,
-                        fraction = {
+                    val sheetOpen by remember(state.progress) {
+                        derivedStateOf {
+                            state.progress.run { fraction != 1f || (from == to && from == BottomSheetValue.Expanded) }
+                        }
+                    }
+                    val fraction by remember(state.progress) {
+                        derivedStateOf {
                             state.progress.run {
-                                if (from != to) {
-                                    val newFraction = fraction.takeIf { it != 1f } ?: 0f
+                                val newFraction = fraction.takeIf { it != 1f } ?: 0f
+                                if (from != to && from == BottomSheetValue.Expanded) {
                                     min(0.5f, (1 - newFraction) / 2)
+                                } else if (from != to && from == BottomSheetValue.Collapsed) {
+                                    min(0.5f, newFraction / 2)
                                 } else if (from == BottomSheetValue.Expanded) {
                                     0.5f
                                 } else {
                                     0f
                                 }
                             }
-                        },
-                        onTap = {
+                        }
+                    }
+                    content()
+                    Scrim(
+                        open = sheetOpen,
+                        fraction = { fraction },
+                        onDismiss = {
                             scope.launch { state.collapse() }
                         }
                     )
                 }
             },
             bottomSheet = {
-                Surface(
-                    swipeable
-                        .fillMaxWidth()
-                        .onGloballyPositioned {
-                            bottomSheetHeight = it.size.height.toFloat()
-                        },
-                    shape = shape,
-                    shadowElevation = elevation,
-                    tonalElevation = elevation,
-                    color = sheetBackgroundColor,
-                    contentColor = sheetContentColor,
-                    content = {
-                        Column {
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 22.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Spacer(Modifier.weight(1f))
-                                Surface(
-                                    Modifier
-                                        .width(32.dp)
-                                        .height(4.dp),
-                                    shape = CircleShape,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                ) {}
-                                Spacer(Modifier.weight(1f))
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Surface(
+                        swipeable
+                            .width(sheetWidth)
+                            .then(sheetHorizontalPadding)
+                            .onGloballyPositioned {
+                                bottomSheetHeight = it.size.height.toFloat()
                             }
-                            sheetContent()
+                            .padding(top = 72.dp),
+                        shape = shape,
+                        shadowElevation = elevation,
+                        tonalElevation = elevation,
+                        color = sheetContainerColor,
+                        contentColor = sheetContentColor,
+                        content = {
+                            Column {
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 22.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Spacer(Modifier.weight(1f))
+                                    Surface(
+                                        Modifier
+                                            .width(32.dp)
+                                            .height(4.dp),
+                                        shape = CircleShape,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    ) {}
+                                    Spacer(Modifier.weight(1f))
+                                }
+                                sheetContent()
+                            }
                         }
-                    }
-                )
+                    )
+                }
             },
             bottomSheetOffset = state.offset,
         )
@@ -267,9 +298,42 @@ private fun BottomSheetStack(
                     it.measure(constraints.copy(minWidth = 0, minHeight = 0))
                 }
 
-            val sheetOffsetY = bottomSheetOffset.value.roundToInt()
+            val sheetOffsetY = bottomSheetOffset.value.roundToInt().also { makeLog(it) }
 
             sheetPlaceable.placeRelative(0, sheetOffsetY)
         }
     }
+}
+
+@Composable
+private fun Scrim(
+    open: Boolean,
+    onDismiss: () -> Unit,
+    fraction: () -> Float
+) {
+    val color = MaterialTheme.colorScheme.scrim
+    val dismissSheet = if (open) {
+        Modifier.pointerInput(onDismiss) { detectTapGestures { onDismiss() } }
+    } else {
+        Modifier
+    }
+
+    Canvas(
+        Modifier
+            .fillMaxSize()
+            .then(dismissSheet)
+    ) {
+        drawRect(color, alpha = fraction())
+    }
+}
+
+object BottomSheetDefaults {
+
+    val ContainerShape = RoundedCornerShape(
+        topStart = 28.dp,
+        topEnd = 28.dp,
+        bottomStart = 0.dp,
+        bottomEnd = 0.dp
+    )
+
 }
