@@ -15,9 +15,6 @@ fun DialogController.show(dialog: Dialog) = navigate(dialog)
 
 fun DialogController.close() = pop()
 
-inline val DialogController.currentDialog: Dialog
-    get() = currentDestination ?: Dialog.None
-
 typealias DialogController = NavController<Dialog>
 
 @Composable

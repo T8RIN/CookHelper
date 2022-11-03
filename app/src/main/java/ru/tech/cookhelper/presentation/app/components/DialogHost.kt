@@ -64,7 +64,6 @@ fun DialogHost(controller: DialogController) {
                     onAvatarPicked = dialog.onAvatarPicked
                 )
             }
-            else -> {}
         }
     }
 }

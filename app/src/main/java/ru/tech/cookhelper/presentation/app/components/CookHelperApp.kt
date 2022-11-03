@@ -39,10 +39,9 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     val snackbarHostState = rememberSnackbarHostState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val dialogController = rememberNavController<Dialog>(startDestination = Dialog.None)
+    val dialogController = rememberNavController<Dialog>(initialBackstack = emptyList())
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
-    val bottomSheetController =
-        rememberNavController<BottomSheet>(initialBackstack = emptyList())
+    val bottomSheetController = rememberNavController<BottomSheet>(initialBackstack = emptyList())
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarActions = rememberTopAppBarActions()

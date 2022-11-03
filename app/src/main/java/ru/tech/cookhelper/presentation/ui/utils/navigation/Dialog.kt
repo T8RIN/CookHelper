@@ -9,9 +9,6 @@ import ru.tech.cookhelper.domain.model.Product
 sealed class Dialog : Parcelable {
 
     @Parcelize
-    object None : Dialog()
-
-    @Parcelize
     class Exit(
         @IgnoredOnParcel val onExit: () -> Unit = {}
     ) : Dialog()

@@ -192,4 +192,5 @@
     <string name="reply">Ответить</string>
     <string name="comment">Комментарий</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
+    <string name="create_topic">Создать обсуждение</string>
 </resources>

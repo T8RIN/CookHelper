@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.presentation.ui.utils.android.Logger.makeLog
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -298,7 +297,7 @@ private fun BottomSheetStack(
                     it.measure(constraints.copy(minWidth = 0, minHeight = 0))
                 }
 
-            val sheetOffsetY = bottomSheetOffset.value.roundToInt().also { makeLog(it) }
+            val sheetOffsetY = bottomSheetOffset.value.roundToInt()
 
             sheetPlaceable.placeRelative(0, sheetOffsetY)
         }
