@@ -23,6 +23,7 @@ import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
 import ru.tech.cookhelper.presentation.profile.ProfileScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
+import ru.tech.cookhelper.presentation.topic_creation.TopicCreationScreen
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
@@ -143,6 +144,13 @@ fun ScreenHost(
                         id = screen.id,
                         title = screen.label,
                         onBack = { controller.goBack() }
+                    )
+                }
+                Screen.TopicCreation -> {
+                    TopicCreationScreen(
+                        onBack = {
+                            controller.goBack()
+                        }
                     )
                 }
             }

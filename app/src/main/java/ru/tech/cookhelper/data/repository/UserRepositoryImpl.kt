@@ -22,6 +22,7 @@ import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
 import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.RecipePost
+import ru.tech.cookhelper.domain.model.Topic
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.compress
@@ -213,11 +214,31 @@ class UserRepositoryImpl @Inject constructor(
         val response = runIo { userApi.createPost(token, label, content, image).execute() }
         val body = response.bodyOrThrow()
 
-        if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()?.let {
-            if (it.images[0].id == "") it.copy(images = emptyList(), comments = emptyList())
-            else it.copy(comments = emptyList())
-        }))
+        if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()))
         else emit(Action.Empty(body.status))
 
+    }.catch { emit(it.toAction()) }
+
+    override fun createTopic(
+        token: String,
+        title: String,
+        text: String,
+        attachments: List<Pair<File?, String>>,
+        tags: List<String>
+    ): Flow<Action<Topic>> = flow {
+        emit(Action.Loading())
+
+        attachments.firstOrNull()?.first?.compress { !it.isSvg && !it.isGif }
+
+        val _attachments = attachments.firstOrNull()?.first.toMultipartFormData(
+            attachments.firstOrNull()?.second ?: ""
+        )
+
+        val response =
+            runIo { userApi.createTopic(token, title, text, _attachments, tags).execute() }
+        val body = response.bodyOrThrow()
+
+        if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()))
+        else emit(Action.Empty(body.status))
     }.catch { emit(it.toAction()) }
 }

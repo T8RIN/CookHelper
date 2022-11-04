@@ -193,4 +193,21 @@
     <string name="comment">Комментарий</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
     <string name="create_topic">Создать обсуждение</string>
+    <string name="filter_by">Фильтровать по</string>
+    <string name="has_attachments">Имеет вложения</string>
+    <string name="no_rating">Без рейтинга</string>
+    <string name="negative_rating">Отрицательный рейтинг</string>
+    <string name="positive_rating">Положительный рейтинг</string>
+    <string name="sorted_by">Сортировать по</string>
+    <string name="date">Дате</string>
+    <string name="rating">Рейтингу</string>
+    <string name="reversed">Перевернуть</string>
+    <string name="contains_tags">Содержит теги</string>
+    <string name="add_tag">Добавить тег</string>
+    <string name="topic_creation_started">Создание обсуждения началось</string>
+    <string name="topic_creation_started_leave_message">Создание обсуждения началось, осталось совсем чуть-чуть, чтобы завершить ее, если вы выйдете сейчас, то утратите несохраненные данные</string>
+    <string name="topic_created">Обсуждение успешно создано</string>
+    <string name="headline">Заголовок</string>
+    <string name="question">Вопрос</string>
+    <string name="tags">Теги</string>
 </resources>

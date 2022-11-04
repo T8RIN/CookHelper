@@ -1,37 +1,43 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import dev.olshevski.navigation.reimagined.NavHost
-import kotlinx.coroutines.launch
+import androidx.compose.ui.Modifier
+import dev.olshevski.navigation.reimagined.DialogNavHost
+import dev.olshevski.navigation.reimagined.popAll
 import ru.tech.cookhelper.presentation.forum_screen.components.ForumFilterBottomSheet
-import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.BottomSheetLayout
-import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.BottomSheetValue
-import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.rememberBottomSheetState
+import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.ModalBottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.provider.BottomSheetController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
+import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BottomSheetHost(controller: BottomSheetController, content: @Composable () -> Unit) {
-    val state = rememberBottomSheetState(BottomSheetValue.Collapsed)
+fun BottomSheetHost(bottomSheetController: BottomSheetController, content: @Composable () -> Unit) {
     val scope = rememberCoroutineScope()
+    val controller = bottomSheetController.controller
+    val state = bottomSheetController.state
 
-    BottomSheetLayout(
+    ModalBottomSheet(
+        modifier = Modifier.animateContentSize(),
         state = state,
-        onDismiss = { controller.close() },
+        nestedScrollEnabled = controller.currentDestination?.nestedScrollEnabled == true,
+        dismissOnTapOutside = controller.currentDestination?.dismissOnTapOutside == true,
+        gesturesEnabled = controller.currentDestination?.gesturesEnabled == true,
+        onDismiss = { controller.popAll() },
         sheetContent = {
-            NavHost(
+            DialogNavHost(
                 controller = controller,
             ) { sheet ->
                 when (sheet) {
-                    BottomSheet.ForumFilter -> {
-                        ForumFilterBottomSheet()
+                    is BottomSheet.ForumFilter -> {
+                        ForumFilterBottomSheet(
+                            filters = sheet.filters,
+                            onFiltersChange = sheet.onFiltersChange
+                        )
                     }
-                }
-                LaunchedEffect(controller) {
-                    scope.launch { state.expand() }
                 }
             }
         },

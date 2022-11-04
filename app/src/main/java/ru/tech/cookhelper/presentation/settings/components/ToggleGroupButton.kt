@@ -15,15 +15,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 
 @Composable
-fun ToggleGroup(items: List<Int>, selectedIndex: Int, indexChanged: (Int) -> Unit) {
+fun ToggleGroupButton(
+    modifier: Modifier = defaultModifier,
+    items: List<Int>,
+    selectedIndex: Int,
+    indexChanged: (Int) -> Unit
+) {
     val cornerRadius = 24.dp
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
+    Row(modifier = modifier) {
+        if (modifier == defaultModifier) Spacer(modifier = Modifier.weight(1f))
 
         items.forEachIndexed { index, item ->
             OutlinedButton(
@@ -74,6 +75,10 @@ fun ToggleGroup(items: List<Int>, selectedIndex: Int, indexChanged: (Int) -> Uni
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        if (modifier == defaultModifier) Spacer(modifier = Modifier.weight(1f))
     }
 }
+
+private var defaultModifier = Modifier
+    .fillMaxWidth()
+    .padding(8.dp)

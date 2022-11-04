@@ -2,14 +2,22 @@ package ru.tech.cookhelper.presentation.ui.utils.provider
 
 import androidx.compose.runtime.compositionLocalOf
 import dev.olshevski.navigation.reimagined.NavController
-import dev.olshevski.navigation.reimagined.pop
+import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.BottomSheetState
 import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 
 val LocalBottomSheetController =
-    compositionLocalOf<NavController<BottomSheet>> { error("BottomSheetController not present") }
+    compositionLocalOf<BottomSheetController> { error("BottomSheetController not present") }
 
-fun BottomSheetController.show(sheet: BottomSheet) = navigate(sheet)
+suspend fun BottomSheetController.show(sheet: BottomSheet) {
+    controller.apply {
+        navigateAndPopAll(sheet)
+        state.expand()
+    }
+}
 
-fun BottomSheetController.close() = pop()
+suspend fun BottomSheetController.close() = state.collapse()
 
-typealias BottomSheetController = NavController<BottomSheet>
+data class BottomSheetController(
+    val controller: NavController<BottomSheet>,
+    val state: BottomSheetState
+)

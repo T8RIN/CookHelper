@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.tech.cookhelper.data.remote.dto.PostDto
 import ru.tech.cookhelper.data.remote.dto.RecipePostDto
+import ru.tech.cookhelper.data.remote.dto.TopicDto
 import ru.tech.cookhelper.data.remote.utils.Response
 
 interface UserApi {
@@ -22,5 +23,15 @@ interface UserApi {
         @Part("text") text: String,
         @Part image: MultipartBody.Part?
     ): Call<Response<PostDto>>
+
+    @Multipart
+    @POST("api/forum/post/topic/create/")
+    fun createTopic(
+        @Part("token") token: String,
+        @Part("title") title: String,
+        @Part("text") text: String,
+        @Part files: MultipartBody.Part?,
+        @Part("tags") tags: List<String>
+    ): Call<Response<TopicDto>>
 
 }

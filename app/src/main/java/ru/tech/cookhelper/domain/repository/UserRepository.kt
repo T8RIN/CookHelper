@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.RecipePost
+import ru.tech.cookhelper.domain.model.Topic
 import ru.tech.cookhelper.domain.model.User
 import java.io.File
 
@@ -54,5 +55,13 @@ interface UserRepository {
         imageFile: File?,
         type: String
     ): Flow<Action<Post>>
+
+    fun createTopic(
+        token: String,
+        title: String,
+        text: String,
+        attachments: List<Pair<File?, String>>,
+        tags: List<String>
+    ): Flow<Action<Topic>>
 
 }

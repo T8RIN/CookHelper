@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.domain.model.ForumFilters
 import ru.tech.cookhelper.presentation.app.components.containerColorWithScroll
 import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
@@ -35,12 +37,26 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
     val bottomSheetController = LocalBottomSheetController.current
     val tabColor by scrollBehavior.containerColorWithScroll()
     val lazyListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
+    var filters by remember { mutableStateOf(ForumFilters.empty()) }
 
     LocalTopAppBarActions.current.setActions {
         IconButton(onClick = { /*TODO*/ }) {
             Icon(Icons.Rounded.Search, null)
         }
-        IconButton(onClick = { bottomSheetController.show(BottomSheet.ForumFilter) }) {
+        IconButton(onClick = {
+            scope.launch {
+                bottomSheetController.show(
+                    BottomSheet.ForumFilter(
+                        filters = filters,
+                        onFiltersChange = {
+                            filters = it
+                        }
+                    )
+                )
+            }
+        }) {
             Icon(Icons.Rounded.FilterList, null)
         }
     }
@@ -102,7 +118,7 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
                 .align(Alignment.BottomEnd),
             text = { Text(stringResource(R.string.create_topic)) },
             icon = { Icon(Icons.Rounded.CreateAlt, null) },
-            onClick = { /*TODO*/ }
+            onClick = { screenController.navigate(Screen.TopicCreation) }
         )
 
     }

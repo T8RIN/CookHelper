@@ -40,8 +40,8 @@ sealed class Dialog : Parcelable {
 
     @Parcelize
     class PickProductsWithMeasures(
-        val products: List<Product>,
-        val allProducts: List<Product>,
+        @IgnoredOnParcel val products: List<Product> = emptyList(),
+        @IgnoredOnParcel val allProducts: List<Product> = emptyList(),
         @IgnoredOnParcel val onProductsPicked: (newProducts: List<Product>) -> Unit = {}
     ) : Dialog()
 

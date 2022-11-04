@@ -193,4 +193,21 @@
     <string name="comment">Comment</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="create_topic">Create topic</string>
+    <string name="filter_by">Filter by</string>
+    <string name="has_attachments">Has attachments</string>
+    <string name="no_rating">No rating</string>
+    <string name="negative_rating">Negative rating</string>
+    <string name="positive_rating">Positive rating</string>
+    <string name="sorted_by">Sorted by</string>
+    <string name="date">Date</string>
+    <string name="rating">Rating</string>
+    <string name="reversed">Reversed</string>
+    <string name="contains_tags">Contains tags</string>
+    <string name="add_tag">Add tag</string>
+    <string name="topic_creation_started">Topic creation started</string>
+    <string name="topic_creation_started_leave_message">Topic creation started, just a little bit left to complete, if you exit now you will lose any unsaved data</string>
+    <string name="topic_created">Topic created successfully</string>
+    <string name="headline">Headline</string>
+    <string name="question">Question</string>
+    <string name="tags">Tags</string>
 </resources>

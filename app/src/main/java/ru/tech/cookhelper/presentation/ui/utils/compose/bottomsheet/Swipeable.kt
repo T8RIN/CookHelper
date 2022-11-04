@@ -554,8 +554,8 @@ internal fun <T> Modifier.swipeable(
         state.anchors = anchors
         state.resistance = resistance
         state.thresholds = { a, b ->
-            val from = anchors.getValue(a)
-            val to = anchors.getValue(b)
+            val from: T = anchors.getValue(a)
+            val to: T = anchors.getValue(b)
             with(thresholds(from, to)) { density.computeThreshold(a, b) }
         }
         with(density) {
@@ -799,7 +799,6 @@ internal object SwipeableDefaults {
 }
 
 // temp default nested scroll connection for swipeables which desire as an opt in
-// revisit in b/174756744 as all types will have their own specific connection probably
 @ExperimentalMaterial3Api
 internal val <T> SwipeableState<T>.PreUpPostDownNestedScrollConnection: NestedScrollConnection
     get() = object : NestedScrollConnection {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -33,7 +33,7 @@ import kotlin.math.roundToInt
  */
 enum class BottomSheetValue {
     /**
-     * The bottom sheet is visible, but only showing its peek height.
+     * The bottom sheet is hidden.
      */
     Collapsed,
 
@@ -44,7 +44,7 @@ enum class BottomSheetValue {
 }
 
 /**
- * State of the persistent bottom sheet in [BottomSheetLayout].
+ * State of the persistent bottom sheet in [ModalBottomSheet].
  *
  * @param initialValue The initial value of the state.
  * @param animationSpec The default animation that will be used to animate to a new state.
@@ -147,13 +147,15 @@ fun rememberBottomSheetState(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetLayout(
+fun ModalBottomSheet(
     modifier: Modifier = Modifier,
     state: BottomSheetState,
     sheetContent: @Composable ColumnScope.() -> Unit,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit = {},
+    dismissOnTapOutside: Boolean = true,
     gesturesEnabled: Boolean = true,
-    shape: Shape = BottomSheetDefaults.ContainerShape,
+    nestedScrollEnabled: Boolean = true,
+    sheetShape: Shape = BottomSheetDefaults.ContainerShape,
     elevation: Dp = 1.dp,
     sheetContainerColor: Color = MaterialTheme.colorScheme.surface,
     sheetContentColor: Color = contentColorFor(sheetContainerColor),
@@ -166,7 +168,10 @@ fun BottomSheetLayout(
         var bottomSheetHeight by remember { mutableStateOf(fullHeight) }
 
         val swipeable = Modifier
-            .nestedScroll(state.nestedScrollConnection)
+            .then(
+                if (nestedScrollEnabled) Modifier.nestedScroll(state.nestedScrollConnection)
+                else Modifier
+            )
             .swipeable(
                 state = state,
                 anchors = mapOf(
@@ -218,6 +223,7 @@ fun BottomSheetLayout(
                     Scrim(
                         open = sheetOpen,
                         fraction = { fraction },
+                        canDismiss = dismissOnTapOutside,
                         onDismiss = {
                             scope.launch { state.collapse() }
                         }
@@ -237,7 +243,7 @@ fun BottomSheetLayout(
                                 bottomSheetHeight = it.size.height.toFloat()
                             }
                             .padding(top = 72.dp),
-                        shape = shape,
+                        shape = sheetShape,
                         shadowElevation = elevation,
                         tonalElevation = elevation,
                         color = sheetContainerColor,
@@ -307,12 +313,17 @@ private fun BottomSheetStack(
 @Composable
 private fun Scrim(
     open: Boolean,
+    canDismiss: Boolean,
     onDismiss: () -> Unit,
     fraction: () -> Float
 ) {
     val color = MaterialTheme.colorScheme.scrim
     val dismissSheet = if (open) {
-        Modifier.pointerInput(onDismiss) { detectTapGestures { onDismiss() } }
+        Modifier.pointerInput(onDismiss) {
+            detectTapGestures {
+                if (canDismiss) onDismiss()
+            }
+        }
     } else {
         Modifier
     }
@@ -328,7 +339,7 @@ private fun Scrim(
 
 object BottomSheetDefaults {
 
-    val ContainerShape = RoundedCornerShape(
+    val ContainerShape = SquircleShape(
         topStart = 28.dp,
         topEnd = 28.dp,
         bottomStart = 0.dp,

@@ -130,13 +130,13 @@ sealed class Screen(
     @Parcelize
     class FullscreenImagePager(
         val id: String = "0",
-        val images: List<FileData> = emptyList()
+        @IgnoredOnParcel val images: List<FileData> = emptyList()
     ) : Screen(showTopAppBar = false)
 
 
     @Parcelize
     class AllImages(
-        val images: List<FileData> = emptyList(),
+        @IgnoredOnParcel val images: List<FileData> = emptyList(),
         val canAddImages: Boolean = false,
         @IgnoredOnParcel val onAddImage: (uri: String) -> Unit = {}
     ) : Screen(showTopAppBar = false)
@@ -152,6 +152,9 @@ sealed class Screen(
 
     @Parcelize
     object EditProfile : Screen(showTopAppBar = false)
+
+    @Parcelize
+    object TopicCreation : Screen(showTopAppBar = false)
 
     @Parcelize
     class ForumDiscussion(val id: Int, val label: String) : Screen(showTopAppBar = false)

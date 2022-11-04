@@ -174,7 +174,7 @@ fun SettingsScreen(
                     }
                 }
                 if (expandedNightMode) {
-                    ToggleGroup(
+                    ToggleGroupButton(
                         items = listOf(R.string.dark, R.string.light, R.string.system),
                         selectedIndex = settingsState.nightMode.ordinal,
                         indexChanged = {

@@ -21,9 +21,10 @@ import ru.tech.cookhelper.presentation.ui.theme.CookHelperTheme
 import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.BottomSheetValue
+import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.rememberBottomSheetState
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
-import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
@@ -41,7 +42,10 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
     val dialogController = rememberNavController<Dialog>(initialBackstack = emptyList())
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
-    val bottomSheetController = rememberNavController<BottomSheet>(initialBackstack = emptyList())
+    val bottomSheetController = BottomSheetController(
+        rememberNavController(initialBackstack = emptyList()),
+        rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    )
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarActions = rememberTopAppBarActions()
@@ -85,7 +89,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     drawerState = drawerState,
                     gesturesEnabled = showTopAppBar
                 ) {
-                    BottomSheetHost(controller = bottomSheetController) {
+                    BottomSheetHost(bottomSheetController = bottomSheetController) {
                         Column {
                             AnimatedTopAppBar(
                                 topAppBarSize = TopAppBarSize.Centered,
