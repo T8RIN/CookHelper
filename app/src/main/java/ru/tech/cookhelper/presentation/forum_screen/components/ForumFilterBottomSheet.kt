@@ -124,7 +124,7 @@ fun ForumFilterBottomSheet(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     ToggleGroupButton(
-                        modifier = Modifier.padding(end = 8.dp, top = 8.dp, bottom = 8.dp),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
                         items = listOf(R.string.date, R.string.rating),
                         selectedIndex = when {
                             localFilters.recencySort -> 0
@@ -140,11 +140,7 @@ fun ForumFilterBottomSheet(
                             }
                         }
                     )
-                    Spacer(
-                        Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp)
-                    )
+                    Spacer(Modifier.weight(1f))
                     Checkbox(
                         checked = localFilters.reverseSort,
                         onCheckedChange = {
@@ -156,7 +152,7 @@ fun ForumFilterBottomSheet(
                             checkmarkColor = MaterialTheme.colorScheme.onSecondaryContainer.harmonizeWithPrimary()
                         )
                     )
-                    Text(stringResource(R.string.reversed))
+                    Text(stringResource(R.string.reversed), maxLines = 1)
                 }
             }
             item {

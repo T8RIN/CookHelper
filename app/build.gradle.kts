@@ -60,14 +60,8 @@ android {
 
 dependencies {
 
-    //Android Essentials
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
-    implementation("com.google.android.material:material:1.8.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03")
-    implementation("androidx.window:window:1.1.0-alpha03")
+    //Exif interface
     implementation("androidx.exifinterface:exifinterface:1.3.5")
-
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
