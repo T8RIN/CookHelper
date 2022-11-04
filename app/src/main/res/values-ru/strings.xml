@@ -193,12 +193,12 @@
     <string name="comment">Комментарий</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
     <string name="create_topic">Создать обсуждение</string>
-    <string name="filter_by">Фильтровать по</string>
+    <string name="filter_by">Фильтр</string>
     <string name="has_attachments">Имеет вложения</string>
     <string name="no_rating">Без рейтинга</string>
-    <string name="negative_rating">Отрицательный рейтинг</string>
-    <string name="positive_rating">Положительный рейтинг</string>
-    <string name="sorted_by">Сортировать по</string>
+    <string name="negative_rating">Рейтинг \"+\"</string>
+    <string name="positive_rating">Рейтинг \"-\"</string>
+    <string name="sorted_by">Сортировка по</string>
     <string name="date">Дате</string>
     <string name="rating">Рейтингу</string>
     <string name="reversed">Наоборот</string>

@@ -72,7 +72,7 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
                 onTabClick = { selectedTabIndex = it }
             )
             AnimatedContent(targetState = selectedTabIndex == 0) { first ->
-                if (first) {
+                if (!first) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.fillMaxSize()
