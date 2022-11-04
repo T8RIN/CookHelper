@@ -201,7 +201,7 @@
     <string name="sorted_by">Сортировать по</string>
     <string name="date">Дате</string>
     <string name="rating">Рейтингу</string>
-    <string name="reversed">Перевернуть</string>
+    <string name="reversed">Наоборот</string>
     <string name="contains_tags">Содержит теги</string>
     <string name="add_tag">Добавить тег</string>
     <string name="topic_creation_started">Создание обсуждения началось</string>
