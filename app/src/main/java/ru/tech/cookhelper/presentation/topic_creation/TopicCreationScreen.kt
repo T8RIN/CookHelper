@@ -30,6 +30,7 @@ import androidx.core.net.toUri
 import com.google.accompanist.flowlayout.FlowRow
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.domain.model.getLastAvatar
 import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.forum_discussion.components.TagItem
 import ru.tech.cookhelper.presentation.topic_creation.viewModel.TopicCreationViewModel
@@ -94,7 +95,7 @@ fun TopicCreationScreen(
                         .padding(start = 8.dp)
                         .fillMaxWidth()
                 ) {
-                    Picture(model = user?.avatar?.firstOrNull(), modifier = Modifier.size(40.dp))
+                    Picture(model = user?.getLastAvatar(), modifier = Modifier.size(40.dp))
                     Spacer(Modifier.width(12.dp))
                     Text(
                         text = "${user?.name?.trim()} ${user?.surname?.trim()}",

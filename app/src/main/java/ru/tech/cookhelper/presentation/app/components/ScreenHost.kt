@@ -109,7 +109,7 @@ fun ScreenHost(
                     )
                 }
                 is Screen.Authentication -> {
-                    AuthenticationScreen()
+                    AuthenticationScreen(onTitleChange = onTitleChange)
                 }
                 is Screen.PostCreation -> {
                     PostCreationScreen(

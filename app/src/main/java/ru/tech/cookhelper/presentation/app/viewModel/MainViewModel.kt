@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,6 +48,8 @@ class MainViewModel @Inject constructor(
     private val _userState: MutableState<UserState> = mutableStateOf(UserState())
     val userState: UserState by _userState
 
+    private var observingJob: Job? = null
+
     init {
         getSettingsListUseCase().onEach { list ->
             var state = SettingsState()
@@ -74,20 +77,22 @@ class MainViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         getUserUseCase().onEach { user ->
-            if (user == null) sendEvent(Event.NavigateTo(Screen.Authentication.Login))
+            if (user == null) {
+                observingJob?.cancel()
+                observingJob = null
+                sendEvent(Event.NavigateTo(Screen.Authentication.Login))
+            }
             else {
                 _userState.update { UserState(user, user.token) }
+                if(observingJob == null) {
+                    observingJob = observeUserUseCase(userState.user?.id ?: 0, userState.token)
+                        .onSuccess {
+                            cacheUserUseCase(this)
+                        }
+                        .launchIn(viewModelScope)
+                }
             }
         }.launchIn(viewModelScope)
-
-        viewModelScope.launch {
-            delay(500)
-            observeUserUseCase(userState.user?.id ?: 0, userState.token)
-                .onSuccess {
-                    cacheUserUseCase(this)
-                }
-                .launchIn(viewModelScope)
-        }
 
     }
 

@@ -16,8 +16,8 @@ import ru.tech.cookhelper.data.local.entity.asDatabaseEntity
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.user.UserApi
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
-import ru.tech.cookhelper.data.remote.web_socket.protocol.FeedService
-import ru.tech.cookhelper.data.remote.web_socket.protocol.UserService
+import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
+import ru.tech.cookhelper.data.remote.web_socket.user.UserService
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.Topic

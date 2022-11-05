@@ -1,8 +1,8 @@
 package ru.tech.cookhelper.domain.use_case.close_connection
 
-import ru.tech.cookhelper.data.remote.web_socket.protocol.FeedService
-import ru.tech.cookhelper.data.remote.web_socket.protocol.MessageService
-import ru.tech.cookhelper.data.remote.web_socket.protocol.UserService
+import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
+import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.user.UserService
 import javax.inject.Inject
 
 class CloseConnectionsUseCase @Inject constructor(

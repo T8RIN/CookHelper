@@ -32,6 +32,7 @@ import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.login_screen.viewModel.LoginViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -45,6 +46,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 @Composable
 fun LoginField(
     scaleModifier: Float,
+    onTitleChange: (UIText) -> Unit,
     onGetCredentials: (name: String?, email: String?, token: String?) -> Unit,
     authController: NavController<Screen>,
     viewModel: LoginViewModel = hiltViewModel()
@@ -180,7 +182,10 @@ fun LoginField(
                 authController.navigate(it.screen)
             }
             is Event.NavigateIf -> {
-                if (it.predicate(screenController.currentDestination)) screenController.navigate(it.screen)
+                if (it.predicate(screenController.currentDestination)) {
+                    screenController.navigate(it.screen)
+                    onTitleChange(Screen.Home.Feed.title)
+                }
             }
             else -> {}
         }

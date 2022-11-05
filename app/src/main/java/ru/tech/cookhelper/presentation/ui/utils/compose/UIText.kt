@@ -40,7 +40,7 @@ sealed class UIText {
         fun Empty() = UIText.DynamicString("")
         fun String.asUIText() = UIText.DynamicString(this)
         fun Int.asUIText() = UIText.StringResource(this)
-        fun UIText(value: String) = UIText.DynamicString(value)
+        fun UIText(value: String?) = UIText.DynamicString(value)
         fun UIText(@StringRes value: Int) = UIText.StringResource(value)
         fun DynamicString(value: String?) = UIText.DynamicString(value ?: "")
     }

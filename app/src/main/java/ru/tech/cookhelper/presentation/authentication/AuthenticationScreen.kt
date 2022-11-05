@@ -27,14 +27,17 @@ import ru.tech.cookhelper.presentation.confirm_email.ConfirmEmailField
 import ru.tech.cookhelper.presentation.login_screen.LoginField
 import ru.tech.cookhelper.presentation.registration_screen.RegistrationField
 import ru.tech.cookhelper.presentation.restore_password.RestorePasswordField
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun AuthenticationScreen() {
+fun AuthenticationScreen(onTitleChange: (UIText) -> Unit) {
+
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
     val authController = rememberNavController<Screen>(Screen.Authentication.Login)
 
     val height = LocalConfiguration.current.screenHeightDp
@@ -100,7 +103,8 @@ fun AuthenticationScreen() {
                                     scaleModifier = scaleModifier,
                                     name = name,
                                     email = email,
-                                    token = token
+                                    token = token,
+                                    onTitleChange = onTitleChange
                                 )
                             }
                             Screen.Authentication.Login -> {
@@ -111,7 +115,8 @@ fun AuthenticationScreen() {
                                         email = e ?: ""
                                         token = t ?: ""
                                     },
-                                    authController = authController
+                                    authController = authController,
+                                    onTitleChange = onTitleChange
                                 )
                             }
                             Screen.Authentication.Register -> {
@@ -122,7 +127,8 @@ fun AuthenticationScreen() {
                                         name = n ?: ""
                                         email = e ?: ""
                                         token = t ?: ""
-                                    }
+                                    },
+                                    onTitleChange = onTitleChange
                                 )
                             }
                             Screen.Authentication.RestorePassword -> {

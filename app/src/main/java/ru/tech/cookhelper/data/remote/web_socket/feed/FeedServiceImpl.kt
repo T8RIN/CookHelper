@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.flow
 import ru.tech.cookhelper.data.remote.dto.RecipePostDto
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketClient
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
-import ru.tech.cookhelper.data.remote.web_socket.protocol.FeedService
 import ru.tech.cookhelper.data.utils.JsonParser
 import javax.inject.Inject
 

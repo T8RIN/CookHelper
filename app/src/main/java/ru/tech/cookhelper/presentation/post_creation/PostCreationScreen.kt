@@ -33,6 +33,7 @@ import androidx.core.net.toUri
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Post
+import ru.tech.cookhelper.domain.model.getLastAvatar
 import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
@@ -95,7 +96,7 @@ fun PostCreationScreen(
                         .padding(start = 8.dp)
                         .fillMaxWidth()
                 ) {
-                    Picture(model = user?.avatar?.firstOrNull(), modifier = Modifier.size(40.dp))
+                    Picture(model = user?.getLastAvatar(), modifier = Modifier.size(40.dp))
                     Spacer(Modifier.width(12.dp))
                     Text(
                         text = "${user?.name?.trim()} ${user?.surname?.trim()}",

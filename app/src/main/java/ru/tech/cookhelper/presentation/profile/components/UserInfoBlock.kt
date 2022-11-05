@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.domain.model.getLastAvatar
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.ui.theme.Gray
@@ -53,7 +54,7 @@ fun UserInfoBlock(
     Column(Modifier.padding(horizontal = 15.dp)) {
         Row(Modifier.fillMaxWidth()) {
             Picture(
-                model = userState.user?.avatar?.lastOrNull()?.link,
+                model = userState.user?.getLastAvatar(),
                 modifier = Modifier
                     .padding(top = 15.dp)
                     .size(80.dp)

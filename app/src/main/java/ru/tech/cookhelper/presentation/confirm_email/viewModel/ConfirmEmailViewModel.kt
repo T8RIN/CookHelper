@@ -29,6 +29,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEvents
 import ru.tech.cookhelper.presentation.ui.utils.event.ViewModelEventsImpl
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,6 +74,12 @@ class ConfirmEmailViewModel @Inject constructor(
                             R.string.welcome_user,
                             name
                         ), Icons.Outlined.Face
+                    )
+                )
+                sendEvent(
+                    Event.NavigateIf(
+                        predicate = { it is Screen.Authentication },
+                        screen = Screen.Home.None
                     )
                 )
                 cacheUserUseCase(this)

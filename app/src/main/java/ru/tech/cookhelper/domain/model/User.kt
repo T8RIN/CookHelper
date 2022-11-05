@@ -22,3 +22,5 @@ data class User(
     val lastSeen: Long,
     val token: String
 ) : Domain
+
+fun User.getLastAvatar(): String? = avatar.lastOrNull()?.link

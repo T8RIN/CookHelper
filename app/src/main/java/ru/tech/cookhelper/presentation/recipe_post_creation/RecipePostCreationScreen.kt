@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.domain.model.getLastAvatar
 import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
@@ -124,7 +125,7 @@ fun RecipePostCreationScreen(
                             .fillMaxWidth()
                     ) {
                         Picture(
-                            model = user?.avatar?.firstOrNull(),
+                            model = user?.getLastAvatar(),
                             modifier = Modifier.size(40.dp)
                         )
                         Spacer(Modifier.width(12.dp))

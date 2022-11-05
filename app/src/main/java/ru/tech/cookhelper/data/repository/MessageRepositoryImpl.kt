@@ -8,7 +8,7 @@ import ru.tech.cookhelper.core.constants.Status.SUCCESS
 import ru.tech.cookhelper.core.utils.kotlin.runIo
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
-import ru.tech.cookhelper.data.remote.web_socket.protocol.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
 import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.domain.model.Chat
 import ru.tech.cookhelper.domain.model.FormMessage

@@ -7,7 +7,6 @@ import ru.tech.cookhelper.data.remote.dto.UserDto
 import ru.tech.cookhelper.data.remote.utils.Response
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketClient
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
-import ru.tech.cookhelper.data.remote.web_socket.protocol.UserService
 import ru.tech.cookhelper.data.utils.JsonParser
 import javax.inject.Inject
 

@@ -10,9 +10,9 @@ import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.api.user.UserApi
 import ru.tech.cookhelper.data.remote.web_socket.feed.FeedServiceImpl
 import ru.tech.cookhelper.data.remote.web_socket.message.MessageServiceImpl
-import ru.tech.cookhelper.data.remote.web_socket.protocol.FeedService
-import ru.tech.cookhelper.data.remote.web_socket.protocol.MessageService
-import ru.tech.cookhelper.data.remote.web_socket.protocol.UserService
+import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
+import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.user.UserService
 import ru.tech.cookhelper.data.remote.web_socket.user.UserServiceImpl
 import ru.tech.cookhelper.data.utils.JsonParser
 import javax.inject.Singleton

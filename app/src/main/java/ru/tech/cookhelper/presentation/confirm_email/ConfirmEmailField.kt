@@ -24,12 +24,11 @@ import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.confirm_email.viewModel.ConfirmEmailViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
-import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
-import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import ru.tech.cookhelper.presentation.ui.utils.provider.*
 import java.util.*
 
 @ExperimentalAnimationApi
@@ -39,11 +38,12 @@ fun ConfirmEmailField(
     authController: NavController<Screen>,
     scaleModifier: Float,
     name: String, email: String, token: String,
+    onTitleChange: (UIText) -> Unit,
     viewModel: ConfirmEmailViewModel = hiltViewModel(
         defaultArguments = bundleOf("name" to name, "email" to email, "token" to token)
     )
 ) {
-
+    val screenController = LocalScreenController.current
     val toastHost = LocalToastHost.current
     val width = LocalConfiguration.current.screenWidthDp
     val context = LocalContext.current
@@ -118,6 +118,12 @@ fun ConfirmEmailField(
                 it.icon,
                 it.text.asString(context)
             )
+            is Event.NavigateIf -> {
+                if (it.predicate(screenController.currentDestination)) {
+                    screenController.navigate(it.screen)
+                    onTitleChange(Screen.Home.Feed.title)
+                }
+            }
             else -> {}
         }
     }

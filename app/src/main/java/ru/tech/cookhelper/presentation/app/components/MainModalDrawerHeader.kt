@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.domain.model.getLastAvatar
 
 @Composable
 fun MainModalDrawerHeader(userState: UserState, onClick: () -> Unit) {
@@ -22,7 +23,7 @@ fun MainModalDrawerHeader(userState: UserState, onClick: () -> Unit) {
         )
     ) {
         Picture(
-            model = userState.user?.avatar?.lastOrNull()?.link,
+            model = userState.user?.getLastAvatar(),
             modifier = Modifier
                 .padding(start = 15.dp, top = 15.dp)
                 .size(64.dp)

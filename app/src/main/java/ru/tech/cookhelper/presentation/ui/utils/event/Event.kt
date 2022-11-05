@@ -13,5 +13,6 @@ sealed class Event {
     class SendData(vararg val data: Pair<String, Any>) : Event() {
         val mappedData = data.toMap()
         inline operator fun <reified T> get(key: String): T? = mappedData[key] as? T
+        fun count() = mappedData.count()
     }
 }
