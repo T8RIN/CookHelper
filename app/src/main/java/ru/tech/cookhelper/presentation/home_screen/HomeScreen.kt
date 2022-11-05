@@ -2,7 +2,6 @@ package ru.tech.cookhelper.presentation.home_screen
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -14,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.rememberNavController
-import ru.tech.cookhelper.presentation.app.components.Placeholder
-import ru.tech.cookhelper.presentation.feed.FeedScreen
+import ru.tech.cookhelper.presentation.feed_screen.FeedScreen
 import ru.tech.cookhelper.presentation.forum_screen.ForumScreen
+import ru.tech.cookhelper.presentation.fridge_screen.FridgeScreen
 import ru.tech.cookhelper.presentation.home_screen.components.BottomNavigationBar
 import ru.tech.cookhelper.presentation.ui.theme.ScaleCrossfadeTransitionSpec
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.setPadding
@@ -66,13 +65,7 @@ fun HomeScreen(
                         FeedScreen()
                     }
                     is Screen.Home.Fridge -> {
-                        Placeholder(
-                            icon = bottomNavScreen.baseIcon,
-                            text = bottomNavScreen.title.asString(),
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 8.dp)
-                        )
+                        FridgeScreen(scrollBehavior = scrollBehavior)
                     }
                     is Screen.Home.Forum -> {
                         ForumScreen(scrollBehavior = scrollBehavior)

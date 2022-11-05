@@ -80,7 +80,7 @@ fun RecipePostCreationScreen(
         carbohydrates,
         category,
         steps,
-        viewModel.products.joinToString()
+        viewModel.products.asIterable().joinToString()
     )
 
     val resultLauncher = rememberLauncherForActivityResult(
@@ -243,9 +243,9 @@ fun RecipePostCreationScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         CozyTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = viewModel.products.joinToString(
+                            value = viewModel.products.asIterable().joinToString(
                                 separator = "\n",
-                                transform = { "${it.name} - ${it.amount} ${it.mimeType}" }
+                                transform = { "${it.key.name} - ${it.value} ${it.key.mimeType}" }
                             ).trim(),
                             onValueChange = {},
                             shape = RoundedCornerShape(24.dp),

@@ -215,4 +215,6 @@
     <string name="chat_deleted">Chat deleted</string>
     <string name="chat_not_created">Chat not created</string>
     <string name="topic_not_created">Topic not created</string>
+    <string name="fridge_is_empty">Fridge is empty</string>
+    <string name="add_products">Add products</string>
 </resources>

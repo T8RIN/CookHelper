@@ -215,4 +215,6 @@
     <string name="chat_deleted">Чат удален</string>
     <string name="chat_not_created">Чат не создан</string>
     <string name="topic_not_created">Обсуждение не создано</string>
+    <string name="fridge_is_empty">Холодильник пуст</string>
+    <string name="add_products">Добавить продукты</string>
 </resources>

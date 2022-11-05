@@ -163,6 +163,7 @@ fun ProfileScreen(
                             email = "",
                             nickname = "t8rin",
                             verified = true,
+                            fridge = emptyList(),
                             lastSeen = 0L
                         )
                     },

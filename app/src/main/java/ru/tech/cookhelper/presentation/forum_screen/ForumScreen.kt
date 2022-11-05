@@ -145,11 +145,11 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
                     LazyColumn(
                         state = lazyListState,
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(bottom = 80.dp)
+                        contentPadding = PaddingValues(bottom = 88.dp)
                     ) {
                         items(50) {
-                            Separator()
                             Spacer(Modifier.size(50.dp))
+                            Separator()
                         }
                     }
                 }

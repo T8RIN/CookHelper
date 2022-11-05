@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.feed.viewModel
+package ru.tech.cookhelper.presentation.feed_screen.viewModel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -16,7 +16,7 @@ import ru.tech.cookhelper.domain.use_case.get_feed.GetFeedUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.stop_awaiting_feed.StopAwaitingFeedUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
-import ru.tech.cookhelper.presentation.feed.components.FeedState
+import ru.tech.cookhelper.presentation.feed_screen.components.FeedState
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.updateIf
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText

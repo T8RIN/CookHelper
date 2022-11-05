@@ -39,6 +39,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.toMutableStateMap
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
@@ -49,18 +50,11 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.close
 )
 @Composable
 fun PickProductsWithMeasuresDialog(
-    products: List<Product>,
+    products: Map<Product, String>,
     allProducts: List<Product>,
-    onProductsPicked: (newProducts: List<Product>) -> Unit
+    onProductsPicked: (newProducts: Map<Product, String>) -> Unit
 ) {
-    var localProducts by rememberSaveable(saver = ProductsSaver) { mutableStateOf(products) }
-    val localAmounts = rememberSaveable(saver = MapListSaver) { mutableStateMapOf() }
-
-    LaunchedEffect(Unit) {
-        products.forEach {
-            localAmounts[it.id] = it.amount.toString()
-        }
-    }
+    val localProducts = rememberSaveable(saver = MapListSaver) { products.toMutableStateMap() }
 
     val dialogController = LocalDialogController.current
 
@@ -143,7 +137,7 @@ fun PickProductsWithMeasuresDialog(
                                 modifier = Modifier.weight(1f, false),
                                 contentPadding = PaddingValues(vertical = 4.dp),
                             ) {
-                                items(localProducts, key = { it.id }) {
+                                items(localProducts.keys.toList(), key = { it.id }) {
                                     Card(
                                         modifier = Modifier
                                             .padding(vertical = 4.dp),
@@ -161,10 +155,7 @@ fun PickProductsWithMeasuresDialog(
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             IconButton(onClick = {
-                                                localProducts = localProducts
-                                                    .toMutableList()
-                                                    .apply { removeIf { p -> p.id == it.id } }
-                                                    .also { _ -> localAmounts.remove(it.id) }
+                                                localProducts.remove(it)
                                             }) {
                                                 Icon(Icons.Rounded.RemoveCircleOutline, null)
                                             }
@@ -177,10 +168,10 @@ fun PickProductsWithMeasuresDialog(
                                             )
                                             CozyTextField(
                                                 onValueChange = { str ->
-                                                    localAmounts[it.id] = str.stripToDouble()
+                                                    localProducts[it] = str.stripToDouble()
                                                 },
                                                 appearance = TextFieldAppearance.Outlined,
-                                                value = localAmounts[it.id] ?: "",
+                                                value = localProducts[it] ?: "",
                                                 textStyle = LocalTextStyle.current.copy(
                                                     fontSize = 16.sp,
                                                     fontWeight = FontWeight.Bold
@@ -194,9 +185,9 @@ fun PickProductsWithMeasuresDialog(
                                                     .width(TextFieldDefaults.MinHeight * 1.5f)
                                                     .padding(bottom = 8.dp)
                                                     .onFocusChanged { f ->
-                                                        if (!f.isFocused) localAmounts[it.id] =
-                                                            (localAmounts[it.id]
-                                                                ?: "").removeSuffix(".")
+                                                        if (!f.isFocused) {
+                                                            localProducts[it]?.removeSuffix(".")
+                                                        }
                                                     }
                                             )
                                             Spacer(Modifier.width(12.dp))
@@ -307,17 +298,14 @@ fun PickProductsWithMeasuresDialog(
             TextButton(onClick = {
                 if (!addingProducts) {
                     dialogController.close()
-                    onProductsPicked(
-                        localProducts.map {
-                            val amount = localAmounts[it.id]
-                            it.copy(amount = amount.toFloatOrZero())
-                        }
-                    )
+                    onProductsPicked(localProducts)
                 } else {
-                    localProducts = localProducts + allProducts.mapNotNull {
-                        if (selectedProducts.contains(it.id) && !localProducts.any { p -> p.id == it.id }) it
-                        else null
-                    }
+                    localProducts.putAll(
+                        allProducts.mapNotNull {
+                            if (selectedProducts.contains(it.id) && !localProducts.any { p -> p.key.id == it.id }) it
+                            else null
+                        }.associateWith { "" }
+                    )
                     addingProducts = false
                 }
             }) {
@@ -327,35 +315,15 @@ fun PickProductsWithMeasuresDialog(
     )
 }
 
-private val ProductsSaver = Saver<MutableState<List<Product>>, String>(
-    save = { it.value.joinToString("@") { p -> "${p.id}-${p.name}-${p.amount}-${p.mimeType}" } },
+private val MapListSaver = Saver<SnapshotStateMap<Product, String>, String>(
+    save = { it.entries.joinToString("#") { p -> "${p.key.id}_${p.key.name}_${p.key.mimeType}-${p.value}" } },
     restore = {
-        mutableStateOf(
-            it.split("@").mapNotNull { str ->
-                val data = str.split("-")
-                try {
-                    Product(
-                        id = data[0].toIntOrNull() ?: 0,
-                        name = data[1],
-                        amount = data[2].toFloatOrNull() ?: 0f,
-                        mimeType = data[3]
-                    )
-                } catch (e: Exception) {
-                    null
-                }
-            }
-        )
-    }
-)
-
-private val MapListSaver = Saver<SnapshotStateMap<Int, String>, String>(
-    save = { it.entries.joinToString("#") { p -> "${p.key}-${p.value}" } },
-    restore = {
-        val map = mutableStateMapOf<Int, String>()
+        val map = mutableStateMapOf<Product, String>()
         it.split("#").mapNotNull { str ->
             val data = str.split("-")
+            val productData = data[0].split("_")
             try {
-                val key = data[0].toIntOrNull() ?: 0
+                val key = Product(productData[0].toInt(), productData[1], productData[2])
                 val value = data[1]
                 map[key] = value
             } catch (e: Exception) {
@@ -365,5 +333,3 @@ private val MapListSaver = Saver<SnapshotStateMap<Int, String>, String>(
         map
     }
 )
-
-private fun String?.toFloatOrZero() = this?.toFloatOrNull() ?: this?.toIntOrNull()?.toFloat() ?: 0f

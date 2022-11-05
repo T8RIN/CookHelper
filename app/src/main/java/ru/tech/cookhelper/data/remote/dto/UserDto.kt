@@ -2,6 +2,7 @@ package ru.tech.cookhelper.data.remote.dto
 
 import ru.tech.cookhelper.data.remote.utils.Dto
 import ru.tech.cookhelper.domain.model.FileData
+import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.model.User
 
 data class UserDto(
@@ -11,7 +12,7 @@ data class UserDto(
     val bannedRecipes: List<String>?,
     val email: String?,
     val forums: List<String>?,
-    val fridge: List<String>?,
+    val fridge: List<Product>,
     val name: String?,
     val nickname: String?,
     val userPosts: List<String>? = null,

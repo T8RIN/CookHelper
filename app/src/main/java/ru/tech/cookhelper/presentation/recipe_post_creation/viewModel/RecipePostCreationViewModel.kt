@@ -22,8 +22,8 @@ class RecipePostCreationViewModel @Inject constructor(
     private val _allProducts: MutableState<List<Product>> = mutableStateOf(emptyList())
     val allProducts: List<Product> by _allProducts
 
-    private val _products: MutableState<List<Product>> = mutableStateOf(emptyList())
-    val products: List<Product> by _products
+    private val _products: MutableState<Map<Product, String>> = mutableStateOf(emptyMap())
+    val products: Map<Product, String> by _products
 
     private val _user: MutableState<User?> = mutableStateOf(null)
     val user: User? by _user
@@ -54,7 +54,7 @@ class RecipePostCreationViewModel @Inject constructor(
         //TODO: Send data to server
     }
 
-    fun setProducts(newProducts: List<Product>) {
+    fun setProducts(newProducts: Map<Product, String>) {
         _products.update { newProducts }
     }
 

@@ -99,6 +99,7 @@ fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
                 ""
             )
         ),
+        fridge = emptyList(),
         name = "Малик",
         surname = "Мухаметзянов",
         token = "",

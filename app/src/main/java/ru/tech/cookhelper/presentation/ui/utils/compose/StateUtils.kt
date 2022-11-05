@@ -2,9 +2,11 @@ package ru.tech.cookhelper.presentation.ui.utils.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.runtime.toMutableStateList
 
 object StateUtils {
@@ -39,5 +41,13 @@ object StateUtils {
         ) {
             elements.toList().toMutableStateList()
         }
+    }
+
+    fun <K, V> Map<K, V>.toMutableStateMap(): SnapshotStateMap<K, V> {
+        val map = mutableStateMapOf<K, V>()
+        this.forEach {
+            map[it.key] = it.value
+        }
+        return map
     }
 }

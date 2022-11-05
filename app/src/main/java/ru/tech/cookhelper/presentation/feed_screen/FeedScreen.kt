@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.feed
+package ru.tech.cookhelper.presentation.feed_screen
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -21,7 +21,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.sendToast
-import ru.tech.cookhelper.presentation.feed.viewModel.FeedViewModel
+import ru.tech.cookhelper.presentation.feed_screen.viewModel.FeedViewModel
 import ru.tech.cookhelper.presentation.profile.components.ProfileRecipeItem
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
