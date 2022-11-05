@@ -55,7 +55,7 @@ fun FridgeScreen(
                     contentPadding = PaddingValues(bottom = if (fridge.isEmpty()) 88.dp else 128.dp)
                 ) {
                     items(fridge) {
-                        Text(it.name)
+                        Text(it.title)
                     }
                 }
             } else {
@@ -71,34 +71,48 @@ fun FridgeScreen(
             targetState = fridge.isEmpty(),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(4.dp)
+                .padding(4.dp),
+            transitionSpec = { fadeIn() with fadeOut() }
         ) { empty ->
-            Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(12.dp)) {
-                ExpandableFloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.run { if (!empty) tertiaryContainer else primaryContainer },
-                    expanded = empty,
-                    icon = {
-                        Icon(Icons.Rounded.Add, null, modifier = Modifier.size(it))
-                    },
-                    text = {
-                        Text(stringResource(R.string.add_products))
-                    },
-                    size = if (!empty) FabSize.Small else FabSize.Common,
-                    onClick = { dialogController.show(Dialog.PickProducts) }
+            val pickProducts = {
+                dialogController.show(
+                    Dialog.PickProducts(viewModel.allProducts - fridge.toSet()) {
+
+                    }
                 )
-                Spacer(Modifier.height(4.dp))
-                if (!empty) {
+            }
+
+            Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(12.dp)) {
+                if(!empty) {
                     ExpandableFloatingActionButton(
-                        expanded = lazyListState.isScrollingUp(),
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        expanded = false,
                         icon = {
-                            Icon(Icons.Rounded.FindReplace, null, modifier = Modifier.size(it))
+                            Icon(Icons.Rounded.Add, null, modifier = Modifier.size(it))
                         },
-                        text = {
-                            Text(stringResource(R.string.match))
-                        },
-                        onClick = { screenController.navigate(Screen.MatchedRecipes) }
+                        size = FabSize.Small,
+                        onClick = { pickProducts() }
                     )
                 }
+                Spacer(Modifier.height(4.dp))
+                ExpandableFloatingActionButton(
+                    expanded = lazyListState.isScrollingUp(),
+                    icon = {
+                        Icon(
+                            if (!empty) Icons.Rounded.FindReplace else Icons.Rounded.Add,
+                            null,
+                            modifier = Modifier.size(it)
+                        )
+                    },
+                    text = {
+                        if (!empty) Text(stringResource(R.string.match))
+                        else Text(stringResource(R.string.add_products))
+                    },
+                    onClick = {
+                        if(!empty) screenController.navigate(Screen.MatchedRecipes)
+                        else pickProducts()
+                    }
+                )
             }
         }
     }

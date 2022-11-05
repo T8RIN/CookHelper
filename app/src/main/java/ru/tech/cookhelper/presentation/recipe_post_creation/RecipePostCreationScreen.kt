@@ -245,7 +245,7 @@ fun RecipePostCreationScreen(
                             modifier = Modifier.fillMaxWidth(),
                             value = viewModel.products.asIterable().joinToString(
                                 separator = "\n",
-                                transform = { "${it.key.name} - ${it.value} ${it.key.mimeType}" }
+                                transform = { "${it.key.title} - ${it.value} ${it.key.mimetype}" }
                             ).trim(),
                             onValueChange = {},
                             shape = RoundedCornerShape(24.dp),

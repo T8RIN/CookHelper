@@ -217,4 +217,6 @@
     <string name="topic_not_created">Topic not created</string>
     <string name="fridge_is_empty">Fridge is empty</string>
     <string name="add_products">Add products</string>
+    <string name="picking_products">Picking products</string>
+    <string name="picking_products_started">You have picked some products, if you leave now they wil be not added to your fridge</string>
 </resources>

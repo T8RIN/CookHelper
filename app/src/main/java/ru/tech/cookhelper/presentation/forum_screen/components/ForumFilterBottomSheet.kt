@@ -171,13 +171,6 @@ fun ForumFilterBottomSheet(
                         localFilters.copy(tagFilter = tagFilters.joinToString(Constants.DELIMITER))
                     value = ""
                 }
-                val endIcon = @Composable {
-                    IconButton(
-                        onClick = { updateTags() }
-                    ) {
-                        Icon(Icons.Rounded.CheckCircleOutline, null)
-                    }
-                }
                 Text(
                     text = stringResource(R.string.contains_tags),
                     modifier = Modifier.padding(12.dp),
@@ -234,7 +227,19 @@ fun ForumFilterBottomSheet(
                             value = it.trim()
                             if (it.contains("\n")) updateTags()
                         },
-                        endIcon = if (value.isNotEmpty()) endIcon else null,
+                        endIcon = {
+                            AnimatedVisibility(
+                                visible = value.isNotEmpty(),
+                                enter = fadeIn() + scaleIn(),
+                                exit = fadeOut() + scaleOut()
+                            ) {
+                                IconButton(
+                                    onClick = { updateTags() }
+                                ) {
+                                    Icon(Icons.Rounded.CheckCircleOutline, null)
+                                }
+                            }
+                        },
                         maxLines = 2,
                         label = stringResource(R.string.add_tag)
                     )

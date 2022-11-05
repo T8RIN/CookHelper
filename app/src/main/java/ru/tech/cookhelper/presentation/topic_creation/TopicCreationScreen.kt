@@ -136,7 +136,8 @@ fun TopicCreationScreen(
             onResult = {
                 it?.let { uri ->
                     imageUri = uri.toString()
-                }?.also {
+                }
+                if (it == null) {
                     toastHost.sendToast(
                         Icons.Rounded.BrokenImage,
                         context.getString(R.string.image_not_picked)
@@ -186,16 +187,6 @@ fun TopicCreationScreen(
                 )
 
                 var enterTagValue by rememberSaveable { mutableStateOf("") }
-                val endIcon = @Composable {
-                    IconButton(
-                        onClick = {
-                            if (!tags.contains(enterTagValue.trim())) tags.add(enterTagValue.trim())
-                            enterTagValue = ""
-                        }
-                    ) {
-                        Icon(Icons.Rounded.CheckCircleOutline, null)
-                    }
-                }
 
                 CozyTextField(
                     modifier = Modifier
@@ -210,7 +201,22 @@ fun TopicCreationScreen(
                             enterTagValue = ""
                         }
                     },
-                    endIcon = if (enterTagValue.isNotEmpty()) endIcon else null,
+                    endIcon = {
+                        AnimatedVisibility(
+                            visible = enterTagValue.isNotEmpty(),
+                            enter = fadeIn() + scaleIn(),
+                            exit = fadeOut() + scaleOut()
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    if (!tags.contains(enterTagValue.trim())) tags.add(enterTagValue.trim())
+                                    enterTagValue = ""
+                                }
+                            ) {
+                                Icon(Icons.Rounded.CheckCircleOutline, null)
+                            }
+                        }
+                    },
                     maxLines = 2,
                     label = stringResource(R.string.add_tag)
                 )

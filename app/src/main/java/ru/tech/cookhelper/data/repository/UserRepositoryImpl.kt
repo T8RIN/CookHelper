@@ -93,7 +93,7 @@ class UserRepositoryImpl @Inject constructor(
         authService
             .checkNicknameForAvailability(login)
             .getOrExceptionAndNull {
-                it.toAction<Boolean>()
+                return it.toAction()
             }?.let {
                 return when (it.status) {
                     SUCCESS -> Action.Success(data = it.data)
@@ -109,7 +109,7 @@ class UserRepositoryImpl @Inject constructor(
         authService
             .checkEmailForAvailability(email)
             .getOrExceptionAndNull {
-                it.toAction<Boolean>()
+                return it.toAction()
             }?.let {
                 return when (it.status) {
                     SUCCESS -> Action.Success(data = it.data)
@@ -156,7 +156,7 @@ class UserRepositoryImpl @Inject constructor(
         authService
             .requestPasswordRestoreCode(login)
             .getOrExceptionAndNull {
-                it.toAction<Boolean>()
+                return it.toAction()
             }?.let {
                 return when (it.status) {
                     SUCCESS -> Action.Success(it.data?.asDomain())

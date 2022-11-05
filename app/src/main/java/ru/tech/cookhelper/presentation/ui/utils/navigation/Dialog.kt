@@ -17,7 +17,10 @@ sealed class Dialog : Parcelable {
     object AboutApp : Dialog()
 
     @Parcelize
-    object PickProducts : Dialog()
+    class PickProducts(
+        @IgnoredOnParcel val allProducts: List<Product> = emptyList(),
+        @IgnoredOnParcel val onPicked: (products: List<Product>) -> Unit = {}
+    ) : Dialog()
 
     @Parcelize
     class Logout(

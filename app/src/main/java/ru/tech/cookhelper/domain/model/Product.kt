@@ -4,6 +4,7 @@ import ru.tech.cookhelper.domain.utils.Domain
 
 data class Product(
     val id: Int,
-    val name: String,
-    val mimeType: String = "",
+    val title: String,
+    val category: String,
+    val mimetype: String
 ): Domain

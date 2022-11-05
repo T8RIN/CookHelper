@@ -160,7 +160,7 @@ fun PickProductsWithMeasuresDialog(
                                                 Icon(Icons.Rounded.RemoveCircleOutline, null)
                                             }
                                             Text(
-                                                text = it.name,
+                                                text = it.title,
                                                 fontSize = 16.sp,
                                                 modifier = Modifier
                                                     .padding(12.dp)
@@ -180,7 +180,7 @@ fun PickProductsWithMeasuresDialog(
                                                     keyboardType = KeyboardType.Number,
                                                     imeAction = ImeAction.Next
                                                 ),
-                                                label = { Text(it.mimeType) },
+                                                label = { Text(it.mimetype) },
                                                 modifier = Modifier
                                                     .width(TextFieldDefaults.MinHeight * 1.5f)
                                                     .padding(bottom = 8.dp)
@@ -221,7 +221,7 @@ fun PickProductsWithMeasuresDialog(
                     val list by remember(allProductsSearch) {
                         derivedStateOf {
                             combinedAllProducts.filter {
-                                if (allProductsSearch.isNotEmpty()) it.name.lowercase()
+                                if (allProductsSearch.isNotEmpty()) it.title.lowercase()
                                     .contains(allProductsSearch.lowercase())
                                 else true
                             }
@@ -249,7 +249,7 @@ fun PickProductsWithMeasuresDialog(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
-                                            text = it.name,
+                                            text = it.title,
                                             fontSize = 16.sp,
                                             modifier = Modifier
                                                 .padding(12.dp)
@@ -316,14 +316,19 @@ fun PickProductsWithMeasuresDialog(
 }
 
 private val MapListSaver = Saver<SnapshotStateMap<Product, String>, String>(
-    save = { it.entries.joinToString("#") { p -> "${p.key.id}_${p.key.name}_${p.key.mimeType}-${p.value}" } },
+    save = { it.entries.joinToString("#") { p -> "${p.key.id}_${p.key.title}_${p.key.category}_${p.key.mimetype}-${p.value}" } },
     restore = {
         val map = mutableStateMapOf<Product, String>()
         it.split("#").mapNotNull { str ->
             val data = str.split("-")
             val productData = data[0].split("_")
             try {
-                val key = Product(productData[0].toInt(), productData[1], productData[2])
+                val key = Product(
+                    id = productData[0].toInt(),
+                    title = productData[1],
+                    category = productData[2],
+                    mimetype = productData[3]
+                )
                 val value = data[1]
                 map[key] = value
             } catch (e: Exception) {

@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import dev.olshevski.navigation.reimagined.DialogNavHost
+import ru.tech.cookhelper.presentation.fridge_screen.components.PickProductsDialog
 import ru.tech.cookhelper.presentation.profile.components.EditStatusDialog
 import ru.tech.cookhelper.presentation.profile.components.LogoutDialog
 import ru.tech.cookhelper.presentation.profile.components.PickOrOpenAvatarDialog
@@ -28,7 +29,10 @@ fun DialogHost(controller: DialogController) {
                 LogoutDialog(onLogout = dialog.onLogout)
             }
             is Dialog.PickProducts -> {
-                TODO()
+                PickProductsDialog(
+                    onPicked = dialog.onPicked,
+                    allProducts = dialog.allProducts
+                )
             }
             is Dialog.CategorySelection -> {
                 CategorySelectionDialog(
