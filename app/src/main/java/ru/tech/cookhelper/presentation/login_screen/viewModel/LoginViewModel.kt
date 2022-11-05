@@ -79,6 +79,12 @@ class LoginViewModel @Inject constructor(
                             ), Icons.Outlined.Face
                         )
                     )
+                    sendEvent(
+                        Event.NavigateIf(
+                            predicate = { it is Screen.Authentication },
+                            screen = Screen.Home.None
+                        )
+                    )
                     cacheUserUseCase(this)
                 }
                 _loginState.update { LoginState(user = this@onSuccess) }

@@ -7,9 +7,8 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.core.constants.Status.SUCCESS
 import ru.tech.cookhelper.core.utils.kotlin.runIo
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
-import ru.tech.cookhelper.data.remote.dto.MessageDto
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
-import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.protocol.MessageService
 import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.domain.model.Chat
 import ru.tech.cookhelper.domain.model.FormMessage
@@ -37,24 +36,20 @@ class MessageRepositoryImpl @Inject constructor(
             .collect { state ->
                 when (state) {
                     is WebSocketState.Error -> emit(state.t.toAction())
-                    is WebSocketState.Message -> jsonParser.fromJson<MessageDto>(
-                        json = state.text,
-                        type = MessageDto::class.java
-                    )?.let { emit(Action.Success(data = it.asDomain())) }
-                    WebSocketState.Closing -> emit(Action.Loading())
-                    is WebSocketState.Opened -> emit(Action.Empty())
-                    WebSocketState.Opening -> emit(Action.Loading())
-                    WebSocketState.Restarting -> emit(Action.Loading())
-                    WebSocketState.Closed -> Unit
+                    is WebSocketState.Message -> emit(Action.Success(data = state.obj?.asDomain()))
+                    is WebSocketState.Opening,
+                    is WebSocketState.Restarting,
+                    is WebSocketState.Closing -> emit(Action.Loading())
+                    is WebSocketState.Closed, is WebSocketState.Opened -> emit(Action.Empty())
                 }
             }
     }
 
     override fun sendMessage(message: FormMessage) {
-        messageService.send(jsonParser.toJson(message, FormMessage::class.java) ?: "")
+        messageService.sendMessage(jsonParser.toJson(message, FormMessage::class.java) ?: "")
     }
 
-    override fun stopAwaitingMessages() = messageService.close()
+    override fun stopAwaitingMessages() = messageService.closeService()
 
     override fun getChatList(token: String): Flow<Action<List<Chat>>> = flow {
         val response = chatApi.getChatList(token)

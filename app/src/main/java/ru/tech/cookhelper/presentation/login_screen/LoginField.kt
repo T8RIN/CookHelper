@@ -35,7 +35,9 @@ import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +49,7 @@ fun LoginField(
     authController: NavController<Screen>,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-
+    val screenController = LocalScreenController.current
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
 
@@ -176,6 +178,9 @@ fun LoginField(
             }
             is Event.NavigateTo -> {
                 authController.navigate(it.screen)
+            }
+            is Event.NavigateIf -> {
+                if (it.predicate(screenController.currentDestination)) screenController.navigate(it.screen)
             }
             else -> {}
         }

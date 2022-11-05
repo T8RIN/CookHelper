@@ -210,4 +210,9 @@
     <string name="headline">Headline</string>
     <string name="question">Question</string>
     <string name="tags">Tags</string>
+    <string name="recipe_not_created">Recipe not created</string>
+    <string name="chat_not_found">Chat not found</string>
+    <string name="chat_deleted">Chat deleted</string>
+    <string name="chat_not_created">Chat not created</string>
+    <string name="topic_not_created">Topic not created</string>
 </resources>

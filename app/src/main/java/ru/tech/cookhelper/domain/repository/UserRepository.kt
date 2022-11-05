@@ -64,4 +64,9 @@ interface UserRepository {
         tags: List<String>
     ): Flow<Action<Topic>>
 
+    fun observeUser(
+        id: Long,
+        token: String
+    ): Flow<Action<User>>
+
 }

@@ -8,8 +8,13 @@ import retrofit2.Retrofit
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.api.user.UserApi
-import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
-import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.feed.FeedServiceImpl
+import ru.tech.cookhelper.data.remote.web_socket.message.MessageServiceImpl
+import ru.tech.cookhelper.data.remote.web_socket.protocol.FeedService
+import ru.tech.cookhelper.data.remote.web_socket.protocol.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.protocol.UserService
+import ru.tech.cookhelper.data.remote.web_socket.user.UserServiceImpl
+import ru.tech.cookhelper.data.utils.JsonParser
 import javax.inject.Singleton
 
 @Module
@@ -36,10 +41,20 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMessageService(): MessageService = MessageService()
+    fun provideMessageService(
+        jsonParser: JsonParser
+    ): MessageService = MessageServiceImpl(jsonParser)
 
     @Provides
     @Singleton
-    fun provideFeedService(): FeedService = FeedService()
+    fun provideFeedService(
+        jsonParser: JsonParser
+    ): FeedService = FeedServiceImpl(jsonParser)
+
+    @Provides
+    @Singleton
+    fun provideUserService(
+        jsonParser: JsonParser
+    ): UserService = UserServiceImpl(jsonParser)
 
 }

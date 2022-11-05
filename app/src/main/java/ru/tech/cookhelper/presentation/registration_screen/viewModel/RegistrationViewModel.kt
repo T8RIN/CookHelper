@@ -202,6 +202,12 @@ class RegistrationViewModel @Inject constructor(
                         ), Icons.Outlined.Face
                     )
                 )
+                sendEvent(
+                    Event.NavigateIf(
+                        predicate = { it is Screen.Authentication },
+                        screen = Screen.Home.None
+                    )
+                )
                 cacheUserUseCase(this)
             }
             _registrationState.update { RegistrationState(user = this@onSuccess) }

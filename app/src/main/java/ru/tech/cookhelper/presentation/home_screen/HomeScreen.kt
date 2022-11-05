@@ -33,7 +33,7 @@ fun HomeScreen(
 ) {
     val topAppBarActions = LocalTopAppBarActions.current
     val topAppBarNavigationIcon = LocalTopAppBarNavigationIcon.current
-    val topAppBarTitle = LocalLocalTopAppBarTitle.current
+    val topAppBarTitle = LocalTopAppBarTitle.current
 
     val bottomNavigationController =
         rememberNavController<Screen.Home>(startDestination = Screen.Home.Feed)

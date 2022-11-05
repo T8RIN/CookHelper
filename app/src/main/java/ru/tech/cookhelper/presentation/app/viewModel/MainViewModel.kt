@@ -6,10 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import ru.tech.cookhelper.core.onSuccess
+import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
+import ru.tech.cookhelper.domain.use_case.observe_user.ObserveUserUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
 import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.settings.components.Setting
@@ -28,7 +33,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     getSettingsListUseCase: GetSettingsListUseCase,
-    getUserUseCase: GetUserUseCase
+    getUserUseCase: GetUserUseCase,
+    cacheUserUseCase: CacheUserUseCase,
+    observeUserUseCase: ObserveUserUseCase
 ) : ViewModel(), ViewModelEvents<Event> by ViewModelEventsImpl() {
 
     private val _title: MutableState<UIText> = mutableStateOf(Screen.Home.Feed.title)
@@ -69,16 +76,19 @@ class MainViewModel @Inject constructor(
         getUserUseCase().onEach { user ->
             if (user == null) sendEvent(Event.NavigateTo(Screen.Authentication.Login))
             else {
-                sendEvent(
-                    Event.NavigateIf(
-                        predicate = { it is Screen.Authentication },
-                        screen = Screen.Home.None
-                    )
-                )
-                updateTitle(Screen.Home.Feed.title)
                 _userState.update { UserState(user, user.token) }
             }
         }.launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            delay(500)
+            observeUserUseCase(userState.user?.id ?: 0, userState.token)
+                .onSuccess {
+                    cacheUserUseCase(this)
+                }
+                .launchIn(viewModelScope)
+        }
+
     }
 
     fun updateTitle(newTitle: UIText) {

@@ -4,6 +4,9 @@ import androidx.annotation.StringRes
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.core.constants.Status.ANSWER_NOT_ADDED
+import ru.tech.cookhelper.core.constants.Status.CHAT_DELETED
+import ru.tech.cookhelper.core.constants.Status.CHAT_NOT_CREATED
+import ru.tech.cookhelper.core.constants.Status.CHAT_NOT_FOUND
 import ru.tech.cookhelper.core.constants.Status.COMMENT_DELETED
 import ru.tech.cookhelper.core.constants.Status.COMMENT_NOT_FOUND
 import ru.tech.cookhelper.core.constants.Status.CONNECTION_TIMED_OUT
@@ -18,10 +21,12 @@ import ru.tech.cookhelper.core.constants.Status.POST_DELETED
 import ru.tech.cookhelper.core.constants.Status.POST_NOT_FOUND
 import ru.tech.cookhelper.core.constants.Status.READ_TIMEOUT
 import ru.tech.cookhelper.core.constants.Status.RECIPE_DELETED
+import ru.tech.cookhelper.core.constants.Status.RECIPE_NOT_CREATED
 import ru.tech.cookhelper.core.constants.Status.RECIPE_NOT_FOUND
 import ru.tech.cookhelper.core.constants.Status.SUCCESS
 import ru.tech.cookhelper.core.constants.Status.TOKEN_EXPIRED
 import ru.tech.cookhelper.core.constants.Status.TOPIC_DELETED
+import ru.tech.cookhelper.core.constants.Status.TOPIC_NOT_CREATED
 import ru.tech.cookhelper.core.constants.Status.TOPIC_NOT_FOUND
 import ru.tech.cookhelper.core.constants.Status.USER_DELETED
 import ru.tech.cookhelper.core.constants.Status.USER_NOT_FOUND
@@ -61,9 +66,14 @@ fun Int?.getStatusString(): Int = when (this) {
     USER_UPLOAD_FAILED -> R.string.user_upload_failed
     RECIPE_NOT_FOUND -> R.string.recipe_not_found
     RECIPE_DELETED -> R.string.recipe_deleted
+    RECIPE_NOT_CREATED -> R.string.recipe_not_created
+    CHAT_NOT_FOUND -> R.string.chat_not_found
+    CHAT_DELETED -> R.string.chat_deleted
+    CHAT_NOT_CREATED -> R.string.chat_not_created
     TOPIC_NOT_FOUND -> R.string.topic_not_found
     TOPIC_DELETED -> R.string.topic_deleted
     ANSWER_NOT_ADDED -> R.string.answer_not_added
+    TOPIC_NOT_CREATED -> R.string.topic_not_created
     COMMENT_NOT_FOUND -> R.string.comment_not_found
     COMMENT_DELETED -> R.string.comment_deleted
     POST_NOT_FOUND -> R.string.post_not_found

@@ -9,10 +9,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import okhttp3.*
 import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
+import ru.tech.cookhelper.data.utils.JsonParser
+import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
-abstract class WebSocketClient(
-    protected var baseUrl: String = ""
+abstract class WebSocketClient<T>(
+    protected var baseUrl: String = "",
+    private val jsonParser: JsonParser,
+    private var type: Type = Nothing::class.java
 ) : WebSocketListener() {
 
     protected open val okHttpClient: OkHttpClient = OkHttpClient.Builder()
@@ -44,14 +48,17 @@ abstract class WebSocketClient(
     /**
      * Канал с обновлениями сокета
      */
-    private val _webSocketState: Channel<WebSocketState> = Channel(50)
-    val webSocketState: ReceiveChannel<WebSocketState> = _webSocketState
+    private val _webSocketState: Channel<WebSocketState<T>> = Channel(50)
+    val webSocketState: ReceiveChannel<WebSocketState<T>> = _webSocketState
 
     /**
      * Открываем веб-сокет
      */
     @Synchronized
     fun openWebSocket() = apply {
+        require(baseUrl.isNotEmpty()) { "Base url is not present" }
+        require(type != Nothing::class.java) { "JsonParser cannot parse object, type is not present" }
+
         if (opening) return this
 
         if (baseUrl.isEmpty()) throw IllegalStateException("Base url cannot be empty")
@@ -62,7 +69,7 @@ abstract class WebSocketClient(
 
         if (socketOpen) closeWebSocket()
 
-        _webSocketState.trySend(WebSocketState.Opening)
+        _webSocketState.trySend(WebSocketState.Opening())
 
         val request = Request.Builder()
             .url(baseUrl)
@@ -78,7 +85,7 @@ abstract class WebSocketClient(
         if (restarting) return
 
         Log.d(SOCKET_TAG, "restarting")
-        _webSocketState.trySend(WebSocketState.Restarting)
+        _webSocketState.trySend(WebSocketState.Restarting())
 
         restarting = true
 
@@ -107,7 +114,7 @@ abstract class WebSocketClient(
     @Synchronized
     private fun closeWebSocket() {
         Log.d(SOCKET_TAG, "closing")
-        _webSocketState.trySend(WebSocketState.Closing)
+        _webSocketState.trySend(WebSocketState.Closing())
         try {
             webSocket?.close(CLOSE_CODE, CLOSE_REASON)
             socketOpen = false
@@ -152,7 +159,7 @@ abstract class WebSocketClient(
      */
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         super.onClosed(webSocket, code, reason)
-        _webSocketState.trySend(WebSocketState.Closed)
+        _webSocketState.trySend(WebSocketState.Closed())
         Log.d(SOCKET_TAG, "onClosed")
     }
 
@@ -161,7 +168,7 @@ abstract class WebSocketClient(
      */
     override fun onMessage(webSocket: WebSocket, text: String) {
         super.onMessage(webSocket, text)
-        _webSocketState.trySend(WebSocketState.Message(text))
+        _webSocketState.trySend(WebSocketState.Message(jsonParser.fromJson(text, type)))
         Log.d(SOCKET_TAG, "received: $text")
     }
 
@@ -169,9 +176,13 @@ abstract class WebSocketClient(
         baseUrl = newBaseUrl
     }
 
-    fun receiveAsFlow(): Flow<WebSocketState> = webSocketState.receiveAsFlow()
+    fun setType(newType: Type) = apply {
+        type = newType
+    }
+
+    fun receiveAsFlow(): Flow<WebSocketState<T>> = webSocketState.receiveAsFlow()
 
     private val CLOSE_REASON: String = "Normal closure"
     private val CLOSE_CODE: Int = 1000
-    private val SOCKET_TAG: String = this.toString().split(".").lastOrNull() ?: ""
+    private val SOCKET_TAG: String = this::class.java.simpleName
 }

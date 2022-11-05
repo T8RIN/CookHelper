@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
@@ -69,7 +70,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalSettingsProvider provides viewModel.settingsState,
             LocalTopAppBarActions provides topAppBarActions,
             LocalTopAppBarNavigationIcon provides topAppBarNavigationIcon,
-            LocalLocalTopAppBarTitle provides topAppBarTitle
+            LocalTopAppBarTitle provides topAppBarTitle
         )
     ) {
         CookHelperTheme {
@@ -112,7 +113,22 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                         } else it()
                                     }
                                 },
-                                actions = { topAppBarActions(this) },
+                                actions = {
+                                    AnimatedVisibility(
+                                        visible = topAppBarActions.value != null,
+                                        enter = fadeIn() + scaleIn(),
+                                        exit = fadeOut()
+                                    ) {
+                                        AnimatedContent(
+                                            targetState = topAppBarActions.value,
+                                            transitionSpec = {
+                                                fadeIn() + scaleIn() with fadeOut() + scaleOut()
+                                            }
+                                        ) {
+                                            Row { it?.invoke(this) }
+                                        }
+                                    }
+                                },
                                 title = {
                                     AnimatedContent(
                                         targetState = topAppBarTitle.value,

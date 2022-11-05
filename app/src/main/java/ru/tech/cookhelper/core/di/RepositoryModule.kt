@@ -9,8 +9,9 @@ import ru.tech.cookhelper.data.local.database.Database
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.api.user.UserApi
-import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
-import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.protocol.FeedService
+import ru.tech.cookhelper.data.remote.web_socket.protocol.MessageService
+import ru.tech.cookhelper.data.remote.web_socket.protocol.UserService
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
 import ru.tech.cookhelper.data.repository.SettingsRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
@@ -24,12 +25,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
+
     @Provides
     @Singleton
     fun provideSettingsRepository(
         db: Database
-    ): SettingsRepository =
-        SettingsRepositoryImpl(settingsDao = db.settingsDao)
+    ): SettingsRepository = SettingsRepositoryImpl(
+        settingsDao = db.settingsDao
+    )
 
     @Provides
     @Singleton
@@ -38,13 +41,13 @@ object RepositoryModule {
         userApi: UserApi,
         db: Database,
         feedService: FeedService,
-        jsonParser: JsonParser
+        userService: UserService
     ): UserRepository = UserRepositoryImpl(
         authService = authService,
         userApi = userApi,
         userDao = db.userDao,
         feedService = feedService,
-        jsonParser = jsonParser
+        userService = userService
     )
 
     @Provides

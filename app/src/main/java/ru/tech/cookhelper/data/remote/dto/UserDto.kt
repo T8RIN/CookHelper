@@ -1,11 +1,12 @@
 package ru.tech.cookhelper.data.remote.dto
 
 import ru.tech.cookhelper.data.remote.utils.Dto
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.User
 
 data class UserDto(
     val id: Long?,
-    val avatar: List<String>?,
+    val avatar: List<FileData>,
     val bannedIngredients: List<String>?,
     val bannedRecipes: List<String>?,
     val email: String?,

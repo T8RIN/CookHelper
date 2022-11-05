@@ -4,6 +4,7 @@ import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.squareup.moshi.Types
 import ru.tech.cookhelper.data.utils.JsonParser
+import ru.tech.cookhelper.domain.model.FileData
 import java.lang.reflect.Type
 import javax.inject.Inject
 
@@ -27,6 +28,20 @@ class TypeConverters @Inject constructor(private val jsonParser: JsonParser) {
     fun toStringList(data: String): List<String> {
         return jsonParser.fromJson<List<String>>(
             data, getListType(String::class.java)
+        ) ?: emptyList()
+    }
+
+    @TypeConverter
+    fun fromFileDataList(data: List<FileData>): String {
+        return jsonParser.toJson(
+            data, getListType(FileData::class.java)
+        ) ?: ""
+    }
+
+    @TypeConverter
+    fun toFileDataList(data: String): List<FileData> {
+        return jsonParser.fromJson<List<FileData>>(
+            data, getListType(FileData::class.java)
         ) ?: emptyList()
     }
 }

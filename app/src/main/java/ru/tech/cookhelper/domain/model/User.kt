@@ -4,7 +4,7 @@ import ru.tech.cookhelper.domain.utils.Domain
 
 data class User(
     val id: Long,
-    val avatar: List<String>? = null,
+    val avatar: List<FileData>,
     val bannedIngredients: List<String>? = null,
     val bannedRecipes: List<String>? = null,
     val email: String,

@@ -22,7 +22,7 @@ fun MainModalDrawerHeader(userState: UserState, onClick: () -> Unit) {
         )
     ) {
         Picture(
-            model = userState.user?.avatar?.firstOrNull(),
+            model = userState.user?.avatar?.lastOrNull()?.link,
             modifier = Modifier
                 .padding(start = 15.dp, top = 15.dp)
                 .size(64.dp)

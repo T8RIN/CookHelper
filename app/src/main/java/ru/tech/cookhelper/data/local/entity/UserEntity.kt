@@ -3,12 +3,13 @@ package ru.tech.cookhelper.data.local.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.tech.cookhelper.data.local.utils.DatabaseEntity
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.User
 
 @Entity
 data class UserEntity(
     @PrimaryKey val id: Long,
-    val avatar: List<String>,
+    val avatar: List<FileData>,
     val bannedIngredients: List<String>,
     val bannedRecipes: List<String>,
     val email: String,
@@ -50,7 +51,7 @@ data class UserEntity(
 
 fun User.asDatabaseEntity() = UserEntity(
     id = id,
-    avatar = avatar ?: emptyList(),
+    avatar = avatar,
     bannedIngredients = bannedIngredients ?: emptyList(),
     bannedRecipes = bannedRecipes ?: emptyList(),
     email = email,

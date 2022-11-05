@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.data.repository
 
-import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -16,10 +15,9 @@ import ru.tech.cookhelper.data.local.dao.UserDao
 import ru.tech.cookhelper.data.local.entity.asDatabaseEntity
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.user.UserApi
-import ru.tech.cookhelper.data.remote.dto.RecipePostDto
 import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
-import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
-import ru.tech.cookhelper.data.utils.JsonParser
+import ru.tech.cookhelper.data.remote.web_socket.protocol.FeedService
+import ru.tech.cookhelper.data.remote.web_socket.protocol.UserService
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.Topic
@@ -38,7 +36,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userApi: UserApi,
     private val userDao: UserDao,
     private val feedService: FeedService,
-    private val jsonParser: JsonParser
+    private val userService: UserService
 ) : UserRepository {
 
     override fun loginWith(login: String, password: String): Flow<Action<User>> = flow {
@@ -133,29 +131,14 @@ class UserRepositoryImpl @Inject constructor(
             .collect { state ->
                 when (state) {
                     is WebSocketState.Error -> emit(state.t.toAction())
-                    is WebSocketState.Message -> jsonParser.fromJson<List<RecipePostDto>>(
-                        json = state.text,
-                        type = Types.newParameterizedType(
-                            List::class.java,
-                            RecipePostDto::class.java
-                        )
-                    )?.let { it -> emit(Action.Success(data = it.map { it.asDomain() })) }
-                    WebSocketState.Closing -> emit(Action.Loading())
-                    is WebSocketState.Opened -> {
-                        jsonParser.fromJson<List<RecipePostDto>>(
-                            json = state.response.body.string(),
-                            type = Types.newParameterizedType(
-                                List::class.java,
-                                RecipePostDto::class.java
-                            )
-                        )?.let { it -> emit(Action.Success(data = it.map { it.asDomain() })) }
-                    }
-                    WebSocketState.Opening -> emit(Action.Loading())
-                    WebSocketState.Restarting -> emit(Action.Loading())
-                    else -> {}
+                    is WebSocketState.Message -> emit(Action.Success(data = state.obj?.map { it.asDomain() }))
+                    is WebSocketState.Opening,
+                    is WebSocketState.Restarting,
+                    is WebSocketState.Closing -> emit(Action.Loading())
+                    is WebSocketState.Closed, is WebSocketState.Opened -> emit(Action.Empty())
                 }
             }
-        emit(Action.Loading())
+//        emit(Action.Loading())
 //        userApi.getFeed(token).getOrExceptionAndNull {
 //            it.toAction<Boolean>()
 //        }?.let {
@@ -165,7 +148,7 @@ class UserRepositoryImpl @Inject constructor(
 //        }
     }
 
-    override fun stopAwaitingFeed() = feedService.close()
+    override fun stopAwaitingFeed() = feedService.closeService()
 
     override suspend fun requestPasswordRestoreCode(
         login: String
@@ -241,4 +224,22 @@ class UserRepositoryImpl @Inject constructor(
         if (body.status == SUCCESS) emit(Action.Success(data = body.data?.asDomain()))
         else emit(Action.Empty(body.status))
     }.catch { emit(it.toAction()) }
+
+    override fun observeUser(
+        id: Long,
+        token: String
+    ): Flow<Action<User>> = flow {
+        userService(token = token, id = id)
+            .catch { emit(it.toAction()) }
+            .collect { state ->
+                when (state) {
+                    is WebSocketState.Error -> emit(state.t.toAction())
+                    is WebSocketState.Message -> emit(Action.Success(data = state.obj?.data?.asDomain()))
+                    is WebSocketState.Opening,
+                    is WebSocketState.Restarting,
+                    is WebSocketState.Closing -> emit(Action.Loading())
+                    is WebSocketState.Closed, is WebSocketState.Opened -> emit(Action.Empty())
+                }
+            }
+    }
 }

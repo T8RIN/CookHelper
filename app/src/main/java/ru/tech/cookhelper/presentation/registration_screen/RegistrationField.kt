@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,9 +37,7 @@ import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
-import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
-import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
@@ -51,7 +48,7 @@ fun RegistrationField(
     onGetCredentials: (name: String?, email: String?, token: String?) -> Unit,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-
+    val screenController = LocalScreenController.current
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
 
@@ -301,7 +298,7 @@ fun RegistrationField(
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
             is Event.ShowToast -> toastHost.sendToast(
-                Icons.Rounded.ErrorOutline,
+                it.icon,
                 it.text.asString(context)
             )
             is Event.SendData -> {
@@ -309,6 +306,9 @@ fun RegistrationField(
             }
             is Event.NavigateTo -> {
                 authController.navigate(it.screen)
+            }
+            is Event.NavigateIf -> {
+                if (it.predicate(screenController.currentDestination)) screenController.navigate(it.screen)
             }
             else -> {}
         }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.domain.model.Post
+import ru.tech.cookhelper.domain.use_case.close_connection.CloseConnectionsUseCase
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.domain.use_case.log_out.LogoutUseCase
 import ru.tech.cookhelper.presentation.app.components.UserState
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     getUserUseCase: GetUserUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val closeConnectionsUseCase: CloseConnectionsUseCase
 ) : ViewModel() {
 
     /*TODO: Remove this shit*/
@@ -36,7 +38,10 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logOut() {
-        viewModelScope.launch { logoutUseCase() }
+        viewModelScope.launch {
+            logoutUseCase()
+            closeConnectionsUseCase()
+        }
     }
 
     fun addImage(imageUri: String) {

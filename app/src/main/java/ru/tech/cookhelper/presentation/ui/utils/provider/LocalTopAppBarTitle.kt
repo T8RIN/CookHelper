@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.*
 
 
-val LocalLocalTopAppBarTitle = compositionLocalOf<TopAppBarTitleState> {
+val LocalTopAppBarTitle = compositionLocalOf<TopAppBarTitleState> {
     error("TopAppBarTitleState not present")
 }
 
