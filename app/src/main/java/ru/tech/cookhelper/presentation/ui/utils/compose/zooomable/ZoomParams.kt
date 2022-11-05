@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils.zooomable
+package ru.tech.cookhelper.presentation.ui.utils.compose.zooomable
 
 import androidx.compose.ui.geometry.Offset
 

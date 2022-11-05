@@ -32,10 +32,15 @@ fun HomeScreen(
     scrollBehavior: TopAppBarScrollBehavior
 ) {
     val topAppBarActions = LocalTopAppBarActions.current
+    val topAppBarNavigationIcon = LocalTopAppBarNavigationIcon.current
+    val topAppBarTitle = LocalLocalTopAppBarTitle.current
+
     val bottomNavigationController =
         rememberNavController<Screen.Home>(startDestination = Screen.Home.Feed)
     LaunchedEffect(bottomNavigationController.currentDestination) {
         topAppBarActions.clearActions()
+        topAppBarNavigationIcon.clearNavigationIcon()
+        topAppBarTitle.clearTitle()
     }
     Scaffold(
         bottomBar = {

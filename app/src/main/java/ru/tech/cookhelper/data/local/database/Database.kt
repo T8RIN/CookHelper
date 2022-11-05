@@ -14,7 +14,7 @@ import androidx.room.TypeConverters as RoomTypeConverters
     // autoMigrations = [AutoMigration(from = 1, to = 2)]
 )
 @RoomTypeConverters(TypeConverters::class)
-abstract class CookHelperDatabase : RoomDatabase() {
+abstract class Database : RoomDatabase() {
     abstract val settingsDao: SettingsDao
     abstract val userDao: UserDao
 }

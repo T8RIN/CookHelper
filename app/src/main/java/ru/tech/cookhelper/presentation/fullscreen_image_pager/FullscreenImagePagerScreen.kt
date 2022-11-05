@@ -31,7 +31,7 @@ import ru.tech.cookhelper.presentation.app.components.AnimatedTopAppBar
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
-import ru.tech.cookhelper.presentation.ui.utils.zooomable.ZoomParams
+import ru.tech.cookhelper.presentation.ui.utils.compose.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable

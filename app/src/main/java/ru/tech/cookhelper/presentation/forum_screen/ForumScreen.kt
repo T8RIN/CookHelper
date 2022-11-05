@@ -26,6 +26,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.CreateAlt
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.stringResourceListOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.setValue
 import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
@@ -40,9 +41,14 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
     val scope = rememberCoroutineScope()
 
     var filters by remember { mutableStateOf(ForumFilters.empty()) }
+    val topAppBarTitle = LocalLocalTopAppBarTitle.current
 
     LocalTopAppBarActions.current.setActions {
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = {
+            topAppBarTitle.setValue {
+                TextField(value = "", onValueChange = {})
+            }
+        }) {
             Icon(Icons.Rounded.Search, null)
         }
         IconButton(onClick = {

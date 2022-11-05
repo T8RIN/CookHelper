@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -49,8 +49,12 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarActions = rememberTopAppBarActions()
+    val topAppBarNavigationIcon = rememberTopAppBarNavigationIcon()
+    val topAppBarTitle = rememberTopAppBarTitle()
     LaunchedEffect(screenController.currentDestination) {
         topAppBarActions.clearActions()
+        topAppBarNavigationIcon.clearNavigationIcon()
+        topAppBarTitle.clearTitle()
     }
 
     val scrollBehavior = topAppBarScrollBehavior()
@@ -63,7 +67,9 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalSnackbarHost provides snackbarHostState,
             LocalToastHost provides fancyToastValues,
             LocalSettingsProvider provides viewModel.settingsState,
-            LocalTopAppBarActions provides topAppBarActions
+            LocalTopAppBarActions provides topAppBarActions,
+            LocalTopAppBarNavigationIcon provides topAppBarNavigationIcon,
+            LocalLocalTopAppBarTitle provides topAppBarTitle
         )
     ) {
         CookHelperTheme {
@@ -94,17 +100,31 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                             AnimatedTopAppBar(
                                 topAppBarSize = TopAppBarSize.Centered,
                                 navigationIcon = {
-                                    IconButton(
-                                        onClick = { scope.launch { drawerState.open() } },
-                                        content = { Icon(Icons.Rounded.Menu, null) }
-                                    )
+                                    AnimatedContent(
+                                        targetState = topAppBarNavigationIcon.value,
+                                        transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
+                                    ) {
+                                        if (it == null) {
+                                            IconButton(
+                                                onClick = { scope.launch { drawerState.open() } },
+                                                content = { Icon(Icons.Rounded.Menu, null) }
+                                            )
+                                        } else it()
+                                    }
                                 },
                                 actions = { topAppBarActions(this) },
                                 title = {
-                                    Text(
-                                        viewModel.title.asString(),
-                                        fontWeight = FontWeight.Medium
-                                    )
+                                    AnimatedContent(
+                                        targetState = topAppBarTitle.value,
+                                        transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
+                                    ) {
+                                        if (it == null) {
+                                            Text(
+                                                viewModel.title.asString(),
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        } else it()
+                                    }
                                 },
                                 visible = showTopAppBar,
                                 scrollBehavior = scrollBehavior

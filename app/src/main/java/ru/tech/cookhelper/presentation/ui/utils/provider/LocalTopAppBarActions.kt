@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.*
 
-val LocalTopAppBarActions = compositionLocalOf<MutableState<TopAppBarActions?>> {
+val LocalTopAppBarActions = compositionLocalOf<TopAppBarActionsState> {
     error("TopAppBarActionsState not present")
 }
 
 @Composable
-operator fun TopAppBarActionsState.invoke(rowScope: RowScope) {
-    this.value?.invoke(rowScope)
-}
+operator fun TopAppBarActionsState.invoke(rowScope: RowScope) = this.value?.invoke(rowScope)
 
 @SuppressLint("ComposableNaming")
 @Composable

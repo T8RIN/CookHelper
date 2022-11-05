@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ru.tech.cookhelper.data.local.database.CookHelperDatabase
+import ru.tech.cookhelper.data.local.database.Database
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
 import ru.tech.cookhelper.data.remote.api.user.UserApi
@@ -27,7 +27,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideSettingsRepository(
-        db: CookHelperDatabase
+        db: Database
     ): SettingsRepository =
         SettingsRepositoryImpl(settingsDao = db.settingsDao)
 
@@ -36,7 +36,7 @@ object RepositoryModule {
     fun provideUserRepository(
         authService: AuthService,
         userApi: UserApi,
-        db: CookHelperDatabase,
+        db: Database,
         feedService: FeedService,
         jsonParser: JsonParser
     ): UserRepository = UserRepositoryImpl(

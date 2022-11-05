@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils.zooomable
+package ru.tech.cookhelper.presentation.ui.utils.compose.zooomable
 
 import android.content.res.Configuration
 import androidx.annotation.FloatRange
@@ -139,7 +139,7 @@ private suspend fun PointerInputScope.detectDrag(
     onDragCancel: () -> Unit = { },
     onDrag: (change: PointerInputChange, dragAmount: Offset) -> Unit
 ) {
-    forEachGesture {
+    awaitEachGesture {
         awaitPointerEventScope {
             val down = awaitFirstDown(requireUnconsumed = false)
             var drag: PointerInputChange?

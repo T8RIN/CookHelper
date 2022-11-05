@@ -201,7 +201,7 @@ fun CozyTextField(
                     maxLines = maxLines,
                     interactionSource = interactionSource,
                     isError = isError
-                //TODO: Try to use new supportingText feature
+                    //TODO: Try to use new supportingText feature
                 )
                 errorImpl()
             }
