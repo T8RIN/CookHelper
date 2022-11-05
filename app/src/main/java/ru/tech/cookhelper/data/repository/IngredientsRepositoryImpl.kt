@@ -27,4 +27,21 @@ class IngredientsRepositoryImpl @Inject constructor(
         return Action.Empty()
     }
 
+    override suspend fun addProductsToFridge(
+        token: String,
+        fridge: List<Product>
+    ): Action<Boolean> {
+        ingredientsApi
+            .addProductsToFridge(token, fridge)
+            .getOrExceptionAndNull {
+                return it.toAction()
+            }?.let { response ->
+                return when (response.status) {
+                    Status.SUCCESS -> Action.Success(data = response.data)
+                    else -> Action.Empty(status = response.status)
+                }
+            }
+        return Action.Empty()
+    }
+
 }

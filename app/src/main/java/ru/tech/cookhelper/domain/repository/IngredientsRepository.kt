@@ -5,4 +5,5 @@ import ru.tech.cookhelper.domain.model.Product
 
 interface IngredientsRepository {
     suspend fun getAvailableProducts(): Action<List<Product>>
+    suspend fun addProductsToFridge(token: String, fridge: List<Product>): Action<Boolean>
 }

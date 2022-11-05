@@ -19,3 +19,5 @@ inline fun <T> Result<T>.getOrExceptionAndNull(action: (Throwable) -> Unit): T? 
 suspend fun <T> runIo(
     function: suspend () -> T
 ): T = withContext(Dispatchers.IO) { function() }
+
+fun String.cptlize(): String = replaceFirstChar { it.titlecase() }
