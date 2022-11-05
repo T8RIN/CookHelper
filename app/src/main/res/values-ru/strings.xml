@@ -210,4 +210,9 @@
     <string name="headline">Заголовок</string>
     <string name="question">Вопрос</string>
     <string name="tags">Теги</string>
+    <string name="recipe_not_created">Рецепт не создан</string>
+    <string name="chat_not_found">Чат не найден</string>
+    <string name="chat_deleted">Чат удален</string>
+    <string name="chat_not_created">Чат не создан</string>
+    <string name="topic_not_created">Обсуждение не создано</string>
 </resources>
