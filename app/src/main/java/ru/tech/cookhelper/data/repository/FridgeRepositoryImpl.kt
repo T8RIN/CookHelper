@@ -5,15 +5,16 @@ import ru.tech.cookhelper.core.constants.Constants.DELIMITER
 import ru.tech.cookhelper.core.constants.Status
 import ru.tech.cookhelper.core.utils.kotlin.getOrExceptionAndNull
 import ru.tech.cookhelper.data.remote.api.ingredients.IngredientsApi
+import ru.tech.cookhelper.data.remote.dto.RecipePostDto
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.model.User
-import ru.tech.cookhelper.domain.repository.IngredientsRepository
+import ru.tech.cookhelper.domain.repository.FridgeRepository
 import ru.tech.cookhelper.presentation.ui.utils.toAction
 import javax.inject.Inject
 
-class IngredientsRepositoryImpl @Inject constructor(
+class FridgeRepositoryImpl @Inject constructor(
     private val ingredientsApi: IngredientsApi
-) : IngredientsRepository {
+) : FridgeRepository {
 
     override suspend fun getAvailableProducts(): Action<List<Product>> {
         ingredientsApi
@@ -44,6 +45,10 @@ class IngredientsRepositoryImpl @Inject constructor(
                 }
             }
         return Action.Empty()
+    }
+
+    override suspend fun getMatchedRecipes(token: String): Action<List<RecipePostDto>> {
+        TODO("Not yet implemented")
     }
 
 }

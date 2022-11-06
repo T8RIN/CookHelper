@@ -67,7 +67,7 @@ import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun ForumDiscussion(id: Int, title: String, onBack: () -> Unit) {
+fun ForumDiscussionScreen(id: Int, title: String, onBack: () -> Unit) {
     BackHandler(onBack = onBack)
 
     val scrollBehavior = topAppBarScrollBehavior()

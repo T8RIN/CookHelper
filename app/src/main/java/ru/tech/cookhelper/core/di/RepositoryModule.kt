@@ -13,13 +13,13 @@ import ru.tech.cookhelper.data.remote.api.user.UserApi
 import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
 import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
 import ru.tech.cookhelper.data.remote.web_socket.user.UserService
-import ru.tech.cookhelper.data.repository.IngredientsRepositoryImpl
+import ru.tech.cookhelper.data.repository.FridgeRepositoryImpl
 import ru.tech.cookhelper.data.repository.MessageRepositoryImpl
 import ru.tech.cookhelper.data.repository.SettingsRepositoryImpl
 import ru.tech.cookhelper.data.repository.UserRepositoryImpl
 import ru.tech.cookhelper.data.utils.JsonParser
 import ru.tech.cookhelper.data.utils.MoshiParser
-import ru.tech.cookhelper.domain.repository.IngredientsRepository
+import ru.tech.cookhelper.domain.repository.FridgeRepository
 import ru.tech.cookhelper.domain.repository.MessageRepository
 import ru.tech.cookhelper.domain.repository.SettingsRepository
 import ru.tech.cookhelper.domain.repository.UserRepository
@@ -69,7 +69,7 @@ object RepositoryModule {
     @Singleton
     fun provideIngredientsRepository(
         ingredientsApi: IngredientsApi
-    ): IngredientsRepository = IngredientsRepositoryImpl(ingredientsApi)
+    ): FridgeRepository = FridgeRepositoryImpl(ingredientsApi)
 
     @Provides
     fun provideJsonParser(): JsonParser = MoshiParser(Moshi.Builder().build())
