@@ -9,7 +9,7 @@ import ru.tech.cookhelper.presentation.ui.theme.*
 fun Product.getIcon(): ImageVector = when (this.category) {
     1 -> Icons.Filled.Steak
     2 -> Icons.Filled.Fish
-    3 -> Icons.Filled.Cow
+    3 -> Icons.Filled.Milk
     4 -> Icons.Filled.Egg
     5 -> Icons.Filled.Carrot
     6 -> Icons.Filled.Apple
@@ -23,7 +23,7 @@ fun Product.getIcon(): ImageVector = when (this.category) {
     14 -> Icons.Filled.Jellyfish
     15 -> Icons.Filled.Flavour
     16 -> Icons.Filled.Peanut
-    17 -> Icons.Filled.HairDryer
+    17 -> Icons.Filled.DriedGrape
     18 -> Icons.Filled.Cheese
     19 -> Icons.Filled.Cherry
     20 -> Icons.Filled.Oil

@@ -16,7 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.tech.cookhelper.domain.model.RecipePost
+import ru.tech.cookhelper.domain.model.Recipe
+import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
@@ -28,9 +29,10 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRecipeItem(
-    recipePost: RecipePost,
-    onAuthorClick: (authorId: String) -> Unit,
-    onRecipeClick: (id: String) -> Unit
+    currentUser: User?,
+    recipePost: Recipe,
+    onAuthorClick: (authorId: Long) -> Unit,
+    onRecipeClick: (id: Long) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -56,17 +58,17 @@ fun ProfileRecipeItem(
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
         shape = SquircleShape(24.dp),
-        onClick = { onRecipeClick(recipePost.postId) }
+        onClick = { onRecipeClick(recipePost.id) }
     ) {
         AuthorBubble(
             modifier = Modifier.padding(top = 12.dp, start = 12.dp),
             author = recipePost.author,
             timestamp = timestamp,
-            onClick = { onAuthorClick(recipePost.authorId) }
+            onClick = { onAuthorClick(recipePost.author.id) }
         )
         Spacer(Modifier.size(16.dp))
         Picture(
-            model = recipePost.recipe.iconUrl,
+            model = recipePost.image.link,
             modifier = Modifier
                 .height(175.dp)
                 .padding(bottom = 8.dp),
@@ -78,7 +80,7 @@ fun ProfileRecipeItem(
         ) {
             Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = recipePost.recipe.title,
+                    text = recipePost.title,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
                     modifier = Modifier.weight(1f)
@@ -99,7 +101,7 @@ fun ProfileRecipeItem(
                     ) {
                         Icon(Icons.Rounded.AvTimer, null)
                         Text(
-                            text = recipePost.recipe.cookTime.toString(),
+                            text = recipePost.time.toString(),
                             modifier = Modifier.padding(horizontal = 4.dp)
                         )
                     }
@@ -107,7 +109,7 @@ fun ProfileRecipeItem(
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                text = recipePost.recipe.products.joinToString(", "),
+                text = recipePost.ingredients.joinToString(", ") { it.title },
                 fontSize = 16.sp
             )
             Spacer(Modifier.height(8.dp))
@@ -115,12 +117,13 @@ fun ProfileRecipeItem(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
+                val liked = remember(recipePost) { recipePost.likes.contains(currentUser?.id) }
                 PostActionButton(
                     onClick = { /*TODO: Like feature */ },
-                    icon = if (recipePost.liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                    text = recipePost.likeCount.toString(),
-                    contentColor = if (recipePost.liked) LikeColor else Gray,
-                    containerColor = if (recipePost.liked) LikeColor.copy(alpha = 0.3f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                    icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                    text = recipePost.likes.size.toString(),
+                    contentColor = if (liked) LikeColor else Gray,
+                    containerColor = if (liked) LikeColor.copy(alpha = 0.3f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(
                         alpha = 0.1f
                     )
                 )
@@ -129,11 +132,11 @@ fun ProfileRecipeItem(
                     onClick = { /*TODO: Open comments feature */ },
                     containerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f),
                     icon = Icons.Rounded.ChatBubbleOutline,
-                    text = recipePost.commentsCount.toString()
+                    text = recipePost.comments.size.toString()
                 )
                 Spacer(Modifier.weight(1f))
                 PostActionButton(
-                    onClick = { context.shareWith(recipePost.recipe.toShareValue()) },
+                    onClick = { context.shareWith(recipePost.toShareValue()) },
                     icon = Icons.Rounded.Share,
                     containerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f),
                     text = ""

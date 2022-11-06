@@ -48,9 +48,10 @@ fun FeedScreen(viewModel: FeedViewModel = hiltViewModel()) {
             LazyColumn(contentPadding = PaddingValues(top = 8.dp), state = lazyListState) {
                 items(
                     items = viewModel.feedState.data,
-                    key = { it.postId }
+                    key = { it.id }
                 ) { item ->
                     ProfileRecipeItem(
+                        currentUser = viewModel.user.user,
                         recipePost = item,
                         onRecipeClick = {
                             //TODO: Open Recipe fullscreen like a post

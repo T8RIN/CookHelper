@@ -19,7 +19,7 @@ import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
 import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
 import ru.tech.cookhelper.data.remote.web_socket.user.UserService
 import ru.tech.cookhelper.domain.model.Post
-import ru.tech.cookhelper.domain.model.RecipePost
+import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.Topic
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.UserRepository
@@ -125,7 +125,7 @@ class UserRepositoryImpl @Inject constructor(
         TODO()
     }
 
-    override fun getFeed(token: String): Flow<Action<List<RecipePost>>> = flow {
+    override fun getFeed(token: String): Flow<Action<List<Recipe>>> = flow {
         feedService(token = token)
             .catch { emit(it.toAction()) }
             .collect { state ->

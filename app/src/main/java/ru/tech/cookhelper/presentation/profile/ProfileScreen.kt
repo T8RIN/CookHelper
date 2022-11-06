@@ -19,8 +19,6 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
 import ru.tech.cookhelper.domain.model.FileData
-import ru.tech.cookhelper.domain.model.Recipe
-import ru.tech.cookhelper.domain.model.RecipePost
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
@@ -31,7 +29,6 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
-import kotlin.random.Random.Default.nextBoolean
 
 @Composable
 fun ProfileScreen(
@@ -194,50 +191,7 @@ fun ProfileScreen(
             }
         } else {
             items(6, key = { /*TODO: set normal key*/ it }) {
-                ProfileRecipeItem(
-                    RecipePost(
-                        "", "", 0L, nextBoolean(), 29, 12,
-                        Recipe(
-                            0,
-                            listOf(
-                                "cucumber",
-                                "apple",
-                                "pineapple",
-                                "vinegar",
-                                "pepper",
-                                "salt",
-                                "jalapeno",
-                                "meat",
-                                "cucumber",
-                                "apple",
-                                "pineapple",
-                                "vinegar",
-                                "pepper",
-                                "salt",
-                                "jalapeno",
-                                "meat"
-                            ),
-                            emptyList(),
-                            0.0,
-                            0.0,
-                            "",
-                            emptyList(),
-                            100,
-                            0.0,
-                            0.0,
-                            "",
-                            "Big and hard to cook recipe with very very very long label",
-                            "https://koelov.ru/wp-content/uploads/2013/10/kabachkovyj-tort-recept-prigotovleniya.jpg"
-                        ),
-                        userState.user
-                    ),
-                    onRecipeClick = {
-                        //TODO: Open Recipe fullscreen like a post
-                    },
-                    onAuthorClick = {
-                        //TODO: Open Author page
-                    },
-                )
+
             }
         }
     }

@@ -761,32 +761,32 @@ val Icons.Filled.Bean: ImageVector
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
                 pathFillType = NonZero
             ) {
-                moveTo(6.4f, 0.0f)
-                curveToRelative(3.0f, 0.0f, 5.5f, 1.8f, 6.4f, 4.5f)
-                curveTo(13.0f, 5.0f, 13.0f, 5.4f, 13.1f, 5.9f)
-                curveToRelative(0.1f, 0.7f, 0.4f, 1.3f, 0.8f, 1.9f)
-                curveToRelative(0.9f, 1.5f, 2.3f, 2.5f, 4.0f, 3.0f)
-                curveToRelative(0.5f, 0.1f, 1.0f, 0.1f, 1.4f, 0.3f)
-                curveToRelative(2.4f, 0.8f, 3.9f, 2.4f, 4.5f, 4.8f)
-                curveToRelative(0.7f, 3.0f, -0.8f, 6.2f, -3.7f, 7.5f)
-                curveToRelative(-0.9f, 0.4f, -1.8f, 0.6f, -2.8f, 0.6f)
-                curveToRelative(-3.7f, 0.0f, -7.0f, -1.4f, -9.9f, -3.6f)
-                curveToRelative(-2.5f, -1.9f, -4.4f, -4.3f, -5.8f, -7.1f)
-                curveToRelative(-0.9f, -1.9f, -1.5f, -3.9f, -1.6f, -6.0f)
-                curveToRelative(-0.1f, -2.5f, 0.7f, -4.6f, 2.9f, -6.1f)
-                curveTo(4.0f, 0.4f, 5.2f, 0.0f, 6.4f, 0.0f)
+                moveTo(7.8f, 3.0f)
+                curveToRelative(2.3f, 0.0f, 4.1f, 1.3f, 4.8f, 3.4f)
+                curveToRelative(0.2f, 0.4f, 0.2f, 0.7f, 0.2f, 1.1f)
+                curveToRelative(0.1f, 0.5f, 0.3f, 1.0f, 0.6f, 1.4f)
+                curveToRelative(0.7f, 1.1f, 1.7f, 1.9f, 3.0f, 2.2f)
+                curveToRelative(0.4f, 0.1f, 0.8f, 0.1f, 1.1f, 0.2f)
+                curveToRelative(1.8f, 0.6f, 2.9f, 1.8f, 3.4f, 3.6f)
+                curveToRelative(0.5f, 2.2f, -0.6f, 4.6f, -2.8f, 5.6f)
+                curveTo(17.4f, 20.9f, 16.7f, 21.0f, 16.0f, 21.0f)
+                curveToRelative(-2.8f, 0.0f, -5.3f, -1.0f, -7.4f, -2.7f)
+                curveToRelative(-1.9f, -1.4f, -3.3f, -3.2f, -4.4f, -5.3f)
+                curveTo(3.5f, 11.6f, 3.1f, 10.1f, 3.0f, 8.5f)
+                curveTo(2.9f, 6.6f, 3.5f, 5.0f, 5.2f, 3.9f)
+                curveTo(6.0f, 3.3f, 6.9f, 3.0f, 7.8f, 3.0f)
                 close()
-                moveTo(17.3f, 13.5f)
-                curveToRelative(0.3f, 0.0f, 0.5f, -0.2f, 0.5f, -0.4f)
-                curveToRelative(0.1f, -0.3f, -0.1f, -0.5f, -0.4f, -0.6f)
-                curveToRelative(-0.8f, -0.2f, -1.5f, -0.4f, -2.2f, -0.8f)
-                curveToRelative(-1.8f, -0.9f, -2.9f, -2.4f, -3.6f, -4.3f)
-                curveToRelative(-0.2f, -0.6f, -0.3f, -1.2f, -0.4f, -1.8f)
-                curveToRelative(0.0f, -0.3f, -0.3f, -0.5f, -0.6f, -0.4f)
-                curveToRelative(-0.3f, 0.1f, -0.5f, 0.3f, -0.4f, 0.6f)
-                curveToRelative(0.1f, 0.5f, 0.2f, 0.9f, 0.3f, 1.4f)
-                curveToRelative(0.9f, 2.9f, 2.7f, 5.0f, 5.7f, 6.0f)
-                curveTo(16.6f, 13.4f, 16.9f, 13.5f, 17.3f, 13.5f)
+                moveTo(16.0f, 13.1f)
+                curveToRelative(0.2f, 0.0f, 0.4f, -0.1f, 0.4f, -0.3f)
+                curveToRelative(0.1f, -0.2f, -0.1f, -0.4f, -0.3f, -0.5f)
+                curveToRelative(-0.6f, -0.1f, -1.1f, -0.3f, -1.7f, -0.6f)
+                curveToRelative(-1.4f, -0.7f, -2.2f, -1.8f, -2.7f, -3.2f)
+                curveToRelative(-0.2f, -0.4f, -0.2f, -0.9f, -0.3f, -1.3f)
+                curveToRelative(0.0f, -0.2f, -0.2f, -0.4f, -0.5f, -0.3f)
+                reflectiveCurveToRelative(-0.4f, 0.2f, -0.3f, 0.4f)
+                curveToRelative(0.1f, 0.4f, 0.2f, 0.7f, 0.2f, 1.0f)
+                curveToRelative(0.7f, 2.2f, 2.0f, 3.8f, 4.3f, 4.5f)
+                curveTo(15.5f, 13.0f, 15.7f, 13.1f, 16.0f, 13.1f)
                 close()
             }
         }
@@ -840,7 +840,7 @@ val Icons.Filled.Candy: ImageVector
 
 private var _candy: ImageVector? = null
 
-public val Icons.Filled.Carrot: ImageVector
+val Icons.Filled.Carrot: ImageVector
     get() {
         if (_carrot != null) {
             return _carrot!!
@@ -1069,201 +1069,6 @@ val Icons.Filled.Cherry: ImageVector
     }
 
 private var _cherry: ImageVector? = null
-
-val Icons.Filled.Cow: ImageVector
-    get() {
-        if (_cow != null) {
-            return _cow!!
-        }
-        _cow = Builder(
-            name = "Cow", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp, viewportWidth
-            = 24.0f, viewportHeight = 24.0f
-        ).apply {
-            path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
-            ) {
-                moveTo(10.5f, 18.0f)
-                arcTo(
-                    0.5f, 0.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 11.0f,
-                    y1 = 18.5f
-                )
-                arcTo(
-                    0.5f, 0.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 10.5f,
-                    y1 = 19.0f
-                )
-                arcTo(
-                    0.5f, 0.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 10.0f,
-                    y1 = 18.5f
-                )
-                arcTo(
-                    0.5f, 0.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 10.5f,
-                    y1 = 18.0f
-                )
-                moveTo(13.5f, 18.0f)
-                arcTo(
-                    horizontalEllipseRadius = 0.5f,
-                    verticalEllipseRadius = 0.5f,
-                    theta = 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 14.0f,
-                    y1 = 18.5f
-                )
-                arcTo(
-                    0.5f, 0.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 13.5f,
-                    y1 = 19.0f
-                )
-                arcTo(
-                    0.5f, 0.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 13.0f,
-                    y1 = 18.5f
-                )
-                arcTo(
-                    0.5f, 0.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 13.5f,
-                    y1 = 18.0f
-                )
-                moveTo(10.0f, 11.0f)
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 11.0f,
-                    y1 = 12.0f
-                )
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 10.0f,
-                    y1 = 13.0f
-                )
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 9.0f,
-                    y1 = 12.0f
-                )
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 10.0f,
-                    y1 = 11.0f
-                )
-                moveTo(14.0f, 11.0f)
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 15.0f,
-                    y1 = 12.0f
-                )
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 14.0f,
-                    y1 = 13.0f
-                )
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 13.0f,
-                    y1 = 12.0f
-                )
-                arcTo(
-                    1.0f, 1.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 14.0f,
-                    y1 = 11.0f
-                )
-                moveTo(18.0f, 18.0f)
-                curveTo(18.0f, 20.21f, 15.31f, 22.0f, 12.0f, 22.0f)
-                curveTo(8.69f, 22.0f, 6.0f, 20.21f, 6.0f, 18.0f)
-                curveTo(6.0f, 17.1f, 6.45f, 16.27f, 7.2f, 15.6f)
-                curveTo(6.45f, 14.6f, 6.0f, 13.35f, 6.0f, 12.0f)
-                lineTo(6.12f, 10.78f)
-                curveTo(5.58f, 10.93f, 4.93f, 10.93f, 4.4f, 10.78f)
-                curveTo(3.38f, 10.5f, 1.84f, 9.35f, 2.07f, 8.55f)
-                curveTo(2.3f, 7.75f, 4.21f, 7.6f, 5.23f, 7.9f)
-                curveTo(5.82f, 8.07f, 6.45f, 8.5f, 6.82f, 8.96f)
-                lineTo(7.39f, 8.15f)
-                curveTo(6.79f, 7.05f, 7.0f, 4.0f, 10.0f, 3.0f)
-                lineTo(9.91f, 3.14f)
-                verticalLineTo(3.14f)
-                curveTo(9.63f, 3.58f, 8.91f, 4.97f, 9.67f, 6.47f)
-                curveTo(10.39f, 6.17f, 11.17f, 6.0f, 12.0f, 6.0f)
-                curveTo(12.83f, 6.0f, 13.61f, 6.17f, 14.33f, 6.47f)
-                curveTo(15.09f, 4.97f, 14.37f, 3.58f, 14.09f, 3.14f)
-                lineTo(14.0f, 3.0f)
-                curveTo(17.0f, 4.0f, 17.21f, 7.05f, 16.61f, 8.15f)
-                lineTo(17.18f, 8.96f)
-                curveTo(17.55f, 8.5f, 18.18f, 8.07f, 18.77f, 7.9f)
-                curveTo(19.79f, 7.6f, 21.7f, 7.75f, 21.93f, 8.55f)
-                curveTo(22.16f, 9.35f, 20.62f, 10.5f, 19.6f, 10.78f)
-                curveTo(19.07f, 10.93f, 18.42f, 10.93f, 17.88f, 10.78f)
-                lineTo(18.0f, 12.0f)
-                curveTo(18.0f, 13.35f, 17.55f, 14.6f, 16.8f, 15.6f)
-                curveTo(17.55f, 16.27f, 18.0f, 17.1f, 18.0f, 18.0f)
-                moveTo(12.0f, 16.0f)
-                curveTo(9.79f, 16.0f, 8.0f, 16.9f, 8.0f, 18.0f)
-                curveTo(8.0f, 19.1f, 9.79f, 20.0f, 12.0f, 20.0f)
-                curveTo(14.21f, 20.0f, 16.0f, 19.1f, 16.0f, 18.0f)
-                curveTo(16.0f, 16.9f, 14.21f, 16.0f, 12.0f, 16.0f)
-                moveTo(12.0f, 14.0f)
-                curveTo(13.12f, 14.0f, 14.17f, 14.21f, 15.07f, 14.56f)
-                curveTo(15.65f, 13.87f, 16.0f, 13.0f, 16.0f, 12.0f)
-                arcTo(
-                    4.0f, 4.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 12.0f,
-                    y1 = 8.0f
-                )
-                arcTo(
-                    4.0f, 4.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 8.0f,
-                    y1 = 12.0f
-                )
-                curveTo(8.0f, 13.0f, 8.35f, 13.87f, 8.93f, 14.56f)
-                curveTo(9.83f, 14.21f, 10.88f, 14.0f, 12.0f, 14.0f)
-                moveTo(14.09f, 3.14f)
-                verticalLineTo(3.14f)
-                close()
-            }
-        }
-            .build()
-        return _cow!!
-    }
-
-private var _cow: ImageVector? = null
 
 val Icons.Filled.Cup: ImageVector
     get() {
@@ -1501,177 +1306,6 @@ val Icons.Filled.Flavour: ImageVector
     }
 
 private var _flavour: ImageVector? = null
-
-val Icons.Filled.HairDryer: ImageVector
-    get() {
-        if (_hairdryer != null) {
-            return _hairdryer!!
-        }
-        _hairdryer = Builder(
-            name = "Hairdryer", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
-            viewportWidth = 24.0f, viewportHeight = 24.0f
-        ).apply {
-            path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
-            ) {
-                moveTo(22.0f, 9.0f)
-                arcTo(
-                    4.32f, 4.32f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 19.78f,
-                    y1 = 8.45f
-                )
-                arcTo(
-                    3.4f, 3.4f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 18.0f,
-                    y1 = 8.0f
-                )
-                verticalLineTo(7.0f)
-                arcTo(
-                    4.32f, 4.32f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 20.22f,
-                    y1 = 7.55f
-                )
-                arcTo(
-                    3.4f, 3.4f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 22.0f,
-                    y1 = 8.0f
-                )
-                moveTo(22.0f, 6.0f)
-                arcTo(
-                    3.4f, 3.4f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 20.22f,
-                    y1 = 5.55f
-                )
-                arcTo(
-                    4.32f, 4.32f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 18.0f,
-                    y1 = 5.0f
-                )
-                verticalLineTo(6.0f)
-                arcTo(
-                    3.4f, 3.4f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 19.78f,
-                    y1 = 6.45f
-                )
-                arcTo(
-                    4.32f, 4.32f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 22.0f,
-                    y1 = 7.0f
-                )
-                moveTo(22.0f, 10.0f)
-                arcTo(
-                    3.4f, 3.4f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 20.22f,
-                    y1 = 9.55f
-                )
-                arcTo(
-                    4.32f, 4.32f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 18.0f,
-                    y1 = 9.0f
-                )
-                verticalLineTo(10.0f)
-                arcTo(
-                    3.4f, 3.4f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 19.78f,
-                    y1 = 10.45f
-                )
-                arcTo(
-                    4.32f, 4.32f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 22.0f,
-                    y1 = 11.0f
-                )
-                moveTo(10.0f, 12.73f)
-                arcTo(
-                    70.39f, 70.39f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 17.0f,
-                    y1 = 11.0f
-                )
-                verticalLineTo(4.0f)
-                reflectiveCurveTo(10.5f, 2.0f, 7.5f, 2.0f)
-                arcTo(
-                    5.5f, 5.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 6.12f,
-                    y1 = 12.82f
-                )
-                lineTo(7.0f, 19.0f)
-                horizontalLineTo(8.0f)
-                arcTo(
-                    3.0f, 3.0f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 9.46f,
-                    y1 = 21.33f
-                )
-                arcTo(
-                    3.15f, 3.15f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 11.0f,
-                    y1 = 24.0f
-                )
-                horizontalLineTo(12.0f)
-                arcTo(
-                    4.12f, 4.12f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = false,
-                    x1 = 10.09f,
-                    y1 = 20.55f
-                )
-                curveTo(9.39f, 20.0f, 9.0f, 19.63f, 9.0f, 19.0f)
-                horizontalLineTo(10.0f)
-                moveTo(7.5f, 10.0f)
-                arcTo(
-                    2.5f, 2.5f, 0.0f,
-                    isMoreThanHalf = true,
-                    isPositiveArc = true,
-                    x1 = 10.0f,
-                    y1 = 7.5f
-                )
-                arcTo(
-                    2.5f, 2.5f, 0.0f,
-                    isMoreThanHalf = false,
-                    isPositiveArc = true,
-                    x1 = 7.5f,
-                    y1 = 10.0f
-                )
-                close()
-            }
-        }
-            .build()
-        return _hairdryer!!
-    }
-
-private var _hairdryer: ImageVector? = null
 
 val Icons.Filled.Jellyfish: ImageVector
     get() {
@@ -2196,3 +1830,397 @@ val Icons.Filled.BorderRadius: ImageVector
     }
 
 private var _borderradius: ImageVector? = null
+
+val Icons.Filled.Milk: ImageVector
+    get() {
+        if (_milk != null) {
+            return _milk!!
+        }
+        _milk = Builder(
+            name = "Milk", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
+            viewportWidth = 24.0f, viewportHeight = 24.0f
+        ).apply {
+            path(
+                fill = SolidColor(Color(0xFF030303)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(19.2f, 7.2f)
+                curveToRelative(0.3f, 0.3f, 0.5f, 0.6f, 0.7f, 0.8f)
+                curveToRelative(0.1f, 0.1f, 0.0f, 0.2f, 0.0f, 0.3f)
+                curveToRelative(-0.5f, 0.5f, -0.9f, 1.0f, -1.4f, 1.4f)
+                curveToRelative(-0.1f, 0.1f, -0.2f, 0.3f, -0.2f, 0.5f)
+                curveToRelative(0.0f, 2.9f, 0.0f, 5.8f, 0.0f, 8.7f)
+                curveToRelative(0.0f, 1.3f, -0.7f, 2.2f, -1.8f, 2.5f)
+                curveToRelative(-0.2f, 0.0f, -0.4f, 0.0f, -0.6f, 0.0f)
+                curveToRelative(-2.6f, 0.0f, -5.3f, 0.0f, -7.9f, 0.0f)
+                curveToRelative(-1.5f, 0.0f, -2.4f, -1.0f, -2.4f, -2.5f)
+                curveToRelative(0.0f, -2.9f, 0.0f, -5.8f, 0.0f, -8.7f)
+                curveToRelative(0.0f, -0.2f, -0.1f, -0.4f, -0.2f, -0.5f)
+                curveTo(5.0f, 9.2f, 4.6f, 8.8f, 4.1f, 8.3f)
+                curveTo(4.0f, 8.2f, 4.0f, 8.1f, 4.1f, 7.9f)
+                curveToRelative(0.2f, -0.2f, 0.4f, -0.6f, 0.7f, -0.6f)
+                curveToRelative(0.2f, 0.0f, 0.4f, 0.4f, 0.7f, 0.6f)
+                curveTo(5.6f, 8.1f, 5.8f, 8.3f, 6.0f, 8.5f)
+                curveToRelative(0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.0f)
+                curveToRelative(0.5f, -1.0f, 1.0f, -1.9f, 1.6f, -2.9f)
+                curveToRelative(0.1f, -0.1f, 0.0f, -0.2f, -0.1f, -0.2f)
+                curveTo(7.3f, 4.9f, 7.2f, 4.4f, 7.3f, 3.9f)
+                curveToRelative(0.2f, -0.5f, 0.6f, -0.8f, 1.2f, -0.8f)
+                curveToRelative(2.3f, 0.0f, 4.6f, 0.0f, 6.9f, 0.0f)
+                curveToRelative(0.6f, 0.0f, 1.0f, 0.3f, 1.2f, 0.8f)
+                curveToRelative(0.2f, 0.5f, 0.1f, 1.0f, -0.4f, 1.4f)
+                curveToRelative(-0.1f, 0.1f, -0.1f, 0.2f, -0.1f, 0.3f)
+                curveToRelative(0.5f, 0.9f, 1.0f, 1.9f, 1.5f, 2.8f)
+                curveToRelative(0.1f, 0.2f, 0.2f, 0.1f, 0.3f, 0.0f)
+                curveTo(18.4f, 8.0f, 18.8f, 7.6f, 19.2f, 7.2f)
+                close()
+                moveTo(12.0f, 10.3f)
+                curveToRelative(-1.6f, 0.0f, -3.2f, 0.0f, -4.8f, 0.0f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, 0.1f, -0.3f, 0.3f)
+                curveToRelative(0.0f, 2.8f, 0.0f, 5.5f, 0.0f, 8.3f)
+                curveToRelative(0.0f, 0.8f, 0.4f, 1.3f, 1.2f, 1.3f)
+                curveToRelative(1.0f, 0.0f, 1.9f, 0.0f, 2.9f, 0.0f)
+                curveToRelative(1.7f, 0.0f, 3.3f, 0.0f, 5.0f, 0.0f)
+                curveToRelative(0.8f, 0.0f, 1.2f, -0.4f, 1.2f, -1.3f)
+                curveToRelative(0.0f, -2.8f, 0.0f, -5.5f, 0.0f, -8.3f)
+                curveToRelative(0.0f, -0.3f, -0.1f, -0.3f, -0.3f, -0.3f)
+                curveTo(15.2f, 10.3f, 13.6f, 10.3f, 12.0f, 10.3f)
+                close()
+                moveTo(16.7f, 9.0f)
+                curveToRelative(0.0f, -0.1f, 0.0f, -0.1f, 0.0f, -0.1f)
+                curveToRelative(-0.6f, -1.0f, -1.1f, -2.1f, -1.7f, -3.1f)
+                curveToRelative(-0.1f, -0.2f, -0.2f, -0.2f, -0.3f, -0.2f)
+                curveToRelative(-1.7f, 0.0f, -3.5f, 0.0f, -5.2f, 0.0f)
+                curveTo(9.2f, 5.6f, 9.1f, 5.7f, 9.0f, 5.8f)
+                curveTo(8.6f, 6.7f, 8.1f, 7.5f, 7.7f, 8.3f)
+                curveTo(7.5f, 8.5f, 7.4f, 8.8f, 7.3f, 9.0f)
+                curveTo(10.4f, 9.0f, 13.5f, 9.0f, 16.7f, 9.0f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF030303)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(12.0f, 13.3f)
+                curveToRelative(1.2f, 0.0f, 2.3f, 0.0f, 3.5f, 0.0f)
+                curveToRelative(0.2f, 0.0f, 0.3f, 0.1f, 0.3f, 0.3f)
+                curveToRelative(-0.1f, 0.6f, -0.2f, 1.3f, -0.6f, 1.8f)
+                curveToRelative(-0.1f, 0.2f, -0.1f, 0.3f, 0.0f, 0.4f)
+                curveToRelative(0.1f, 0.1f, 0.2f, 0.2f, 0.2f, 0.3f)
+                curveToRelative(0.2f, 0.4f, 0.2f, 0.8f, -0.1f, 1.0f)
+                curveToRelative(-0.3f, 0.2f, -0.8f, 0.2f, -1.0f, -0.1f)
+                curveToRelative(-0.2f, -0.3f, -0.4f, -0.3f, -0.7f, -0.1f)
+                curveToRelative(-0.2f, 0.2f, -0.5f, 0.2f, -0.7f, 0.3f)
+                curveToRelative(-0.2f, 0.0f, -0.2f, 0.1f, -0.2f, 0.3f)
+                curveToRelative(0.0f, 0.1f, 0.0f, 0.2f, 0.0f, 0.3f)
+                curveToRelative(0.0f, 0.4f, -0.3f, 0.7f, -0.7f, 0.7f)
+                curveToRelative(-0.4f, 0.0f, -0.7f, -0.3f, -0.7f, -0.7f)
+                curveToRelative(0.0f, -0.1f, 0.0f, -0.1f, 0.0f, -0.2f)
+                curveToRelative(0.0f, -0.2f, 0.0f, -0.3f, -0.2f, -0.3f)
+                curveToRelative(-0.3f, -0.1f, -0.6f, -0.2f, -0.9f, -0.4f)
+                curveToRelative(-0.1f, -0.1f, -0.2f, -0.1f, -0.3f, 0.1f)
+                curveToRelative(-0.1f, 0.2f, -0.3f, 0.4f, -0.5f, 0.5f)
+                curveToRelative(-0.3f, 0.1f, -0.6f, 0.0f, -0.8f, -0.3f)
+                curveToRelative(-0.2f, -0.3f, -0.2f, -0.6f, 0.0f, -0.8f)
+                curveToRelative(0.4f, -0.4f, 0.3f, -0.7f, 0.1f, -1.2f)
+                curveToRelative(-0.2f, -0.4f, -0.3f, -0.9f, -0.4f, -1.3f)
+                curveToRelative(0.0f, -0.2f, 0.0f, -0.3f, 0.3f, -0.3f)
+                curveTo(9.7f, 13.3f, 10.8f, 13.3f, 12.0f, 13.3f)
+                close()
+            }
+        }
+            .build()
+        return _milk!!
+    }
+
+private var _milk: ImageVector? = null
+
+val Icons.Filled.DriedGrape: ImageVector
+    get() {
+        if (_driedGrape != null) {
+            return _driedGrape!!
+        }
+        _driedGrape = Builder(
+            name = "DriedGrape", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
+            viewportWidth = 24.0f, viewportHeight = 24.0f
+        ).apply {
+            path(
+                fill = SolidColor(Color(0xFF010101)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(3.0f, 15.7f)
+                curveToRelative(0.0f, -0.5f, 0.1f, -0.9f, 0.3f, -1.3f)
+                curveToRelative(0.2f, -0.5f, 0.6f, -0.9f, 1.2f, -1.0f)
+                curveToRelative(0.0f, 0.0f, 0.1f, 0.0f, 0.1f, -0.1f)
+                curveToRelative(0.9f, -0.9f, 2.4f, -1.1f, 3.5f, -0.7f)
+                curveToRelative(0.1f, 0.0f, 0.2f, 0.1f, 0.3f, 0.2f)
+                curveToRelative(0.0f, 0.0f, 0.1f, 0.0f, 0.1f, 0.0f)
+                curveTo(8.5f, 13.0f, 8.6f, 13.0f, 8.7f, 13.0f)
+                curveToRelative(0.8f, 0.2f, 1.5f, 0.6f, 2.1f, 1.2f)
+                curveToRelative(0.3f, 0.3f, 0.5f, 0.6f, 0.8f, 1.0f)
+                curveToRelative(0.0f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f)
+                curveToRelative(0.2f, 0.2f, 0.5f, 0.4f, 0.7f, 0.6f)
+                curveToRelative(0.4f, 0.5f, 0.5f, 0.9f, 0.2f, 1.5f)
+                curveToRelative(-0.1f, 0.2f, -0.1f, 0.4f, -0.1f, 0.6f)
+                curveToRelative(0.1f, 0.3f, 0.1f, 0.6f, 0.1f, 0.9f)
+                curveToRelative(0.0f, 0.1f, -0.1f, 0.2f, -0.1f, 0.4f)
+                curveToRelative(-0.2f, 0.4f, -0.5f, 0.8f, -0.8f, 1.1f)
+                curveToRelative(-0.3f, 0.3f, -0.7f, 0.4f, -1.1f, 0.3f)
+                curveToRelative(-0.2f, 0.0f, -0.4f, -0.1f, -0.6f, -0.2f)
+                curveToRelative(-0.1f, 0.0f, -0.1f, 0.0f, -0.2f, 0.0f)
+                curveToRelative(-0.6f, 0.3f, -1.3f, 0.5f, -2.0f, 0.4f)
+                curveToRelative(-0.7f, 0.0f, -1.3f, -0.2f, -1.8f, -0.6f)
+                curveToRelative(-0.3f, -0.2f, -0.5f, -0.5f, -0.6f, -0.8f)
+                curveToRelative(0.0f, 0.0f, 0.0f, -0.1f, -0.1f, -0.1f)
+                curveToRelative(-0.6f, -0.2f, -1.0f, -0.6f, -1.4f, -1.2f)
+                curveTo(3.3f, 17.5f, 3.0f, 16.6f, 3.0f, 15.7f)
+                close()
+                moveTo(10.5f, 18.5f)
+                curveToRelative(0.1f, 0.0f, 0.1f, 0.0f, 0.1f, 0.0f)
+                curveToRelative(0.1f, 0.0f, 0.2f, -0.1f, 0.2f, -0.3f)
+                curveToRelative(0.0f, -0.1f, -0.1f, -0.2f, -0.2f, -0.3f)
+                curveToRelative(-0.4f, -0.1f, -0.8f, -0.3f, -1.2f, -0.5f)
+                curveToRelative(-0.5f, -0.4f, -0.9f, -0.9f, -1.2f, -1.4f)
+                curveToRelative(-0.4f, -0.8f, -1.1f, -1.5f, -2.0f, -1.9f)
+                curveTo(6.0f, 14.1f, 5.8f, 14.0f, 5.5f, 13.9f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, 0.1f, -0.3f, 0.3f)
+                curveToRelative(0.0f, 0.1f, 0.1f, 0.2f, 0.2f, 0.3f)
+                curveToRelative(0.4f, 0.1f, 0.8f, 0.3f, 1.1f, 0.5f)
+                curveToRelative(0.6f, 0.4f, 1.0f, 0.9f, 1.3f, 1.5f)
+                curveTo(8.3f, 17.4f, 9.0f, 18.0f, 10.0f, 18.4f)
+                curveTo(10.1f, 18.4f, 10.3f, 18.5f, 10.5f, 18.5f)
+                close()
+                moveTo(8.6f, 15.1f)
+                curveToRelative(0.2f, 0.0f, 0.4f, -0.1f, 0.4f, -0.2f)
+                curveToRelative(0.0f, -0.2f, -0.1f, -0.3f, -0.3f, -0.3f)
+                curveToRelative(0.0f, 0.0f, -0.1f, 0.0f, -0.1f, 0.0f)
+                curveToRelative(-0.1f, -0.1f, -0.2f, -0.1f, -0.3f, -0.2f)
+                curveToRelative(-0.1f, -0.1f, -0.2f, -0.2f, -0.3f, -0.3f)
+                curveToRelative(-0.1f, -0.1f, -0.3f, -0.1f, -0.4f, 0.0f)
+                curveToRelative(-0.1f, 0.1f, -0.1f, 0.3f, 0.0f, 0.4f)
+                curveTo(7.8f, 14.7f, 8.0f, 14.8f, 8.2f, 15.0f)
+                curveTo(8.4f, 15.1f, 8.5f, 15.1f, 8.6f, 15.1f)
+                close()
+                moveTo(7.8f, 19.1f)
+                curveToRelative(0.1f, 0.0f, 0.2f, 0.0f, 0.3f, -0.1f)
+                curveToRelative(0.1f, -0.1f, 0.2f, -0.3f, 0.1f, -0.4f)
+                curveToRelative(-0.1f, -0.1f, -0.2f, -0.2f, -0.4f, -0.1f)
+                curveToRelative(-0.1f, 0.0f, -0.1f, 0.0f, -0.2f, 0.0f)
+                curveToRelative(-0.2f, -0.1f, -0.3f, -0.2f, -0.5f, -0.3f)
+                curveToRelative(-0.1f, -0.1f, -0.3f, -0.1f, -0.4f, 0.0f)
+                curveToRelative(-0.1f, 0.1f, -0.1f, 0.3f, 0.0f, 0.4f)
+                curveTo(7.0f, 18.8f, 7.2f, 18.9f, 7.4f, 19.0f)
+                curveTo(7.5f, 19.1f, 7.6f, 19.1f, 7.8f, 19.1f)
+                close()
+                moveTo(9.7f, 15.7f)
+                curveToRelative(-0.1f, 0.0f, -0.3f, 0.1f, -0.3f, 0.3f)
+                curveToRelative(0.0f, 0.1f, 0.1f, 0.2f, 0.2f, 0.3f)
+                curveToRelative(0.0f, 0.0f, 0.1f, 0.0f, 0.1f, 0.0f)
+                curveToRelative(0.2f, 0.0f, 0.3f, 0.1f, 0.3f, 0.3f)
+                curveToRelative(0.0f, 0.1f, 0.1f, 0.2f, 0.2f, 0.2f)
+                curveToRelative(0.1f, 0.0f, 0.2f, -0.1f, 0.3f, -0.2f)
+                curveToRelative(0.0f, -0.1f, 0.0f, -0.2f, 0.0f, -0.2f)
+                curveTo(10.5f, 16.0f, 10.2f, 15.8f, 9.7f, 15.7f)
+                close()
+                moveTo(6.6f, 16.4f)
+                curveToRelative(0.0f, -0.3f, -0.2f, -0.6f, -0.5f, -0.7f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, 0.0f, -0.3f, 0.2f)
+                curveToRelative(0.0f, 0.1f, 0.0f, 0.3f, 0.2f, 0.3f)
+                curveTo(6.0f, 16.3f, 6.0f, 16.3f, 6.0f, 16.5f)
+                curveToRelative(0.0f, 0.0f, 0.0f, 0.1f, 0.0f, 0.1f)
+                curveToRelative(0.0f, 0.1f, 0.1f, 0.3f, 0.2f, 0.3f)
+                curveToRelative(0.2f, 0.0f, 0.3f, -0.1f, 0.4f, -0.3f)
+                curveTo(6.6f, 16.6f, 6.6f, 16.5f, 6.6f, 16.4f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF010101)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(16.1f, 15.0f)
+                curveToRelative(-0.6f, 0.0f, -1.2f, -0.2f, -1.8f, -0.5f)
+                curveToRelative(-0.1f, 0.0f, -0.1f, 0.0f, -0.2f, 0.0f)
+                curveToRelative(-0.3f, 0.1f, -0.6f, 0.2f, -0.9f, 0.2f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, -0.1f, -0.5f, -0.2f)
+                curveToRelative(-0.6f, -0.4f, -0.9f, -0.8f, -1.2f, -1.5f)
+                curveToRelative(-0.1f, -0.2f, -0.1f, -0.4f, 0.0f, -0.7f)
+                curveToRelative(0.0f, -0.2f, 0.1f, -0.5f, 0.1f, -0.7f)
+                curveToRelative(0.0f, -0.1f, 0.0f, -0.1f, 0.0f, -0.2f)
+                curveToRelative(-0.2f, -0.2f, -0.3f, -0.5f, -0.3f, -0.8f)
+                curveToRelative(0.0f, -0.3f, 0.1f, -0.6f, 0.3f, -0.8f)
+                curveToRelative(0.2f, -0.2f, 0.4f, -0.4f, 0.7f, -0.6f)
+                curveToRelative(0.1f, 0.0f, 0.1f, -0.1f, 0.2f, -0.2f)
+                curveToRelative(0.5f, -0.7f, 1.0f, -1.4f, 1.8f, -1.8f)
+                curveTo(14.6f, 7.2f, 15.0f, 7.0f, 15.4f, 7.0f)
+                curveToRelative(0.0f, 0.0f, 0.1f, 0.0f, 0.1f, -0.1f)
+                curveToRelative(0.0f, 0.0f, 0.1f, -0.1f, 0.1f, -0.1f)
+                curveToRelative(0.9f, -0.5f, 1.9f, -0.5f, 2.9f, -0.1f)
+                curveToRelative(0.4f, 0.1f, 0.7f, 0.4f, 0.9f, 0.6f)
+                curveToRelative(0.0f, 0.0f, 0.1f, 0.0f, 0.1f, 0.1f)
+                curveToRelative(0.8f, 0.2f, 1.2f, 0.8f, 1.4f, 1.5f)
+                curveToRelative(0.2f, 0.8f, 0.1f, 1.5f, -0.2f, 2.2f)
+                curveToRelative(-0.3f, 0.7f, -0.6f, 1.3f, -1.2f, 1.8f)
+                curveToRelative(-0.2f, 0.2f, -0.4f, 0.3f, -0.7f, 0.4f)
+                curveToRelative(0.0f, 0.0f, -0.1f, 0.0f, -0.1f, 0.1f)
+                curveToRelative(-0.3f, 0.7f, -0.8f, 1.2f, -1.6f, 1.4f)
+                curveToRelative(-0.2f, 0.1f, -0.4f, 0.1f, -0.6f, 0.1f)
+                curveTo(16.4f, 15.0f, 16.3f, 15.0f, 16.1f, 15.0f)
+                close()
+                moveTo(13.5f, 12.5f)
+                curveTo(13.5f, 12.5f, 13.6f, 12.5f, 13.5f, 12.5f)
+                curveToRelative(0.5f, -0.1f, 0.9f, -0.3f, 1.2f, -0.5f)
+                curveToRelative(0.7f, -0.4f, 1.1f, -1.0f, 1.5f, -1.7f)
+                curveToRelative(0.2f, -0.4f, 0.5f, -0.8f, 0.9f, -1.1f)
+                curveToRelative(0.4f, -0.3f, 0.9f, -0.6f, 1.4f, -0.7f)
+                curveToRelative(0.1f, 0.0f, 0.2f, -0.1f, 0.2f, -0.2f)
+                curveToRelative(0.0f, -0.1f, 0.0f, -0.2f, -0.1f, -0.3f)
+                curveToRelative(-0.1f, -0.1f, -0.2f, -0.1f, -0.3f, 0.0f)
+                curveToRelative(-0.9f, 0.2f, -1.6f, 0.7f, -2.2f, 1.4f)
+                curveToRelative(-0.2f, 0.3f, -0.4f, 0.6f, -0.6f, 0.9f)
+                curveToRelative(-0.5f, 0.8f, -1.2f, 1.4f, -2.2f, 1.6f)
+                curveToRelative(-0.1f, 0.0f, -0.2f, 0.2f, -0.2f, 0.3f)
+                curveTo(13.2f, 12.4f, 13.3f, 12.5f, 13.5f, 12.5f)
+                close()
+                moveTo(16.2f, 13.1f)
+                curveToRelative(0.4f, 0.0f, 0.7f, -0.2f, 1.0f, -0.5f)
+                curveToRelative(0.1f, -0.1f, 0.1f, -0.3f, 0.0f, -0.4f)
+                curveToRelative(-0.1f, -0.1f, -0.2f, -0.1f, -0.4f, 0.0f)
+                curveToRelative(-0.1f, 0.1f, -0.3f, 0.2f, -0.5f, 0.3f)
+                curveToRelative(-0.1f, 0.0f, -0.1f, 0.0f, -0.2f, 0.0f)
+                curveToRelative(-0.1f, -0.1f, -0.3f, 0.0f, -0.3f, 0.1f)
+                curveToRelative(-0.1f, 0.1f, 0.0f, 0.3f, 0.1f, 0.4f)
+                curveTo(16.0f, 13.0f, 16.1f, 13.1f, 16.2f, 13.1f)
+                close()
+                moveTo(15.3f, 9.1f)
+                curveToRelative(0.1f, 0.0f, 0.2f, 0.0f, 0.3f, -0.1f)
+                curveToRelative(0.3f, -0.1f, 0.5f, -0.4f, 0.7f, -0.6f)
+                curveToRelative(0.1f, -0.1f, 0.1f, -0.3f, 0.0f, -0.4f)
+                curveToRelative(-0.1f, -0.1f, -0.3f, -0.1f, -0.4f, 0.0f)
+                curveToRelative(-0.1f, 0.2f, -0.3f, 0.3f, -0.5f, 0.4f)
+                curveToRelative(0.0f, 0.0f, -0.1f, 0.1f, -0.2f, 0.1f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, 0.1f, -0.3f, 0.3f)
+                curveTo(15.0f, 9.0f, 15.2f, 9.1f, 15.3f, 9.1f)
+                close()
+                moveTo(14.2f, 9.7f)
+                curveToRelative(0.0f, 0.0f, -0.1f, 0.0f, -0.1f, 0.0f)
+                curveToRelative(-0.4f, 0.1f, -0.7f, 0.3f, -0.7f, 0.7f)
+                curveToRelative(0.0f, 0.2f, 0.1f, 0.3f, 0.2f, 0.3f)
+                curveToRelative(0.2f, 0.0f, 0.3f, -0.1f, 0.3f, -0.2f)
+                curveToRelative(0.0f, -0.1f, 0.1f, -0.2f, 0.2f, -0.2f)
+                curveToRelative(0.1f, 0.0f, 0.1f, 0.0f, 0.2f, -0.1f)
+                curveToRelative(0.2f, 0.0f, 0.3f, -0.1f, 0.3f, -0.3f)
+                curveTo(14.5f, 9.8f, 14.4f, 9.7f, 14.2f, 9.7f)
+                close()
+                moveTo(17.7f, 10.9f)
+                curveToRelative(0.1f, 0.0f, 0.2f, -0.1f, 0.2f, -0.3f)
+                curveToRelative(0.0f, -0.1f, 0.0f, -0.2f, 0.0f, -0.2f)
+                curveToRelative(0.0f, -0.1f, 0.0f, -0.1f, 0.1f, -0.2f)
+                curveToRelative(0.1f, 0.0f, 0.2f, -0.2f, 0.2f, -0.3f)
+                curveToRelative(0.0f, -0.2f, -0.2f, -0.2f, -0.3f, -0.2f)
+                curveToRelative(-0.2f, 0.1f, -0.4f, 0.2f, -0.5f, 0.4f)
+                curveToRelative(-0.1f, 0.2f, 0.0f, 0.3f, 0.0f, 0.5f)
+                curveTo(17.4f, 10.8f, 17.6f, 10.9f, 17.7f, 10.9f)
+                close()
+            }
+            path(
+                fill = SolidColor(Color(0xFF010101)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
+                moveTo(6.4f, 3.0f)
+                curveToRelative(0.5f, 0.0f, 0.9f, 0.1f, 1.3f, 0.3f)
+                curveToRelative(0.1f, 0.0f, 0.1f, 0.1f, 0.1f, 0.1f)
+                curveToRelative(0.0f, 0.0f, 0.0f, 0.0f, 0.1f, 0.1f)
+                curveToRelative(0.8f, 0.1f, 1.4f, 0.6f, 1.9f, 1.1f)
+                curveToRelative(0.2f, 0.3f, 0.5f, 0.5f, 0.6f, 0.8f)
+                curveToRelative(0.0f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f)
+                curveToRelative(0.2f, 0.2f, 0.4f, 0.3f, 0.6f, 0.5f)
+                curveToRelative(0.1f, 0.2f, 0.2f, 0.4f, 0.3f, 0.6f)
+                curveToRelative(0.1f, 0.3f, 0.0f, 0.6f, -0.2f, 0.8f)
+                curveToRelative(0.0f, 0.1f, -0.1f, 0.1f, 0.0f, 0.2f)
+                curveToRelative(0.1f, 0.3f, 0.1f, 0.6f, 0.1f, 0.9f)
+                curveToRelative(0.0f, 0.2f, 0.0f, 0.3f, -0.1f, 0.5f)
+                curveTo(11.0f, 9.4f, 10.8f, 9.7f, 10.5f, 10.0f)
+                curveToRelative(-0.3f, 0.2f, -0.6f, 0.3f, -1.0f, 0.2f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, -0.1f, -0.5f, -0.1f)
+                curveToRelative(-0.1f, 0.0f, -0.1f, 0.0f, -0.2f, 0.0f)
+                curveToRelative(-0.6f, 0.3f, -1.3f, 0.5f, -2.1f, 0.4f)
+                curveToRelative(-0.7f, -0.1f, -1.3f, -0.4f, -1.7f, -1.0f)
+                curveToRelative(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f)
+                curveTo(5.1f, 9.2f, 4.9f, 9.1f, 4.7f, 9.0f)
+                curveTo(4.3f, 8.8f, 3.9f, 8.4f, 3.7f, 8.0f)
+                curveTo(3.2f, 7.3f, 3.0f, 6.6f, 3.0f, 5.8f)
+                curveToRelative(0.0f, -0.4f, 0.1f, -0.7f, 0.2f, -1.0f)
+                curveTo(3.4f, 4.3f, 3.8f, 4.0f, 4.3f, 3.9f)
+                curveToRelative(0.0f, 0.0f, 0.1f, 0.0f, 0.1f, -0.1f)
+                curveTo(4.8f, 3.4f, 5.3f, 3.2f, 5.9f, 3.0f)
+                curveTo(6.1f, 3.0f, 6.2f, 3.0f, 6.4f, 3.0f)
+                close()
+                moveTo(9.5f, 8.4f)
+                curveToRelative(0.2f, 0.0f, 0.3f, -0.1f, 0.3f, -0.2f)
+                curveToRelative(0.0f, -0.2f, -0.1f, -0.3f, -0.2f, -0.3f)
+                curveToRelative(-0.4f, -0.1f, -0.7f, -0.3f, -1.0f, -0.5f)
+                curveTo(8.2f, 7.0f, 7.9f, 6.6f, 7.6f, 6.1f)
+                curveTo(7.2f, 5.4f, 6.7f, 4.9f, 6.0f, 4.6f)
+                curveTo(5.8f, 4.4f, 5.5f, 4.3f, 5.3f, 4.3f)
+                curveTo(5.1f, 4.3f, 5.0f, 4.4f, 4.9f, 4.5f)
+                curveToRelative(0.0f, 0.2f, 0.1f, 0.3f, 0.2f, 0.3f)
+                curveToRelative(0.4f, 0.1f, 0.7f, 0.2f, 1.0f, 0.5f)
+                curveToRelative(0.4f, 0.3f, 0.8f, 0.7f, 1.0f, 1.2f)
+                curveToRelative(0.4f, 0.7f, 1.0f, 1.3f, 1.8f, 1.6f)
+                curveTo(9.2f, 8.3f, 9.4f, 8.3f, 9.5f, 8.4f)
+                close()
+                moveTo(8.0f, 5.4f)
+                curveToRelative(0.1f, 0.0f, 0.3f, -0.1f, 0.3f, -0.3f)
+                curveToRelative(0.0f, -0.1f, -0.1f, -0.3f, -0.2f, -0.3f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, -0.1f, -0.4f, -0.2f)
+                curveTo(7.6f, 4.6f, 7.5f, 4.5f, 7.4f, 4.4f)
+                curveTo(7.3f, 4.3f, 7.1f, 4.3f, 7.0f, 4.4f)
+                curveTo(6.9f, 4.5f, 6.9f, 4.7f, 7.0f, 4.8f)
+                curveTo(7.2f, 5.0f, 7.4f, 5.1f, 7.6f, 5.3f)
+                curveTo(7.7f, 5.3f, 7.8f, 5.4f, 8.0f, 5.4f)
+                close()
+                moveTo(7.2f, 8.9f)
+                curveToRelative(0.1f, 0.0f, 0.2f, 0.0f, 0.2f, -0.1f)
+                curveToRelative(0.1f, -0.1f, 0.2f, -0.2f, 0.1f, -0.4f)
+                curveTo(7.5f, 8.3f, 7.4f, 8.2f, 7.2f, 8.3f)
+                curveToRelative(-0.1f, 0.0f, -0.1f, 0.0f, -0.1f, 0.0f)
+                curveTo(7.0f, 8.2f, 6.8f, 8.1f, 6.7f, 8.0f)
+                curveToRelative(-0.1f, -0.1f, -0.3f, -0.1f, -0.4f, 0.0f)
+                curveToRelative(-0.1f, 0.1f, -0.1f, 0.2f, 0.0f, 0.3f)
+                curveToRelative(0.0f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f)
+                curveTo(6.7f, 8.7f, 6.9f, 8.8f, 7.2f, 8.9f)
+                close()
+                moveTo(9.0f, 5.9f)
+                curveToRelative(-0.2f, 0.0f, -0.3f, 0.1f, -0.3f, 0.2f)
+                curveToRelative(0.0f, 0.2f, 0.1f, 0.3f, 0.2f, 0.3f)
+                curveToRelative(0.0f, 0.0f, 0.1f, 0.0f, 0.1f, 0.0f)
+                curveToRelative(0.1f, 0.0f, 0.2f, 0.1f, 0.2f, 0.2f)
+                curveToRelative(0.0f, 0.1f, 0.0f, 0.1f, 0.1f, 0.1f)
+                curveToRelative(0.1f, 0.1f, 0.2f, 0.1f, 0.3f, 0.0f)
+                curveToRelative(0.1f, -0.1f, 0.2f, -0.2f, 0.1f, -0.3f)
+                curveTo(9.7f, 6.1f, 9.3f, 5.9f, 9.0f, 5.9f)
+                close()
+                moveTo(6.2f, 6.5f)
+                curveTo(6.2f, 6.5f, 6.2f, 6.5f, 6.2f, 6.5f)
+                curveToRelative(0.0f, 0.0f, 0.0f, -0.1f, 0.0f, -0.1f)
+                curveToRelative(0.0f, -0.3f, -0.3f, -0.5f, -0.6f, -0.5f)
+                curveTo(5.5f, 5.9f, 5.4f, 6.0f, 5.4f, 6.1f)
+                curveToRelative(0.0f, 0.2f, 0.0f, 0.3f, 0.2f, 0.3f)
+                curveToRelative(0.1f, 0.0f, 0.1f, 0.1f, 0.1f, 0.1f)
+                curveToRelative(0.0f, 0.0f, 0.0f, 0.1f, 0.0f, 0.1f)
+                curveTo(5.6f, 6.8f, 5.7f, 7.0f, 5.8f, 7.0f)
+                curveTo(6.0f, 7.0f, 6.2f, 6.9f, 6.2f, 6.7f)
+                curveTo(6.2f, 6.7f, 6.2f, 6.6f, 6.2f, 6.5f)
+                close()
+            }
+        }
+            .build()
+        return _driedGrape!!
+    }
+
+private var _driedGrape: ImageVector? = null
