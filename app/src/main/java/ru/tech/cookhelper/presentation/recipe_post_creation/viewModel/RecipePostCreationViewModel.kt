@@ -13,6 +13,7 @@ import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.use_case.get_user.GetUserUseCase
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class RecipePostCreationViewModel @Inject constructor(
@@ -37,7 +38,7 @@ class RecipePostCreationViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         _categories.value = List(15) { "Категория блюда с порядковым номером $it" }
-        _allProducts.value = List(30) { Product(it, "Продукт $it", category = "", mimetype = "грамм") }
+        _allProducts.value = List(30) { Product(it, "Продукт $it", category = Random.nextInt(1, 22), mimetype = "грамм") }
     }
 
     fun sendRecipePost(

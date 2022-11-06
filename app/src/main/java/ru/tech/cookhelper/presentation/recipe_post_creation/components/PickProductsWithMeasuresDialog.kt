@@ -326,7 +326,7 @@ private val MapListSaver = Saver<SnapshotStateMap<Product, String>, String>(
                 val key = Product(
                     id = productData[0].toInt(),
                     title = productData[1],
-                    category = productData[2],
+                    category = productData[2].toInt(),
                     mimetype = productData[3]
                 )
                 val value = data[1]

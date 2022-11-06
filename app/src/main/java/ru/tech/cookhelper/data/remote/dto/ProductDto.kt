@@ -6,7 +6,7 @@ import ru.tech.cookhelper.domain.model.Product
 data class ProductDto(
     val id: Int,
     val title: String,
-    val category: String,
+    val category: Int,
     val mimetype: String
 ) : Dto {
     override fun asDomain(): Product = Product(

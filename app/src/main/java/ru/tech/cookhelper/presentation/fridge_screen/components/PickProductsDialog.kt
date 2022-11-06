@@ -197,7 +197,7 @@ private val ProductsSaver = Saver<SnapshotStateList<Product>, String>(
                 Product(
                     id = data[0].toInt(),
                     title = data[1],
-                    category = data[2],
+                    category = data[2].toInt(),
                     mimetype = data[3]
                 )
             } catch (e: Exception) {

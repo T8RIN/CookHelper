@@ -92,5 +92,9 @@ class FridgeViewModel @Inject constructor(
         }
     }
 
+    fun deleteProduct(product: Product) {
+        TODO("Not yet implemented")
+    }
+
 
 }
