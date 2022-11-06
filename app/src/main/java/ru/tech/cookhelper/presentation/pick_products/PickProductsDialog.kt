@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.core.utils.kotlin.cptlize
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Loading
@@ -90,13 +91,16 @@ fun PickProductsDialog(
         text = {
             AnimatedContent(targetState = viewModel.loadingProducts) { loading ->
                 if (!loading) {
-                    val list by remember(searchValue) {
+                    val fridge = viewModel.userState.user?.fridge ?: emptyList()
+                    val list by remember {
                         derivedStateOf {
-                            allProducts.filter {
+                            allProducts.toMutableList().apply {
+                                removeAll(fridge.map { it.copy(title = it.title.cptlize()) })
+                            }.filter {
                                 if (allProducts.isNotEmpty()) it.title.lowercase()
                                     .contains(searchValue.lowercase())
                                 else true
-                            }
+                            }.sortedBy { it.title }
                         }
                     }
                     AnimatedContent(targetState = list.isEmpty()) { empty ->
@@ -169,7 +173,11 @@ fun PickProductsDialog(
                         }
                     }
                 } else {
-                    Loading()
+                    Loading(
+                        Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.5f)
+                    )
                 }
             }
         },

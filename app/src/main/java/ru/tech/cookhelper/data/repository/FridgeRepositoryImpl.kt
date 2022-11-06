@@ -4,20 +4,20 @@ import ru.tech.cookhelper.core.Action
 import ru.tech.cookhelper.core.constants.Constants.DELIMITER
 import ru.tech.cookhelper.core.constants.Status
 import ru.tech.cookhelper.core.utils.kotlin.getOrExceptionAndNull
-import ru.tech.cookhelper.data.remote.api.ingredients.IngredientsApi
-import ru.tech.cookhelper.data.remote.dto.RecipeDto
+import ru.tech.cookhelper.data.remote.api.ingredients.FridgeApi
 import ru.tech.cookhelper.domain.model.Product
+import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.FridgeRepository
 import ru.tech.cookhelper.presentation.ui.utils.toAction
 import javax.inject.Inject
 
 class FridgeRepositoryImpl @Inject constructor(
-    private val ingredientsApi: IngredientsApi
+    private val fridgeApi: FridgeApi
 ) : FridgeRepository {
 
     override suspend fun getAvailableProducts(): Action<List<Product>> {
-        ingredientsApi
+        fridgeApi
             .getAvailableProducts()
             .getOrExceptionAndNull {
                 return it.toAction()
@@ -34,7 +34,7 @@ class FridgeRepositoryImpl @Inject constructor(
         token: String,
         fridge: List<Product>
     ): Action<User> {
-        ingredientsApi
+        fridgeApi
             .addProductsToFridge(token, fridge.joinToString(DELIMITER) { it.id.toString() })
             .getOrExceptionAndNull {
                 return it.toAction()
@@ -47,8 +47,18 @@ class FridgeRepositoryImpl @Inject constructor(
         return Action.Empty()
     }
 
-    override suspend fun getMatchedRecipes(token: String): Action<List<RecipeDto>> {
-        TODO("Not yet implemented")
+    override suspend fun getMatchedRecipes(token: String): Action<List<Recipe>> {
+        fridgeApi
+            .getMatchedRecipes(token)
+            .getOrExceptionAndNull {
+                return it.toAction()
+            }?.let { response ->
+                return when (response.status) {
+                    Status.SUCCESS -> Action.Success(data = response.data?.map { it.asDomain() })
+                    else -> Action.Empty(status = response.status)
+                }
+            }
+        return Action.Empty()
     }
 
 }

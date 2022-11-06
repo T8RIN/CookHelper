@@ -234,7 +234,7 @@ fun PostCreationScreen(
         )
 
         if (viewModel.postCreationState.post != null) {
-            SideEffect {
+            LaunchedEffect(Unit) {
                 toastHost.sendToast(
                     Icons.Rounded.Done, UIText(R.string.post_created).asString(context)
                 )

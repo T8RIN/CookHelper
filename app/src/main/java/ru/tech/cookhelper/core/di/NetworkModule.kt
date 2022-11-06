@@ -4,11 +4,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
-import ru.tech.cookhelper.data.remote.api.ingredients.IngredientsApi
+import ru.tech.cookhelper.data.remote.api.ingredients.FridgeApi
 import ru.tech.cookhelper.data.remote.api.user.UserApi
+import ru.tech.cookhelper.data.remote.dto.RecipeDto
+import ru.tech.cookhelper.data.remote.web_socket.WebSocketState
 import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
 import ru.tech.cookhelper.data.remote.web_socket.feed.FeedServiceImpl
 import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
@@ -16,7 +21,10 @@ import ru.tech.cookhelper.data.remote.web_socket.message.MessageServiceImpl
 import ru.tech.cookhelper.data.remote.web_socket.user.UserService
 import ru.tech.cookhelper.data.remote.web_socket.user.UserServiceImpl
 import ru.tech.cookhelper.data.utils.JsonParser
+import ru.tech.cookhelper.domain.model.FileData
+import ru.tech.cookhelper.domain.model.User
 import javax.inject.Singleton
+import kotlin.random.Random
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -42,9 +50,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideIngredientsApi(
+    fun provideFridgeApi(
         retrofit: Retrofit
-    ): IngredientsApi = retrofit.create(IngredientsApi::class.java)
+    ): FridgeApi = retrofit.create(FridgeApi::class.java)
 
     @Provides
     @Singleton

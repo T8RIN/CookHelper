@@ -25,6 +25,7 @@ import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
+import ru.tech.cookhelper.presentation.ui.utils.android.Logger.makeLog
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -190,9 +191,7 @@ fun ProfileScreen(
                 }
             }
         } else {
-            items(6, key = { /*TODO: set normal key*/ it }) {
-
-            }
+            //TODO: Recipes
         }
     }
 }

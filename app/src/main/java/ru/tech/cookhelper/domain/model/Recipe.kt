@@ -11,7 +11,7 @@ data class Recipe(
     val time: Long,
     val category: String,
     val ingredients: List<Product>,
-    val values: List<Double>,
+    val measures: List<Double>,
     val proteins: Double,
     val carbohydrates: Double,
     val fats: Double,

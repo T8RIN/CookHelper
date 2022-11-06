@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.kotlin.cptlize
-import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.fridge_screen.components.ProductItem
@@ -56,7 +55,7 @@ fun FridgeScreen(
         derivedStateOf {
             (viewModel.userState.user?.fridge?.map {
                 it.copy(title = it.title.cptlize())
-            } ?: emptyList()) + List(22) { Product(it, it.toString(), it, "") }
+            } ?: emptyList()).asReversed()
         }
     }
 

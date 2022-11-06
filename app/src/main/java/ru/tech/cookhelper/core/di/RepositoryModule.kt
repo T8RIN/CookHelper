@@ -8,7 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import ru.tech.cookhelper.data.local.database.Database
 import ru.tech.cookhelper.data.remote.api.auth.AuthService
 import ru.tech.cookhelper.data.remote.api.chat.ChatApi
-import ru.tech.cookhelper.data.remote.api.ingredients.IngredientsApi
+import ru.tech.cookhelper.data.remote.api.ingredients.FridgeApi
 import ru.tech.cookhelper.data.remote.api.user.UserApi
 import ru.tech.cookhelper.data.remote.web_socket.feed.FeedService
 import ru.tech.cookhelper.data.remote.web_socket.message.MessageService
@@ -68,8 +68,8 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideIngredientsRepository(
-        ingredientsApi: IngredientsApi
-    ): FridgeRepository = FridgeRepositoryImpl(ingredientsApi)
+        fridgeApi: FridgeApi
+    ): FridgeRepository = FridgeRepositoryImpl(fridgeApi)
 
     @Provides
     fun provideJsonParser(): JsonParser = MoshiParser(Moshi.Builder().build())
