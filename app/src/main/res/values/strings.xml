@@ -220,4 +220,7 @@
     <string name="picking_products">Picking products</string>
     <string name="picking_products_started">You have picked some products, if you leave now they wil be not added to your fridge</string>
     <string name="cook_time_min">%d min</string>
+    <string name="added_to_fridge">Added to fridge</string>
+    <string name="removed_from_fridge">Removed from fridge</string>
+    <string name="products_not_matched">There is not enough products in your fridge to cook something, or check your block-list first</string>
 </resources>

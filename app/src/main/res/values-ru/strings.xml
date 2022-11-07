@@ -220,4 +220,7 @@
     <string name="picking_products">Выбор продуктов</string>
     <string name="picking_products_started">Вы выбрали некотороые продукты,  есливы закроете это окно сейчас, то они не будут добавлены в холодильник</string>
     <string name="cook_time_min">%d мин</string>
+    <string name="added_to_fridge">Добавлено в холодильник</string>
+    <string name="removed_from_fridge">Удалено из холодильника</string>
+    <string name="products_not_matched">У вас недостаточно продуктов для приготовления какого-либо блюда или уберите что-то из блок-листа</string>
 </resources>

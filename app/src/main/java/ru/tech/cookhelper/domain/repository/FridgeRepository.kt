@@ -9,4 +9,5 @@ interface FridgeRepository {
     suspend fun getAvailableProducts(): Action<List<Product>>
     suspend fun addProductsToFridge(token: String, fridge: List<Product>): Action<User>
     suspend fun getMatchedRecipes(token: String): Action<List<MatchedRecipe>>
+    suspend fun removeProductsFromFridge(token: String, fridge: List<Product>): Action<User>
 }

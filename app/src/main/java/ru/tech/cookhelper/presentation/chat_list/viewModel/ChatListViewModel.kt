@@ -53,7 +53,7 @@ class ChatListViewModel @Inject constructor(
                                 "CwtL5.png"
                             )
                         ),
-                        title = "Интеллектуалы",
+                        title = "Перспектива",
                         lastMessage = Message(
                             0,
                             "О чем речь?",

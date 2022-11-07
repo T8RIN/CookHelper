@@ -18,6 +18,13 @@ interface FridgeApi {
         @Part("fridge") fridge: String
     ): Result<Response<UserDto>>
 
+    @Multipart
+    @POST("api/user/post/fridge/remove/")
+    suspend fun removeProductsFromFridge(
+        @Part("token") token: String,
+        @Part("fridge") fridge: String
+    ): Result<Response<UserDto>>
+
     @GET("api/user/get/fridge/recipe/")
     suspend fun getMatchedRecipes(
         @Query("token") token: String

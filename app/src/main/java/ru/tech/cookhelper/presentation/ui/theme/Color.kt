@@ -791,6 +791,10 @@ inline val Red: Color
     @Composable
     get() = Color(0xFFff4e3a).harmonizeWithPrimary()
 
+inline val Orange: Color
+    @Composable
+    get() = Color(0xFFFB8C00).harmonizeWithPrimary()
+
 inline val Green: Color
     @Composable
     get() = Color(0xFF56CA5B).harmonizeWithPrimary()

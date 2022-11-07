@@ -22,6 +22,7 @@ import ru.tech.cookhelper.presentation.home_screen.HomeScreen
 import ru.tech.cookhelper.presentation.matched_recipes.MatchedRecipesScreen
 import ru.tech.cookhelper.presentation.post_creation.PostCreationScreen
 import ru.tech.cookhelper.presentation.profile.ProfileScreen
+import ru.tech.cookhelper.presentation.recipe_details.RecipeDetailsScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.topic_creation.TopicCreationScreen
@@ -54,10 +55,13 @@ fun ScreenHost(
                     screen.baseIcon,
                     screen.title.asString()
                 )
-                is Screen.RecipeDetails -> Placeholder(
-                    screen.baseIcon,
-                    screen.title.asString()
-                )
+                is Screen.RecipeDetails -> {
+                    RecipeDetailsScreen(
+                        recipe = screen.recipe,
+                        percentString = screen.percentString,
+                        onBack = { controller.goBack() }
+                    )
+                }
                 is Screen.MatchedRecipes -> {
                     MatchedRecipesScreen(
                         onBack = { controller.goBack() }

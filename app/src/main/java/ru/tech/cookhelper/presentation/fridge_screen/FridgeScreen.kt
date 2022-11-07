@@ -75,7 +75,7 @@ fun FridgeScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = 8.dp),
                             product = product,
-                            onDelete = { viewModel.deleteProduct(product) }
+                            onDelete = { viewModel.removeProductsFromFridge(listOf(product)) }
                         )
                         if (index != fridge.lastIndex) Separator()
                     }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
+import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.matched_recipes.components.MatchedRecipeItem
@@ -60,18 +62,24 @@ fun MatchedRecipesScreen(
         )
         AnimatedContent(targetState = viewModel.matchedRecipesState.isLoading) { loading ->
             if (!loading) {
-                LazyColumn(
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                    contentPadding = WindowInsets.navigationBars.asPaddingValues()
-                ) {
-                    itemsIndexed(viewModel.matchedRecipesState.recipes) { index, recipe ->
-                        MatchedRecipeItem(
-                            matchedRecipe = recipe,
-                            onClick = {
-                                screenController.navigate(Screen.RecipeDetails(recipe))
+                AnimatedContent(targetState = viewModel.matchedRecipesState.recipes.isEmpty()) { empty ->
+                    if(!empty) {
+                        LazyColumn(
+                            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                            contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                        ) {
+                            itemsIndexed(viewModel.matchedRecipesState.recipes) { index, matchedRecipe ->
+                                MatchedRecipeItem(
+                                    matchedRecipe = matchedRecipe,
+                                    onClick = {
+                                        screenController.navigate(Screen.RecipeDetails(matchedRecipe.recipe))
+                                    }
+                                )
+                                if (index != viewModel.matchedRecipesState.recipes.lastIndex) Separator()
                             }
-                        )
-                        if (index != viewModel.matchedRecipesState.recipes.lastIndex) Separator()
+                        }
+                    } else {
+                        Placeholder(icon = Icons.Rounded.SearchOff, text = stringResource(R.string.products_not_matched))
                     }
                 }
             } else {

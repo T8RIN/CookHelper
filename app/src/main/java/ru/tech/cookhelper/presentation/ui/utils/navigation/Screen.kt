@@ -9,8 +9,8 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
-import ru.tech.cookhelper.domain.model.MatchedRecipe
 import ru.tech.cookhelper.domain.model.Post
+import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 
@@ -114,7 +114,8 @@ sealed class Screen(
 
     @Parcelize
     class RecipeDetails(
-        @IgnoredOnParcel val recipe: MatchedRecipe? = null
+        @IgnoredOnParcel val recipe: Recipe? = null,
+        val percentString: String = ""
     ) : Screen(showTopAppBar = false)
 
     @Parcelize

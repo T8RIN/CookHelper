@@ -61,4 +61,21 @@ class FridgeRepositoryImpl @Inject constructor(
         return Action.Empty()
     }
 
+    override suspend fun removeProductsFromFridge(
+        token: String,
+        fridge: List<Product>
+    ): Action<User> {
+        fridgeApi
+            .removeProductsFromFridge(token, fridge.joinToString(DELIMITER) { it.id.toString() })
+            .getOrExceptionAndNull {
+                return it.toAction()
+            }?.let { response ->
+                return when (response.status) {
+                    Status.SUCCESS -> Action.Success(data = response.data?.asDomain())
+                    else -> Action.Empty(status = response.status)
+                }
+            }
+        return Action.Empty()
+    }
+
 }
