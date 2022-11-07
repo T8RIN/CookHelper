@@ -49,7 +49,7 @@ class ChatListViewModel @Inject constructor(
                         id = 1,
                         images = listOf(
                             FileData(
-                                "https://i.stack.imgur.com/CwtL5.png",
+                                "https://cookhelper-inc.herokuapp.com/data/user/qwqwqw.png",
                                 "CwtL5.png"
                             )
                         ),

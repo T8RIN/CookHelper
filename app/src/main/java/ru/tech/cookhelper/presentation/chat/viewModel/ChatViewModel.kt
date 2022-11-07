@@ -8,8 +8,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.tech.cookhelper.core.onEmpty
 import ru.tech.cookhelper.core.onError
 import ru.tech.cookhelper.core.onLoading
@@ -59,56 +62,66 @@ class ChatViewModel @Inject constructor(
 
     val messages = mutableStateListOf<Message>()
 
+    private var chatJob: Job? = null
+
     init {
         getUserUseCase().onEach {
             it?.let {
                 _user.update { it }
                 chatId = savedStateHandle["chatId"]!!
-                awaitAndGetMessages(chatId, it.token)
+                if (chatJob == null) {
+                    chatJob = awaitAndGetMessages(chatId, it.token)
+                }
             }
         }.launchIn(viewModelScope)
     }
 
-    private fun awaitAndGetMessages(chatId: Long, token: String) {
+    private fun awaitAndGetMessages(chatId: Long, token: String): Job = viewModelScope.launch {
 
-        getChatUseCase(
-            chatId = chatId,
-            token = token
-        ).onEmpty {
-            this?.getUIText()?.let {
-                sendEvent(Event.ShowToast(it))
-            }
-            _loadingAllMessages.value = false
-        }.onError {
-            sendEvent(Event.ShowToast(UIText(this)))
-            _loadingAllMessages.value = false
-        }.onLoading {
-            _loadingAllMessages.value = true
-        }.onSuccess {
-            this@ChatViewModel.messages.addAll(this@onSuccess.messages)
-            _loadingAllMessages.value = false
-        }.launchIn(viewModelScope)
+        launch {
+            getChatUseCase(
+                chatId = chatId,
+                token = token
+            ).onEmpty {
+                this?.getUIText()?.let {
+                    sendEvent(Event.ShowToast(it))
+                }
+                _loadingAllMessages.value = false
+            }.onError {
+                sendEvent(Event.ShowToast(UIText(this)))
+                _loadingAllMessages.value = false
+            }.onLoading {
+                _loadingAllMessages.value = true
+            }.onSuccess {
+                this@ChatViewModel.messages.addAll(this@onSuccess.messages)
+                _loadingAllMessages.value = false
+            }.collect()
+        }
 
-        awaitNewMessagesUseCase(
-            chatId = chatId,
-            token = token
-        ).onEmpty {
-            _chatState.update { copy(isLoading = false) }
-        }.onError {
-            _chatState.update { copy(isLoading = false) }
-            sendEvent(Event.ShowToast(UIText(this)))
-        }.onLoading {
-            _chatState.update { copy(isLoading = true) }
-        }.onSuccess {
-            messages.add(this).also {
+        launch {
+            awaitNewMessagesUseCase(
+                chatId = chatId,
+                token = token
+            ).onEmpty {
                 _chatState.update { copy(isLoading = false) }
-            }
-        }.launchIn(viewModelScope)
+            }.onError {
+                _chatState.update { copy(isLoading = false) }
+                sendEvent(Event.ShowToast(UIText(this)))
+            }.onLoading {
+                _chatState.update { copy(isLoading = true) }
+            }.onSuccess {
+                messages.add(this).also {
+                    _chatState.update { copy(isLoading = false) }
+                }
+            }.collect()
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
         stopAwaitingMessagesUseCase()
+        chatJob?.cancel()
+        chatJob = null
     }
 
     fun send(message: String) {
