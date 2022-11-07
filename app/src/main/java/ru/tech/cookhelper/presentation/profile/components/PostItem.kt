@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.Picture
@@ -31,15 +32,12 @@ import java.util.*
 fun PostItem(
     post: Post,
     clientUserId: Long,
-    authorLoader: (authorId: Long) -> User,
-    onImageClick: (imageId: String) -> Unit,
-    onAuthorClick: (authorId: Long) -> Unit,
-    onPostClick: (postId: String) -> Unit,
-    onLikeClick: (postId: String) -> Unit,
-    onCommentsClick: (postId: String) -> Unit = onPostClick
+    onImageClick: (image: FileData) -> Unit,
+    onAuthorClick: (author: User) -> Unit,
+    onPostClick: () -> Unit,
+    onLikeClick: () -> Unit,
+    onCommentsClick: () -> Unit = onPostClick
 ) {
-    val author = authorLoader(post.authorId)
-
     val timestamp by remember {
         derivedStateOf {
             val df =
@@ -59,14 +57,14 @@ fun PostItem(
     Column(
         Modifier
             .fillMaxWidth()
-            .clickable { onPostClick(post.id) }
+            .clickable { onPostClick() }
     ) {
         Spacer(Modifier.size(16.dp))
         AuthorBubble(
             modifier = Modifier.padding(start = 20.dp),
-            author = author,
+            author = post.author,
             timestamp = timestamp,
-            onClick = { onAuthorClick(post.authorId) }
+            onClick = { onAuthorClick(post.author) }
         )
         Spacer(Modifier.size(16.dp))
 
@@ -94,7 +92,7 @@ fun PostItem(
                         .squareSize()
                         .align(Alignment.Center)
                         .clickable {
-                            onImageClick(image.id)
+                            onImageClick(image)
                         },
                     shape = shape
                 )
@@ -105,7 +103,7 @@ fun PostItem(
         Row(Modifier.padding(horizontal = 15.dp)) {
             val liked = post.likes.contains(clientUserId)
             PostActionButton(
-                onClick = { onLikeClick(post.id) },
+                onClick = { onLikeClick() },
                 icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
                 text = post.likes.size.run { if (this != 0) toString() else "" },
                 contentColor = if (liked) LikeColor else Gray,
@@ -115,7 +113,7 @@ fun PostItem(
             )
             Spacer(Modifier.size(8.dp))
             PostActionButton(
-                onClick = { onCommentsClick(post.id) },
+                onClick = { onCommentsClick() },
                 icon = Icons.Rounded.ChatBubbleOutline,
                 text = post.comments.size.run { if (this != 0) toString() else "" }
             )

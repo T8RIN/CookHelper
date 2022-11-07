@@ -3,8 +3,8 @@ package ru.tech.cookhelper.domain.model
 import ru.tech.cookhelper.domain.utils.Domain
 
 data class Post(
-    val id: String,
-    val authorId: Long,
+    val id: Long,
+    val author: User,
     val timestamp: Long,
     val label: String,
     val text: String,

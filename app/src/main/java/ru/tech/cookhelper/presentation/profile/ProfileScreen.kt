@@ -18,14 +18,11 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.ConnectionUtils.isOnline
-import ru.tech.cookhelper.domain.model.FileData
-import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.profile.components.*
 import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
-import ru.tech.cookhelper.presentation.ui.utils.android.Logger.makeLog
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -95,12 +92,12 @@ fun ProfileScreen(
             )
             Spacer(Modifier.height(20.dp))
             ImageCarousel(
-                data = testList,
+                data = emptyList(),
                 onImageClick = { id ->
                     screenController.navigate(
                         Screen.FullscreenImagePager(
                             id = id,
-                            images = testList,
+                            images = emptyList(),
                         )
                     )
                 },
@@ -108,7 +105,7 @@ fun ProfileScreen(
                 onExpand = {
                     screenController.navigate(
                         Screen.AllImages(
-                            images = testList,
+                            images = emptyList(),
                             canAddImages = true,
                             onAddImage = { viewModel.addImage(it) }
                         )
@@ -146,29 +143,10 @@ fun ProfileScreen(
             itemsIndexed(viewModel.posts, key = { _, post -> post.id }) { index, post ->
                 PostItem(
                     post = post,
-                    authorLoader = {
-                        User(
-                            id = 1,
-                            avatar = listOf(
-                                FileData(
-                                    "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-                                    ""
-                                )
-                            ),
-                            name = "Малик",
-                            surname = "Мухаметзянов",
-                            token = "",
-                            email = "",
-                            nickname = "t8rin",
-                            verified = true,
-                            fridge = emptyList(),
-                            lastSeen = 0L
-                        )
-                    },
-                    onImageClick = { id ->
+                    onImageClick = {
                         screenController.navigate(
                             Screen.FullscreenImagePager(
-                                id = id,
+                                id = it.id,
                                 images = post.images
                             )
                         )
@@ -195,20 +173,3 @@ fun ProfileScreen(
         }
     }
 }
-
-private val testList = listOf(
-    FileData("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "1"),
-    FileData(
-        "https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg",
-        "2"
-    ),
-    FileData(
-        "https://sun1-89.userapi.com/impf/zNPPyzy-fIkM0yKJRQxrgTXvs0GRq8o3r3R2cg/FzpwGJudQi4.jpg?size=1461x2160&quality=95&sign=16250424fdef8401465f946368bc8188&type=album",
-        "3"
-    ),
-    FileData("https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg", "4"),
-    FileData(
-        "https://ciroccodentalcenterpa.com/wp-content/uploads/foods-fight-plaque.jpg",
-        "5"
-    )
-)

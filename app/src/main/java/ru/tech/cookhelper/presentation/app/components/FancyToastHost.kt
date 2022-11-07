@@ -39,6 +39,7 @@ fun FancyToastHost(fancyToastValues: FancyToastValues) {
                 modifier = Modifier
                     .fillMaxSize()
                     .imePadding()
+                    .navigationBarsPadding()
             ) {
                 Card(
                     colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onTertiaryContainer),
