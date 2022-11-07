@@ -1,8 +1,8 @@
 package ru.tech.cookhelper.data.remote.api.ingredients
 
 import retrofit2.http.*
+import ru.tech.cookhelper.data.remote.dto.MatchedRecipeDto
 import ru.tech.cookhelper.data.remote.dto.ProductDto
-import ru.tech.cookhelper.data.remote.dto.RecipeDto
 import ru.tech.cookhelper.data.remote.dto.UserDto
 import ru.tech.cookhelper.data.remote.utils.Response
 
@@ -21,6 +21,6 @@ interface FridgeApi {
     @GET("api/user/get/fridge/recipe/")
     suspend fun getMatchedRecipes(
         @Query("token") token: String
-    ): Result<Response<List<RecipeDto>>>
+    ): Result<Response<List<MatchedRecipeDto>>>
 
 }

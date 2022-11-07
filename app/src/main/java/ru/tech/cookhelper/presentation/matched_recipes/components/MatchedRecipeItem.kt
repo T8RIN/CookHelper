@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AvTimer
-import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,14 +12,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import ru.tech.cookhelper.domain.model.Recipe
+import ru.tech.cookhelper.R
+import ru.tech.cookhelper.domain.model.MatchedRecipe
 import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.ui.theme.Fridge
 
 @Composable
-fun MatchedRecipeItem(recipe: Recipe, onClick: () -> Unit) {
+fun MatchedRecipeItem(matchedRecipe: MatchedRecipe, onClick: () -> Unit) {
+    val recipe = matchedRecipe.recipe
+
     Column(
         Modifier
             .clip(RoundedCornerShape(6.dp))
@@ -60,7 +63,10 @@ fun MatchedRecipeItem(recipe: Recipe, onClick: () -> Unit) {
                 ) {
                     Icon(Icons.Outlined.AvTimer, null)
                     Spacer(Modifier.width(15.dp))
-                    Text("${recipe.time} мин", textAlign = TextAlign.Center)
+                    Text(
+                        stringResource(R.string.cook_time_min, recipe.time),
+                        textAlign = TextAlign.Center
+                    )
                 }
                 Spacer(Modifier.height(5.dp))
                 Row(
@@ -68,14 +74,14 @@ fun MatchedRecipeItem(recipe: Recipe, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        Icons.Outlined.LocalFireDepartment,
+                        Icons.Outlined.Fridge,
                         null,
                         tint = MaterialTheme.colorScheme.outline
                     )
                     Spacer(Modifier.width(15.dp))
                     Text(
-                        "Б ${recipe.proteins}\nЖ ${recipe.fats}\nУ ${recipe.carbohydrates}",
-                        style = MaterialTheme.typography.bodySmall,
+                        text = matchedRecipe.percentString,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.outline
                     )
                 }

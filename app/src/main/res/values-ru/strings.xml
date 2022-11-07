@@ -217,4 +217,7 @@
     <string name="topic_not_created">Обсуждение не создано</string>
     <string name="fridge_is_empty">Холодильник пуст</string>
     <string name="add_products">Добавить продукты</string>
+    <string name="picking_products">Выбор продуктов</string>
+    <string name="picking_products_started">Вы выбрали некотороые продукты,  есливы закроете это окно сейчас, то они не будут добавлены в холодильник</string>
+    <string name="cook_time_min">%d мин</string>
 </resources>

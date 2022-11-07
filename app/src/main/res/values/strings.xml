@@ -219,4 +219,5 @@
     <string name="add_products">Add products</string>
     <string name="picking_products">Picking products</string>
     <string name="picking_products_started">You have picked some products, if you leave now they wil be not added to your fridge</string>
+    <string name="cook_time_min">%d min</string>
 </resources>

@@ -5,8 +5,8 @@ import ru.tech.cookhelper.core.constants.Constants.DELIMITER
 import ru.tech.cookhelper.core.constants.Status
 import ru.tech.cookhelper.core.utils.kotlin.getOrExceptionAndNull
 import ru.tech.cookhelper.data.remote.api.ingredients.FridgeApi
+import ru.tech.cookhelper.domain.model.MatchedRecipe
 import ru.tech.cookhelper.domain.model.Product
-import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.User
 import ru.tech.cookhelper.domain.repository.FridgeRepository
 import ru.tech.cookhelper.presentation.ui.utils.toAction
@@ -47,7 +47,7 @@ class FridgeRepositoryImpl @Inject constructor(
         return Action.Empty()
     }
 
-    override suspend fun getMatchedRecipes(token: String): Action<List<Recipe>> {
+    override suspend fun getMatchedRecipes(token: String): Action<List<MatchedRecipe>> {
         fridgeApi
             .getMatchedRecipes(token)
             .getOrExceptionAndNull {

@@ -31,8 +31,10 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -64,9 +66,9 @@ fun MatchedRecipesScreen(
                 ) {
                     itemsIndexed(viewModel.matchedRecipesState.recipes) { index, recipe ->
                         MatchedRecipeItem(
-                            recipe = recipe,
+                            matchedRecipe = recipe,
                             onClick = {
-
+                                screenController.navigate(Screen.RecipeDetails(recipe))
                             }
                         )
                         if (index != viewModel.matchedRecipesState.recipes.lastIndex) Separator()
