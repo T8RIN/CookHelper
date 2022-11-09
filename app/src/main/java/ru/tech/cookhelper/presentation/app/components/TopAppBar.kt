@@ -125,4 +125,4 @@ fun TopAppBarScrollBehavior.containerColorWithScroll(
         FastOutLinearInEasing.transform(if (state.overlappedFraction > 0.01f) 1f else 0f)
     ),
     animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-)
+).value

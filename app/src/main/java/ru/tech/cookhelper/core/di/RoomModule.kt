@@ -21,14 +21,20 @@ object RoomModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext applicationContext: Context,
-        jsonParser: JsonParser
+        typeConverters: TypeConverters
     ): Database = Room.databaseBuilder(
-        applicationContext,
-        Database::class.java,
-        "cook_helper_db"
-    ).addTypeConverter(TypeConverters(jsonParser))
+        context = applicationContext,
+        klass = Database::class.java,
+        name = "CookHelperDatabase"
+    ).addTypeConverter(typeConverters)
         .fallbackToDestructiveMigration()
         .fallbackToDestructiveMigrationOnDowngrade()
         .build()
+
+    @Singleton
+    @Provides
+    fun provideTypeConverters(
+        jsonParser: JsonParser
+    ): TypeConverters = TypeConverters(jsonParser)
 
 }

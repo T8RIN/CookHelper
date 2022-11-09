@@ -2,6 +2,8 @@ package ru.tech.cookhelper.core.constants
 
 object Constants {
 
+    val DOTS = "." * 100
+
     const val DELIMITER = "*"
 
     const val BASE_URL = "https://cookhelper-inc.herokuapp.com/"
@@ -17,4 +19,12 @@ object Constants {
         return IMG_URL.replace(DELIMITER, id.toString())
     }
 
+}
+
+private operator fun String.times(count: Int): String {
+    var s = this
+    repeat(count) {
+        s += this
+    }
+    return s
 }

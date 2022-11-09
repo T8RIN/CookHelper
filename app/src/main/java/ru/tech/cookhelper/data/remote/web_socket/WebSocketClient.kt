@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import okhttp3.*
 import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import ru.tech.cookhelper.data.utils.JsonParser
+import java.io.Closeable
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
@@ -17,7 +18,7 @@ abstract class WebSocketClient<T>(
     protected var baseUrl: String = "",
     private val jsonParser: JsonParser,
     private var type: Type = Nothing::class.java
-) : WebSocketListener() {
+) : WebSocketListener(), Closeable {
 
     protected open val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .setTimeout()
@@ -126,7 +127,7 @@ abstract class WebSocketClient<T>(
     }
 
     @Synchronized
-    fun close() {
+    override fun close() {
         closeWebSocket()
     }
 

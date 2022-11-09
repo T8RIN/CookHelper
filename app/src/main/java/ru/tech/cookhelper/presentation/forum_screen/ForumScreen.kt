@@ -38,7 +38,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.*
 fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
     val screenController = LocalScreenController.current
     val bottomSheetController = LocalBottomSheetController.current
-    val tabColor by scrollBehavior.containerColorWithScroll()
+    val tabColor = scrollBehavior.containerColorWithScroll()
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 

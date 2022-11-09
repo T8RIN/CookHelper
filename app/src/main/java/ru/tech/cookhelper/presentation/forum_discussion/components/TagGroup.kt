@@ -6,7 +6,11 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun ChipGroup(modifier: Modifier = Modifier, chips: List<String>, onChipClick: (String) -> Unit) {
+fun TagGroup(
+    modifier: Modifier = Modifier,
+    chips: List<String>,
+    onChipClick: (String) -> Unit
+) {
     FlowRow(
         mainAxisSpacing = 8.dp,
         crossAxisSpacing = 8.dp,

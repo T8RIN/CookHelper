@@ -41,7 +41,7 @@ import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
-import ru.tech.cookhelper.presentation.forum_discussion.components.ChipGroup
+import ru.tech.cookhelper.presentation.forum_discussion.components.TagGroup
 import ru.tech.cookhelper.presentation.forum_discussion.components.ExpandableFloatingActionButtonWithExtra
 import ru.tech.cookhelper.presentation.forum_discussion.components.ForumReplyItem
 import ru.tech.cookhelper.presentation.forum_discussion.components.RatingButton
@@ -282,7 +282,7 @@ fun ForumDiscussionScreen(id: Int, title: String, onBack: () -> Unit) {
                         )
                     }
                     Spacer(Modifier.size(4.dp))
-                    ChipGroup(
+                    TagGroup(
                         modifier = Modifier.padding(8.dp),
                         chips = listOf(
                             "Forum",
