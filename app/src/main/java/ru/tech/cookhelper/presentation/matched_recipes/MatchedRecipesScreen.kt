@@ -54,7 +54,7 @@ fun MatchedRecipesScreen(
         TopAppBar(
             title = { Text(stringResource(R.string.matched_recipes)) },
             navigationIcon = {
-                IconButton(onClick = { onBack() }) {
+                IconButton(onClick = onBack) {
                     Icon(Icons.Rounded.ArrowBack, null)
                 }
             },

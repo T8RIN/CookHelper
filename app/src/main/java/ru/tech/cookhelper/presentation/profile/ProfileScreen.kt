@@ -65,7 +65,7 @@ fun ProfileScreen(
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     LazyColumn(
-        contentPadding = WindowInsets.navigationBars.asPaddingValues().addPadding(bottom = 80.dp)
+        contentPadding = WindowInsets.navigationBars.asPaddingValues().addPadding(bottom = 92.dp)
     ) {
         item {
             UserInfoBlock(

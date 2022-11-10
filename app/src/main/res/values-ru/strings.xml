@@ -223,4 +223,6 @@
     <string name="added_to_fridge">Добавлено в холодильник</string>
     <string name="removed_from_fridge">Удалено из холодильника</string>
     <string name="products_not_matched">У вас недостаточно продуктов для приготовления какого-либо блюда или уберите что-то из блок-листа</string>
+    <string name="products">Продукты</string>
+    <string name="discussion">Обсуждение</string>
 </resources>

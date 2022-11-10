@@ -4,14 +4,15 @@ import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -35,7 +36,6 @@ import ru.tech.cookhelper.presentation.forum_screen.components.IndicatorType
 import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_details.viewModel.RecipeDetailsViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.stringResourceListOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
@@ -54,7 +54,7 @@ fun RecipeDetailsScreen(
     }
 
     val recipeState = viewModel.recipe
-    val scrollBehavior = topAppBarScrollBehavior(ScrollBehavior.EnterAlways())
+    val scrollBehavior = topAppBarScrollBehavior(ScrollBehavior.ExitUntilCollapsed())
 
     Column(Modifier.navigationBarsPadding()) {
         TopAppBar(
@@ -119,23 +119,35 @@ private fun BoxWithConstraintsScope.PortraitContent(
             Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .verticalScroll(rememberScrollState())
         ) {
+            var scrolled by remember { mutableStateOf(0) }
             Picture(
                 model = recipe?.image?.link,
-                shape = SquircleShape(24.dp),
+                shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
                     .width(maxWidth)
-                    .height(maxWidth / 1.5f)
+                    .height((maxWidth / 1.5f) - (0.5 * scrolled).dp)
                     .padding(12.dp)
             )
             HorizontalPager(
-                count = 2,
-                state = state
+                modifier = Modifier.weight(1f),
+                count = 3,
+                state = state,
+                verticalAlignment = Alignment.Top
             ) { page ->
-                when (page) {
-                    0 -> {
-                        Column(Modifier.padding(4.dp)) {
+                val scrollState = rememberScrollState()
+
+                LaunchedEffect(scrollState.value) {
+                    scrolled = scrollState.value
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                ) {
+                    when (page) {
+                        0 -> {
                             if (recipe != null) {
                                 repeat(recipe.ingredients.size) {
                                     val product = recipe.ingredients[it]
@@ -154,18 +166,30 @@ private fun BoxWithConstraintsScope.PortraitContent(
                                 }
                             }
                         }
-                    }
-                    1 -> {
+                        1 -> {
+                            if (recipe != null) {
+                                repeat(recipe.cookSteps.size) {
+                                    Text(
+                                        text = recipe.cookSteps[it],
+                                        modifier = Modifier.padding(16.dp)
+                                    )
+                                    Spacer(Modifier.height(16.dp))
+                                }
+                            }
+                        }
+                        2 -> {
 
+                        }
                     }
                 }
             }
         }
         Separator()
+
         TabRow(
             indicatorType = IndicatorType.Tonal,
             selectedTabIndex = selectedTab,
-            tabs = stringResourceListOf(R.string.products, R.string.recipe),
+            tabs = stringResourceListOf(R.string.products, R.string.recipe, R.string.discussion),
             onTabClick = {
                 scope.launch {
                     state.animateScrollToPage(it)

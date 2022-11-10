@@ -224,4 +224,5 @@
     <string name="removed_from_fridge">Removed from fridge</string>
     <string name="products_not_matched">There is not enough products in your fridge to cook something, or check your block-list first</string>
     <string name="products">Products</string>
+    <string name="discussion">Discussion</string>
 </resources>
