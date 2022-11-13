@@ -26,8 +26,8 @@ fun TopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     val colors =
-        if (background != null) TopAppBarDefaults.smallTopAppBarColors(containerColor = background)
-        else TopAppBarDefaults.smallTopAppBarColors()
+        if (background != null) TopAppBarDefaults.topAppBarColors(containerColor = background)
+        else TopAppBarDefaults.topAppBarColors()
 
     when (topAppBarSize) {
         TopAppBarSize.Small -> {
@@ -123,6 +123,21 @@ fun TopAppBarScrollBehavior.containerColorWithScroll(
         containerColor,
         scrolledContainerColor,
         FastOutLinearInEasing.transform(if (state.overlappedFraction > 0.01f) 1f else 0f)
+    ),
+    animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+).value
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarScrollBehavior.containerColorWithCollapse(
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    collapsedContainerColor: Color = MaterialTheme.colorScheme
+        .surfaceColorAtElevation(3.dp)
+) = animateColorAsState(
+    targetValue = lerp(
+        containerColor,
+        collapsedContainerColor,
+        FastOutLinearInEasing.transform(state.collapsedFraction)
     ),
     animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
 ).value

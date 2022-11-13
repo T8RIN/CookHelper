@@ -4,15 +4,19 @@ import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -32,6 +36,7 @@ import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.app.components.TopAppBarSize
+import ru.tech.cookhelper.presentation.app.components.containerColorWithCollapse
 import ru.tech.cookhelper.presentation.forum_screen.components.IndicatorType
 import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_details.viewModel.RecipeDetailsViewModel
@@ -57,16 +62,28 @@ fun RecipeDetailsScreen(
     val scrollBehavior = topAppBarScrollBehavior(ScrollBehavior.ExitUntilCollapsed())
 
     Column(Modifier.navigationBarsPadding()) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = onBack) {
-                    Icon(Icons.Rounded.ArrowBack, null)
-                }
-            },
-            topAppBarSize = TopAppBarSize.Large,
-            title = { Text(recipeState?.title ?: "") },
-            scrollBehavior = scrollBehavior
-        )
+        Box {
+            Picture(
+                model = recipe?.image?.link,
+                shape = RectangleShape,
+                colorFilter = ColorFilter.tint(
+                    color = MaterialTheme.colorScheme.scrim.copy(.5f),
+                    blendMode = BlendMode.Darken
+                ),
+                modifier = Modifier.matchParentSize()
+            )
+            TopAppBar(
+                background = scrollBehavior.containerColorWithCollapse(Color.Transparent),
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Rounded.ArrowBack, null)
+                    }
+                },
+                topAppBarSize = TopAppBarSize.Large,
+                title = { Text(recipeState?.title ?: "") },
+                scrollBehavior = scrollBehavior
+            )
+        }
         BoxWithConstraints(
             Modifier
                 .fillMaxWidth()
@@ -120,31 +137,16 @@ private fun BoxWithConstraintsScope.PortraitContent(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            var scrolled by remember { mutableStateOf(0) }
-            Picture(
-                model = recipe?.image?.link,
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .width(maxWidth)
-                    .height((maxWidth / 1.5f) - (0.5 * scrolled).dp)
-                    .padding(12.dp)
-            )
             HorizontalPager(
                 modifier = Modifier.weight(1f),
                 count = 3,
                 state = state,
                 verticalAlignment = Alignment.Top
             ) { page ->
-                val scrollState = rememberScrollState()
-
-                LaunchedEffect(scrollState.value) {
-                    scrolled = scrollState.value
-                }
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(scrollState)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     when (page) {
                         0 -> {
