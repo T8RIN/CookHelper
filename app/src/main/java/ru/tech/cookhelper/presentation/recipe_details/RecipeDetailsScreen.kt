@@ -13,9 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
@@ -41,6 +38,7 @@ import ru.tech.cookhelper.presentation.forum_screen.components.IndicatorType
 import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_details.viewModel.RecipeDetailsViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
+import ru.tech.cookhelper.presentation.ui.theme.scrimColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.stringResourceListOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
@@ -66,14 +64,12 @@ fun RecipeDetailsScreen(
             Picture(
                 model = recipe?.image?.link,
                 shape = RectangleShape,
-                colorFilter = ColorFilter.tint(
-                    color = MaterialTheme.colorScheme.scrim.copy(.5f),
-                    blendMode = BlendMode.Darken
-                ),
                 modifier = Modifier.matchParentSize()
             )
             TopAppBar(
-                background = scrollBehavior.containerColorWithCollapse(Color.Transparent),
+                background = scrollBehavior.containerColorWithCollapse(
+                    MaterialTheme.colorScheme.scrimColor()
+                ),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Rounded.ArrowBack, null)
@@ -124,7 +120,6 @@ private fun BoxWithConstraintsScope.PortraitContent(
 ) {
     val constraints = this.constraints
     val maxHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }
-    val maxWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
     val selectedTab = state.currentPage
 
     Column(

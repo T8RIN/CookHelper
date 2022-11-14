@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.ui.theme
 
 import android.content.res.Configuration
 import android.os.Build
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverseSecondaryColor
@@ -134,3 +136,11 @@ fun getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
         else LightThemeColors
     }
 }
+
+@Composable
+fun Material3ColorScheme.scrimColor(
+    @FloatRange(
+        0.0,
+        1.0
+    ) alpha: Float = 0.75f
+): Color = surfaceColorAtElevation(3.dp).copy(alpha = alpha)
