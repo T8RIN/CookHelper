@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -16,7 +17,7 @@ import kotlinx.coroutines.isActive
 @Composable
 fun Marquee(
     modifier: Modifier = Modifier,
-    gradientEdgeColor: Color = Color.White,
+    gradientEdgeColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable (Modifier) -> Unit
 ) {
     var xOffset by remember { mutableStateOf(0) }
