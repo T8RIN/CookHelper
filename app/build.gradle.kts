@@ -72,8 +72,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03")
 
     //Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.44.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.44.2")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
     //Desugaring
@@ -92,11 +92,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-util:1.4.0-alpha02")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.27.0")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.27.0")
-    implementation("com.google.accompanist:accompanist-pager:0.27.0")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.27.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.1")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.27.1")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.27.1")
+    implementation("com.google.accompanist:accompanist-pager:0.27.1")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.27.1")
 
     //Coil
     implementation("io.coil-kt:coil:2.2.2")

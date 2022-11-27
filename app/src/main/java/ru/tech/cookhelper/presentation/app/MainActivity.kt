@@ -19,8 +19,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        actionBar?.hide()
+
         GlobalExceptionHandler.initialize(applicationContext, CrashActivity::class.java)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             provideWindowSizeClass {
                 CookHelperApp()
