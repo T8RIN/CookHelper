@@ -125,4 +125,7 @@ dependencies {
     //Result Retrofit Adapter
     implementation("com.github.skydoves:retrofit-adapters-result:1.0.4")
 
+    //Compose Blur backport
+    implementation("com.github.skydoves:cloudy:0.1.1")
+
 }

@@ -91,7 +91,10 @@ fun EditProfileScreen(
                         .padding(horizontal = 16.dp),
                     loading = viewModel.loginState.isLoading,
                     isError = !viewModel.loginState.isValid,
-                    error = { Text(viewModel.loginState.error.asString()) },
+                    supportingText = {
+                        Text(viewModel.loginState.error.asString())
+                    },
+                    supportingTextVisible = !viewModel.loginState.isValid,
                     startIcon = Icons.Outlined.AlternateEmail,
                     onValueChange = {
                         viewModel.setTemp(nickname = it)
@@ -108,8 +111,9 @@ fun EditProfileScreen(
                         .padding(horizontal = 16.dp),
                     loading = viewModel.emailState.isLoading,
                     isError = !viewModel.emailState.isValid,
-                    error = {
+                    supportingText = { isError ->
                         Text(viewModel.emailState.error.asString())
+                        isError
                     },
                     singleLine = true,
                     startIcon = Icons.Outlined.Email,
@@ -217,7 +221,7 @@ private fun PasswordField(
     value: String,
     label: String,
     isError: Boolean = false,
-    error: (@Composable () -> Unit)? = null,
+    error: (@Composable (Boolean) -> Unit)? = null,
     showPassword: MutableState<Boolean>,
     onValueChange: (String) -> Unit
 ) {
@@ -237,7 +241,8 @@ private fun PasswordField(
                 )
             }
         },
-        error = error,
+        supportingText = error,
+        supportingTextVisible = isError,
         isError = isError,
         value = value
     )

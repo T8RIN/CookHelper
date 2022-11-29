@@ -104,9 +104,10 @@ fun RegistrationField(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
-                    error = {
+                    supportingText = {
                         Text(stringResource(R.string.required_field))
                     },
+                    supportingTextVisible = name.isEmpty(),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
                     endIcon = {
                         if (name.isNotBlank())
@@ -127,9 +128,10 @@ fun RegistrationField(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
-                    error = {
+                    supportingText = {
                         Text(stringResource(R.string.required_field))
                     },
+                    supportingTextVisible = surname.isEmpty(),
                     modifier = Modifier.width(TextFieldDefaults.MinWidth),
                     endIcon = {
                         if (surname.isNotBlank())
@@ -150,9 +152,10 @@ fun RegistrationField(
                     label = { Text(stringResource(R.string.nick)) },
                     singleLine = true,
                     isError = !viewModel.loginState.isValid,
-                    error = {
+                    supportingText = {
                         Text(viewModel.loginState.error.asString())
                     },
+                    supportingTextVisible = !viewModel.loginState.isValid,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
@@ -180,9 +183,10 @@ fun RegistrationField(
                             label = { Text(stringResource(R.string.email)) },
                             singleLine = true,
                             isError = !viewModel.emailState.isValid,
-                            error = {
+                            supportingText = {
                                 Text(viewModel.emailState.error.asString())
                             },
+                            supportingTextVisible = !viewModel.emailState.isValid,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Next
@@ -206,9 +210,10 @@ fun RegistrationField(
                             label = { Text(stringResource(R.string.password)) },
                             singleLine = true,
                             isError = !viewModel.isPasswordValid,
-                            error = {
+                            supportingText = {
                                 Text(viewModel.passwordValidationError.asString())
                             },
+                            supportingTextVisible = !viewModel.isPasswordValid,
                             appearance = TextFieldAppearance.Outlined,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
@@ -239,10 +244,11 @@ fun RegistrationField(
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Done
                             ),
-                            error = {
+                            supportingText = {
                                 if (passwordRepeat.isEmpty()) Text(stringResource(R.string.required_field))
                                 else Text(stringResource(R.string.passwords_dont_match))
                             },
+                            supportingTextVisible = passwordRepeat.isEmpty() || passwordRepeat != password,
                             modifier = Modifier.width(TextFieldDefaults.MinWidth),
                             keyboardActions = KeyboardActions(onDone = {
                                 focusManager.clearFocus()

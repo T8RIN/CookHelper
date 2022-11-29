@@ -1,7 +1,6 @@
 package ru.tech.cookhelper.presentation.forum_discussion
 
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,16 +41,16 @@ import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
-import ru.tech.cookhelper.presentation.forum_discussion.components.TagGroup
 import ru.tech.cookhelper.presentation.forum_discussion.components.ExpandableFloatingActionButtonWithExtra
 import ru.tech.cookhelper.presentation.forum_discussion.components.ForumReplyItem
 import ru.tech.cookhelper.presentation.forum_discussion.components.RatingButton
+import ru.tech.cookhelper.presentation.forum_discussion.components.TagGroup
+import ru.tech.cookhelper.presentation.forum_discussion.viewModel.ForumDiscussionViewModel
 import ru.tech.cookhelper.presentation.profile.components.AuthorBubble
 import ru.tech.cookhelper.presentation.profile.components.PostActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.ForumRemove
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
-import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.blur
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.pluralStringResource
@@ -67,7 +67,12 @@ import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun ForumDiscussionScreen(id: Int, title: String, onBack: () -> Unit) {
+fun ForumDiscussionScreen(
+    id: Int,
+    title: String,
+    onBack: () -> Unit,
+    viewModel: ForumDiscussionViewModel = hiltViewModel()
+) {
     BackHandler(onBack = onBack)
 
     val scrollBehavior = topAppBarScrollBehavior()
@@ -78,18 +83,11 @@ fun ForumDiscussionScreen(id: Int, title: String, onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
 
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
-    var job by remember { mutableStateOf<Job?>(null) }
-    DisposableEffect(Unit) {
-        onDispose { job?.cancel() }
-    }
     val placeholderSize = configuration.minScreenDp or 460.dp
 
     var applyBottomPadding by remember { mutableStateOf<Job?>(null) }
     var bottomPadding by remember { mutableStateOf(48.dp) }
     val isAtTheBottom = lazyListState.isLastItemVisible()
-
-    //TODO: Create Picture.kt with blurred background
 
     val user = User(
         id = 1,
@@ -248,7 +246,7 @@ fun ForumDiscussionScreen(id: Int, title: String, onBack: () -> Unit) {
                     Spacer(Modifier.size(10.dp))
                     Box(Modifier.fillMaxWidth()) {
                         Picture(
-                            model = bitmap,
+                            model = viewModel.blurredBitmap,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(configuration.minScreenDp),
@@ -269,14 +267,7 @@ fun ForumDiscussionScreen(id: Int, title: String, onBack: () -> Unit) {
                                 },
                             allowHardware = false,
                             onSuccess = {
-                                job?.cancel()
-                                if (configuration.isLandscape) {
-                                    job = scope.launch {
-                                        delay(300)
-                                        bitmap =
-                                            it.result.drawable.toBitmap().blur(scale = 0.5f, 60)
-                                    }
-                                }
+                                viewModel.blur(it.result.drawable.toBitmap())
                             },
                             shape = RoundedCornerShape(4.dp)
                         )

@@ -3,9 +3,7 @@ package ru.tech.cookhelper.presentation.ui.utils.android
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Dimensions.MAX_DIMEN
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Extensions.GIF
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Extensions.SVG
@@ -108,7 +106,10 @@ object ImageUtils {
         }
     }
 
-    suspend fun Bitmap.blur(scale: Float, radius: Int): Bitmap? = withContext(Dispatchers.IO) {
+    private suspend fun Bitmap.blur(
+        scale: Float,
+        radius: Int
+    ): Bitmap? = withContext(Dispatchers.IO) {
         var sentBitmap = this@blur
         val width = (sentBitmap.width * scale).roundToInt()
         val height = (sentBitmap.height * scale).roundToInt()
@@ -319,5 +320,25 @@ object ImageUtils {
         sentBitmap.recycle()
         return@withContext bitmap
     }
+
+
+    private var job: Job? = null
+
+    fun Bitmap.blur(
+        scale: Float = 0.5f,
+        radius: Int = 60,
+        debounce: Long = 300L,
+        scope: CoroutineScope,
+        onBlurred: (Bitmap?) -> Unit
+    ): Job {
+        job?.cancel()
+        return scope.launch {
+            delay(debounce)
+            onBlurred(blur(scale, radius))
+        }.also { job = it }
+    }
+
+    fun Bitmap.signature(): String =
+        "$allocationByteCount-$density-$config-$width-$height"
 
 }

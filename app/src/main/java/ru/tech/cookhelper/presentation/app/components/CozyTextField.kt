@@ -7,9 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -19,7 +17,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.RoundedTextField
@@ -45,7 +42,8 @@ fun CozyTextField(
     startIcon: ImageVector? = null,
     isError: Boolean = false,
     loading: Boolean = false,
-    error: (@Composable () -> Unit)? = null,
+    supportingText: (@Composable (isError: Boolean) -> Unit)? = null,
+    supportingTextVisible: Boolean = true,
     endIcon: (@Composable () -> Unit)? = null,
     formatText: String.() -> String = { this },
     textStyle: TextStyle = LocalTextStyle.current,
@@ -62,7 +60,8 @@ fun CozyTextField(
     },
     enabled: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    minLines: Int = 1
 ) {
     val labelImpl = @Composable {
         Text(text = label!!)
@@ -87,7 +86,8 @@ fun CozyTextField(
         startIcon = if (startIcon != null) leadingIconImpl else null,
         isError = isError,
         loading = loading,
-        error = error,
+        supportingText = supportingText,
+        supportingTextVisible = supportingTextVisible,
         endIcon = endIcon,
         formatText = formatText,
         textStyle = textStyle,
@@ -100,7 +100,8 @@ fun CozyTextField(
         colors = colors,
         enabled = enabled,
         maxLines = maxLines,
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
+        minLines = minLines
     )
 }
 
@@ -121,7 +122,8 @@ fun CozyTextField(
     startIcon: (@Composable () -> Unit)? = null,
     isError: Boolean = false,
     loading: Boolean = false,
-    error: (@Composable () -> Unit)? = null,
+    supportingText: (@Composable (isError: Boolean) -> Unit)? = null,
+    supportingTextVisible: Boolean = true,
     endIcon: (@Composable () -> Unit)? = null,
     formatText: String.() -> String = { this },
     textStyle: TextStyle = LocalTextStyle.current,
@@ -138,7 +140,8 @@ fun CozyTextField(
     },
     enabled: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    minLines: Int = 1
 ) {
     val focus = LocalFocusManager.current
     val scope = rememberCoroutineScope()
@@ -155,21 +158,10 @@ fun CozyTextField(
             }
         }
         .animateContentSize()
-    val errorImpl = @Composable {
-        if (isError && !loading && error != null) {
-            Spacer(Modifier.height(6.dp))
-            ProvideTextStyle(
-                LocalTextStyle.current.copy(
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 12.sp
-                )
-            ) {
-                Row {
-                    Spacer(modifier = Modifier.width(15.dp))
-                    error()
-                    Spacer(modifier = Modifier.width(15.dp))
-                }
-            }
+
+    val supportingTextImpl = @Composable {
+        if (!loading && supportingText != null) {
+            supportingText(isError)
         }
     }
 
@@ -200,10 +192,10 @@ fun CozyTextField(
                     enabled = enabled,
                     maxLines = maxLines,
                     interactionSource = interactionSource,
-                    isError = isError
-                    //TODO: Try to use new supportingText feature
+                    isError = isError,
+                    supportingText = if (supportingText != null && supportingTextVisible) supportingTextImpl else null,
+                    minLines = minLines
                 )
-                errorImpl()
             }
         }
         TextFieldAppearance.Filled -> {
@@ -236,8 +228,9 @@ fun CozyTextField(
                     maxLines = maxLines,
                     interactionSource = interactionSource,
                     isError = isError,
+                    supportingText = if (supportingText != null && supportingTextVisible) supportingTextImpl else null,
+                    minLines = minLines
                 )
-                errorImpl()
             }
         }
         TextFieldAppearance.Rounded -> {
@@ -251,7 +244,8 @@ fun CozyTextField(
                 value = value,
                 isError = isError,
                 loading = loading,
-                error = error,
+                supportingText = supportingText,
+                supportingTextVisible = supportingTextVisible,
                 endIcon = endIcon,
                 formatText = formatText,
                 textStyle = textStyle,
@@ -264,7 +258,8 @@ fun CozyTextField(
                 colors = colors,
                 enabled = enabled,
                 maxLines = maxLines,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                minLines = minLines
             )
         }
     }

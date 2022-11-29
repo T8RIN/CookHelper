@@ -10,10 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -43,7 +40,8 @@ fun RoundedTextField(
     value: String,
     isError: Boolean = false,
     loading: Boolean = false,
-    error: (@Composable () -> Unit)? = null,
+    supportingText: (@Composable (isError: Boolean) -> Unit)? = null,
+    supportingTextVisible: Boolean = true,
     endIcon: (@Composable () -> Unit)? = null,
     formatText: String.() -> String = { this },
     textStyle: TextStyle = LocalTextStyle.current,
@@ -56,7 +54,8 @@ fun RoundedTextField(
     colors: TextFieldColors = RoundedTextFieldColors(isError),
     enabled: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    minLines: Int = 1
 ) {
     val labelImpl = @Composable {
         Text(
@@ -91,13 +90,15 @@ fun RoundedTextField(
         hint = if (hint.isNotEmpty()) hintImpl else null,
         isError = isError,
         loading = loading,
-        error = error,
+        supportingText = supportingText,
+        supportingTextVisible = supportingTextVisible,
         formatText = formatText,
         onLoseFocusTransformation = onLoseFocusTransformation,
         keyboardActions = keyboardActions,
         enabled = enabled,
         maxLines = maxLines,
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
+        minLines = minLines
     )
 }
 
@@ -113,7 +114,8 @@ fun RoundedTextField(
     value: String,
     isError: Boolean = false,
     loading: Boolean = false,
-    error: (@Composable () -> Unit)? = null,
+    supportingText: (@Composable (isError: Boolean) -> Unit)? = null,
+    supportingTextVisible: Boolean = true,
     endIcon: (@Composable () -> Unit)? = null,
     formatText: String.() -> String = { this },
     textStyle: TextStyle = LocalTextStyle.current,
@@ -126,7 +128,8 @@ fun RoundedTextField(
     colors: TextFieldColors = RoundedTextFieldColors(isError),
     enabled: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    minLines: Int = 1
 ) {
     val focus = LocalFocusManager.current
 
@@ -163,6 +166,12 @@ fun RoundedTextField(
         }
         .animateContentSize()
 
+    val supportingTextImpl = @Composable {
+        if (!loading && supportingText != null) {
+            supportingText(isError)
+        }
+    }
+
     Column(
         modifier = modifier
             .animateContentSize()
@@ -190,9 +199,10 @@ fun RoundedTextField(
             keyboardActions = keyboardActions,
             enabled = enabled,
             maxLines = maxLines,
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            minLines = minLines,
         )
-        if (isError && !loading && error != null) {
+        if (isError && !loading && supportingText != null && supportingTextVisible) {
             Spacer(Modifier.height(6.dp))
             ProvideTextStyle(
                 LocalTextStyle.current.copy(
@@ -202,7 +212,7 @@ fun RoundedTextField(
             ) {
                 Row {
                     Spacer(modifier = Modifier.width(15.dp))
-                    error()
+                    supportingTextImpl()
                     Spacer(modifier = Modifier.width(15.dp))
                 }
             }
