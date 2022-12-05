@@ -3,6 +3,8 @@ package ru.tech.cookhelper.presentation.ui.theme
 import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.FloatRange
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,6 +20,10 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.darken
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.lighten
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
+
+@Composable
+private fun Color.animate(): Color =
+    animateColorAsState(targetValue = this, animationSpec = tween(1500)).value
 
 private val ColorScheme.LightThemeColors: Material3ColorScheme
     get() = lightColorScheme(
@@ -95,6 +101,38 @@ fun CookHelperTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         else -> getColorScheme()
+    }.run {
+        copy(
+            primary = primary.animate(),
+            onPrimary = onPrimary.animate(),
+            primaryContainer = primaryContainer.animate(),
+            onPrimaryContainer = onPrimaryContainer.animate(),
+            inversePrimary = inversePrimary.animate(),
+            secondary = secondary.animate(),
+            onSecondary = onSecondary.animate(),
+            secondaryContainer = secondaryContainer.animate(),
+            onSecondaryContainer = onSecondaryContainer.animate(),
+            tertiary = tertiary.animate(),
+            onTertiary = onTertiary.animate(),
+            tertiaryContainer = tertiaryContainer.animate(),
+            onTertiaryContainer = onTertiaryContainer.animate(),
+            background = background.animate(),
+            onBackground = onBackground.animate(),
+            surface = surface.animate(),
+            onSurface = onSurface.animate(),
+            surfaceVariant = surfaceVariant.animate(),
+            onSurfaceVariant = onSurfaceVariant.animate(),
+            surfaceTint = surfaceTint.animate(),
+            inverseSurface = inversePrimary.animate(),
+            inverseOnSurface = inverseOnSurface.animate(),
+            error = error.animate(),
+            onError = onError.animate(),
+            errorContainer = errorContainer.animate(),
+            onErrorContainer = onError.animate(),
+            outline = outline.animate(),
+            outlineVariant = outlineVariant.animate(),
+            scrim = scrim.animate()
+        )
     }
 
     val systemUiController = rememberSystemUiController()
@@ -120,6 +158,7 @@ fun CookHelperTheme(
             content()
         }
     )
+
 }
 
 @Composable
