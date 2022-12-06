@@ -1,6 +1,5 @@
 package ru.tech.cookhelper.presentation.forum_discussion
 
-import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
@@ -50,6 +49,7 @@ import ru.tech.cookhelper.presentation.profile.components.PostActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.ForumRemove
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
+import ru.tech.cookhelper.presentation.ui.utils.android.ConfigurationUtils.minScreenDp
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
@@ -62,7 +62,6 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
-import kotlin.math.min
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -438,13 +437,3 @@ private infix fun Dp.or(dp: Dp): Dp {
     return if (this >= dp) dp
     else this
 }
-
-private val Configuration.isLandscape: Boolean
-    get() {
-        return orientation == Configuration.ORIENTATION_LANDSCAPE
-    }
-
-private val Configuration.minScreenDp: Dp
-    get() {
-        return min(screenHeightDp, screenWidthDp).dp
-    }
