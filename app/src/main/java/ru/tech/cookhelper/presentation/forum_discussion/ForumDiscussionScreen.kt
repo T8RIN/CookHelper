@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -51,6 +50,7 @@ import ru.tech.cookhelper.presentation.profile.components.PostActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.ForumRemove
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.pluralStringResource
@@ -246,7 +246,8 @@ fun ForumDiscussionScreen(
                     Spacer(Modifier.size(10.dp))
                     Box(Modifier.fillMaxWidth()) {
                         Picture(
-                            model = viewModel.blurredBitmap,
+                            model = "https://media-cldnry.s-nbcnews.com/image/upload/rockcms/2022-03/plant-based-food-mc-220323-02-273c7b.jpg",
+                            transformations = listOf(ImageUtils.BlurTransformation(radius = 60)),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(configuration.minScreenDp),
@@ -265,10 +266,6 @@ fun ForumDiscussionScreen(
                                         )
                                     )
                                 },
-                            allowHardware = false,
-                            onSuccess = {
-                                viewModel.blur(it.result.drawable.toBitmap())
-                            },
                             shape = RoundedCornerShape(4.dp)
                         )
                     }

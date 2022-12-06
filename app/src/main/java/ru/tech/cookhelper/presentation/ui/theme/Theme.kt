@@ -21,10 +21,6 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.lighten
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
 
-@Composable
-private fun Color.animate(): Color =
-    animateColorAsState(targetValue = this, animationSpec = tween(1500)).value
-
 private val ColorScheme.LightThemeColors: Material3ColorScheme
     get() = lightColorScheme(
         primary = md_theme_light_primary,
@@ -93,12 +89,16 @@ fun CookHelperTheme(
     dynamicColor: Boolean = LocalSettingsProvider.current.dynamicColors,
     content: @Composable () -> Unit
 ) {
-    val darkTheme = isDarkMode()
+    @Composable
+    fun Color.animate(): Color = animateColorAsState(
+        targetValue = this,
+        animationSpec = tween(1500)
+    ).value
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (isDarkMode()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         else -> getColorScheme()
     }.run {
@@ -136,7 +136,7 @@ fun CookHelperTheme(
     }
 
     val systemUiController = rememberSystemUiController()
-    val useDarkIcons = !darkTheme
+    val useDarkIcons = !isDarkMode()
     val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     MaterialTheme(

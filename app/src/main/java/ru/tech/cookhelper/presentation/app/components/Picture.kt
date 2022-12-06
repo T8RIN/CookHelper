@@ -23,6 +23,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
 import coil.imageLoader
 import coil.request.ImageRequest
+import coil.transform.Transformation
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.hideSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.isSystemBarsHidden
@@ -36,6 +37,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.zooomable.rememberZoomab
 fun Picture(
     modifier: Modifier = Modifier,
     model: Any?,
+    transformations: List<Transformation> = emptyList(),
     manualImageRequest: ImageRequest? = null,
     manualImageLoader: ImageLoader? = null,
     contentDescription: String? = null,
@@ -75,6 +77,7 @@ fun Picture(
         .data(model)
         .crossfade(crossfadeEnabled)
         .allowHardware(allowHardware)
+        .transformations(transformations)
         .build()
 
     val image: @Composable () -> Unit = {

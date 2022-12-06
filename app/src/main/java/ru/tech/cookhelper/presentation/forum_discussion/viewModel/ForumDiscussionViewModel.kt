@@ -9,7 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.blur
+import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.AsyncBlur.blur
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.signature
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import javax.inject.Inject

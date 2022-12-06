@@ -3,6 +3,8 @@ package ru.tech.cookhelper.presentation.ui.utils.android
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
+import coil.size.Size
+import coil.transform.Transformation
 import kotlinx.coroutines.*
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Dimensions.MAX_DIMEN
 import ru.tech.cookhelper.presentation.ui.utils.android.ImageUtils.Extensions.GIF
@@ -322,23 +324,46 @@ object ImageUtils {
     }
 
 
-    private var job: Job? = null
+    object AsyncBlur {
+        private var job: Job? = null
 
-    fun Bitmap.blur(
-        scale: Float = 0.5f,
-        radius: Int = 60,
-        debounce: Long = 300L,
-        scope: CoroutineScope,
-        onBlurred: (Bitmap?) -> Unit
-    ): Job {
-        job?.cancel()
-        return scope.launch {
-            delay(debounce)
-            onBlurred(blur(scale, radius))
-        }.also { job = it }
+        fun Bitmap.blur(
+            scale: Float = 0.5f,
+            radius: Int = 60,
+            debounce: Long = 300L,
+            scope: CoroutineScope,
+            onBlurred: (Bitmap?) -> Unit
+        ): Job {
+            job?.cancel()
+            return scope.launch {
+                delay(debounce)
+                onBlurred(blur(scale, radius))
+            }.also { job = it }
+        }
     }
 
     fun Bitmap.signature(): String =
         "$allocationByteCount-$density-$config-$width-$height"
+
+    class BlurTransformation(
+        private val radius: Int = 25,
+        private val scale: Float = 0.5f
+    ) : Transformation {
+
+        override val cacheKey: String = "${javaClass.name}-$radius"
+
+        override suspend fun transform(
+            input: Bitmap,
+            size: Size
+        ): Bitmap = input.blur(scale, radius) ?: input
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            return other is BlurTransformation && radius == other.radius
+        }
+
+        override fun hashCode(): Int = radius.hashCode()
+
+    }
 
 }
