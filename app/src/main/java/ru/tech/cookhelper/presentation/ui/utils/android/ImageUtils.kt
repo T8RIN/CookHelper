@@ -108,6 +108,7 @@ object ImageUtils {
         }
     }
 
+
     private suspend fun Bitmap.blur(
         scale: Float,
         radius: Int
@@ -323,6 +324,27 @@ object ImageUtils {
         return@withContext bitmap
     }
 
+    class BlurTransformation(
+        private val radius: Int = 25,
+        private val scale: Float = 0.5f
+    ) : Transformation {
+
+        override val cacheKey: String = "${javaClass.name}-$radius"
+
+        override suspend fun transform(
+            input: Bitmap,
+            size: Size
+        ): Bitmap = input.blur(scale, radius) ?: input
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            return other is BlurTransformation && radius == other.radius
+        }
+
+        override fun hashCode(): Int = radius.hashCode()
+
+    }
+
 
     object AsyncBlur {
         private var job: Job? = null
@@ -344,26 +366,5 @@ object ImageUtils {
 
     fun Bitmap.signature(): String =
         "$allocationByteCount-$density-$config-$width-$height"
-
-    class BlurTransformation(
-        private val radius: Int = 25,
-        private val scale: Float = 0.5f
-    ) : Transformation {
-
-        override val cacheKey: String = "${javaClass.name}-$radius"
-
-        override suspend fun transform(
-            input: Bitmap,
-            size: Size
-        ): Bitmap = input.blur(scale, radius) ?: input
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            return other is BlurTransformation && radius == other.radius
-        }
-
-        override fun hashCode(): Int = radius.hashCode()
-
-    }
 
 }

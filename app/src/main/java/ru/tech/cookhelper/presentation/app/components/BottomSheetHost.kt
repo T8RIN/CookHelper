@@ -3,7 +3,6 @@ package ru.tech.cookhelper.presentation.app.components
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import dev.olshevski.navigation.reimagined.DialogNavHost
 import dev.olshevski.navigation.reimagined.popAll
@@ -15,8 +14,10 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BottomSheetHost(bottomSheetController: BottomSheetController, content: @Composable () -> Unit) {
-    val scope = rememberCoroutineScope()
+fun BottomSheetHost(
+    bottomSheetController: BottomSheetController,
+    content: @Composable () -> Unit
+) {
     val controller = bottomSheetController.controller
     val state = bottomSheetController.state
 

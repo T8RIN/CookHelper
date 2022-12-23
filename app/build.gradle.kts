@@ -81,15 +81,15 @@ dependencies {
 
     //Compose
     implementation("androidx.activity:activity-compose:1.7.0-alpha02")
-    implementation("androidx.compose.ui:ui:1.4.0-alpha02")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha02")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha02")
-    implementation("androidx.compose.material:material-icons-core:1.4.0-alpha02")
-    implementation("androidx.compose.material:material-icons-extended:1.4.0-alpha02")
+    implementation("androidx.compose.ui:ui:1.4.0-alpha03")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha03")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha03")
+    implementation("androidx.compose.material:material-icons-core:1.4.0-alpha03")
+    implementation("androidx.compose.material:material-icons-extended:1.4.0-alpha03")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha03")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha04")
-    implementation("androidx.compose.foundation:foundation:1.4.0-alpha02")
-    implementation("androidx.compose.ui:ui-util:1.4.0-alpha02")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha05")
+    implementation("androidx.compose.foundation:foundation:1.4.0-alpha03")
+    implementation("androidx.compose.ui:ui-util:1.4.0-alpha03")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
@@ -111,9 +111,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
 
     //Room
-    implementation("androidx.room:room-runtime:2.5.0-beta02")
-    implementation("androidx.room:room-ktx:2.5.0-beta02")
-    kapt("androidx.room:room-compiler:2.5.0-beta02")
+    implementation("androidx.room:room-runtime:2.5.0-rc01")
+    implementation("androidx.room:room-ktx:2.5.0-rc01")
+    kapt("androidx.room:room-compiler:2.5.0-rc01")
 
     //Navigation
     implementation("dev.olshevski.navigation:reimagined:1.3.0")

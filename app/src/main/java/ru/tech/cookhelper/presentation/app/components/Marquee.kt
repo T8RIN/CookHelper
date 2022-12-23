@@ -21,7 +21,7 @@ fun Marquee(
     content: @Composable (Modifier) -> Unit
 ) {
     var xOffset by remember { mutableStateOf(0) }
-    val layoutInfoState = remember { mutableStateOf<LayoutInfo?>(null) }
+    val layoutInfoState = remember { mutableStateOf<MarqueeLayoutInfo?>(null) }
 
     LaunchedEffect(layoutInfoState.value) {
         val layoutInfo = layoutInfoState.value ?: return@LaunchedEffect
@@ -67,7 +67,7 @@ fun Marquee(
             layoutInfoState.value = null
         } else {
             val spacing = constraints.maxWidth * 2 / 3
-            layoutInfoState.value = LayoutInfo(
+            layoutInfoState.value = MarqueeLayoutInfo(
                 width = main.width + spacing, containerWidth = constraints.maxWidth
             )
             val secondTextOffset = main.width + xOffset + spacing
@@ -126,7 +126,7 @@ private enum class MarqueeLayers {
     EdgesGradient
 }
 
-private data class LayoutInfo(
+private data class MarqueeLayoutInfo(
     val width: Int,
     val containerWidth: Int
 )

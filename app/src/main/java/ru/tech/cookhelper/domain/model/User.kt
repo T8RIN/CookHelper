@@ -23,4 +23,4 @@ data class User(
     val token: String
 ) : Domain
 
-fun User.getLastAvatar(): String? = avatar.lastOrNull()?.link
+fun User?.getLastAvatar(): String? = this?.avatar?.lastOrNull()?.link
