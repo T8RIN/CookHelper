@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.components.Marquee
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Toast
 import ru.tech.cookhelper.presentation.app.components.sendToast
@@ -174,13 +175,15 @@ fun SettingsScreen(
                     }
                 }
                 if (expandedNightMode) {
-                    ToggleGroupButton(
-                        items = listOf(R.string.dark, R.string.light, R.string.system),
-                        selectedIndex = settingsState.nightMode.ordinal,
-                        indexChanged = {
-                            viewModel.insertSetting(setting.ordinal, it)
-                        }
-                    )
+                    Marquee {
+                        ToggleGroupButton(
+                            items = listOf(R.string.dark, R.string.light, R.string.system),
+                            selectedIndex = settingsState.nightMode.ordinal,
+                            indexChanged = {
+                                viewModel.insertSetting(setting.ordinal, it)
+                            }
+                        )
+                    }
                 }
                 if (expandedColorScheme && !settingsState.dynamicColors) {
                     Spacer(Modifier.height(10.dp))

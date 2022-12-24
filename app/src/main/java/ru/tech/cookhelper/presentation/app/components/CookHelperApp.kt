@@ -25,7 +25,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBar
 import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.BottomSheetValue
 import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.rememberBottomSheetState
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
-import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.event.collectEvents
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
@@ -162,7 +162,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         }
     }
 
-    viewModel.eventFlow.collectWithLifecycle {
+    viewModel.collectEvents {
         when (it) {
             is Event.NavigateIf -> {
                 if (it.predicate(screenController.currentDestination)) screenController.navigate(it.screen)
