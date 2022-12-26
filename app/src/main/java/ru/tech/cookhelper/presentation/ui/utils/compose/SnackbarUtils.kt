@@ -1,22 +1,26 @@
 package ru.tech.cookhelper.presentation.ui.utils.compose
 
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 object SnackbarUtils {
-    fun CoroutineScope.showSnackbar(
-        host: SnackbarHostState,
+
+    fun SnackbarHostState.show(
+        scope: CoroutineScope,
         message: String,
-        action: String = "",
+        actionLabel: String? = null,
+        duration: SnackbarDuration = if (actionLabel == null) SnackbarDuration.Short else SnackbarDuration.Indefinite,
         result: (SnackbarResult) -> Unit = {}
     ) {
-        launch {
+        scope.launch {
             result(
-                host.showSnackbar(
+                showSnackbar(
                     message = message,
-                    actionLabel = action
+                    actionLabel = actionLabel,
+                    duration = duration
                 )
             )
         }

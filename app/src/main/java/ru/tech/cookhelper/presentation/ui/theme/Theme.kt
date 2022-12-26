@@ -123,7 +123,7 @@ fun CookHelperTheme(
             surfaceVariant = surfaceVariant.animate(),
             onSurfaceVariant = onSurfaceVariant.animate(),
             surfaceTint = surfaceTint.animate(),
-            inverseSurface = inversePrimary.animate(),
+            inverseSurface = inverseSurface.animate(),
             inverseOnSurface = inverseOnSurface.animate(),
             error = error.animate(),
             onError = onError.animate(),

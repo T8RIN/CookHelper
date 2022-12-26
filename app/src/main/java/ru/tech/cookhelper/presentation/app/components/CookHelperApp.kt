@@ -154,9 +154,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                         }
                     }
                 }
-
                 DialogHost(controller = dialogController)
-
                 FancyToastHost(fancyToastValues = fancyToastValues.value)
             }
         }

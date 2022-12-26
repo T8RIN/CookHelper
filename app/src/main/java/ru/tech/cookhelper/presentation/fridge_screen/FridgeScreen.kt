@@ -100,10 +100,14 @@ fun FridgeScreen(
         val empty = fridge.isEmpty()
 
         Column(
-            horizontalAlignment = Alignment.End, modifier = Modifier
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
+                .padding(bottom = 16.dp)
         ) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                SnackbarHost(LocalSnackbarHost.current)
+            }
             AnimatedVisibility(
                 visible = !empty,
                 enter = fadeIn(),
@@ -113,7 +117,11 @@ fun FridgeScreen(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                     expanded = false,
                     icon = {
-                        Icon(Icons.Rounded.Add, null, modifier = Modifier.size(it))
+                        Icon(
+                            Icons.Rounded.Add, null, modifier = Modifier
+                                .size(it)
+                                .padding(horizontal = 16.dp)
+                        )
                     },
                     size = FabSize.Small,
                     onClick = { pickProducts() }
@@ -121,6 +129,7 @@ fun FridgeScreen(
             }
             Spacer(Modifier.height(4.dp))
             ExpandableFloatingActionButton(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 expanded = lazyListState.isScrollingUp(),
                 icon = {
                     Icon(
