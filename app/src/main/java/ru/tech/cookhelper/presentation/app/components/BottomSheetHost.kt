@@ -27,7 +27,7 @@ fun BottomSheetHost(
         nestedScrollEnabled = controller.currentDestination?.nestedScrollEnabled == true,
         dismissOnTapOutside = controller.currentDestination?.dismissOnTapOutside == true,
         gesturesEnabled = controller.currentDestination?.gesturesEnabled == true,
-        onDismiss = { controller.popAll() },
+        onDismiss = controller.currentDestination?.onDismiss ?: { controller.popAll() },
         sheetContent = {
             DialogNavHost(
                 controller = controller,

@@ -8,7 +8,8 @@ import ru.tech.cookhelper.domain.model.ForumFilters
 sealed class BottomSheet(
     val gesturesEnabled: Boolean = true,
     val dismissOnTapOutside: Boolean = true,
-    val nestedScrollEnabled: Boolean = true
+    val nestedScrollEnabled: Boolean = true,
+    @IgnoredOnParcel val onDismiss: (() -> Unit)? = null
 ) : Parcelable {
     @Parcelize
     class ForumFilter(
