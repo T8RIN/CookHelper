@@ -327,6 +327,7 @@ private fun Scrim(
     } else {
         Modifier
     }
+
     Canvas(
         Modifier
             .fillMaxSize()

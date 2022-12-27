@@ -134,12 +134,10 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                         targetState = topAppBarTitle.value,
                                         transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
                                     ) {
-                                        if (it == null) {
-                                            Text(
-                                                viewModel.title.asString(),
-                                                fontWeight = FontWeight.Medium
-                                            )
-                                        } else it()
+                                        it?.invoke() ?: Text(
+                                            viewModel.title.asString(),
+                                            fontWeight = FontWeight.Medium
+                                        )
                                     }
                                 },
                                 visible = showTopAppBar,

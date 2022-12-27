@@ -3,8 +3,6 @@ package ru.tech.cookhelper.presentation.ui.theme
 import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.FloatRange
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -89,50 +87,12 @@ fun CookHelperTheme(
     dynamicColor: Boolean = LocalSettingsProvider.current.dynamicColors,
     content: @Composable () -> Unit
 ) {
-    @Composable
-    fun Color.animate(): Color = animateColorAsState(
-        targetValue = this,
-        animationSpec = tween(1500)
-    ).value
-
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (isDarkMode()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         else -> getColorScheme()
-    }.run {
-        copy(
-            primary = primary.animate(),
-            onPrimary = onPrimary.animate(),
-            primaryContainer = primaryContainer.animate(),
-            onPrimaryContainer = onPrimaryContainer.animate(),
-            inversePrimary = inversePrimary.animate(),
-            secondary = secondary.animate(),
-            onSecondary = onSecondary.animate(),
-            secondaryContainer = secondaryContainer.animate(),
-            onSecondaryContainer = onSecondaryContainer.animate(),
-            tertiary = tertiary.animate(),
-            onTertiary = onTertiary.animate(),
-            tertiaryContainer = tertiaryContainer.animate(),
-            onTertiaryContainer = onTertiaryContainer.animate(),
-            background = background.animate(),
-            onBackground = onBackground.animate(),
-            surface = surface.animate(),
-            onSurface = onSurface.animate(),
-            surfaceVariant = surfaceVariant.animate(),
-            onSurfaceVariant = onSurfaceVariant.animate(),
-            surfaceTint = surfaceTint.animate(),
-            inverseSurface = inverseSurface.animate(),
-            inverseOnSurface = inverseOnSurface.animate(),
-            error = error.animate(),
-            onError = onError.animate(),
-            errorContainer = errorContainer.animate(),
-            onErrorContainer = onError.animate(),
-            outline = outline.animate(),
-            outlineVariant = outlineVariant.animate(),
-            scrim = scrim.animate()
-        )
     }
 
     val systemUiController = rememberSystemUiController()
@@ -146,14 +106,16 @@ fun CookHelperTheme(
             val color = NavigationBarDefaults.containerColor.createInverseSecondaryColor()
 
             SideEffect {
-                systemUiController.setStatusBarColor(
-                    color = Color.Transparent,
-                    darkIcons = useDarkIcons
-                )
-                systemUiController.setNavigationBarColor(
-                    color = if (landscape) color else Color.Transparent,
-                    darkIcons = useDarkIcons
-                )
+                systemUiController.apply {
+                    setStatusBarColor(
+                        color = Color.Transparent,
+                        darkIcons = useDarkIcons
+                    )
+                    setNavigationBarColor(
+                        color = if (landscape) color else Color.Transparent,
+                        darkIcons = useDarkIcons
+                    )
+                }
             }
             content()
         }
