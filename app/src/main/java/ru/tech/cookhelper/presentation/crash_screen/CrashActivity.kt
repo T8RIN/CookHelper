@@ -31,16 +31,15 @@ import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.MainActivity
-import ru.tech.cookhelper.presentation.app.components.FancyToastHost
 import ru.tech.cookhelper.presentation.app.components.GlobalExceptionHandler.Companion.getExceptionString
-import ru.tech.cookhelper.presentation.app.components.Toast
-import ru.tech.cookhelper.presentation.app.components.rememberFancyToastValues
-import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.app.components.ToastHost
 import ru.tech.cookhelper.presentation.crash_screen.viewModel.CrashViewModel
 import ru.tech.cookhelper.presentation.ui.theme.CookHelperTheme
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.rememberToastHostState
 
 
 @AndroidEntryPoint
@@ -55,11 +54,11 @@ class CrashActivity : ComponentActivity() {
         val crashReason = getExceptionString()
 
         setContent {
-            val fancyToastValues = rememberFancyToastValues()
+            val toastHostState = rememberToastHostState()
 
             CompositionLocalProvider(
                 LocalSettingsProvider provides viewModel.settingsState,
-                LocalToastHost provides fancyToastValues
+                LocalToastHost provides toastHostState
             ) {
                 CookHelperTheme {
                     val conf = LocalConfiguration.current
@@ -136,10 +135,9 @@ class CrashActivity : ComponentActivity() {
                                             )
                                         )
                                     }
-                                    fancyToastValues.sendToast(
+                                    toastHostState.show(
                                         icon = Icons.Rounded.ContentCopy,
                                         message = getString(R.string.copied_to_clipboard),
-                                        length = Toast.Short.time
                                     )
                                 }) {
                                     Icon(Icons.Rounded.ContentCopy, null)
@@ -148,7 +146,7 @@ class CrashActivity : ComponentActivity() {
                         }
                     }
 
-                    FancyToastHost(fancyToastValues = fancyToastValues.value)
+                    ToastHost(hostState = toastHostState)
                 }
             }
         }

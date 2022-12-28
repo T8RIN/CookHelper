@@ -37,7 +37,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     val scope = rememberCoroutineScope()
     val activity = LocalContext.current.findActivity()
 
-    val fancyToastValues = rememberFancyToastValues()
+    val toastHostState = rememberToastHostState()
     val snackbarHostState = rememberSnackbarHostState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
@@ -66,7 +66,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalDialogController provides dialogController,
             LocalBottomSheetController provides bottomSheetController,
             LocalSnackbarHost provides snackbarHostState,
-            LocalToastHost provides fancyToastValues,
+            LocalToastHost provides toastHostState,
             LocalSettingsProvider provides viewModel.settingsState,
             LocalTopAppBarActions provides topAppBarActions,
             LocalTopAppBarNavigationIcon provides topAppBarNavigationIcon,
@@ -153,7 +153,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     }
                 }
                 DialogHost(controller = dialogController)
-                FancyToastHost(fancyToastValues = fancyToastValues.value)
+                ToastHost(hostState = toastHostState)
             }
         }
     }

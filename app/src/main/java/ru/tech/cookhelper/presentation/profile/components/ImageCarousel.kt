@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +46,7 @@ fun ImageCarousel(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             if (uri == null) {
-                toastHost.sendToast(
+                toastHost.show(
                     icon = Icons.Outlined.BrokenImage,
                     message = (R.string.image_not_picked).asString(context)
                 )

@@ -50,18 +50,20 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
         IconButton(onClick = { searchMode = true }) {
             Icon(Icons.Rounded.Search, null)
         }
-        IconButton(onClick = {
-            scope.launch {
-                bottomSheetController.show(
-                    BottomSheet.ForumFilter(
-                        filters = filters,
-                        onFiltersChange = {
-                            filters = it
-                        }
+        IconButton(
+            onClick = {
+                scope.launch {
+                    bottomSheetController.show(
+                        BottomSheet.ForumFilter(
+                            filters = filters,
+                            onFiltersChange = {
+                                filters = it
+                            }
+                        )
                     )
-                )
+                }
             }
-        }) {
+        ) {
             Icon(Icons.Rounded.FilterList, null)
         }
     }

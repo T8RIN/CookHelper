@@ -20,7 +20,6 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Placeholder
-import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.chat_list.components.ChatListItem
 import ru.tech.cookhelper.presentation.chat_list.viewModel.ChatListViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
@@ -29,6 +28,7 @@ import ru.tech.cookhelper.presentation.ui.theme.CreateAlt
 import ru.tech.cookhelper.presentation.ui.theme.MessageDraw
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -104,7 +104,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = hiltViewModel()) {
     val context = LocalContext.current
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
-            is Event.ShowToast -> toastHost.sendToast(
+            is Event.ShowToast -> toastHost.show(
                 Icons.Rounded.ErrorOutline,
                 it.text.asString(context)
             )

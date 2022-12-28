@@ -29,10 +29,10 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
-import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.login_screen.viewModel.LoginViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -171,7 +171,7 @@ fun LoginField(
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
-            is Event.ShowToast -> toastHost.sendToast(
+            is Event.ShowToast -> toastHost.show(
                 it.icon,
                 it.text.asString(context)
             )

@@ -38,6 +38,7 @@ import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -235,7 +236,7 @@ fun PostCreationScreen(
 
         if (viewModel.postCreationState.post != null) {
             LaunchedEffect(Unit) {
-                toastHost.sendToast(
+                toastHost.show(
                     Icons.Rounded.Done, UIText(R.string.post_created).asString(context)
                 )
                 onBack()
@@ -250,7 +251,7 @@ fun PostCreationScreen(
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
-            is Event.ShowToast -> toastHost.sendToast(
+            is Event.ShowToast -> toastHost.show(
                 it.icon,
                 it.text.asString(context)
             )

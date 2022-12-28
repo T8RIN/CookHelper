@@ -37,6 +37,7 @@ import ru.tech.cookhelper.presentation.topic_creation.viewModel.TopicCreationVie
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.rememberMutableStateListOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
@@ -138,7 +139,7 @@ fun TopicCreationScreen(
                     imageUri = uri.toString()
                 }
                 if (it == null) {
-                    toastHost.sendToast(
+                    toastHost.show(
                         Icons.Rounded.BrokenImage,
                         context.getString(R.string.image_not_picked)
                     )
@@ -316,7 +317,7 @@ fun TopicCreationScreen(
 
         if (viewModel.topicCreationState.topic != null) {
             SideEffect {
-                toastHost.sendToast(
+                toastHost.show(
                     Icons.Rounded.Done, UIText(R.string.topic_created).asString(context)
                 )
                 onBack()
@@ -330,7 +331,7 @@ fun TopicCreationScreen(
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
-            is Event.ShowToast -> toastHost.sendToast(
+            is Event.ShowToast -> toastHost.show(
                 it.icon,
                 it.text.asString(context)
             )

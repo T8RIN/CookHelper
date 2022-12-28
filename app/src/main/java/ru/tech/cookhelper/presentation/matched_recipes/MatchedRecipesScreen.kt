@@ -26,11 +26,11 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
-import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.matched_recipes.components.MatchedRecipeItem
 import ru.tech.cookhelper.presentation.matched_recipes.viewModel.MatchedRecipesViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -90,7 +90,7 @@ fun MatchedRecipesScreen(
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
-            is Event.ShowToast -> toastHost.sendToast(
+            is Event.ShowToast -> toastHost.show(
                 it.icon,
                 it.text.asString(context)
             )

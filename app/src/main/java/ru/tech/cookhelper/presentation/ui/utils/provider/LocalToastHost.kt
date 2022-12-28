@@ -1,8 +1,12 @@
 package ru.tech.cookhelper.presentation.ui.utils.provider
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
-import ru.tech.cookhelper.presentation.app.components.FancyToastValues
+import androidx.compose.runtime.remember
+import ru.tech.cookhelper.presentation.app.components.ToastHostState
 
 val LocalToastHost =
-    compositionLocalOf<MutableState<FancyToastValues>> { error("FancyToastValues not present") }
+    compositionLocalOf<ToastHostState> { error("ToastData not present") }
+
+@Composable
+fun rememberToastHostState() = remember { ToastHostState() }

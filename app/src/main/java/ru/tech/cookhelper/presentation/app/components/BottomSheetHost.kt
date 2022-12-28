@@ -1,10 +1,9 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.olshevski.navigation.reimagined.DialogNavHost
+import dev.olshevski.navigation.reimagined.NavHost
 import dev.olshevski.navigation.reimagined.popAll
 import ru.tech.cookhelper.presentation.forum_screen.components.ForumFilterBottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.ModalBottomSheet
@@ -12,7 +11,6 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.provider.BottomSheetController
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun BottomSheetHost(
     bottomSheetController: BottomSheetController,
@@ -29,7 +27,7 @@ fun BottomSheetHost(
         gesturesEnabled = controller.currentDestination?.gesturesEnabled == true,
         onDismiss = controller.currentDestination?.onDismiss ?: { controller.popAll() },
         sheetContent = {
-            DialogNavHost(
+            NavHost(
                 controller = controller,
             ) { sheet ->
                 when (sheet) {

@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.sendToast
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
 
 @Composable
@@ -27,7 +27,7 @@ fun PostCreationBlock(onCreateRecipe: () -> Unit, onCreatePost: (imageUri: Strin
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             if (uri == null) {
-                toastHost.sendToast(
+                toastHost.show(
                     icon = Icons.Outlined.BrokenImage,
                     message = imageNotPicked
                 )

@@ -32,11 +32,11 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.CozyTextField
 import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
-import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
 import ru.tech.cookhelper.presentation.restore_password.viewModel.RestorePasswordViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -226,7 +226,7 @@ fun RestorePasswordField(
 
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {
-            is Event.ShowToast -> toastHost.sendToast(
+            is Event.ShowToast -> toastHost.show(
                 it.icon,
                 it.text.asString(context)
             )

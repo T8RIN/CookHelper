@@ -39,8 +39,6 @@ import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Marquee
 import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.app.components.Toast
-import ru.tech.cookhelper.presentation.app.components.sendToast
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.settings.components.*
 import ru.tech.cookhelper.presentation.settings.components.Setting.*
@@ -52,6 +50,7 @@ import ru.tech.cookhelper.presentation.ui.theme.ordinal
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
@@ -166,7 +165,7 @@ fun SettingsScreen(
                             onClick = {
                                 if (!settingsState.dynamicColors) {
                                     expandedColorScheme = !expandedColorScheme
-                                } else toastHost.sendToast(
+                                } else toastHost.show(
                                     Icons.Outlined.InvertColors,
                                     (R.string.cannot_change_theme).asString(context)
                                 )
@@ -253,10 +252,9 @@ fun SettingsScreen(
                                     )
                                 },
                                 onClick = {
-                                    toastHost.sendToast(
+                                    toastHost.show(
                                         Icons.Outlined.GetApp,
-                                        (R.string.long_click_to_go).asString(context),
-                                        Toast.Short.time
+                                        (R.string.long_click_to_go).asString(context)
                                     )
                                 }
                             )
