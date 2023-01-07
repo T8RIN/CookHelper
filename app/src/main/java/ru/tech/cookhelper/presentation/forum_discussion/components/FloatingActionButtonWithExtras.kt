@@ -26,10 +26,10 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ExpandableFloatingActionButtonWithExtra(
+fun FloatingActionButtonWithExtras(
     modifier: Modifier = Modifier,
     expanded: Boolean = false,
-    isExtra: Boolean = false,
+    showExtraContent: Boolean = false,
     size: FabSize = FabSize.Common,
     shape: Shape = size.shape,
     containerColor: Color = FloatingActionButtonDefaults.containerColor,
@@ -38,7 +38,7 @@ fun ExpandableFloatingActionButtonWithExtra(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     text: @Composable () -> Unit = {},
     icon: @Composable (iconSize: Dp) -> Unit,
-    expandedContent: @Composable () -> Unit,
+    extraContent: @Composable () -> Unit,
     transitionSpec: AnimatedContentScope<Boolean>.() -> ContentTransform = {
         fadeIn(animationSpec = tween(220, delayMillis = 90)) +
                 scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
@@ -50,9 +50,9 @@ fun ExpandableFloatingActionButtonWithExtra(
     val horizontalPadding by animateDpAsState(targetValue = if (expanded) size.horizontalPadding else 0.dp)
     val content: @Composable () -> Unit = {
         CompositionLocalProvider(LocalRippleTheme provides localRipple) {
-            AnimatedContent(targetState = isExtra, transitionSpec = transitionSpec) {
+            AnimatedContent(targetState = showExtraContent, transitionSpec = transitionSpec) {
                 if (it) {
-                    expandedContent()
+                    extraContent()
                 } else {
                     Row(
                         modifier = Modifier.padding(horizontal = horizontalPadding),
@@ -71,9 +71,9 @@ fun ExpandableFloatingActionButtonWithExtra(
         }
     }
 
-    val _onClick = { if (!isExtra) onClick() }
+    val _onClick = { if (!showExtraContent) onClick() }
 
-    CompositionLocalProvider(LocalRippleTheme provides if (!isExtra) LocalRippleTheme.current else NoRippleTheme) {
+    CompositionLocalProvider(LocalRippleTheme provides if (!showExtraContent) LocalRippleTheme.current else NoRippleTheme) {
         when (size) {
             FabSize.Small -> {
                 SmallFloatingActionButton(

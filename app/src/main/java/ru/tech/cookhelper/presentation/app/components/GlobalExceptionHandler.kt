@@ -6,10 +6,10 @@ import android.content.Intent
 import android.util.Log
 import kotlin.system.exitProcess
 
-class GlobalExceptionHandler private constructor(
+class GlobalExceptionHandler<T : Activity> private constructor(
     private val applicationContext: Context,
     private val defaultHandler: Thread.UncaughtExceptionHandler,
-    private val activityToBeLaunched: Class<*>
+    private val activityToBeLaunched: Class<T>
 ) : Thread.UncaughtExceptionHandler {
 
     override fun uncaughtException(p0: Thread, p1: Throwable) {
@@ -22,28 +22,28 @@ class GlobalExceptionHandler private constructor(
         }
     }
 
-    private fun launchActivity(
+    private fun <T : Activity> launchActivity(
         applicationContext: Context,
-        activity: Class<*>,
+        activity: Class<T>,
         exception: Throwable
     ) {
-        val crashedIntent = Intent(applicationContext, activity).also {
-            it.putExtra(INTENT_DATA_NAME, "$exception\n${Log.getStackTraceString(exception)}")
+        val crashedIntent = Intent(applicationContext, activity).apply {
+            putExtra(INTENT_DATA_NAME, "$exception\n${Log.getStackTraceString(exception)}")
+            addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+            )
         }
-        crashedIntent.addFlags(
-            Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                    Intent.FLAG_ACTIVITY_NEW_TASK or
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK
-        )
         applicationContext.startActivity(crashedIntent)
     }
 
     companion object {
-        private const val INTENT_DATA_NAME = "CrashData"
+        private const val INTENT_DATA_NAME = "GlobalExceptionHandler"
 
-        fun initialize(
+        fun <T : Activity> initialize(
             applicationContext: Context,
-            activityToBeLaunched: Class<*>
+            activityToBeLaunched: Class<T>
         ) {
             val handler = GlobalExceptionHandler(
                 applicationContext,
@@ -54,6 +54,5 @@ class GlobalExceptionHandler private constructor(
         }
 
         fun Activity.getExceptionString(): String = intent.getStringExtra(INTENT_DATA_NAME) ?: ""
-
     }
 }

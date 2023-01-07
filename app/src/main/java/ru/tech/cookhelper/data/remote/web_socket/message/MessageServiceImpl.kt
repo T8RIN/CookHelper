@@ -14,7 +14,7 @@ class MessageServiceImpl @Inject constructor(
 
     override operator fun invoke(
         chatId: Long, token: String
-    ): Flow<WebSocketState<MessageDto>> = updateBaseUrl(
+    ): Flow<WebSocketState<MessageDto>> = setBaseUrl(
         newBaseUrl = "${Constants.WS_BASE_URL}websocket/chat/?token=$token&id=$chatId"
     ).setType(MessageDto::class.java).openWebSocket().receiveAsFlow()
 

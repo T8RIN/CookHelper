@@ -39,7 +39,7 @@ import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.app.components.TopAppBar
-import ru.tech.cookhelper.presentation.forum_discussion.components.ExpandableFloatingActionButtonWithExtra
+import ru.tech.cookhelper.presentation.forum_discussion.components.FloatingActionButtonWithExtras
 import ru.tech.cookhelper.presentation.forum_discussion.components.ForumReplyItem
 import ru.tech.cookhelper.presentation.forum_discussion.components.RatingButton
 import ru.tech.cookhelper.presentation.forum_discussion.components.TagGroup
@@ -359,8 +359,8 @@ fun ForumDiscussionScreen(
 
         var isExtra by remember { mutableStateOf(false) }
 
-        ExpandableFloatingActionButtonWithExtra(
-            isExtra = isExtra,
+        FloatingActionButtonWithExtras(
+            showExtraContent = isExtra,
             expanded = lazyListState.isScrollingUp(),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -376,7 +376,7 @@ fun ForumDiscussionScreen(
                 },
             icon = { Icon(Icons.Rounded.Reply, null, modifier = Modifier.size(it)) },
             text = { Text(stringResource(R.string.reply)) },
-            expandedContent = {
+            extraContent = {
                 val colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 )

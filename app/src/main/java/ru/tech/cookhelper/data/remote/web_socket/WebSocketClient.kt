@@ -8,20 +8,21 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import okhttp3.*
-import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import ru.tech.cookhelper.data.utils.JsonParser
 import java.io.Closeable
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
+@Suppress("PrivatePropertyName", "MemberVisibilityCanBePrivate")
 abstract class WebSocketClient<T>(
-    protected var baseUrl: String = "",
+    private var baseUrl: String = "",
     private val jsonParser: JsonParser,
     private var type: Type = Nothing::class.java
 ) : WebSocketListener(), Closeable {
 
     protected open val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-        .setTimeout()
+        .readTimeout(40, TimeUnit.SECONDS)
+        .connectTimeout(40, TimeUnit.SECONDS)
         .pingInterval(40, TimeUnit.SECONDS)
         .hostnameVerifier { _, _ -> true }
         .build()
@@ -57,19 +58,15 @@ abstract class WebSocketClient<T>(
      */
     @Synchronized
     fun openWebSocket() = apply {
-        require(baseUrl.isNotEmpty()) { "Base url is not present" }
+        require(baseUrl.isNotEmpty()) { "Base url cannot be empty" }
         require(type != Nothing::class.java) { "JsonParser cannot parse object, type is not present" }
 
         if (opening) return this
 
-        if (baseUrl.isEmpty()) throw IllegalStateException("Base url cannot be empty")
-
-        Log.d(SOCKET_TAG, "opening")
-
-        opening = true
-
         if (socketOpen) closeWebSocket()
 
+        Log.d(SOCKET_TAG, "opening")
+        opening = true
         _webSocketState.trySend(WebSocketState.Opening())
 
         val request = Request.Builder()
@@ -120,16 +117,14 @@ abstract class WebSocketClient<T>(
             webSocket?.close(CLOSE_CODE, CLOSE_REASON)
             socketOpen = false
         } catch (e: Exception) {
-            _webSocketState.trySend(WebSocketState.Error(Throwable("closeWebSocket error")))
+            _webSocketState.trySend(WebSocketState.Error(e))
             Log.d(SOCKET_TAG, "closeWebSocket error")
             e.printStackTrace()
         }
     }
 
     @Synchronized
-    override fun close() {
-        closeWebSocket()
-    }
+    override fun close() = closeWebSocket()
 
     /**
      * Сокет открылся
@@ -149,7 +144,10 @@ abstract class WebSocketClient<T>(
      */
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
+
         Log.d(SOCKET_TAG, "onFailure: $t")
+        t.printStackTrace()
+
         _webSocketState.trySend(WebSocketState.Error(t))
         // Переоткрываем
         restartWebSocket()
@@ -173,7 +171,7 @@ abstract class WebSocketClient<T>(
         Log.d(SOCKET_TAG, "received: $text")
     }
 
-    fun updateBaseUrl(newBaseUrl: String) = apply {
+    fun setBaseUrl(newBaseUrl: String) = apply {
         baseUrl = newBaseUrl
     }
 

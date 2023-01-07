@@ -130,22 +130,15 @@ class UserRepositoryImpl @Inject constructor(
             .catch { emit(it.toAction()) }
             .collect { state ->
                 when (state) {
-                    is WebSocketState.Error -> emit(state.t.toAction())
                     is WebSocketState.Message -> emit(Action.Success(data = state.obj?.map { it.asDomain() }))
                     is WebSocketState.Opening,
                     is WebSocketState.Restarting,
                     is WebSocketState.Closing -> emit(Action.Loading())
-                    is WebSocketState.Closed, is WebSocketState.Opened -> emit(Action.Empty())
+                    is WebSocketState.Error -> emit(state.t.toAction())
+                    is WebSocketState.Closed,
+                    is WebSocketState.Opened -> emit(Action.Empty())
                 }
             }
-//        emit(Action.Loading())
-//        userApi.getFeed(token).getOrExceptionAndNull {
-//            it.toAction<Boolean>()
-//        }?.let {
-//            if (it.status == SUCCESS) emit(Action.Success(data = it.data?.map { it.asDomain() }
-//                ?: emptyList()))
-//            else emit(Action.Empty(it.status))
-//        }
     }
 
     override fun stopAwaitingFeed() = feedService.closeService()
@@ -238,7 +231,8 @@ class UserRepositoryImpl @Inject constructor(
                     is WebSocketState.Opening,
                     is WebSocketState.Restarting,
                     is WebSocketState.Closing -> emit(Action.Loading())
-                    is WebSocketState.Closed, is WebSocketState.Opened -> emit(Action.Empty())
+                    is WebSocketState.Closed,
+                    is WebSocketState.Opened -> emit(Action.Empty())
                 }
             }
     }

@@ -12,4 +12,4 @@ fun ToastHostState.show(
     message: String,
     duration: ToastDuration = ToastDuration.Short,
     scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-) = scope.launch { this@show.showToast(message, icon, duration) }
+) = scope.launch { showToast(message, icon, duration) }

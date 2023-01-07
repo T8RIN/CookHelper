@@ -17,7 +17,7 @@ class UserServiceImpl @Inject constructor(
     override operator fun invoke(
         id: Long,
         token: String
-    ): Flow<WebSocketState<Response<UserDto>>> = updateBaseUrl(
+    ): Flow<WebSocketState<Response<UserDto>>> = setBaseUrl(
         newBaseUrl = "${Constants.WS_BASE_URL}websocket/user/?id=$id&token=$token"
     ).setType(
         Types.newParameterizedType(Response::class.java, UserDto::class.java)

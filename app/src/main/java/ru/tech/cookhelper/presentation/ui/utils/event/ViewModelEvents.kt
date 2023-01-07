@@ -11,6 +11,4 @@ interface ViewModelEvents<T> {
 @Composable
 inline fun <reified T> ViewModelEvents<T>.collectEvents(
     noinline eventCollector: suspend (event: T) -> Unit
-) {
-    eventFlow.collectWithLifecycle(action = eventCollector)
-}
+) = eventFlow.collectWithLifecycle(action = eventCollector)
