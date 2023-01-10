@@ -1,6 +1,8 @@
 package ru.tech.cookhelper.presentation.ui.utils.provider
 
 import android.app.Activity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -17,5 +19,11 @@ fun Activity.provideWindowSizeClass(content: @Composable () -> Unit) {
         LocalWindowSizeClass provides calculateWindowSizeClass(this),
         content = content
     )
+}
+
+fun ComponentActivity.setContentWithWindowSizeClass(
+    content: @Composable () -> Unit
+) = setContent {
+    provideWindowSizeClass(content = content)
 }
 
