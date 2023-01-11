@@ -136,7 +136,6 @@ fun SettingsScreen(
                             )
                         },
                         modifier = Modifier.rotate(rotation),
-                        enabled = !settingsState.dynamicColors
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.KeyboardArrowDown,
@@ -173,7 +172,7 @@ fun SettingsScreen(
                 var expanded by rememberSaveable { mutableStateOf(false) }
                 PreferenceRow(
                     title = stringResource(R.string.theme_preview),
-                    icon = Icons.Outlined.Preview,
+                    icon = Icons.Outlined.Visibility,
                     onClick = { expanded = !expanded }
                 ) {
                     val rotation: Float by animateFloatAsState(if (expanded) 180f else 0f)
