@@ -2,6 +2,8 @@ package ru.tech.cookhelper.presentation.ui.theme
 
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Shapes
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -10,6 +12,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import java.lang.Math.toRadians
 import kotlin.math.*
+
+val Shapes = Shapes(
+    extraSmall = RoundedCornerShape(4.dp),
+    small = SquircleShape(8.dp),
+    medium = SquircleShape(12.dp),
+    large = SquircleShape(16.dp),
+    extraLarge = SquircleShape(28.dp)
+)
 
 data class SquircleShape(
     private val topLeft: Dp = 0.dp,

@@ -11,6 +11,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategoryS
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.PickProductsWithMeasuresDialog
 import ru.tech.cookhelper.presentation.settings.components.AboutAppDialog
+import ru.tech.cookhelper.presentation.settings.components.PickLanguageDialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.DialogController
 
@@ -65,6 +66,14 @@ fun DialogHost(controller: DialogController) {
                     hasAvatar = dialog.hasAvatar,
                     onOpenAvatar = dialog.onOpenAvatar,
                     onAvatarPicked = dialog.onAvatarPicked
+                )
+            }
+            is Dialog.PickLanguageDialog -> {
+                PickLanguageDialog(
+                    entries = dialog.entries,
+                    selected = dialog.selected,
+                    onSelect = dialog.onSelect,
+                    onDismiss = dialog.onDismiss
                 )
             }
         }

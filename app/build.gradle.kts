@@ -61,6 +61,9 @@ android {
 
 dependencies {
 
+    //App Compat
+    implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
+
     //Exif interface
     implementation("androidx.exifinterface:exifinterface:1.3.5")
 

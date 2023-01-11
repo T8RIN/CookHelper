@@ -102,6 +102,7 @@ fun CookHelperTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = Shapes,
         content = {
             val color = NavigationBarDefaults.containerColor.createInverseSecondaryColor()
 
@@ -136,6 +137,12 @@ fun getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
         return if (darkTheme) DarkThemeColors
         else LightThemeColors
     }
+}
+
+@Composable
+fun ColorScheme.toColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
+    return if (darkTheme) DarkThemeColors
+    else LightThemeColors
 }
 
 @Composable

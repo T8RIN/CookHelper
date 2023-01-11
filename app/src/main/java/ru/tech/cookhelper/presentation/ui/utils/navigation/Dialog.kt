@@ -59,4 +59,12 @@ sealed class Dialog : Parcelable {
         @IgnoredOnParcel val onAvatarPicked: (imageUri: String) -> Unit = {},
         @IgnoredOnParcel val onOpenAvatar: () -> Unit = {}
     ) : Dialog()
+
+    @Parcelize
+    class PickLanguageDialog(
+        @IgnoredOnParcel val entries: Map<String, String> = emptyMap(),
+        val selected: String,
+        @IgnoredOnParcel val onSelect: (String) -> Unit = {},
+        @IgnoredOnParcel val onDismiss: () -> Unit = {}
+    ) : Dialog()
 }

@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import kotlin.coroutines.resume
 import kotlin.math.min
 
@@ -29,6 +28,7 @@ import kotlin.math.min
 fun ToastHost(
     hostState: ToastHostState,
     modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.BottomCenter,
     toast: @Composable (ToastData) -> Unit = { Toast(it) }
 ) {
     val currentToastData = hostState.currentToastData
@@ -49,7 +49,7 @@ fun ToastHost(
     ) {
         AnimatedContent(
             targetState = currentToastData,
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(alignment)
         ) {
             it?.let { toast(it) }
         }
@@ -205,7 +205,7 @@ enum class ToastDuration { Short, Long }
 object ToastDefaults {
     val contentColor: Color @Composable get() = MaterialTheme.colorScheme.onTertiaryContainer
     val color: Color @Composable get() = MaterialTheme.colorScheme.surfaceVariant
-    val shape = SquircleShape(24.dp)
+    val shape: Shape @Composable get() = MaterialTheme.shapes.extraLarge
 }
 
 private fun ToastDuration.toMillis(

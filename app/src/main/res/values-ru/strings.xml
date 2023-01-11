@@ -28,7 +28,7 @@
     <string name="dynamic_сolors">Динамечские цвета</string>
     <string name="cart_connection">Связь корзины и холодильника</string>
     <string name="color_scheme">Цветовая палитра</string>
-    <string name="dynamic_colors_subtitle">При включении тема приложения будет подстраиваться под ваши текущие обои (Необходим Android версии 12 и выше)</string>
+    <string name="dynamic_colors_subtitle">При включении, тема приложения будет подстраиваться под ваши текущие обои (Необходим Android версии 12 и выше)</string>
     <string name="cart_connection_subtitle">Если включено, то при вычеркивании продукта из корзины, он будет автоматичсеки помещен в холодильник и наоборот</string>
     <string name="dark">Темная</string>
     <string name="light">Светлая</string>
@@ -225,4 +225,6 @@
     <string name="products_not_matched">У вас недостаточно продуктов для приготовления какого-либо блюда или уберите что-то из блок-листа</string>
     <string name="products">Продукты</string>
     <string name="discussion">Обсуждение</string>
+    <string name="theme_preview">Предпросмотр темы</string>
+    <string name="language">Язык приложения</string>
 </resources>

@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.tech.cookhelper.core.onSuccess
 import ru.tech.cookhelper.domain.use_case.cache_user.CacheUserUseCase
 import ru.tech.cookhelper.domain.use_case.get_settings_list.GetSettingsListUseCase
@@ -71,6 +69,11 @@ class MainViewModel @Inject constructor(
                             cartConnection = setting.option.toBoolean()
                         )
                     }
+                    Setting.LANGUAGE.ordinal -> {
+                        state = state.copy(
+                            language = setting.option
+                        )
+                    }
                 }
             }
             _settingsState.update { state }
@@ -81,10 +84,9 @@ class MainViewModel @Inject constructor(
                 observingJob?.cancel()
                 observingJob = null
                 sendEvent(Event.NavigateTo(Screen.Authentication.Login))
-            }
-            else {
+            } else {
                 _userState.update { UserState(user, user.token) }
-                if(observingJob == null) {
+                if (observingJob == null) {
                     observingJob = observeUserUseCase(userState.user?.id ?: 0, userState.token)
                         .onSuccess {
                             cacheUserUseCase(this)
