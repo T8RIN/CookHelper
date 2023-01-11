@@ -3,6 +3,8 @@ package ru.tech.cookhelper.presentation.ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 
 @Suppress("PropertyName")
@@ -706,7 +708,7 @@ sealed interface ColorScheme {
         override val md_theme_dark_surfaceTint get() = md_theme_light_inversePrimary
     }
 
-    object VioletVariant : ColorScheme {
+    object Purple : ColorScheme {
         override val md_theme_light_primary = Color(0xFFa200bb)
         override val md_theme_light_onPrimary = Color(0xFFffffff)
         override val md_theme_light_primaryContainer = Color(0xFFffd5ff)
@@ -777,11 +779,28 @@ val colorList: List<ColorScheme> = listOf(
     ColorScheme.Orange,
     ColorScheme.Red,
     ColorScheme.Pink,
-    ColorScheme.VioletVariant,
+    ColorScheme.Purple,
     ColorScheme.Violet,
 )
 
+val colorTitlesList: List<Int> = listOf(
+    R.string.dark_blue,
+    R.string.blue,
+    R.string.light_blue,
+    R.string.mint,
+    R.string.green,
+    R.string.yellow,
+    R.string.carrot,
+    R.string.orange,
+    R.string.red,
+    R.string.pink,
+    R.string.purple,
+    R.string.violet,
+)
+
 val ColorScheme.ordinal get() = colorList.indexOf(this)
+
+val ColorScheme.title @Composable get() = stringResource(colorTitlesList[colorList.indexOf(this)])
 
 inline val LikeColor: Color
     @Composable
@@ -801,4 +820,4 @@ inline val Green: Color
 
 inline val Gray: Color
     @Composable
-    get() = MaterialTheme.colorScheme.outline
+    get() = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)

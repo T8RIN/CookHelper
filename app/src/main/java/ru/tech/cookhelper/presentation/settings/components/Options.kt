@@ -10,14 +10,13 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GetApp
 import androidx.compose.material.icons.outlined.InvertColors
 import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material3.*
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -25,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
@@ -33,10 +33,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Marquee
 import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
-import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
-import ru.tech.cookhelper.presentation.ui.theme.colorList
-import ru.tech.cookhelper.presentation.ui.theme.ordinal
-import ru.tech.cookhelper.presentation.ui.theme.toColorScheme
+import ru.tech.cookhelper.presentation.ui.theme.*
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getCurrentLocaleString
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getLanguages
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
@@ -49,7 +46,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 
 @Composable
-fun SettingsState.ThemeOptions(insertSetting: (id: Int, option: Any) -> Unit) {
+fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
     Column(Modifier.animateContentSize()) {
         var expanded by rememberSaveable { mutableStateOf(false) }
         PreferenceRow(
@@ -80,7 +77,7 @@ fun SettingsState.ThemeOptions(insertSetting: (id: Int, option: Any) -> Unit) {
 }
 
 @Composable
-fun SettingsState.ColorSchemeOptions(insertSetting: (id: Int, option: Any) -> Unit) {
+fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
     val toastHost = LocalToastHost.current
     val context = LocalContext.current
 
@@ -115,12 +112,15 @@ fun SettingsState.ColorSchemeOptions(insertSetting: (id: Int, option: Any) -> Un
             )
         }
         if (expanded && !dynamicColors) {
+            val state = rememberLazyListState()
             Spacer(Modifier.height(10.dp))
             LazyRow(
+                state = state,
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
                 items(colorList) { scheme ->
                     AppThemeItem(
+                        title = scheme.title,
                         selected = scheme.ordinal == colorScheme.ordinal,
                         colorScheme = scheme.toColorScheme(),
                         onClick = {
@@ -130,6 +130,10 @@ fun SettingsState.ColorSchemeOptions(insertSetting: (id: Int, option: Any) -> Un
                 }
             }
             Spacer(Modifier.height(20.dp))
+
+            LaunchedEffect(Unit) {
+                state.scrollToItem(colorScheme.ordinal)
+            }
         }
         Separator()
     }
@@ -285,6 +289,39 @@ fun SettingsState.AppInfoVersionOption() {
 }
 
 @Composable
+fun SettingsState.FontSizeOption(insertSetting: (id: Int, option: Any) -> Unit) {
+    Column(Modifier.animateContentSize()) {
+        var expanded by rememberSaveable { mutableStateOf(false) }
+        PreferenceRow(
+            title = stringResource(Setting.FONT_SCALE.title),
+            subtitle = Setting.FONT_SCALE.subtitle?.let { stringResource(it) },
+            icon = Setting.FONT_SCALE.getIcon(nightMode),
+            onClick = { expanded = !expanded }
+        ) {
+            RotationButton(
+                rotated = expanded,
+                onClick = { expanded = !expanded }
+            )
+        }
+        if (expanded) {
+            Slider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                value = fontScale,
+                onValueChange = {
+                    insertSetting(Setting.FONT_SCALE.ordinal, it)
+                },
+                valueRange = 0.5f..1.5f,
+                steps = 5
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        Separator()
+    }
+}
+
+@Composable
 fun SettingsState.CartConnectionOption(insertSetting: (id: Int, option: Any) -> Unit) {
     PreferenceRowSwitch(
         title = stringResource(Setting.CART_CONNECTION.title),
@@ -300,14 +337,19 @@ fun SettingsState.CartConnectionOption(insertSetting: (id: Int, option: Any) -> 
 
 @Composable
 private fun AppThemeItem(
+    title: String,
     colorScheme: ColorScheme,
     selected: Boolean,
     onClick: () -> Unit,
 ) {
+    val density = LocalDensity.current
+    var standardWidth = 120.dp
+
     Column(
         modifier = Modifier
-            .width(115.dp)
-            .padding(start = 8.dp, end = 8.dp),
+            .width(standardWidth)
+            .padding(start = 8.dp, end = 8.dp)
+            .animateContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AppThemePreviewItem(
@@ -315,6 +357,22 @@ private fun AppThemeItem(
             onClick = onClick,
             colorScheme = colorScheme,
             shapes = MaterialTheme.shapes
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelSmall.copy(
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
+            ),
+            maxLines = 1,
+            onTextLayout = {
+                with(density) {
+                    val width = it.size.width.toDp()
+                    if (width > standardWidth) {
+                        standardWidth = width + 8.dp
+                    }
+                }
+            }
         )
     }
 }

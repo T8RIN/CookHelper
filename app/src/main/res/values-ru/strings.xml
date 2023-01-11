@@ -32,7 +32,7 @@
     <string name="cart_connection_subtitle">Если включено, то при вычеркивании продукта из корзины, он будет автоматичсеки помещен в холодильник и наоборот</string>
     <string name="dark">Темная</string>
     <string name="light">Светлая</string>
-    <string name="system">Системная</string>
+    <string name="system">Дефолт</string>
     <string name="share">Поделиться</string>
     <string name="about_dish">О рецепте</string>
     <string name="about_app">О приложении</string>
@@ -227,4 +227,18 @@
     <string name="discussion">Обсуждение</string>
     <string name="theme_preview">Предпросмотр темы</string>
     <string name="language">Язык приложения</string>
+    <string name="dark_blue">Сапфировая</string>
+    <string name="blue">Небесная</string>
+    <string name="light_blue">Океаническая</string>
+    <string name="mint">Мятная</string>
+    <string name="green">Травяная</string>
+    <string name="yellow">Солнечная</string>
+    <string name="carrot">Морковная</string>
+    <string name="orange">Апельсиновая</string>
+    <string name="red">Яблочная</string>
+    <string name="pink">Вишневая</string>
+    <string name="purple">Пурпурная</string>
+    <string name="violet">Баклажановая</string>
+    <string name="font_size">Размер шрифта</string>
+    <string name="font_size_subtitle">Может работать очень нестабильно, если вы выбрали размер щрифта не предназанченный для вашего разрешения экрана</string>
 </resources>

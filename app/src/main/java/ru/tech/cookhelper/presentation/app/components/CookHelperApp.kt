@@ -13,7 +13,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.olshevski.navigation.reimagined.rememberNavController
 import kotlinx.coroutines.launch
@@ -57,8 +59,12 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         topAppBarNavigationIcon.clearNavigationIcon()
         topAppBarTitle.clearTitle()
     }
-
     val scrollBehavior = topAppBarScrollBehavior()
+
+    val density = Density(
+        LocalDensity.current.density,
+        viewModel.settingsState.fontScale
+    )
 
     CompositionLocalProvider(
         values = arrayOf(
@@ -70,7 +76,8 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalSettingsProvider provides viewModel.settingsState,
             LocalTopAppBarActions provides topAppBarActions,
             LocalTopAppBarNavigationIcon provides topAppBarNavigationIcon,
-            LocalTopAppBarTitle provides topAppBarTitle
+            LocalTopAppBarTitle provides topAppBarTitle,
+            LocalDensity provides density
         )
     ) {
         CookHelperTheme {

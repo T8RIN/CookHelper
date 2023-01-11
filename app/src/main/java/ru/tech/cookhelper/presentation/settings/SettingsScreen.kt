@@ -40,11 +40,12 @@ fun SettingsScreen(
             .verticalScroll(rememberScrollState())
     ) {
         with(settingsState) {
-            ThemeOptions(viewModel::insertSetting)
-            ColorSchemeOptions(viewModel::insertSetting)
+            ChangeLanguageOption(viewModel::insertSetting)
+            ThemeOption(viewModel::insertSetting)
+            ColorSchemeOption(viewModel::insertSetting)
             ThemePreviewOption()
             DynamicColorsOption(viewModel::insertSetting)
-            ChangeLanguageOption(viewModel::insertSetting)
+            FontSizeOption(viewModel::insertSetting)
             CartConnectionOption(viewModel::insertSetting)
             AppInfoVersionOption()
 

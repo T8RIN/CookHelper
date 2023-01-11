@@ -74,6 +74,11 @@ class MainViewModel @Inject constructor(
                             language = setting.option
                         )
                     }
+                    Setting.FONT_SCALE.ordinal -> {
+                        state = state.copy(
+                            fontScale = setting.option.toFloatOrNull() ?: 1f
+                        )
+                    }
                 }
             }
             _settingsState.update { state }
