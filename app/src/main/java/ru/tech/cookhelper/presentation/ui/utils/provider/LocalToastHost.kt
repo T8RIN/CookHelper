@@ -5,8 +5,8 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import ru.tech.cookhelper.presentation.app.components.ToastHostState
 
-val LocalToastHost =
-    compositionLocalOf<ToastHostState> { error("ToastData not present") }
+val LocalToastHostState =
+    compositionLocalOf<ToastHostState> { error("ToastHostState not present") }
 
 @Composable
 fun rememberToastHostState() = remember { ToastHostState() }

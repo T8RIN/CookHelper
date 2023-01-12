@@ -32,7 +32,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBar
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +46,7 @@ fun AllImagesScreen(
     val screenController = LocalScreenController.current
     val scrollBehavior = topAppBarScrollBehavior()
     val context = LocalContext.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
 
     val resultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),

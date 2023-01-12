@@ -9,11 +9,12 @@ import ru.tech.cookhelper.presentation.forum_screen.components.ForumFilterBottom
 import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.ModalBottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.provider.BottomSheetController
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalBottomSheetController
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 
 @Composable
 fun BottomSheetHost(
-    bottomSheetController: BottomSheetController,
+    bottomSheetController: BottomSheetController = LocalBottomSheetController.current,
     content: @Composable () -> Unit
 ) {
     val controller = bottomSheetController.controller

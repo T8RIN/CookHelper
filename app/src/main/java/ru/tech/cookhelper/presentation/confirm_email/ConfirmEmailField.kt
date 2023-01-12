@@ -44,7 +44,7 @@ fun ConfirmEmailField(
     )
 ) {
     val screenController = LocalScreenController.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val width = LocalConfiguration.current.screenWidthDp
     val context = LocalContext.current
 

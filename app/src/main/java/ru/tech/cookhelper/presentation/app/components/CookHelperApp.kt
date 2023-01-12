@@ -1,7 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -72,7 +71,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalDialogController provides dialogController,
             LocalBottomSheetController provides bottomSheetController,
             LocalSnackbarHost provides snackbarHostState,
-            LocalToastHost provides toastHostState,
+            LocalToastHostState provides toastHostState,
             LocalSettingsProvider provides viewModel.settingsState,
             LocalTopAppBarActions provides topAppBarActions,
             LocalTopAppBarNavigationIcon provides topAppBarNavigationIcon,
@@ -103,64 +102,68 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                     drawerState = drawerState,
                     gesturesEnabled = showTopAppBar
                 ) {
-                    BottomSheetHost(bottomSheetController = bottomSheetController) {
-                        Column {
-                            AnimatedTopAppBar(
-                                topAppBarSize = TopAppBarSize.Centered,
-                                navigationIcon = {
-                                    AnimatedContent(
-                                        targetState = topAppBarNavigationIcon.value,
-                                        transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
-                                    ) {
-                                        if (it == null) {
-                                            IconButton(
-                                                onClick = { scope.launch { drawerState.open() } },
-                                                content = { Icon(Icons.Rounded.Menu, null) }
-                                            )
-                                        } else it()
-                                    }
-                                },
-                                actions = {
-                                    AnimatedVisibility(
-                                        visible = topAppBarActions.value != null,
-                                        enter = fadeIn() + scaleIn(),
-                                        exit = fadeOut()
-                                    ) {
+                    BottomSheetHost {
+                        SimpleScaffold(
+                            topAppBar = {
+                                AnimatedTopAppBar(
+                                    topAppBarSize = TopAppBarSize.Centered,
+                                    navigationIcon = {
                                         AnimatedContent(
-                                            targetState = topAppBarActions.value,
-                                            transitionSpec = {
-                                                fadeIn() + scaleIn() with fadeOut() + scaleOut()
-                                            }
+                                            targetState = topAppBarNavigationIcon.value,
+                                            transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
                                         ) {
-                                            Row { it?.invoke(this) }
+                                            if (it == null) {
+                                                IconButton(
+                                                    onClick = { scope.launch { drawerState.open() } },
+                                                    content = { Icon(Icons.Rounded.Menu, null) }
+                                                )
+                                            } else it()
                                         }
-                                    }
-                                },
-                                title = {
-                                    AnimatedContent(
-                                        targetState = topAppBarTitle.value,
-                                        transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
-                                    ) {
-                                        it?.invoke() ?: Text(
-                                            viewModel.title.asString(),
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                    }
-                                },
-                                visible = showTopAppBar,
-                                scrollBehavior = scrollBehavior
-                            )
-                            ScreenHost(
-                                scrollBehavior = scrollBehavior,
-                                controller = screenController,
-                                transitionSpec = ScaleCrossfadeTransitionSpec,
-                                onTitleChange = { viewModel.updateTitle(it) }
-                            )
-                        }
+                                    },
+                                    actions = {
+                                        AnimatedVisibility(
+                                            visible = topAppBarActions.value != null,
+                                            enter = fadeIn() + scaleIn(),
+                                            exit = fadeOut()
+                                        ) {
+                                            AnimatedContent(
+                                                targetState = topAppBarActions.value,
+                                                transitionSpec = {
+                                                    fadeIn() + scaleIn() with fadeOut() + scaleOut()
+                                                }
+                                            ) {
+                                                Row { it?.invoke(this) }
+                                            }
+                                        }
+                                    },
+                                    title = {
+                                        AnimatedContent(
+                                            targetState = topAppBarTitle.value,
+                                            transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
+                                        ) {
+                                            it?.invoke() ?: Text(
+                                                viewModel.title.asString(),
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        }
+                                    },
+                                    visible = showTopAppBar,
+                                    scrollBehavior = scrollBehavior
+                                )
+                            },
+                            content = {
+                                ScreenHost(
+                                    scrollBehavior = scrollBehavior,
+                                    controller = screenController,
+                                    transitionSpec = ScaleCrossfadeTransitionSpec,
+                                    onTitleChange = { viewModel.updateTitle(it) }
+                                )
+                            }
+                        )
                     }
                 }
-                DialogHost(controller = dialogController)
-                ToastHost(hostState = toastHostState)
+                DialogHost()
+                ToastHost()
             }
         }
     }

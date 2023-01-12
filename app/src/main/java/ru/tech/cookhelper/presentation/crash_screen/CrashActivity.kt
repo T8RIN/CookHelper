@@ -38,7 +38,7 @@ import ru.tech.cookhelper.presentation.ui.theme.CookHelperTheme
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.rememberToastHostState
 
 
@@ -58,7 +58,7 @@ class CrashActivity : ComponentActivity() {
 
             CompositionLocalProvider(
                 LocalSettingsProvider provides viewModel.settingsState,
-                LocalToastHost provides toastHostState
+                LocalToastHostState provides toastHostState
             ) {
                 CookHelperTheme {
                     val conf = LocalConfiguration.current

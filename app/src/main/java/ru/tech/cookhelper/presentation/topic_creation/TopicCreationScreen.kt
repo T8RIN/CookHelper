@@ -42,7 +42,7 @@ import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 
 
@@ -53,7 +53,7 @@ fun TopicCreationScreen(
     onBack: () -> Unit,
 ) {
     val context = LocalContext.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val focus = LocalFocusManager.current
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
 

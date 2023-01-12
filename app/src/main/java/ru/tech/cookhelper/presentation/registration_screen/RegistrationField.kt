@@ -51,7 +51,7 @@ fun RegistrationField(
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val screenController = LocalScreenController.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val context = LocalContext.current
 
     var name by rememberSaveable { mutableStateOf("") }

@@ -38,7 +38,7 @@ import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 
@@ -49,7 +49,7 @@ fun PickProductsDialog(
     viewModel: PickProductsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
 
     val dialogController = LocalDialogController.current
     var searchValue by rememberSaveable { mutableStateOf("") }

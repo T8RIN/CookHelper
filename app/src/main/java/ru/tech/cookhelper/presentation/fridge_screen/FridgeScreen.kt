@@ -44,7 +44,7 @@ fun FridgeScreen(
     viewModel: FridgeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
 
     val screenController = LocalScreenController.current
     val dialogController = LocalDialogController.current

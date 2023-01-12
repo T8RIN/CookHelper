@@ -29,7 +29,7 @@ import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +40,7 @@ fun ImageCarousel(
     onAddImage: (imageUri: String) -> Unit,
     onExpand: () -> Unit
 ) {
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val context = LocalContext.current
     val resultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),

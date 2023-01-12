@@ -29,7 +29,7 @@ import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 @OptIn(
@@ -44,7 +44,7 @@ fun PickOrOpenAvatarDialog(
     onAvatarPicked: (imageUri: String) -> Unit
 ) {
     val dialogController = LocalDialogController.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val context = LocalContext.current
 
     var imageUri by rememberSaveable { mutableStateOf("") }

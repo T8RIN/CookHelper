@@ -1,6 +1,10 @@
 package ru.tech.cookhelper.presentation.ui.theme
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType.Companion.NonZero
 import androidx.compose.ui.graphics.SolidColor
@@ -10,6 +14,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.ImageVector.Builder
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
+
+@Composable
+operator fun ImageVector.invoke(
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    tint: Color = LocalContentColor.current
+) {
+    Icon(
+        imageVector = this,
+        contentDescription = contentDescription,
+        modifier = modifier,
+        tint = tint
+    )
+}
 
 val Icons.Rounded.Fridge: ImageVector
     get() {

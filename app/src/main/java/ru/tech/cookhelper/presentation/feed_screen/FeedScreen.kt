@@ -25,7 +25,7 @@ import ru.tech.cookhelper.presentation.profile.components.ProfileRecipeItem
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -70,7 +70,7 @@ fun FeedScreen(viewModel: FeedViewModel = hiltViewModel()) {
         }
     }
 
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val context = LocalContext.current
     viewModel.eventFlow.collectWithLifecycle {
         when (it) {

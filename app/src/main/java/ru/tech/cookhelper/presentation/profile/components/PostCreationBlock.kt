@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 
 @Composable
 fun PostCreationBlock(onCreateRecipe: () -> Unit, onCreatePost: (imageUri: String) -> Unit) {
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val imageNotPicked = stringResource(R.string.image_not_picked)
 
     val resultLauncher = rememberLauncherForActivityResult(

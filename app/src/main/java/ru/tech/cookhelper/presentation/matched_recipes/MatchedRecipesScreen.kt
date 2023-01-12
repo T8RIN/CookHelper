@@ -35,7 +35,7 @@ import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -45,7 +45,7 @@ fun MatchedRecipesScreen(
     viewModel: MatchedRecipesViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
 
     val screenController = LocalScreenController.current
 

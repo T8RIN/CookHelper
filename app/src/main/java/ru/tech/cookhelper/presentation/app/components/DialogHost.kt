@@ -14,10 +14,11 @@ import ru.tech.cookhelper.presentation.settings.components.AboutAppDialog
 import ru.tech.cookhelper.presentation.settings.components.PickLanguageDialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.DialogController
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun DialogHost(controller: DialogController) {
+fun DialogHost(controller: DialogController = LocalDialogController.current) {
     DialogNavHost(controller = controller) { dialog ->
         when (dialog) {
             is Dialog.Exit -> {

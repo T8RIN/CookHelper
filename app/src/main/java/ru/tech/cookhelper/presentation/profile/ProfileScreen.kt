@@ -38,7 +38,7 @@ fun ProfileScreen(
     val activity = LocalContext.current.findActivity()
 
     LocalTopAppBarActions.current.setActions {
-        val toastHost = LocalToastHost.current
+        val toastHost = LocalToastHostState.current
         IconButton(
             onClick = {
                 dialogController.show(

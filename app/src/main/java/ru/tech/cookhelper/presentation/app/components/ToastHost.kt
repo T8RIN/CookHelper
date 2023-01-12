@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import kotlin.coroutines.resume
 import kotlin.math.min
 
@@ -26,7 +27,7 @@ import kotlin.math.min
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ToastHost(
-    hostState: ToastHostState,
+    hostState: ToastHostState = LocalToastHostState.current,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.BottomCenter,
     toast: @Composable (ToastData) -> Unit = { Toast(it) }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HelpOutline
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +13,7 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.presentation.app.components.NavigationBarsSpacer
 import ru.tech.cookhelper.presentation.settings.components.*
 import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
+import ru.tech.cookhelper.presentation.ui.theme.invoke
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarActions
@@ -30,7 +30,7 @@ fun SettingsScreen(
     LocalTopAppBarActions.current.setActions {
         IconButton(
             onClick = { dialogController.show(Dialog.AboutApp) },
-            content = { Icon(Icons.Outlined.HelpOutline, null) }
+            content = { Icons.Outlined.HelpOutline() }
         )
     }
 

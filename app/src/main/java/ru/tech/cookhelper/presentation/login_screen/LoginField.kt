@@ -37,7 +37,7 @@ import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
@@ -52,7 +52,7 @@ fun LoginField(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val screenController = LocalScreenController.current
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val context = LocalContext.current
 
     var login by rememberSaveable { mutableStateOf("") }

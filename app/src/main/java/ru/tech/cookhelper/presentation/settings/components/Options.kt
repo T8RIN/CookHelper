@@ -41,7 +41,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 
@@ -78,7 +78,7 @@ fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
 
 @Composable
 fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val context = LocalContext.current
 
     Column(Modifier.animateContentSize()) {
@@ -218,7 +218,7 @@ fun SettingsState.ChangeLanguageOption(insertSetting: (id: Int, option: Any) -> 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsState.AppInfoVersionOption() {
-    val toastHost = LocalToastHost.current
+    val toastHost = LocalToastHostState.current
     val context = LocalContext.current
 
     PreferenceRow(
