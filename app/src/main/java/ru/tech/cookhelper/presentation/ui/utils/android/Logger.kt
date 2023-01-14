@@ -5,19 +5,28 @@ import android.util.Log
 object Logger {
 
     fun makeLog(
-        vararg any: Any?,
+        any: Any?,
         tag: String = this::class.java.simpleName,
         level: Level = Level.DEBUG
     ) {
-        any.forEach {
-            when (level) {
-                Level.VERBOSE -> Log.v(tag, it.toString())
-                Level.DEBUG -> Log.d(tag, it.toString())
-                Level.INFO -> Log.i(tag, it.toString())
-                Level.WARN -> Log.w(tag, it.toString())
-                Level.ERROR -> Log.e(tag, it.toString())
-            }
+        when (level) {
+            Level.VERBOSE -> Log.v(tag, any.toString())
+            Level.DEBUG -> Log.d(tag, any.toString())
+            Level.INFO -> Log.i(tag, any.toString())
+            Level.WARN -> Log.w(tag, any.toString())
+            Level.ERROR -> Log.e(tag, any.toString())
         }
+    }
+
+    fun Any?.log(
+        tag: String = (this@Logger)::class.java.simpleName,
+        level: Level = Level.DEBUG
+    ) {
+        makeLog(
+            any = this,
+            tag = tag,
+            level = level
+        )
     }
 
     enum class Level {

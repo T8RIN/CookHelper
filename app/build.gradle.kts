@@ -72,8 +72,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Coroutine Lifecycle Scopes
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha03")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha04")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha04")
 
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.44.2")
@@ -84,16 +84,16 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
 
     //Compose
-    implementation("androidx.activity:activity-compose:1.7.0-alpha02")
-    implementation("androidx.compose.ui:ui:1.4.0-alpha03")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha03")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha03")
-    implementation("androidx.compose.material:material-icons-core:1.4.0-alpha03")
-    implementation("androidx.compose.material:material-icons-extended:1.4.0-alpha03")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha03")
+    implementation("androidx.activity:activity-compose:1.7.0-alpha03")
+    implementation("androidx.compose.ui:ui:1.4.0-alpha04")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha04")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha04")
+    implementation("androidx.compose.material:material-icons-core:1.4.0-alpha04")
+    implementation("androidx.compose.material:material-icons-extended:1.4.0-alpha04")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha04")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha05")
-    implementation("androidx.compose.foundation:foundation:1.4.0-alpha03")
-    implementation("androidx.compose.ui:ui-util:1.4.0-alpha03")
+    implementation("androidx.compose.foundation:foundation:1.4.0-alpha04")
+    implementation("androidx.compose.ui:ui-util:1.4.0-alpha04")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
@@ -115,9 +115,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
 
     //Room
-    implementation("androidx.room:room-runtime:2.5.0-rc01")
-    implementation("androidx.room:room-ktx:2.5.0-rc01")
-    kapt("androidx.room:room-compiler:2.5.0-rc01")
+    implementation("androidx.room:room-runtime:2.5.0")
+    implementation("androidx.room:room-ktx:2.5.0")
+    kapt("androidx.room:room-compiler:2.5.0")
 
     //Navigation
     implementation("dev.olshevski.navigation:reimagined:1.3.1")

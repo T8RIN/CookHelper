@@ -161,7 +161,9 @@ fun ModalBottomSheet(
     sheetContentColor: Color = contentColorFor(sheetContainerColor),
     content: @Composable () -> Unit
 ) {
+    val lastFractionsPool = remember { StrictSizedList<Float>(allowedSize = 3) }
     val scope = rememberCoroutineScope()
+
     BoxWithConstraints(modifier) {
         val fullWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
         val fullHeight = constraints.maxHeight.toFloat()
@@ -206,7 +208,9 @@ fun ModalBottomSheet(
                     val fraction by remember(state.progress) {
                         derivedStateOf {
                             state.progress.run {
-                                val newFraction = fraction.takeIf { it != 1f } ?: 0f
+                                val newFraction =
+                                    fraction.takeIf { it != 1f && !lastFractionsPool.contains(1f) }
+                                        ?: 0f
                                 if (from != to && from == BottomSheetValue.Expanded) {
                                     min(0.5f, (1 - newFraction) / 2)
                                 } else if (from != to && from == BottomSheetValue.Collapsed) {
@@ -216,6 +220,8 @@ fun ModalBottomSheet(
                                 } else {
                                     0f
                                 }
+                            }.also {
+                                lastFractionsPool.add(state.progress.fraction)
                             }
                         }
                     }
@@ -250,22 +256,18 @@ fun ModalBottomSheet(
                         contentColor = sheetContentColor,
                         content = {
                             Column {
-                                Row(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 22.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Spacer(Modifier.weight(1f))
                                     Surface(
-                                        Modifier
+                                        modifier = Modifier
+                                            .padding(vertical = 22.dp)
                                             .width(32.dp)
                                             .height(4.dp),
                                         shape = CircleShape,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     ) {}
-                                    Spacer(Modifier.weight(1f))
                                 }
                                 sheetContent()
                             }
@@ -345,5 +347,23 @@ object BottomSheetDefaults {
         bottomStart = 0.dp,
         bottomEnd = 0.dp
     )
+
+}
+
+
+class StrictSizedList<T>(
+    var allowedSize: Int,
+    private val list: MutableList<T> = mutableListOf()
+) : MutableList<T> by list {
+
+    override fun add(element: T): Boolean {
+        return if (size < allowedSize) list.add(element)
+        else {
+            list.removeFirst()
+            list.add(element)
+        }
+    }
+
+    override fun toString(): String = "StrictSizedList(items = ${list.joinToString()})"
 
 }
