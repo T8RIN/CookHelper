@@ -24,8 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import ru.tech.cookhelper.BuildConfig
@@ -342,12 +342,9 @@ private fun AppThemeItem(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val density = LocalDensity.current
-    var standardWidth = 120.dp
-
     Column(
         modifier = Modifier
-            .width(standardWidth)
+            .width(120.dp)
             .padding(start = 8.dp, end = 8.dp)
             .animateContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -359,20 +356,16 @@ private fun AppThemeItem(
             shapes = MaterialTheme.shapes
         )
         Spacer(Modifier.height(4.dp))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
-            ),
-            maxLines = 1,
-            onTextLayout = {
-                with(density) {
-                    val width = it.size.width.toDp()
-                    if (width > standardWidth) {
-                        standardWidth = width + 8.dp
-                    }
-                }
-            }
-        )
+        Marquee {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = title,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    textAlign = TextAlign.Center
+                ),
+                maxLines = 1
+            )
+        }
     }
 }
