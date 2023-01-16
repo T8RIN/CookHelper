@@ -312,7 +312,7 @@ fun SettingsState.FontSizeOption(insertSetting: (id: Int, option: Any) -> Unit) 
                 onValueChange = {
                     insertSetting(Setting.FONT_SCALE.ordinal, it)
                 },
-                valueRange = 0.5f..1.5f,
+                valueRange = 0.75f..1.25f,
                 steps = 5
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -358,7 +358,7 @@ private fun AppThemeItem(
         Spacer(Modifier.height(4.dp))
         Marquee {
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = it,
                 text = title,
                 style = MaterialTheme.typography.labelSmall.copy(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),

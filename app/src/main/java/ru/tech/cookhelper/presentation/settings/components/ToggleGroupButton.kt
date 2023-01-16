@@ -30,7 +30,6 @@ fun ToggleGroupButton(
             OutlinedButton(
                 onClick = { indexChanged(index) },
                 modifier = Modifier
-                    .height(40.dp)
                     .widthIn(min = 48.dp)
                     .then(
                         when (index) {

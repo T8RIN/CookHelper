@@ -11,10 +11,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.isActive
+import kotlin.math.absoluteValue
+import kotlin.math.ceil
 
 /**
  * Marquee is an implementation of marquee effect from Android XML for JetpackCompose
@@ -29,7 +33,10 @@ fun Marquee(
     params: MarqueeParams = defaultMarqueeParams(),
     content: @Composable (Modifier) -> Unit
 ) {
-    var xOffset by remember { mutableStateOf(0) }
+    val density = LocalDensity.current
+    val gradientEdgeWidth = with(density) { params.gradientEdgeWidth.toPx().toInt() }
+
+    var xOffset by remember { mutableStateOf(gradientEdgeWidth) }
     val layoutInfoState = remember { mutableStateOf<MarqueeLayoutInfo?>(null) }
 
     LaunchedEffect(layoutInfoState.value) {
@@ -38,13 +45,18 @@ fun Marquee(
         val layoutInfo = layoutInfoState.value ?: return@LaunchedEffect
         if (layoutInfo.width <= layoutInfo.containerWidth) return@LaunchedEffect
 
-        val duration = params.period * layoutInfo.width / layoutInfo.containerWidth
+        val duration =
+            ceil(layoutInfo.containerWidth / with(density) { params.velocity.toPx().absoluteValue / 1000f }).toInt()
 
         val animation = TargetBasedAnimation(
             animationSpec = infiniteRepeatable(
+                initialStartOffset = StartOffset(-params.delayMillis + params.initialDelayMillis),
                 animation = tween(
-                    durationMillis = duration, easing = params.easing
-                ), repeatMode = RepeatMode.Restart
+                    durationMillis = duration,
+                    easing = params.easing,
+                    delayMillis = params.delayMillis
+                ),
+                repeatMode = RepeatMode.Restart
             ),
             typeConverter = Int.VectorConverter,
             initialValue = if (ltr) 0 else -layoutInfo.width,
@@ -55,7 +67,7 @@ fun Marquee(
 
         do {
             val playTime = withFrameNanos { it } - startTime
-            xOffset = animation.getValueFromNanos(playTime)
+            xOffset = animation.getValueFromNanos(playTime) + gradientEdgeWidth
         } while (isActive)
     }
 
@@ -76,8 +88,9 @@ fun Marquee(
                 content(Modifier.fillMaxWidth())
             }.first().measure(constraints)
             layoutInfoState.value = null
+            xOffset = 0
         } else {
-            val spacing = constraints.maxWidth * 2 / 3
+            val spacing = constraints.maxWidth / 3
             layoutInfoState.value = MarqueeLayoutInfo(
                 width = main.width + spacing, containerWidth = constraints.maxWidth
             )
@@ -92,11 +105,13 @@ fun Marquee(
             gradient = if (params.gradientEnabled) subcompose(MarqueeLayers.EdgesGradient) {
                 Row {
                     GradientEdge(
+                        width = params.gradientEdgeWidth,
                         startColor = params.gradientEdgeColor,
                         endColor = Color.Transparent
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     GradientEdge(
+                        width = params.gradientEdgeWidth,
                         startColor = Color.Transparent,
                         endColor = params.gradientEdgeColor
                     )
@@ -119,18 +134,24 @@ fun Marquee(
 /**
  * Data class which represents Marquee layout params
  *
- * @param period Period of marquee effect, the shorter the period, the faster the effect
+ * @param velocity Velocity of marquee effect
  * @param gradientEnabled If gradient edges will be shown or not
  * @param gradientEdgeColor Color of gradient edges
  * @param direction Direction of marquee effect reproducing
  * @param easing Easing of marquee effect
+ * @param initialDelayMillis Initial delay
+ * @param delayMillis Repeating delay
+ * @param gradientEdgeWidth Width of gradient edge in Dp
  */
 data class MarqueeParams(
-    @androidx.annotation.IntRange(from = 1, to = Long.MAX_VALUE) val period: Int = 7500,
+    val velocity: Dp,
     val gradientEnabled: Boolean,
     val gradientEdgeColor: Color,
     val direction: LayoutDirection,
-    val easing: Easing
+    val easing: Easing,
+    val initialDelayMillis: Int,
+    val delayMillis: Int,
+    val gradientEdgeWidth: Dp
 )
 
 /**
@@ -138,20 +159,25 @@ data class MarqueeParams(
  */
 @Composable
 fun defaultMarqueeParams(): MarqueeParams = MarqueeParams(
-    period = 7500,
+    velocity = 30.dp,
     gradientEnabled = true,
     gradientEdgeColor = MaterialTheme.colorScheme.background,
     direction = LocalLayoutDirection.current,
-    easing = LinearEasing
+    easing = LinearEasing,
+    delayMillis = 1_500,
+    initialDelayMillis = 1_500,
+    gradientEdgeWidth = 10.dp
 )
 
 @Composable
 private fun GradientEdge(
-    startColor: Color, endColor: Color
+    width: Dp,
+    startColor: Color,
+    endColor: Color
 ) {
     Box(
         modifier = Modifier
-            .width(10.dp)
+            .width(width)
             .fillMaxHeight()
             .background(
                 brush = Brush.horizontalGradient(
