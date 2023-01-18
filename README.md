@@ -14,7 +14,7 @@ An endless recipe feed will keep you entertained, chat on the forum for cooking 
 </p>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/52178347/189719148-6cb5d8bd-dc7f-488f-897a-837828d765da.png"/>
+<img src="https://user-images.githubusercontent.com/52178347/213148379-6c4937e2-43d8-4431-8cde-a923664cb9a4.png"/>
 </p>
 
 ## Download
