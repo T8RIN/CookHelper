@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.*
@@ -13,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
@@ -25,56 +26,69 @@ fun TopAppBar(
     background: Color? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
+    val surface = MaterialTheme.colorScheme.surface
     val colors =
         if (background != null) TopAppBarDefaults.topAppBarColors(containerColor = background)
-        else TopAppBarDefaults.topAppBarColors()
+        else TopAppBarDefaults.topAppBarColors(
+            containerColor = scrollBehavior?.containerColorWithScroll()?.takeIf {
+                it != surface
+            } ?: scrollBehavior?.containerColorWithCollapse() ?: surface
+        )
 
-    when (topAppBarSize) {
-        TopAppBarSize.Small -> {
-            TopAppBar(
-                title = title,
-                modifier = modifier,
-                navigationIcon = navigationIcon,
-                actions = actions,
-                scrollBehavior = scrollBehavior,
-                colors = colors,
-                windowInsets = windowInsets
-            )
-        }
-        TopAppBarSize.Centered -> {
-            CenterAlignedTopAppBar(
-                title = title,
-                modifier = modifier,
-                navigationIcon = navigationIcon,
-                actions = actions,
-                scrollBehavior = scrollBehavior,
-                colors = colors,
-                windowInsets = windowInsets
-            )
-        }
-        TopAppBarSize.Medium -> {
-            MediumTopAppBar(
-                title = title,
-                modifier = modifier,
-                navigationIcon = navigationIcon,
-                actions = actions,
-                scrollBehavior = scrollBehavior,
-                colors = colors,
-                windowInsets = windowInsets
-            )
-        }
-        TopAppBarSize.Large -> {
-            LargeTopAppBar(
-                title = title,
-                modifier = modifier,
-                navigationIcon = navigationIcon,
-                actions = actions,
-                scrollBehavior = scrollBehavior,
-                colors = colors,
-                windowInsets = windowInsets
-            )
+    AnimatedContent(
+        targetState = topAppBarSize,
+        transitionSpec = { fadeIn() with fadeOut() }
+    ) { size ->
+        Box(modifier = Modifier.animateContentSize()) {
+            when (size) {
+                TopAppBarSize.Small -> {
+                    TopAppBar(
+                        title = title,
+                        modifier = modifier,
+                        navigationIcon = navigationIcon,
+                        actions = actions,
+                        scrollBehavior = scrollBehavior,
+                        colors = colors,
+                        windowInsets = windowInsets
+                    )
+                }
+                TopAppBarSize.Centered -> {
+                    CenterAlignedTopAppBar(
+                        title = title,
+                        modifier = modifier,
+                        navigationIcon = navigationIcon,
+                        actions = actions,
+                        scrollBehavior = scrollBehavior,
+                        colors = colors,
+                        windowInsets = windowInsets
+                    )
+                }
+                TopAppBarSize.Medium -> {
+                    MediumTopAppBar(
+                        title = title,
+                        modifier = modifier,
+                        navigationIcon = navigationIcon,
+                        actions = actions,
+                        scrollBehavior = scrollBehavior,
+                        colors = colors,
+                        windowInsets = windowInsets
+                    )
+                }
+                TopAppBarSize.Large -> {
+                    LargeTopAppBar(
+                        title = title,
+                        modifier = modifier,
+                        navigationIcon = navigationIcon,
+                        actions = actions,
+                        scrollBehavior = scrollBehavior,
+                        colors = colors,
+                        windowInsets = windowInsets
+                    )
+                }
+            }
         }
     }
+
 }
 
 enum class TopAppBarSize { Small, Centered, Medium, Large }

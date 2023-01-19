@@ -7,4 +7,4 @@ data class Product(
     val title: String,
     val category: Int,
     val mimetype: String
-): Domain
+) : Domain

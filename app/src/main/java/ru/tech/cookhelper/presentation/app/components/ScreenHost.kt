@@ -81,11 +81,7 @@ fun ScreenHost(
                     SettingsScreen(settingsState = LocalSettingsProvider.current)
                 }
                 is Screen.Profile -> {
-                    ProfileScreen(
-                        updateTitle = { newTitle ->
-                            onTitleChange(UIText.DynamicString(newTitle))
-                        }
-                    )
+                    ProfileScreen()
                 }
                 is Screen.AllImages -> {
                     AllImagesScreen(

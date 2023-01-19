@@ -21,7 +21,9 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.setPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.navigation.navBarList
-import ru.tech.cookhelper.presentation.ui.utils.provider.*
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarVisuals
+import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
+import ru.tech.cookhelper.presentation.ui.utils.provider.navigateAndPopAll
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -29,17 +31,13 @@ fun HomeScreen(
     onTitleChange: (newTitle: UIText) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    val topAppBarActions = LocalTopAppBarActions.current
-    val topAppBarNavigationIcon = LocalTopAppBarNavigationIcon.current
-    val topAppBarTitle = LocalTopAppBarTitle.current
+    val topAppBarVisuals = LocalTopAppBarVisuals.current
 
     val bottomNavigationController =
         rememberNavController<Screen.Home>(startDestination = Screen.Home.Feed)
-    LaunchedEffect(bottomNavigationController.currentDestination) {
-        topAppBarActions.clearActions()
-        topAppBarNavigationIcon.clearNavigationIcon()
-        topAppBarTitle.clearTitle()
-    }
+
+    LaunchedEffect(bottomNavigationController.currentDestination) { topAppBarVisuals.clear() }
+
     Scaffold(
         bottomBar = {
             BottomNavigationBar(

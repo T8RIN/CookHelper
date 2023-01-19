@@ -63,7 +63,7 @@ fun MatchedRecipesScreen(
         AnimatedContent(targetState = viewModel.matchedRecipesState.isLoading) { loading ->
             if (!loading) {
                 AnimatedContent(targetState = viewModel.matchedRecipesState.recipes.isEmpty()) { empty ->
-                    if(!empty) {
+                    if (!empty) {
                         LazyColumn(
                             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                             contentPadding = WindowInsets.navigationBars.asPaddingValues()
@@ -79,7 +79,10 @@ fun MatchedRecipesScreen(
                             }
                         }
                     } else {
-                        Placeholder(icon = Icons.Rounded.SearchOff, text = stringResource(R.string.products_not_matched))
+                        Placeholder(
+                            icon = Icons.Rounded.SearchOff,
+                            text = stringResource(R.string.products_not_matched)
+                        )
                     }
                 }
             } else {

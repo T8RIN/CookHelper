@@ -99,13 +99,17 @@ fun ForumScreen(scrollBehavior: TopAppBarScrollBehavior) {
     }
 
     if (searchMode) {
-        LocalTopAppBarTitle.current.setTitle(searchTitle)
-        LocalTopAppBarNavigationIcon.current.setNavigationIcon(searchNavigationIcon)
-        LocalTopAppBarActions.current.setActions(searchActions)
+        LocalTopAppBarVisuals.current.update {
+            title(searchTitle)
+            navIcon(searchNavigationIcon)
+            actions(searchActions)
+        }
     } else {
-        LocalTopAppBarActions.current.setActions(actions)
-        LocalTopAppBarTitle.current.clearTitle()
-        LocalTopAppBarNavigationIcon.current.clearNavigationIcon()
+        LocalTopAppBarVisuals.current.update {
+            actions(actions)
+            navIcon(null)
+            title(null)
+        }
     }
 
     Box(Modifier.fillMaxSize()) {

@@ -38,7 +38,14 @@ class RecipePostCreationViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         _categories.value = List(15) { "Категория блюда с порядковым номером $it" }
-        _allProducts.value = List(30) { Product(it, "Продукт $it", category = Random.nextInt(1, 22), mimetype = "грамм") }
+        _allProducts.value = List(30) {
+            Product(
+                it,
+                "Продукт $it",
+                category = Random.nextInt(1, 22),
+                mimetype = "грамм"
+            )
+        }
     }
 
     fun sendRecipePost(

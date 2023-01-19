@@ -16,8 +16,7 @@ import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
 import ru.tech.cookhelper.presentation.ui.theme.invoke
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarActions
-import ru.tech.cookhelper.presentation.ui.utils.provider.setActions
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarVisuals
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
 
 @Composable
@@ -27,11 +26,13 @@ fun SettingsScreen(
 ) {
     val dialogController = LocalDialogController.current
 
-    LocalTopAppBarActions.current.setActions {
-        IconButton(
-            onClick = { dialogController.show(Dialog.AboutApp) },
-            content = { Icons.Outlined.HelpOutline() }
-        )
+    LocalTopAppBarVisuals.current.update {
+        actions {
+            IconButton(
+                onClick = { dialogController.show(Dialog.AboutApp) },
+                content = { Icons.Outlined.HelpOutline() }
+            )
+        }
     }
 
     Column(

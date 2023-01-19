@@ -30,6 +30,7 @@ import ru.tech.cookhelper.presentation.ui.utils.event.collectEvents
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
+import ru.tech.cookhelper.presentation.ui.utils.provider.TopAppBarVisuals.Companion.rememberTopAppBarVisuals
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -50,13 +51,9 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     )
 
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
-    val topAppBarActions = rememberTopAppBarActions()
-    val topAppBarNavigationIcon = rememberTopAppBarNavigationIcon()
-    val topAppBarTitle = rememberTopAppBarTitle()
+    val topAppBarVisuals = rememberTopAppBarVisuals()
     LaunchedEffect(screenController.currentDestination) {
-        topAppBarActions.clearActions()
-        topAppBarNavigationIcon.clearNavigationIcon()
-        topAppBarTitle.clearTitle()
+        topAppBarVisuals.clear()
     }
     val scrollBehavior = topAppBarScrollBehavior()
 
@@ -73,9 +70,7 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             LocalSnackbarHost provides snackbarHostState,
             LocalToastHostState provides toastHostState,
             LocalSettingsProvider provides viewModel.settingsState,
-            LocalTopAppBarActions provides topAppBarActions,
-            LocalTopAppBarNavigationIcon provides topAppBarNavigationIcon,
-            LocalTopAppBarTitle provides topAppBarTitle,
+            LocalTopAppBarVisuals provides topAppBarVisuals,
             LocalDensity provides density
         )
     ) {
@@ -109,25 +104,23 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                     topAppBarSize = TopAppBarSize.Centered,
                                     navigationIcon = {
                                         AnimatedContent(
-                                            targetState = topAppBarNavigationIcon.value,
+                                            targetState = topAppBarVisuals.navigationIcon,
                                             transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
                                         ) {
-                                            if (it == null) {
-                                                IconButton(
-                                                    onClick = { scope.launch { drawerState.open() } },
-                                                    content = { Icon(Icons.Rounded.Menu, null) }
-                                                )
-                                            } else it()
+                                            it?.invoke() ?: IconButton(
+                                                onClick = { scope.launch { drawerState.open() } },
+                                                content = { Icon(Icons.Rounded.Menu, null) }
+                                            )
                                         }
                                     },
                                     actions = {
                                         AnimatedVisibility(
-                                            visible = topAppBarActions.value != null,
+                                            visible = topAppBarVisuals.actions != null,
                                             enter = fadeIn() + scaleIn(),
                                             exit = fadeOut()
                                         ) {
                                             AnimatedContent(
-                                                targetState = topAppBarActions.value,
+                                                targetState = topAppBarVisuals.actions,
                                                 transitionSpec = {
                                                     fadeIn() + scaleIn() with fadeOut() + scaleOut()
                                                 }
@@ -138,11 +131,11 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                     },
                                     title = {
                                         AnimatedContent(
-                                            targetState = topAppBarTitle.value,
-                                            transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
+                                            targetState = topAppBarVisuals.title to viewModel.title,
+                                            transitionSpec = { fadeIn() with fadeOut() + scaleOut() }
                                         ) {
-                                            it?.invoke() ?: Text(
-                                                viewModel.title.asString(),
+                                            it.first?.invoke() ?: Text(
+                                                it.second.asString(),
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }

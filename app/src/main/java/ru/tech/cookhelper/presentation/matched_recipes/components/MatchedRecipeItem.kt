@@ -76,7 +76,8 @@ fun MatchedRecipeItem(matchedRecipe: MatchedRecipe, onClick: () -> Unit) {
                 Spacer(
                     Modifier
                         .weight(1f)
-                        .padding(bottom = 4.dp))
+                        .padding(bottom = 4.dp)
+                )
                 Text(
                     recipe.ingredients.joinToString(", ") { it.title },
                     style = MaterialTheme.typography.bodySmall,

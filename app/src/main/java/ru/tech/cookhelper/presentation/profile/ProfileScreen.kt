@@ -8,12 +8,17 @@ import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
@@ -30,37 +35,45 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.*
 
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel(),
-    updateTitle: (title: String) -> Unit
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val screenController = LocalScreenController.current
     val dialogController = LocalDialogController.current
     val activity = LocalContext.current.findActivity()
 
-    LocalTopAppBarActions.current.setActions {
-        val toastHost = LocalToastHostState.current
-        IconButton(
-            onClick = {
-                dialogController.show(
-                    Dialog.Logout(
-                        onLogout = {
-                            if (activity?.isOnline() == true) {
-                                viewModel.logOut()
-                            } else toastHost.show(
-                                Icons.Outlined.SignalWifiConnectedNoInternet4,
-                                message = activity?.getString(R.string.no_connection) ?: ""
-                            )
-                        }
-                    )
-                )
-            },
-            content = { Icon(Icons.Outlined.Logout, null) }
-        )
-    }
-
     val userState = viewModel.userState
     val nick = userState.user?.nickname
-    if (nick != null) LaunchedEffect(Unit) { updateTitle(nick) }
+
+    LocalTopAppBarVisuals.current.update {
+        actions {
+            val toastHost = LocalToastHostState.current
+            IconButton(
+                onClick = {
+                    dialogController.show(
+                        Dialog.Logout(
+                            onLogout = {
+                                if (activity?.isOnline() == true) {
+                                    viewModel.logOut()
+                                } else toastHost.show(
+                                    Icons.Outlined.SignalWifiConnectedNoInternet4,
+                                    message = activity?.getString(R.string.no_connection) ?: ""
+                                )
+                            }
+                        )
+                    )
+                },
+                content = { Icon(Icons.Outlined.Logout, null) }
+            )
+        }
+        nick?.let {
+            title {
+                Text(
+                    text = it,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
 
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
