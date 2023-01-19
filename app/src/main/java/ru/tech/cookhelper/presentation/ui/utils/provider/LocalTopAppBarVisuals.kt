@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.ui.utils.provider
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.*
 
@@ -17,13 +18,16 @@ val LocalTopAppBarVisuals = compositionLocalOf<TopAppBarVisuals> {
 data class TopAppBarVisuals(
     private val topAppBarActionsState: TopAppBarActionsState,
     private val topAppBarTitleState: TopAppBarTitleState,
-    private val topAppBarNavigationIconState: TopAppBarNavigationIconState,
+    private val topAppBarNavigationIconState: TopAppBarNavigationIconState
 ) {
-    val actions: TopAppBarActions? @Composable get() = topAppBarActionsState.value
+    val actions: TopAppBarActions?
+        get() = topAppBarActionsState.value
 
-    val title: TopAppBarTitle? @Composable get() = topAppBarTitleState.value
+    val title: TopAppBarTitle?
+        get() = topAppBarTitleState.value
 
-    val navigationIcon: TopAppBarNavigationIcon? @Composable get() = topAppBarNavigationIconState.value
+    val navigationIcon: TopAppBarNavigationIcon?
+        get() = topAppBarNavigationIconState.value
 
     fun clear() {
         topAppBarActionsState.value = null
@@ -43,11 +47,14 @@ data class TopAppBarVisuals(
         topAppBarNavigationIconState.value = null
     }
 
+    @SuppressLint("ComposableNaming")
     @Composable
     fun update(
         builder: @Composable TopAppBarVisualsScope.() -> Unit
     ) = builder(TopAppBarVisualsScopeImpl(this))
 
+
+    @SuppressLint("ComposableNaming")
     private class TopAppBarVisualsScopeImpl(
         private val topAppBarVisuals: TopAppBarVisuals
     ) : TopAppBarVisualsScope {
@@ -107,6 +114,8 @@ data class TopAppBarVisuals(
 
 }
 
+
+@SuppressLint("ComposableNaming")
 interface TopAppBarVisualsScope {
 
     @Composable

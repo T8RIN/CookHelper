@@ -1,6 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -47,12 +47,12 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
         rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
 
+    val scrollBehavior = topAppBarScrollBehavior()
     val showTopAppBar = screenController.currentDestination?.showTopAppBar == true
     val topAppBarVisuals = rememberTopAppBarVisuals()
     LaunchedEffect(screenController.currentDestination) {
         topAppBarVisuals.clear()
     }
-    val scrollBehavior = topAppBarScrollBehavior()
 
     val density = Density(
         LocalDensity.current.density,
@@ -101,17 +101,13 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                     topAppBarSize = TopAppBarSize.Centered,
                                     navigationIcon = {
                                         NavIcon(
-                                            targetState = topAppBarVisuals.navigationIcon,
                                             onClick = { scope.launch { drawerState.open() } }
                                         )
                                     },
-                                    actions = {
-                                        AppBarActions(actions = topAppBarVisuals.actions)
-                                    },
+                                    actions = { AppBarActions() },
                                     title = {
-                                        AnimatedContent(
-                                            targetState = topAppBarVisuals.title to viewModel.title,
-                                            transitionSpec = { fadeIn() with fadeOut() + scaleOut() }
+                                        AppBarTitle(
+                                            targetState = topAppBarVisuals.title to viewModel.title
                                         ) {
                                             it.first?.invoke() ?: Text(
                                                 it.second.asString(),

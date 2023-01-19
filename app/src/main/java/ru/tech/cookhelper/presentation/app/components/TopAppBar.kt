@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarVisuals
 import ru.tech.cookhelper.presentation.ui.utils.provider.TopAppBarActions
 import ru.tech.cookhelper.presentation.ui.utils.provider.TopAppBarNavigationIcon
 
@@ -135,7 +136,7 @@ fun AnimatedTopAppBar(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NavIcon(
-    targetState: TopAppBarNavigationIcon?,
+    targetState: TopAppBarNavigationIcon? = LocalTopAppBarVisuals.current.navigationIcon,
     defaultIcon: ImageVector = Icons.Rounded.Menu,
     onClick: () -> Unit,
 ) {
@@ -153,7 +154,7 @@ fun NavIcon(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppBarActions(
-    actions: TopAppBarActions?
+    actions: TopAppBarActions? = LocalTopAppBarVisuals.current.actions
 ) {
     AnimatedVisibility(
         visible = actions != null,
@@ -169,6 +170,19 @@ fun AppBarActions(
             Row { it?.invoke(this) }
         }
     }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun <S> AppBarTitle(
+    targetState: S,
+    content: @Composable() AnimatedVisibilityScope.(targetState: S) -> Unit
+) {
+    AnimatedContent(
+        targetState = targetState,
+        transitionSpec = { fadeIn() with fadeOut() + scaleOut() },
+        content = content
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
