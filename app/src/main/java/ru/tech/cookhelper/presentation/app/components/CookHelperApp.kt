@@ -1,10 +1,7 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -103,31 +100,13 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                                 AnimatedTopAppBar(
                                     topAppBarSize = TopAppBarSize.Centered,
                                     navigationIcon = {
-                                        AnimatedContent(
+                                        NavIcon(
                                             targetState = topAppBarVisuals.navigationIcon,
-                                            transitionSpec = { fadeIn() + scaleIn() with fadeOut() + scaleOut() }
-                                        ) {
-                                            it?.invoke() ?: IconButton(
-                                                onClick = { scope.launch { drawerState.open() } },
-                                                content = { Icon(Icons.Rounded.Menu, null) }
-                                            )
-                                        }
+                                            onClick = { scope.launch { drawerState.open() } }
+                                        )
                                     },
                                     actions = {
-                                        AnimatedVisibility(
-                                            visible = topAppBarVisuals.actions != null,
-                                            enter = fadeIn() + scaleIn(),
-                                            exit = fadeOut()
-                                        ) {
-                                            AnimatedContent(
-                                                targetState = topAppBarVisuals.actions,
-                                                transitionSpec = {
-                                                    fadeIn() + scaleIn() with fadeOut() + scaleOut()
-                                                }
-                                            ) {
-                                                Row { it?.invoke(this) }
-                                            }
-                                        }
+                                        AppBarActions(actions = topAppBarVisuals.actions)
                                     },
                                     title = {
                                         AnimatedContent(
