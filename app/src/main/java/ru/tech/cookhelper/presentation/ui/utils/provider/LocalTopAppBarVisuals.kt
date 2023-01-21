@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.ui.utils.provider
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.*
+import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 
 typealias TopAppBarNavigationIcon = @Composable () -> Unit
 typealias TopAppBarActions = @Composable RowScope.() -> Unit
@@ -30,21 +31,21 @@ data class TopAppBarVisuals(
         get() = topAppBarNavigationIconState.value
 
     fun clear() {
-        topAppBarActionsState.value = null
-        topAppBarTitleState.value = null
-        topAppBarNavigationIconState.value = null
+        topAppBarActionsState.update { null }
+        topAppBarTitleState.update { null }
+        topAppBarNavigationIconState.update { null }
     }
 
     fun clearTitle() {
-        topAppBarTitleState.value = null
+        topAppBarTitleState.update { null }
     }
 
     fun clearActions() {
-        topAppBarActionsState.value = null
+        topAppBarActionsState.update { null }
     }
 
     fun clearNavigationIcon() {
-        topAppBarNavigationIconState.value = null
+        topAppBarNavigationIconState.update { null }
     }
 
     @SuppressLint("ComposableNaming")
