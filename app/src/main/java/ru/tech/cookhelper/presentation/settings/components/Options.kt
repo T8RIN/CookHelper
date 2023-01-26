@@ -137,11 +137,11 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         selected = customAccent != null,
                         colorScheme = rememberColorScheme(
                             isDarkTheme = isDarkMode(),
-                            color = customAccent ?: Color.Black
+                            color = customAccent ?: Color.Red
                         ),
                         onClick = {
                             if (customAccent == null) {
-                                insertSetting(Setting.CUSTOM_ACCENT.ordinal, Color.Black.toArgb())
+                                insertSetting(Setting.CUSTOM_ACCENT.ordinal, Color.Red.toArgb())
                             }
                             dialogState.show()
                         }

@@ -32,7 +32,6 @@ import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import com.maxkeppeker.sheets.core.models.base.BaseBehaviors
 import com.maxkeppeker.sheets.core.models.base.Header
 import com.maxkeppeker.sheets.core.models.base.SheetState
 import com.maxkeppeker.sheets.core.models.base.StateHandler
@@ -72,17 +71,6 @@ fun ColorDialog(
             val colorState = rememberColorState(context, selection, config)
             StateHandler(state, colorState)
 
-            val coroutine = rememberCoroutineScope()
-            val onSelection: (Int) -> Unit = {
-                colorState.processSelection(it)
-                BaseBehaviors.autoFinish(
-                    selection = selection,
-                    coroutine = coroutine,
-                    onSelection = colorState::onFinish,
-                    onFinished = state::finish,
-                    onDisableInput = colorState::disableInput
-                )
-            }
 
             FrameBase(
                 header = header,
