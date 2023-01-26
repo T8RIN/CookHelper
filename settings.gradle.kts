@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "CookHelper"
-include ':app'
+include(":app")
+include(":dynamic_theme")

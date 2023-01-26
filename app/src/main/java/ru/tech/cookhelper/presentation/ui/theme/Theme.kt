@@ -11,8 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.cookhelper.dynamic.theme.rememberColorScheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.tech.cookhelper.presentation.settings.components.NightMode
+import ru.tech.cookhelper.presentation.settings.components.SettingsState
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverseSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.darken
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.lighten
@@ -92,7 +94,7 @@ fun CookHelperTheme(
             val context = LocalContext.current
             if (isDarkMode()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        else -> getColorScheme()
+        else -> LocalSettingsProvider.current.getColorScheme()
     }
 
     val systemUiController = rememberSystemUiController()
@@ -132,8 +134,10 @@ fun isDarkMode() = when (LocalSettingsProvider.current.nightMode) {
 }
 
 @Composable
-fun getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
-    LocalSettingsProvider.current.colorScheme.apply {
+fun SettingsState.getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
+    if (customAccent != null) {
+        return rememberColorScheme(isDarkTheme = darkTheme, color = customAccent)
+    } else colorScheme.apply {
         return if (darkTheme) DarkThemeColors
         else LightThemeColors
     }

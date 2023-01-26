@@ -8,10 +8,11 @@ import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.pop
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 
-val LocalDialogController =
-    compositionLocalOf<NavController<Dialog>> { error("DialogController not present") }
+val LocalDialogController = compositionLocalOf<NavController<Dialog>> {
+    error("DialogController not present")
+}
 
-fun DialogController.show(dialog: Dialog) = navigate(dialog)
+fun DialogController.show(dialog: Dialog) = navigateAndPopAll(dialog)
 
 fun DialogController.close() = pop()
 

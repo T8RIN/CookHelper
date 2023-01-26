@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.settings.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
@@ -12,7 +13,8 @@ data class SettingsState(
     val cartConnection: Boolean = true,
     val nightMode: NightMode = NightMode.SYSTEM,
     val language: String = "",
-    val fontScale: Float = 1f
+    val fontScale: Float = 1f,
+    val customAccent: Color? = null
 )
 
 enum class NightMode {
@@ -20,7 +22,7 @@ enum class NightMode {
 }
 
 enum class Setting {
-    NIGHT_MODE, COLOR_SCHEME, DYNAMIC_COLORS, CART_CONNECTION, LANGUAGE, FONT_SCALE
+    NIGHT_MODE, COLOR_SCHEME, DYNAMIC_COLORS, CART_CONNECTION, LANGUAGE, FONT_SCALE, CUSTOM_ACCENT
 }
 
 fun Setting.getIcon(nightMode: NightMode): ImageVector {
@@ -31,7 +33,7 @@ fun Setting.getIcon(nightMode: NightMode): ImageVector {
             NightMode.SYSTEM -> Icons.Outlined.SettingsSystemDaydream
         }
         Setting.DYNAMIC_COLORS -> Icons.Outlined.InvertColors
-        Setting.COLOR_SCHEME -> Icons.Outlined.Palette
+        Setting.COLOR_SCHEME, Setting.CUSTOM_ACCENT -> Icons.Outlined.Palette
         Setting.CART_CONNECTION -> Icons.Outlined.ShoppingCart
         Setting.LANGUAGE -> Icons.Outlined.Translate
         Setting.FONT_SCALE -> Icons.Outlined.FontDownload
@@ -44,7 +46,7 @@ val Setting.title: Int
             Setting.LANGUAGE -> R.string.language
             Setting.NIGHT_MODE -> R.string.app_theme_mode
             Setting.DYNAMIC_COLORS -> R.string.dynamic_сolors
-            Setting.COLOR_SCHEME -> R.string.color_scheme
+            Setting.COLOR_SCHEME, Setting.CUSTOM_ACCENT -> R.string.color_scheme
             Setting.CART_CONNECTION -> R.string.cart_connection
             Setting.FONT_SCALE -> R.string.font_size
         }

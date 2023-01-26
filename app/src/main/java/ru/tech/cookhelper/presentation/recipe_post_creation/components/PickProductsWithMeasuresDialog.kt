@@ -309,7 +309,7 @@ fun PickProductsWithMeasuresDialog(
                     addingProducts = false
                 }
             }) {
-                Text(stringResource(if (!addingProducts) R.string.okay else R.string.apply))
+                Text(stringResource(if (!addingProducts) R.string.ok else R.string.apply))
             }
         }
     )

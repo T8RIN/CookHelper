@@ -12,8 +12,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.GetApp
 import androidx.compose.material.icons.outlined.InvertColors
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.*
 import androidx.compose.material3.ColorScheme
@@ -23,11 +25,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
+import com.cookhelper.dynamic.theme.rememberColorScheme
+import com.maxkeppeker.sheets.core.models.base.*
+import com.maxkeppeler.sheets.color.R.*
+import com.maxkeppeler.sheets.color.models.*
+import com.maxkeppeler.sheets.core.R.*
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Marquee
@@ -76,10 +86,12 @@ fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
+fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Unit) {
     val toastHost = LocalToastHostState.current
     val context = LocalContext.current
+    val dialogState = rememberSheetState()
 
     Column(Modifier.animateContentSize()) {
         var expanded by rememberSaveable { mutableStateOf(false) }
@@ -118,13 +130,32 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any) -> Uni
                 state = state,
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
+                item {
+                    AppThemeItem(
+                        icon = Icons.Rounded.CreateAlt,
+                        title = stringResource(R.string.custom),
+                        selected = customAccent != null,
+                        colorScheme = rememberColorScheme(
+                            isDarkTheme = isDarkMode(),
+                            color = customAccent ?: Color.Black
+                        ),
+                        onClick = {
+                            if (customAccent == null) {
+                                insertSetting(Setting.CUSTOM_ACCENT.ordinal, Color.Black.toArgb())
+                            }
+                            dialogState.show()
+                        }
+                    )
+                    Spacer(Modifier.padding(8.dp))
+                }
                 items(colorList) { scheme ->
                     AppThemeItem(
                         title = scheme.title,
-                        selected = scheme.ordinal == colorScheme.ordinal,
+                        selected = scheme.ordinal == colorScheme.ordinal && customAccent == null,
                         colorScheme = scheme.toColorScheme(),
                         onClick = {
                             insertSetting(Setting.COLOR_SCHEME.ordinal, scheme.ordinal)
+                            insertSetting(Setting.CUSTOM_ACCENT.ordinal, null)
                         }
                     )
                 }
@@ -137,6 +168,26 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any) -> Uni
         }
         Separator()
     }
+
+
+    ColorDialog(
+        header = Header.Default(
+            stringResource(R.string.color_scheme),
+            IconSource(Icons.Outlined.Palette)
+        ),
+        state = dialogState,
+        selection = ColorSelection(
+            selectedColor = SingleColor(customAccent?.toArgb()),
+            onSelectColor = {
+                insertSetting(Setting.CUSTOM_ACCENT.ordinal, it)
+            }
+        ),
+        config = ColorConfig(
+            allowCustomColorAlphaValues = false,
+            defaultDisplayMode = ColorSelectionMode.CUSTOM
+        )
+    )
+
 }
 
 @Composable
@@ -338,6 +389,7 @@ fun SettingsState.CartConnectionOption(insertSetting: (id: Int, option: Any) -> 
 @Composable
 private fun AppThemeItem(
     title: String,
+    icon: ImageVector = Icons.Filled.CheckCircle,
     colorScheme: ColorScheme,
     selected: Boolean,
     onClick: () -> Unit,
@@ -350,6 +402,7 @@ private fun AppThemeItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AppThemePreviewItem(
+            icon = icon,
             selected = selected,
             onClick = onClick,
             colorScheme = colorScheme,

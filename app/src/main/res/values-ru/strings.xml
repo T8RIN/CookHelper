@@ -17,7 +17,7 @@
     <string name="repeat">Повторить</string>
     <string name="nothing_found_by_the_search">Ничего не найдено по данному запросу</string>
     <string name="cannot_cook_anything">Из данных продуктов ничего не приготовить</string>
-    <string name="okay">Ок</string>
+    <string name="ok">Ок</string>
     <string name="cancel">Отмена</string>
     <string name="pick_products">Выберите продукты</string>
     <string name="app_closing">Закрытие приложения</string>
@@ -241,4 +241,12 @@
     <string name="violet">Баклажановая</string>
     <string name="font_size">Размер шрифта</string>
     <string name="font_size_subtitle">Может работать очень нестабильно, если вы выбрали размер щрифта не предназанченный для вашего разрешения экрана</string>
+    <string name="custom">Кастомная</string>
+    <string name="scd_color_dialog_template_colors">Палитра</string>
+    <string name="scd_color_dialog_custom_color">Свой цвет</string>
+    <string name="scd_color_dialog_red">Красный</string>
+    <string name="scd_color_dialog_green">Зеленый</string>
+    <string name="scd_color_dialog_blue">Голубой</string>
+    <string name="scd_color_dialog_clipboard_paste_invalid_color_code">Вставьте aRGB-Код</string>
+    <string name="scd_color_dialog_clipboard_paste_invalid_empty">Нечего вставлять</string>
 </resources>

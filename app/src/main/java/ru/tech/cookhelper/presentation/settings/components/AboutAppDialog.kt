@@ -55,7 +55,7 @@ fun AboutAppDialog() {
         icon = { Icon(Icons.Rounded.HelpOutline, null) },
         confirmButton = {
             TextButton(onClick = { dialogController.close() }) {
-                Text(stringResource(R.string.okay))
+                Text(stringResource(R.string.ok))
             }
         }
     )

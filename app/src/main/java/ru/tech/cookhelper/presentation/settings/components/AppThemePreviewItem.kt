@@ -15,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppThemePreviewItem(
     modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.Filled.CheckCircle,
     selected: Boolean,
     colorScheme: ColorScheme,
     shapes: Shapes,
@@ -58,7 +60,7 @@ fun AppThemePreviewItem(
                 exit = fadeOut() + scaleOut()
             ) {
                 Icon(
-                    imageVector = Icons.Filled.CheckCircle,
+                    imageVector = icon,
                     contentDescription = null,
                     tint = colorScheme.primary
                 )

@@ -11,7 +11,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val insertSettingUseCase: InsertSettingUseCase
 ) : ViewModel() {
-    fun insertSetting(id: Int, option: Any) {
+    fun insertSetting(id: Int, option: Any?) {
         viewModelScope.launch {
             insertSettingUseCase(id, option.toString())
         }

@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.crash_screen.viewModel
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,6 +47,21 @@ class CrashViewModel @Inject constructor(
                     Setting.CART_CONNECTION.ordinal -> {
                         state = state.copy(
                             cartConnection = setting.option.toBoolean()
+                        )
+                    }
+                    Setting.LANGUAGE.ordinal -> {
+                        state = state.copy(
+                            language = setting.option
+                        )
+                    }
+                    Setting.FONT_SCALE.ordinal -> {
+                        state = state.copy(
+                            fontScale = setting.option.toFloatOrNull() ?: 1f
+                        )
+                    }
+                    Setting.CUSTOM_ACCENT.ordinal -> {
+                        state = state.copy(
+                            customAccent = setting.option.toLongOrNull()?.let { Color(it) }
                         )
                     }
                 }
