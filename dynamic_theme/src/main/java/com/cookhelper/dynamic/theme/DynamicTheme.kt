@@ -28,7 +28,10 @@ public fun DynamicTheme(
     isDarkTheme: Boolean,
     content: @Composable () -> Unit,
 ) {
-    val scheme = rememberColorScheme(isDarkTheme, state.primaryColor)
+    val scheme = rememberColorScheme(
+        isDarkTheme = isDarkTheme,
+        color = state.primaryColor
+    )
     MaterialTheme(
         colorScheme = scheme,
         content = content
@@ -116,7 +119,7 @@ private fun Scheme.toDarkThemeColorScheme(): ColorScheme {
         onSurface = Color(onSurface),
         surfaceVariant = Color(surfaceVariant),
         onSurfaceVariant = Color(onSurfaceVariant),
-        surfaceTint = Color(surfaceVariant),
+        surfaceTint = Color(primary),
         inverseSurface = Color(inverseSurface),
         inverseOnSurface = Color(inverseOnSurface),
         error = Color(error),
@@ -150,7 +153,7 @@ private fun Scheme.toLightThemeColorScheme(): ColorScheme {
         onSurface = Color(onSurface),
         surfaceVariant = Color(surfaceVariant),
         onSurfaceVariant = Color(onSurfaceVariant),
-        surfaceTint = Color(surfaceVariant),
+        surfaceTint = Color(primary),
         inverseSurface = Color(inverseSurface),
         inverseOnSurface = Color(inverseOnSurface),
         error = Color(error),

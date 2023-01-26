@@ -3,9 +3,11 @@ package ru.tech.cookhelper.presentation.settings.components
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import androidx.annotation.RestrictTo
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -27,20 +29,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.maxkeppeker.sheets.core.models.base.Header
-import com.maxkeppeker.sheets.core.models.base.SheetState
-import com.maxkeppeker.sheets.core.models.base.StateHandler
 import com.maxkeppeker.sheets.core.utils.TestTags
 import com.maxkeppeker.sheets.core.utils.testSequenceTagOf
 import com.maxkeppeker.sheets.core.utils.testTags
 import com.maxkeppeker.sheets.core.views.BaseTypeState
 import com.maxkeppeker.sheets.core.views.ButtonsComponent
-import com.maxkeppeker.sheets.core.views.base.DialogBase
 import com.maxkeppeker.sheets.core.views.base.FrameBase
 import com.maxkeppeler.sheets.color.models.ColorConfig
 import com.maxkeppeler.sheets.color.models.ColorSelection
@@ -60,9 +60,7 @@ fun ColorDialog(
     header: Header? = null,
     properties: DialogProperties = DialogProperties(),
 ) {
-    MaterialTheme(
-        shapes = Shapes(large = DialogShape)
-    ) {
+    MaterialTheme(shapes = Shapes()) {
         DialogBase(
             state = state,
             properties = properties,
@@ -93,6 +91,206 @@ fun ColorDialog(
         }
     }
 }
+
+@Composable
+fun StateHandler(
+    sheetState: SheetState,
+    baseState: BaseTypeState,
+) {
+    DisposableEffect(sheetState.reset) {
+        if (sheetState.reset) {
+            baseState.reset()
+            sheetState.clearReset()
+        }
+        onDispose {}
+    }
+}
+
+@Composable
+private fun DialogBase(
+    state: SheetState = rememberSheetState(false),
+    properties: DialogProperties = DialogProperties(),
+    onDialogClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
+    LaunchedEffect(Unit) {
+        state.markAsEmbedded()
+    }
+
+    if (!state.visible) return
+
+    val boxInteractionSource = remember { MutableInteractionSource() }
+    val contentInteractionSource = remember { MutableInteractionSource() }
+
+    Dialog(
+        onDismissRequest = state::dismiss,
+        properties = properties,
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .testTag(TestTags.DIALOG_BASE_CONTAINER)
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = boxInteractionSource,
+                    indication = null,
+                    onClick = state::dismiss
+                )
+        ) {
+            Surface(
+                modifier = Modifier
+                    .testTag(TestTags.DIALOG_BASE_CONTENT)
+                    .fillMaxWidth()
+                    .animateContentSize()
+                    .clickable(
+                        indication = null,
+                        interactionSource = contentInteractionSource,
+                        onClick = { onDialogClick?.invoke() }
+                    ),
+                shape = DialogShape,
+                color = MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp),
+                content = content
+            )
+        }
+    }
+}
+
+class SheetState(
+    visible: Boolean = false,
+    embedded: Boolean = true,
+    internal val onFinishedRequest: (SheetState.() -> Unit)? = null,
+    internal val onDismissRequest: (SheetState.() -> Unit)? = null,
+    internal val onCloseRequest: (SheetState.() -> Unit)? = null,
+) {
+    var visible by mutableStateOf(visible)
+    var embedded by mutableStateOf(embedded)
+    var reset by mutableStateOf(false)
+
+    /**
+     * Display the dialog / view.
+     */
+    fun show() {
+        visible = true
+    }
+
+    /**
+     * Hide the dialog / view.
+     */
+    fun hide() {
+        visible = false
+        onDismissRequest?.invoke(this)
+        onCloseRequest?.invoke(this)
+    }
+
+    internal fun clearReset() {
+        reset = false
+    }
+
+    /**
+     * Reset the current state data.
+     */
+    fun invokeReset() {
+        reset = true
+    }
+
+    fun dismiss() {
+        if (!embedded) visible = false
+        onDismissRequest?.invoke(this)
+        onCloseRequest?.invoke(this)
+    }
+
+    /**
+     * Finish the use-case view.
+     */
+    fun finish() {
+        /*
+            We don't want to remove the view itself,
+            but inform through the state that the use-case is done.
+            The parent container (Dialog, PopUp, BottomSheet)
+            can be hidden with the use-case view.
+         */
+        if (!embedded) visible = false
+        onFinishedRequest?.invoke(this)
+        onCloseRequest?.invoke(this)
+    }
+
+    internal fun markAsEmbedded() {
+        embedded = false
+    }
+
+    companion object {
+
+        /**
+         * [Saver] implementation.
+         * Lambda functions need to be passed to new sheet state as they can not be serialized.
+         * @param onCloseRequest The listener that is invoked when the dialog was closed through any cause.
+         * @param onFinishedRequest The listener that is invoked when the dialog's use-case was finished by the user accordingly (negative, positive, selection).
+         * @param onDismissRequest The listener that is invoked when the dialog was dismissed.
+         */
+        fun Saver(
+            onCloseRequest: (SheetState.() -> Unit)?,
+            onFinishedRequest: (SheetState.() -> Unit)?,
+            onDismissRequest: (SheetState.() -> Unit)?
+        ): Saver<SheetState, *> = Saver(
+            save = { state ->
+                SheetStateData(
+                    visible = state.visible,
+                    embedded = state.embedded,
+                )
+            },
+            restore = { data ->
+                SheetState(
+                    visible = data.visible,
+                    embedded = data.embedded,
+                    onCloseRequest = onCloseRequest,
+                    onFinishedRequest = onFinishedRequest,
+                    onDismissRequest = onDismissRequest,
+                )
+            }
+        )
+    }
+
+    /**
+     * Data class that stores the important information of the current state
+     * and can be used by the [Saver] to save and restore the state.
+     */
+    data class SheetStateData(
+        val visible: Boolean,
+        val embedded: Boolean,
+    ) : Serializable
+}
+
+/**
+ * Create a SheetState and remember it.
+ * @param visible The initial visibility.
+ * @param embedded if the use-case is embedded in a container (dialog, bottomSheet, popup, ...)
+ * @param onCloseRequest The listener that is invoked when the dialog was closed through any cause.
+ * @param onFinishedRequest The listener that is invoked when the dialog's use-case was finished by the user accordingly (negative, positive, selection).
+ * @param onDismissRequest The listener that is invoked when the dialog was dismissed.
+ */
+@Composable
+fun rememberSheetState(
+    visible: Boolean = false,
+    embedded: Boolean = true,
+    onCloseRequest: (SheetState.() -> Unit)? = null,
+    onFinishedRequest: (SheetState.() -> Unit)? = null,
+    onDismissRequest: (SheetState.() -> Unit)? = null,
+): SheetState = rememberSaveable(
+    saver = SheetState.Saver(
+        onCloseRequest = onCloseRequest,
+        onFinishedRequest = onFinishedRequest,
+        onDismissRequest = onDismissRequest
+    ),
+    init = {
+        SheetState(
+            visible = visible,
+            embedded = embedded,
+            onCloseRequest = onCloseRequest,
+            onFinishedRequest = onFinishedRequest,
+            onDismissRequest = onDismissRequest
+        )
+    }
+)
 
 private class ColorState(
     private val context: Context,
@@ -196,7 +394,6 @@ fun ColorCustomComponent(
 }
 
 /** Save a text into the clipboard. */
-@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 fun copyColorIntoClipboard(ctx: Context, label: String, value: String) {
     val clipboard = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(label, value)
@@ -204,7 +401,6 @@ fun copyColorIntoClipboard(ctx: Context, label: String, value: String) {
 }
 
 /** Receive the clipboard data. */
-@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 fun pasteColorFromClipboard(
     ctx: Context,
     onPastedColor: (Int) -> Unit,
@@ -228,7 +424,6 @@ fun pasteColorFromClipboard(
 }
 
 /** Receive the clipboard data. */
-@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 fun getFormattedColor(color: Int): String =
     String.format("#%08X", (0xFFFFFFFF and color.toLong()))
 
