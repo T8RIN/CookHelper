@@ -12,10 +12,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -33,19 +33,22 @@ fun AppThemePreviewItem(
             .aspectRatio(1f / 1.7f)
             .border(
                 width = 4.dp,
-                color = if (selected) {
-                    colorScheme.primary
-                } else {
-                    colorScheme.onSurface.copy(alpha = 0.75f)
-                },
-                shape = RoundedCornerShape(15.dp),
+                color = animateColorAsState(
+                    targetValue = if (selected) {
+                        colorScheme.primary
+                    } else {
+                        colorScheme.surfaceVariant
+                    }
+                ).value,
+                shape = SquircleShape(16.dp),
             )
             .padding(4.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(SquircleShape(12.dp))
             .background(colorScheme.background)
             .clickable(onClick = onClick),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,10 +69,9 @@ fun AppThemePreviewItem(
             }
         }
 
-
         Box(
             modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
+                .padding(horizontal = 8.dp)
                 .background(
                     color = colorScheme.surfaceVariant,
                     shape = shapes.small,
@@ -79,7 +81,7 @@ fun AppThemePreviewItem(
             Column(
                 modifier = Modifier
                     .padding(4.dp)
-                    .height(32.dp)
+                    .height(36.dp)
                     .fillMaxWidth()
             ) {
                 Box(
@@ -88,7 +90,7 @@ fun AppThemePreviewItem(
                         .weight(1f)
                         .background(
                             color = colorScheme.tertiary,
-                            shape = RoundedCornerShape(5.dp)
+                            shape = RoundedCornerShape(6.dp)
                         ),
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -98,7 +100,7 @@ fun AppThemePreviewItem(
                         .weight(1f)
                         .background(
                             color = colorScheme.secondary,
-                            shape = RoundedCornerShape(5.dp)
+                            shape = RoundedCornerShape(6.dp)
                         )
                 )
             }
@@ -124,8 +126,7 @@ fun AppThemePreviewItem(
 
         // Bottom bar
         Box(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter,
         ) {
             Surface(
@@ -135,13 +136,12 @@ fun AppThemePreviewItem(
                     modifier = Modifier
                         .height(32.dp)
                         .fillMaxWidth()
-                        .background(colorScheme.surfaceColorAtElevation(3.dp))
+                        .background(colorScheme.surfaceColorAtElevation(1.dp))
                         .padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
                         modifier = Modifier
-                            .alpha(0.6f)
                             .height(18.dp)
                             .weight(1f)
                             .background(

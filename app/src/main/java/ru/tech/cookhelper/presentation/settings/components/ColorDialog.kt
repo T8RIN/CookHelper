@@ -34,13 +34,14 @@ import ru.tech.cookhelper.presentation.ui.theme.invoke
 @Composable
 fun ColorDialog(
     color: Color?,
+    title: String = stringResource(R.string.color_scheme),
     onColorChange: (Int) -> Unit,
     onDismissRequest: () -> Unit
 ) {
     var _color by rememberSaveable { mutableStateOf(color?.toArgb() ?: Color.Red.toArgb()) }
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(R.string.color_scheme)) },
+        title = { Text(title) },
         icon = { Icons.Outlined.Palette() },
         text = {
             Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
