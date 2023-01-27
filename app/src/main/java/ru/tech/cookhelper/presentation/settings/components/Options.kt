@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.GetApp
 import androidx.compose.material.icons.outlined.InvertColors
-import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.*
 import androidx.compose.material3.ColorScheme
@@ -91,7 +90,7 @@ fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
 fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Unit) {
     val toastHost = LocalToastHostState.current
     val context = LocalContext.current
-    val dialogState = rememberSheetState()
+    var showColorPicker by rememberSaveable { mutableStateOf(false) }
 
     Column(Modifier.animateContentSize()) {
         var expanded by rememberSaveable { mutableStateOf(false) }
@@ -142,8 +141,9 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         onClick = {
                             if (customAccent == null) {
                                 insertSetting(Setting.CUSTOM_ACCENT.ordinal, Color.Red.toArgb())
+                            } else {
+                                showColorPicker = true
                             }
-                            dialogState.show()
                         }
                     )
                     Spacer(Modifier.padding(8.dp))
@@ -169,25 +169,13 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
         Separator()
     }
 
-
-    ColorDialog(
-        header = Header.Default(
-            stringResource(R.string.color_scheme),
-            IconSource(Icons.Outlined.Palette)
-        ),
-        state = dialogState,
-        selection = ColorSelection(
-            selectedColor = SingleColor(customAccent?.toArgb()),
-            onSelectColor = {
-                insertSetting(Setting.CUSTOM_ACCENT.ordinal, it)
-            }
-        ),
-        config = ColorConfig(
-            allowCustomColorAlphaValues = false,
-            defaultDisplayMode = ColorSelectionMode.CUSTOM
+    if (showColorPicker) {
+        ColorDialog(
+            color = customAccent,
+            onDismissRequest = { showColorPicker = false },
+            onColorChange = { insertSetting(Setting.CUSTOM_ACCENT.ordinal, it) }
         )
-    )
-
+    }
 }
 
 @Composable
