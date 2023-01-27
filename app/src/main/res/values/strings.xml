@@ -242,11 +242,13 @@
     <string name="font_size">Font size</string>
     <string name="font_size_subtitle">Might work super buggy if your screen are smaller than font size you\'ve chosen</string>
     <string name="custom">Custom</string>
-    <string name="scd_color_dialog_template_colors">Template colors</string>
-    <string name="scd_color_dialog_custom_color">Custom color</string>
-    <string name="scd_color_dialog_red">Red</string>
-    <string name="scd_color_dialog_green">Green</string>
-    <string name="scd_color_dialog_blue">Blue</string>
-    <string name="scd_color_dialog_clipboard_paste_invalid_color_code">Paste valid aRGB-Code.</string>
-    <string name="scd_color_dialog_clipboard_paste_invalid_empty">Nothing to paste</string>
+    <string name="template_colors">Template colors</string>
+    <string name="custom_color">Custom color</string>
+    <string name="color_red">Red</string>
+    <string name="color_green">Green</string>
+    <string name="color_blue">Blue</string>
+    <string name="clipboard_paste_invalid_color_code">Paste valid aRGB-Code.</string>
+    <string name="clipboard_paste_invalid_empty">Nothing to paste</string>
+    <string name="argb" translatable="false">ARGB</string>
+    <string name="color">Color</string>
 </resources>

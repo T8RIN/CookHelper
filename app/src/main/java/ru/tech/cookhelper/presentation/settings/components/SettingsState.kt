@@ -9,12 +9,12 @@ import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
 
 data class SettingsState(
     val dynamicColors: Boolean = true,
-    val colorScheme: ColorScheme = ColorScheme.Blue,
+    val colorScheme: ColorScheme? = ColorScheme.Blue,
     val cartConnection: Boolean = true,
     val nightMode: NightMode = NightMode.SYSTEM,
     val language: String = "",
     val fontScale: Float = 1f,
-    val customAccent: Color? = null
+    val customAccent: Color = Color.Blue
 )
 
 enum class NightMode {

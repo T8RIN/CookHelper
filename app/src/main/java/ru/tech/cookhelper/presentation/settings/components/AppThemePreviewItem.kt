@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -100,7 +99,7 @@ fun AppThemePreviewItem(
                         .background(
                             color = colorScheme.secondary,
                             shape = RoundedCornerShape(5.dp)
-                        ),
+                        )
                 )
             }
         }
@@ -136,27 +135,27 @@ fun AppThemePreviewItem(
                     modifier = Modifier
                         .height(32.dp)
                         .fillMaxWidth()
-                        .background(colorScheme.surface)
+                        .background(colorScheme.surfaceColorAtElevation(3.dp))
                         .padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
                         modifier = Modifier
                             .alpha(0.6f)
-                            .height(17.dp)
+                            .height(18.dp)
                             .weight(1f)
                             .background(
-                                color = colorScheme.surfaceTint,
+                                color = colorScheme.secondaryContainer,
                                 shape = shapes.small,
                             ),
                     )
                     Box(
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .size(17.dp)
+                            .size(18.dp)
                             .background(
                                 color = colorScheme.primaryContainer,
-                                shape = CircleShape,
+                                shape = RoundedCornerShape(6.dp),
                             ),
                     )
                 }

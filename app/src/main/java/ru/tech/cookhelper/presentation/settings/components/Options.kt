@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.GetApp
@@ -24,8 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -127,35 +127,41 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
             Spacer(Modifier.height(10.dp))
             LazyRow(
                 state = state,
+                verticalAlignment = Alignment.CenterVertically,
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
                 item {
                     AppThemeItem(
                         icon = Icons.Rounded.CreateAlt,
                         title = stringResource(R.string.custom),
-                        selected = customAccent != null,
+                        selected = colorScheme == null,
                         colorScheme = rememberColorScheme(
                             isDarkTheme = isDarkMode(),
-                            color = customAccent ?: Color.Red
+                            color = customAccent
                         ),
                         onClick = {
-                            if (customAccent == null) {
-                                insertSetting(Setting.CUSTOM_ACCENT.ordinal, Color.Red.toArgb())
-                            } else {
-                                showColorPicker = true
-                            }
+                            if (colorScheme == null) showColorPicker = true
+                            insertSetting(Setting.COLOR_SCHEME.ordinal, null)
                         }
                     )
-                    Spacer(Modifier.padding(8.dp))
+                    Spacer(Modifier.padding(4.dp))
+                    Box(
+                        Modifier
+                            .width(1.dp)
+                            .height(120.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.outlineVariant)
+                            .animateContentSize()
+                    )
+                    Spacer(Modifier.padding(4.dp))
                 }
                 items(colorList) { scheme ->
                     AppThemeItem(
                         title = scheme.title,
-                        selected = scheme.ordinal == colorScheme.ordinal && customAccent == null,
+                        selected = scheme.ordinal == colorScheme?.ordinal,
                         colorScheme = scheme.toColorScheme(),
                         onClick = {
                             insertSetting(Setting.COLOR_SCHEME.ordinal, scheme.ordinal)
-                            insertSetting(Setting.CUSTOM_ACCENT.ordinal, null)
                         }
                     )
                 }
@@ -163,7 +169,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
             Spacer(Modifier.height(20.dp))
 
             LaunchedEffect(Unit) {
-                state.scrollToItem(colorScheme.ordinal)
+                if (colorScheme != null) state.scrollToItem(colorScheme.ordinal)
             }
         }
         Separator()

@@ -242,11 +242,12 @@
     <string name="font_size">Размер шрифта</string>
     <string name="font_size_subtitle">Может работать очень нестабильно, если вы выбрали размер щрифта не предназанченный для вашего разрешения экрана</string>
     <string name="custom">Кастомная</string>
-    <string name="scd_color_dialog_template_colors">Палитра</string>
-    <string name="scd_color_dialog_custom_color">Свой цвет</string>
-    <string name="scd_color_dialog_red">Красный</string>
-    <string name="scd_color_dialog_green">Зеленый</string>
-    <string name="scd_color_dialog_blue">Голубой</string>
-    <string name="scd_color_dialog_clipboard_paste_invalid_color_code">Вставьте aRGB-Код</string>
-    <string name="scd_color_dialog_clipboard_paste_invalid_empty">Нечего вставлять</string>
+    <string name="template_colors">Палитра</string>
+    <string name="custom_color">Свой цвет</string>
+    <string name="color_red">Красный</string>
+    <string name="color_green">Зеленый</string>
+    <string name="color_blue">Голубой</string>
+    <string name="clipboard_paste_invalid_color_code">Вставьте aRGB-Код</string>
+    <string name="clipboard_paste_invalid_empty">Нечего вставлять</string>
+    <string name="color">Цвет</string>
 </resources>

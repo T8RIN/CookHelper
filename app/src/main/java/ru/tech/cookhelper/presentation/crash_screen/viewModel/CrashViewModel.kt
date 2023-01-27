@@ -14,9 +14,7 @@ import ru.tech.cookhelper.presentation.app.viewModel.toBoolean
 import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.settings.components.Setting
 import ru.tech.cookhelper.presentation.settings.components.SettingsState
-import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
 import ru.tech.cookhelper.presentation.ui.theme.colorList
-import ru.tech.cookhelper.presentation.ui.theme.ordinal
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.update
 import javax.inject.Inject
 
@@ -36,9 +34,15 @@ class CrashViewModel @Inject constructor(
                     Setting.DYNAMIC_COLORS.ordinal -> {
                         state = state.copy(dynamicColors = setting.option.toBoolean())
                     }
+                    Setting.CUSTOM_ACCENT.ordinal -> {
+                        state = state.copy(
+                            customAccent = setting.option.toLongOrNull()?.let { Color(it) }
+                                ?: Color.Blue
+                        )
+                    }
                     Setting.COLOR_SCHEME.ordinal -> {
-                        val index = setting.option.toIntOrNull() ?: ColorScheme.Blue.ordinal
-                        state = state.copy(colorScheme = colorList[index])
+                        val index = setting.option.toIntOrNull() ?: -1
+                        state = state.copy(colorScheme = colorList.getOrNull(index))
                     }
                     Setting.NIGHT_MODE.ordinal -> {
                         val index = setting.option.toIntOrNull() ?: NightMode.SYSTEM.ordinal
@@ -57,11 +61,6 @@ class CrashViewModel @Inject constructor(
                     Setting.FONT_SCALE.ordinal -> {
                         state = state.copy(
                             fontScale = setting.option.toFloatOrNull() ?: 1f
-                        )
-                    }
-                    Setting.CUSTOM_ACCENT.ordinal -> {
-                        state = state.copy(
-                            customAccent = setting.option.toLongOrNull()?.let { Color(it) }
                         )
                     }
                 }
