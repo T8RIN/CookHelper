@@ -34,13 +34,11 @@ fun AppThemePreviewItem(
             .aspectRatio(1f / 1.7f)
             .border(
                 width = 4.dp,
-                color = animateColorAsState(
-                    targetValue = if (selected) {
-                        colorScheme.primary
-                    } else {
-                        colorScheme.outlineVariant
-                    }
-                ).value,
+                color = if (selected) {
+                    colorScheme.primary
+                } else {
+                    colorScheme.outlineVariant
+                },
                 shape = SquircleShape(16.dp),
             )
             .padding(4.dp)
