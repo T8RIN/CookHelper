@@ -33,10 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import com.cookhelper.dynamic.theme.rememberColorScheme
-import com.maxkeppeker.sheets.core.models.base.*
-import com.maxkeppeler.sheets.color.R.*
-import com.maxkeppeler.sheets.color.models.*
-import com.maxkeppeler.sheets.core.R.*
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.components.Marquee
