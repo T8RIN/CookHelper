@@ -58,7 +58,7 @@ fun ToggleGroupButton(
                     )
                     else -> RoundedCornerShape(0.dp)
                 },
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 colors = if (selectedIndex == index) ButtonDefaults.outlinedButtonColors(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer
                 )

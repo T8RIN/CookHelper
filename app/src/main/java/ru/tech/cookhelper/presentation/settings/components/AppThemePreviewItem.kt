@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
@@ -37,7 +38,7 @@ fun AppThemePreviewItem(
                     targetValue = if (selected) {
                         colorScheme.primary
                     } else {
-                        colorScheme.surfaceVariant
+                        colorScheme.outlineVariant
                     }
                 ).value,
                 shape = SquircleShape(16.dp),
@@ -48,7 +49,6 @@ fun AppThemePreviewItem(
             .clickable(onClick = onClick),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,6 +72,7 @@ fun AppThemePreviewItem(
         Box(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
+                .shadow(2.dp, shapes.small)
                 .background(
                     color = colorScheme.surfaceVariant,
                     shape = shapes.small,
@@ -88,6 +89,7 @@ fun AppThemePreviewItem(
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .weight(1f)
+                        .shadow(2.dp, shapes.small)
                         .background(
                             color = colorScheme.tertiary,
                             shape = RoundedCornerShape(6.dp)
@@ -98,6 +100,7 @@ fun AppThemePreviewItem(
                     modifier = Modifier
                         .fillMaxWidth(0.4f)
                         .weight(1f)
+                        .shadow(2.dp, shapes.small)
                         .background(
                             color = colorScheme.secondary,
                             shape = RoundedCornerShape(6.dp)
@@ -117,6 +120,7 @@ fun AppThemePreviewItem(
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.5f)
+                    .shadow(2.dp, shapes.small)
                     .background(
                         color = colorScheme.primary,
                         shape = shapes.small,
@@ -129,36 +133,34 @@ fun AppThemePreviewItem(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter,
         ) {
-            Surface(
-                tonalElevation = 3.dp,
+            Row(
+                modifier = Modifier
+                    .height(32.dp)
+                    .fillMaxWidth()
+                    .background(colorScheme.surfaceColorAtElevation(3.dp))
+                    .padding(horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
+                Box(
                     modifier = Modifier
-                        .height(32.dp)
-                        .fillMaxWidth()
-                        .background(colorScheme.surfaceColorAtElevation(1.dp))
-                        .padding(horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .height(18.dp)
-                            .weight(1f)
-                            .background(
-                                color = colorScheme.secondaryContainer,
-                                shape = shapes.small,
-                            ),
-                    )
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .size(18.dp)
-                            .background(
-                                color = colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(6.dp),
-                            ),
-                    )
-                }
+                        .height(18.dp)
+                        .weight(1f)
+                        .shadow(2.dp, shapes.small)
+                        .background(
+                            color = colorScheme.secondaryContainer,
+                            shape = shapes.small,
+                        )
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .size(18.dp)
+                        .shadow(2.dp, RoundedCornerShape(6.dp))
+                        .background(
+                            color = colorScheme.primaryContainer,
+                            shape = RoundedCornerShape(6.dp),
+                        )
+                )
             }
         }
     }
