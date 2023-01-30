@@ -87,10 +87,10 @@ fun AppThemePreviewItem(
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .weight(1f)
-                        .shadow(2.dp, shapes.small)
+                        .shadow(2.dp, RoundedCornerShape(5.5.dp))
                         .background(
                             color = colorScheme.tertiary,
-                            shape = RoundedCornerShape(6.dp)
+                            shape = RoundedCornerShape(5.5.dp)
                         ),
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -98,10 +98,10 @@ fun AppThemePreviewItem(
                     modifier = Modifier
                         .fillMaxWidth(0.4f)
                         .weight(1f)
-                        .shadow(2.dp, shapes.small)
+                        .shadow(2.dp, RoundedCornerShape(5.5.dp))
                         .background(
                             color = colorScheme.secondary,
-                            shape = RoundedCornerShape(6.dp)
+                            shape = RoundedCornerShape(5.5.dp)
                         )
                 )
             }
