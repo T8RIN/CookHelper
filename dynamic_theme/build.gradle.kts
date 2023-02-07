@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2022.10.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.01.00"))
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.compose.material3:material3")
     implementation(files("libs/material-color-util.jar"))

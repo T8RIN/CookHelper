@@ -96,11 +96,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-util:1.4.0-alpha05")
 
     //Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.28.0")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.28.0")
-    implementation("com.google.accompanist:accompanist-pager:0.28.0")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.29.1-alpha")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.29.1-alpha")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.29.1-alpha")
+    implementation("com.google.accompanist:accompanist-pager:0.29.1-alpha")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.29.1-alpha")
 
     //Coil
     implementation("io.coil-kt:coil:2.2.2")
@@ -130,7 +130,7 @@ dependencies {
     implementation("com.github.skydoves:retrofit-adapters-result:1.0.5")
 
     //Compose Blur backport
-    implementation("com.github.skydoves:cloudy:0.1.1")
+    implementation("com.github.skydoves:cloudy:0.1.2")
 
     implementation(project(":dynamic_theme"))
 
