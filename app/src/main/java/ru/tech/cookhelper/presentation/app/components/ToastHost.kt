@@ -1,13 +1,13 @@
 package ru.tech.cookhelper.presentation.app.components
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import kotlin.coroutines.resume
 import kotlin.math.min
@@ -42,17 +43,19 @@ fun ToastHost(
         }
     }
 
-    Box(
-        modifier
-            .fillMaxSize()
-            .imePadding()
-            .systemBarsPadding()
+    AnimatedContent(
+        targetState = currentToastData,
+        transitionSpec = { ToastDefaults.transition }
     ) {
-        AnimatedContent(
-            targetState = currentToastData,
-            modifier = Modifier.align(alignment)
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .imePadding()
+                .systemBarsPadding()
         ) {
-            it?.let { toast(it) }
+            Box(modifier = Modifier.align(alignment)) {
+                it?.let { toast(it) }
+            }
         }
     }
 
@@ -84,7 +87,6 @@ fun Toast(
                     start = 12.dp,
                     end = 12.dp
                 )
-                .shadow(4.dp, shape)
                 .alpha(0.95f),
         shape = shape
     ) {
@@ -204,8 +206,13 @@ interface ToastVisuals {
 enum class ToastDuration { Short, Long }
 
 object ToastDefaults {
-    val contentColor: Color @Composable get() = MaterialTheme.colorScheme.onTertiaryContainer
-    val color: Color @Composable get() = MaterialTheme.colorScheme.surfaceVariant
+    @OptIn(ExperimentalAnimationApi::class)
+    val transition: ContentTransform
+        get() = fadeIn(tween(250)) + slideInVertically(tween(500)) { it / 2 } with fadeOut(tween(250)) + slideOutVertically(
+            tween(500)
+        ) { it / 2 }
+    val contentColor: Color @Composable get() = MaterialTheme.colorScheme.inverseOnSurface.harmonizeWithPrimary()
+    val color: Color @Composable get() = MaterialTheme.colorScheme.inverseSurface.harmonizeWithPrimary()
     val shape: Shape @Composable get() = MaterialTheme.shapes.extraLarge
 }
 
@@ -213,8 +220,8 @@ private fun ToastDuration.toMillis(
     accessibilityManager: AccessibilityManager?
 ): Long {
     val original = when (this) {
-        ToastDuration.Long -> 5000L
-        ToastDuration.Short -> 2000L
+        ToastDuration.Long -> 6500L
+        ToastDuration.Short -> 3500L
     }
     return accessibilityManager?.calculateRecommendedTimeoutMillis(
         original,

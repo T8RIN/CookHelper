@@ -50,14 +50,12 @@ fun PickOrOpenAvatarDialog(
     val resultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            if (uri == null) {
-                toastHost.show(
-                    icon = Icons.Outlined.BrokenImage,
-                    message = (R.string.image_not_picked).asString(context)
-                )
-                return@rememberLauncherForActivityResult
-            }
-            imageUri = uri.toString()
+            uri?.let {
+                imageUri = it.toString()
+            } ?: toastHost.show(
+                icon = Icons.Outlined.BrokenImage,
+                message = (R.string.image_not_picked).asString(context)
+            )
         }
     )
 

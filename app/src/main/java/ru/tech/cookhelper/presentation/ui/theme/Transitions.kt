@@ -6,6 +6,6 @@ import dev.olshevski.navigation.reimagined.NavTransitionSpec
 
 @OptIn(ExperimentalAnimationApi::class)
 val ScaleCrossfadeTransitionSpec = NavTransitionSpec<Any?> { _, _, _ ->
-    (fadeIn(tween(500)) + scaleIn(initialScale = 0.9f, animationSpec = tween(500)))
-        .with(fadeOut(tween(300)) + scaleOut(targetScale = 0.9f, animationSpec = tween(300)))
+    (fadeIn(tween(200)) + scaleIn(initialScale = 0.9f, animationSpec = tween(200)))
+        .with(fadeOut(tween(200)) + scaleOut(targetScale = 0.9f, animationSpec = tween(200)))
 }
