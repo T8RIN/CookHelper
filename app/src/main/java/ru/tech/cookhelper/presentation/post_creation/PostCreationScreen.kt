@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.post_creation
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -129,7 +130,7 @@ fun PostCreationScreen(
         val paddingValues = PaddingValues(start = 8.dp, end = 8.dp, bottom = 16.dp)
 
         val resultLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent(),
+            contract = ActivityResultContracts.PickVisualMedia(),
             onResult = {
                 it?.let { uri ->
                     imageUri = uri.toString()
@@ -183,7 +184,13 @@ fun PostCreationScreen(
                             modifier = Modifier
                                 .padding(paddingValues)
                                 .fillMaxWidth(),
-                            onClick = { resultLauncher.launch("image/*") }
+                            onClick = {
+                                resultLauncher.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            }
                         ) {
                             Spacer(Modifier.width(8.dp))
                             Icon(Icons.Outlined.Image, null)

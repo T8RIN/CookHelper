@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.presentation.profile.components
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -17,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -35,7 +35,6 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.close
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalAnimationApi::class,
-    ExperimentalComposeUiApi::class
 )
 @Composable
 fun PickOrOpenAvatarDialog(
@@ -49,7 +48,7 @@ fun PickOrOpenAvatarDialog(
 
     var imageUri by rememberSaveable { mutableStateOf("") }
     val resultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+        contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             if (uri == null) {
                 toastHost.show(
@@ -85,7 +84,13 @@ fun PickOrOpenAvatarDialog(
                             Spacer(Modifier.height(4.dp))
                         }
                         Button(
-                            onClick = { resultLauncher.launch("image/*") },
+                            onClick = {
+                                resultLauncher.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            },
                             modifier = Modifier.fillMaxWidth(),
                             colors = if (!hasAvatar) ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
                         ) {

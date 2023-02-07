@@ -1,6 +1,7 @@
 package ru.tech.cookhelper.presentation.profile.components
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -43,7 +44,7 @@ fun ImageCarousel(
     val toastHost = LocalToastHostState.current
     val context = LocalContext.current
     val resultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+        contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             if (uri == null) {
                 toastHost.show(
@@ -95,7 +96,7 @@ fun ImageCarousel(
             }
             item {
                 Card(
-                    onClick = { resultLauncher.launch("image/*") },
+                    onClick = { resultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                     modifier = Modifier.size(imageSize),
                     shape = SquircleShape(12.dp)
                 ) {

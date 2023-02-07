@@ -216,12 +216,9 @@ private fun ToastDuration.toMillis(
         ToastDuration.Long -> 5000L
         ToastDuration.Short -> 2000L
     }
-    if (accessibilityManager == null) {
-        return original
-    }
-    return accessibilityManager.calculateRecommendedTimeoutMillis(
+    return accessibilityManager?.calculateRecommendedTimeoutMillis(
         original,
         containsIcons = true,
         containsText = true
-    )
+    ) ?: original
 }

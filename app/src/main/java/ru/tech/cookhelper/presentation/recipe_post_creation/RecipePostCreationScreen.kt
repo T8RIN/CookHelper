@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.recipe_post_creation
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -84,7 +85,7 @@ fun RecipePostCreationScreen(
     )
 
     val resultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+        contract = ActivityResultContracts.PickVisualMedia(),
         onResult = {
             it?.let { uri ->
                 imageUri = uri.toString()
@@ -145,15 +146,15 @@ fun RecipePostCreationScreen(
                     IconButton(
                         onClick = {
                             viewModel.sendRecipePost(
-                                label,
-                                imageUri,
-                                time,
-                                calories,
-                                proteins,
-                                fats,
-                                carbohydrates,
-                                category,
-                                steps
+                                label = label,
+                                imageUri = imageUri,
+                                time = time,
+                                calories = calories,
+                                proteins = proteins,
+                                fats = fats,
+                                carbohydrates = carbohydrates,
+                                category = category,
+                                steps = steps
                             )
                         },
                         enabled = doneEnabled,
@@ -192,7 +193,13 @@ fun RecipePostCreationScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Card(
-                            onClick = { resultLauncher.launch("image/*") },
+                            onClick = {
+                                resultLauncher.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            },
                             modifier = Modifier
                                 .fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp)
@@ -227,7 +234,13 @@ fun RecipePostCreationScreen(
                                             shape = RectangleShape
                                         )
                                         FilledIconButton(
-                                            onClick = { resultLauncher.launch("image/*") },
+                                            onClick = {
+                                                resultLauncher.launch(
+                                                    PickVisualMediaRequest(
+                                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                                    )
+                                                )
+                                            },
                                             modifier = Modifier.align(Alignment.TopEnd),
                                             colors = IconButtonDefaults.filledIconButtonColors(
                                                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer,

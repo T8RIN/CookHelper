@@ -2,6 +2,7 @@ package ru.tech.cookhelper.presentation.all_images
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,7 +50,7 @@ fun AllImagesScreen(
     val toastHost = LocalToastHostState.current
 
     val resultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+        contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             if (uri == null) {
                 toastHost.show(
@@ -82,7 +83,7 @@ fun AllImagesScreen(
             actions = {
                 if (canAddImages) {
                     IconButton(onClick = {
-                        resultLauncher.launch("image/*")
+                        resultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }) {
                         Icon(Icons.Rounded.Add, null)
                     }
