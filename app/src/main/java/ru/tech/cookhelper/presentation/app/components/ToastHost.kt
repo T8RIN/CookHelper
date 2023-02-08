@@ -1,5 +1,6 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import androidx.annotation.FloatRange
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -10,16 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.AccessibilityManager
 import androidx.compose.ui.platform.LocalAccessibilityManager
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.ColorUtils
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import kotlin.coroutines.resume
 import kotlin.math.min
@@ -29,7 +32,7 @@ import kotlin.math.min
 @Composable
 fun ToastHost(
     hostState: ToastHostState = LocalToastHostState.current,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxSize(),
     alignment: Alignment = Alignment.BottomCenter,
     toast: @Composable (ToastData) -> Unit = { Toast(it) }
 ) {
@@ -47,12 +50,7 @@ fun ToastHost(
         targetState = currentToastData,
         transitionSpec = { ToastDefaults.transition }
     ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .imePadding()
-                .systemBarsPadding()
-        ) {
+        Box(modifier = modifier) {
             Box(modifier = Modifier.align(alignment)) {
                 it?.let { toast(it) }
             }
@@ -87,6 +85,8 @@ fun Toast(
                     start = 12.dp,
                     end = 12.dp
                 )
+                .imePadding()
+                .systemBarsPadding()
                 .alpha(0.95f),
         shape = shape
     ) {
@@ -208,9 +208,15 @@ enum class ToastDuration { Short, Long }
 object ToastDefaults {
     @OptIn(ExperimentalAnimationApi::class)
     val transition: ContentTransform
-        get() = fadeIn(tween(250)) + slideInVertically(tween(500)) { it / 2 } with fadeOut(tween(250)) + slideOutVertically(
+        get() = fadeIn(tween(300)) + scaleIn(
+            tween(500),
+            transformOrigin = TransformOrigin(0.5f, 1f)
+        ) + slideInVertically(
             tween(500)
-        ) { it / 2 }
+        ) { it / 2 } with fadeOut(tween(250)) + slideOutVertically(tween(500)) { it / 2 } + scaleOut(
+            tween(750),
+            transformOrigin = TransformOrigin(0.5f, 1f)
+        )
     val contentColor: Color @Composable get() = MaterialTheme.colorScheme.inverseOnSurface.harmonizeWithPrimary()
     val color: Color @Composable get() = MaterialTheme.colorScheme.inverseSurface.harmonizeWithPrimary()
     val shape: Shape @Composable get() = MaterialTheme.shapes.extraLarge
@@ -229,3 +235,16 @@ private fun ToastDuration.toMillis(
         containsText = true
     ) ?: original
 }
+
+private fun Color.blend(
+    color: Color,
+    @FloatRange(from = 0.0, to = 1.0) fraction: Float = 0.2f
+): Color = Color(ColorUtils.blendARGB(this.toArgb(), color.toArgb(), fraction))
+
+@Composable
+private fun Color.harmonizeWithPrimary(
+    @FloatRange(
+        from = 0.0,
+        to = 1.0
+    ) fraction: Float = 0.2f
+): Color = blend(MaterialTheme.colorScheme.primary, fraction)

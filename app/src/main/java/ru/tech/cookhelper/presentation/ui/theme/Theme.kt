@@ -123,7 +123,6 @@ fun CookHelperTheme(
             content()
         }
     )
-
 }
 
 @Composable
