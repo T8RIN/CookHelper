@@ -11,5 +11,5 @@ fun ToastHostState.show(
     icon: ImageVector? = null,
     message: String,
     duration: ToastDuration = ToastDuration.Short,
-    scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    scope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 ) = scope.launch { showToast(message, icon, duration) }

@@ -4,6 +4,7 @@ package ru.tech.cookhelper.presentation.ui.theme
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,15 +21,21 @@ import androidx.compose.ui.unit.dp
 @Composable
 operator fun ImageVector.invoke(
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
     tint: Color = LocalContentColor.current,
     contentDescription: String? = null,
 ) {
-    Icon(
-        imageVector = this,
-        contentDescription = contentDescription,
-        modifier = modifier,
-        tint = tint
-    )
+    val icon = @Composable {
+        Icon(
+            imageVector = this,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            tint = tint
+        )
+    }
+    onClick?.let {
+        IconButton(onClick = it, content = icon)
+    } ?: icon()
 }
 
 val Icons.Rounded.Fridge: ImageVector

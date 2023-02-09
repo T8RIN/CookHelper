@@ -252,4 +252,8 @@
     <string name="argb" translatable="false">ARGB</string>
     <string name="color">Color</string>
     <string name="product">Product</string>
+    <string name="what_we_are_cooking_answer_preview">Today we will cook a big delicious dinner with meat and salad. Also we will include some oil in it</string>
+    <string name="yummy_preview">Yummy!</string>
+    <string name="toast_preview">Sample preview toast!</string>
+    <string name="snackbar_preview">Sample preview snackbar!</string>
 </resources>

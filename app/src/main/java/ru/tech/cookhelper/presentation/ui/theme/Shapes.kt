@@ -4,6 +4,7 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -21,6 +22,7 @@ val Shapes = Shapes(
     extraLarge = SquircleShape(28.dp)
 )
 
+@Stable
 data class SquircleShape(
     private val topLeft: Dp = 0.dp,
     private val topLeftSmoothness: Int = 60,

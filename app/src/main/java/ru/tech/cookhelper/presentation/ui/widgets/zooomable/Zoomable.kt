@@ -140,17 +140,15 @@ private suspend fun PointerInputScope.detectDrag(
     onDrag: (change: PointerInputChange, dragAmount: Offset) -> Unit
 ) {
     awaitEachGesture {
-        awaitPointerEventScope {
-            val down = awaitFirstDown(requireUnconsumed = false)
-            var drag: PointerInputChange?
-            do {
-                drag = awaitTouchSlopOrCancellation(down.id, onDrag)
-            } while (drag != null && !drag.isConsumed)
-            if (drag != null) {
-                onDragStart.invoke(drag.position)
-                if (!drag(drag.id) { onDrag(it, it.positionChange()) }) onDragCancel()
-                else onDragEnd()
-            }
+        val down = awaitFirstDown(requireUnconsumed = false)
+        var drag: PointerInputChange?
+        do {
+            drag = awaitTouchSlopOrCancellation(down.id, onDrag)
+        } while (drag != null && !drag.isConsumed)
+        if (drag != null) {
+            onDragStart.invoke(drag.position)
+            if (!drag(drag.id) { onDrag(it, it.positionChange()) }) onDragCancel()
+            else onDragEnd()
         }
     }
 }

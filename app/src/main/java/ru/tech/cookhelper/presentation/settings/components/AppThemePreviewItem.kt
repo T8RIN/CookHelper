@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -39,10 +38,10 @@ fun AppThemePreviewItem(
                 } else {
                     colorScheme.outlineVariant
                 },
-                shape = SquircleShape(16.dp),
+                shape = RoundedCornerShape(16.dp),
             )
             .padding(4.dp)
-            .clip(SquircleShape(12.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(colorScheme.background)
             .clickable(onClick = onClick),
         verticalArrangement = Arrangement.SpaceBetween

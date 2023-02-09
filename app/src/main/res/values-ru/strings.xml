@@ -250,4 +250,9 @@
     <string name="clipboard_paste_invalid_color_code">Вставьте aRGB-Код</string>
     <string name="clipboard_paste_invalid_empty">Нечего вставлять</string>
     <string name="color">Цвет</string>
+    <string name="product">Продукт</string>
+    <string name="what_we_are_cooking_answer_preview">Сегодня мы приготовим большой вкусный обед из мяса и рукколы. Также не забудем добавить туда масло, для придания аромата и тонкости</string>
+    <string name="yummy_preview">Вкусно!</string>
+    <string name="toast_preview">Просмотр тоста!</string>
+    <string name="snackbar_preview">Просмотр снекбара!</string>
 </resources>

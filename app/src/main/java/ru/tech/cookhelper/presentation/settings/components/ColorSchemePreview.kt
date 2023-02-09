@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.BreakfastDining
+import androidx.compose.material.icons.rounded.BreakfastDining
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Newspaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,9 +24,10 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.core.constants.Constants.LOREM_IPSUM
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.domain.model.User
-import ru.tech.cookhelper.presentation.app.components.UserState
+import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
 import ru.tech.cookhelper.presentation.chat.components.MessageHeader
 import ru.tech.cookhelper.presentation.chat.formatOrNull
@@ -33,7 +38,10 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Expandabl
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
+import ru.tech.cookhelper.presentation.ui.theme.invoke
+import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.widgets.AppBarTitle
 import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 import ru.tech.cookhelper.presentation.ui.widgets.TopAppBarSize
@@ -41,7 +49,9 @@ import ru.tech.cookhelper.presentation.ui.widgets.TopAppBarSize
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun ColorSchemePreview() {
-    var selectedItem by remember { mutableStateOf<Screen>(Screen.Buttons) }
+    var selectedItem by rememberSaveable { mutableStateOf<Screen>(Screen.Buttons) }
+    val toastHost = LocalToastHostState.current
+    var showSampleDialog by rememberSaveable { mutableStateOf(false) }
 
     OutlinedCard(
         modifier = Modifier
@@ -65,16 +75,19 @@ fun ColorSchemePreview() {
             },
             topAppBarSize = TopAppBarSize.Centered,
             navigationIcon = {
-                IconButton(onClick = {}) {
-                    Icon(Icons.Rounded.ArrowBack, null)
-                }
+                val testMessage = stringResource(R.string.toast_preview)
+                Icons.Rounded.BreakfastDining(
+                    onClick = {
+                        toastHost.show(Icons.Outlined.BreakfastDining, testMessage)
+                    }
+                )
             },
             windowInsets = WindowInsets(0.dp),
             background = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
             actions = {
-                IconButton(onClick = {}) {
-                    Icon(Icons.Rounded.Newspaper, null)
-                }
+                Icons.Rounded.Newspaper(
+                    onClick = { showSampleDialog = true }
+                )
             }
         )
         AnimatedContent(selectedItem) {
@@ -99,6 +112,20 @@ fun ColorSchemePreview() {
             windowInsets = WindowInsets(0.dp),
             onClick = { selectedItem = it })
     }
+
+    if (showSampleDialog) {
+        AlertDialog(
+            onDismissRequest = { showSampleDialog = false },
+            icon = { Icons.Rounded.Newspaper() },
+            confirmButton = {
+                TextButton(onClick = { showSampleDialog = false }) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+            title = { Text(stringResource(R.string.preview)) },
+            text = { Text(LOREM_IPSUM) }
+        )
+    }
 }
 
 @Composable
@@ -111,7 +138,7 @@ private fun FridgeBlock() {
     }
     Column(
         Modifier
-            .height(400.dp)
+            .height(300.dp)
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(8.dp))
@@ -157,7 +184,7 @@ private fun ChatBlock() {
     Spacer(Modifier.height(4.dp))
     MessageBubbleItem(
         isMessageFromCurrentUser = true,
-        text = stringResource(R.string.hello_world_preview),
+        text = stringResource(R.string.what_we_are_cooking_answer_preview),
         timestamp = System.currentTimeMillis(),
         cutTopCorner = true,
         showPointingArrow = true
@@ -165,7 +192,7 @@ private fun ChatBlock() {
     Spacer(Modifier.height(4.dp))
     MessageBubbleItem(
         isMessageFromCurrentUser = false,
-        text = stringResource(R.string.hello_world_answer_preview),
+        text = stringResource(R.string.yummy_preview),
         timestamp = System.currentTimeMillis(),
         cutTopCorner = true,
         showPointingArrow = true
@@ -249,4 +276,77 @@ private fun ProfileBlock() {
         onStatusUpdate = {}
     )
     Spacer(Modifier.height(8.dp))
+    Divider()
+    Spacer(Modifier.width(8.dp))
+    Row {
+        val testMessage = stringResource(R.string.toast_preview)
+        Spacer(
+            Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+        )
+        Toast(
+            modifier = Modifier
+                .heightIn(min = 48.dp)
+                .padding(top = 8.dp)
+                .alpha(0.95f),
+            toastData = object : ToastData {
+                override val visuals: ToastVisuals
+                    get() = object : ToastVisuals {
+                        override val message: String
+                            get() = testMessage
+                        override val icon: ImageVector
+                            get() = Icons.Outlined.BreakfastDining
+                        override val duration: ToastDuration
+                            get() = ToastDuration.Long
+                    }
+
+                override fun dismiss() {}
+            }
+        )
+        Spacer(
+            Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        )
+    }
+    Spacer(Modifier.height(8.dp))
+    Divider()
+    Spacer(Modifier.width(8.dp))
+    Row {
+        val testMessage = stringResource(R.string.snackbar_preview)
+        val ok = stringResource(R.string.ok)
+
+        Spacer(
+            Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+        )
+        Snackbar(
+            snackbarData = object : SnackbarData {
+                override val visuals: SnackbarVisuals
+                    get() = object : SnackbarVisuals {
+                        override val actionLabel: String
+                            get() = ok
+                        override val duration: SnackbarDuration
+                            get() = SnackbarDuration.Indefinite
+                        override val message: String
+                            get() = testMessage
+                        override val withDismissAction: Boolean
+                            get() = false
+
+                    }
+
+                override fun dismiss() {}
+
+                override fun performAction() {}
+            }
+        )
+        Spacer(
+            Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        )
+    }
+    Spacer(Modifier.width(8.dp))
 }
