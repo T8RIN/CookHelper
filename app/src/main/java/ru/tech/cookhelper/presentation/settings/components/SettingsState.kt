@@ -14,7 +14,9 @@ data class SettingsState(
     val nightMode: NightMode = NightMode.SYSTEM,
     val language: String = "",
     val fontScale: Float = 1f,
-    val customAccent: Color = Color.Blue
+    val customAccent: Color = Color.Blue,
+    val pureBlack: Boolean = false,
+    val keepScreenOn: Boolean = true
 )
 
 enum class NightMode {
@@ -22,7 +24,7 @@ enum class NightMode {
 }
 
 enum class Setting {
-    NIGHT_MODE, COLOR_SCHEME, DYNAMIC_COLORS, CART_CONNECTION, LANGUAGE, FONT_SCALE, CUSTOM_ACCENT
+    NIGHT_MODE, COLOR_SCHEME, DYNAMIC_COLORS, CART_CONNECTION, LANGUAGE, FONT_SCALE, CUSTOM_ACCENT, PURE_BLACK, KEEP_SCREEN_ON
 }
 
 fun Setting.getIcon(nightMode: NightMode): ImageVector {
@@ -37,6 +39,8 @@ fun Setting.getIcon(nightMode: NightMode): ImageVector {
         Setting.CART_CONNECTION -> Icons.Outlined.ShoppingCart
         Setting.LANGUAGE -> Icons.Outlined.Translate
         Setting.FONT_SCALE -> Icons.Outlined.FontDownload
+        Setting.PURE_BLACK -> Icons.Outlined.Compare
+        Setting.KEEP_SCREEN_ON -> Icons.Outlined.Smartphone
     }
 }
 
@@ -49,6 +53,8 @@ val Setting.title: Int
             Setting.COLOR_SCHEME, Setting.CUSTOM_ACCENT -> R.string.color_scheme
             Setting.CART_CONNECTION -> R.string.cart_connection
             Setting.FONT_SCALE -> R.string.font_size
+            Setting.PURE_BLACK -> R.string.pure_black
+            Setting.KEEP_SCREEN_ON -> R.string.keep_screen_on
         }
     }
 
@@ -58,6 +64,8 @@ val Setting.subtitle: Int?
             Setting.DYNAMIC_COLORS -> R.string.dynamic_colors_subtitle
             Setting.CART_CONNECTION -> R.string.cart_connection_subtitle
             Setting.FONT_SCALE -> R.string.font_size_subtitle
+            Setting.PURE_BLACK -> R.string.pure_black_subtitle
+            Setting.KEEP_SCREEN_ON -> R.string.keep_screen_on_subtitle
             else -> null
         }
     }

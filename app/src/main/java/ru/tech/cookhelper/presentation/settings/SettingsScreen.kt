@@ -43,11 +43,13 @@ fun SettingsScreen(
         with(settingsState) {
             ChangeLanguageOption(viewModel::insertSetting)
             ThemeOption(viewModel::insertSetting)
+            PureBlackOption(viewModel::insertSetting)
             ColorSchemeOption(viewModel::insertSetting)
             ThemePreviewOption()
             DynamicColorsOption(viewModel::insertSetting)
             FontSizeOption(viewModel::insertSetting)
             CartConnectionOption(viewModel::insertSetting)
+            KeepScreenOnOption(viewModel::insertSetting)
             AppInfoVersionOption()
 
             NavigationBarsSpacer()

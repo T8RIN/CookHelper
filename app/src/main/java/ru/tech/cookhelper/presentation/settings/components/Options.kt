@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package ru.tech.cookhelper.presentation.settings.components
 
 import android.content.Intent
@@ -52,12 +54,13 @@ import ru.tech.cookhelper.presentation.ui.widgets.marquee.Marquee
 
 @Composable
 fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
+    val option = Setting.NIGHT_MODE
     Column(Modifier.animateContentSize()) {
         var expanded by rememberSaveable { mutableStateOf(false) }
         PreferenceRow(
-            title = stringResource(Setting.NIGHT_MODE.title),
-            subtitle = Setting.NIGHT_MODE.subtitle?.let { stringResource(it) },
-            icon = Setting.NIGHT_MODE.getIcon(nightMode),
+            title = stringResource(option.title),
+            subtitle = option.subtitle?.let { stringResource(it) },
+            icon = option.getIcon(nightMode),
             onClick = { expanded = !expanded }
         ) {
             RotationButton(
@@ -70,7 +73,7 @@ fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
                 items = listOf(R.string.dark, R.string.light, R.string.system),
                 selectedIndex = nightMode.ordinal,
                 indexChanged = {
-                    insertSetting(Setting.NIGHT_MODE.ordinal, it)
+                    insertSetting(option.ordinal, it)
                 }
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -85,6 +88,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
     val toastHost = LocalToastHostState.current
     val context = LocalContext.current
     var showColorPicker by rememberSaveable { mutableStateOf(false) }
+    val option = Setting.COLOR_SCHEME
 
     Column(Modifier.animateContentSize()) {
         var expanded by rememberSaveable { mutableStateOf(false) }
@@ -92,9 +96,9 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
 
         PreferenceRow(
             modifier = Modifier.alpha(alpha),
-            title = stringResource(Setting.COLOR_SCHEME.title),
-            subtitle = Setting.COLOR_SCHEME.subtitle?.let { stringResource(it) },
-            icon = Setting.COLOR_SCHEME.getIcon(nightMode),
+            title = stringResource(option.title),
+            subtitle = option.subtitle?.let { stringResource(it) },
+            icon = option.getIcon(nightMode),
             onClick = {
                 if (!dynamicColors) {
                     expanded = !expanded
@@ -135,7 +139,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         ),
                         onClick = {
                             if (colorScheme == null) showColorPicker = true
-                            insertSetting(Setting.COLOR_SCHEME.ordinal, null)
+                            insertSetting(option.ordinal, null)
                         }
                     )
                     Spacer(Modifier.padding(4.dp))
@@ -155,7 +159,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         selected = scheme.ordinal == colorScheme?.ordinal,
                         colorScheme = scheme.toColorScheme(),
                         onClick = {
-                            insertSetting(Setting.COLOR_SCHEME.ordinal, scheme.ordinal)
+                            insertSetting(option.ordinal, scheme.ordinal)
                         }
                     )
                 }
@@ -202,13 +206,14 @@ fun SettingsState.ThemePreviewOption() {
 
 @Composable
 fun SettingsState.DynamicColorsOption(insertSetting: (id: Int, option: Any) -> Unit) {
+    val option = Setting.DYNAMIC_COLORS
     PreferenceRowSwitch(
-        title = stringResource(Setting.DYNAMIC_COLORS.title),
-        subtitle = Setting.DYNAMIC_COLORS.subtitle?.let { stringResource(it) },
-        icon = Setting.DYNAMIC_COLORS.getIcon(nightMode),
+        title = stringResource(option.title),
+        subtitle = option.subtitle?.let { stringResource(it) },
+        icon = option.getIcon(nightMode),
         checked = dynamicColors,
         onClick = {
-            insertSetting(Setting.DYNAMIC_COLORS.ordinal, !dynamicColors)
+            insertSetting(option.ordinal, !dynamicColors)
         }
     )
     Separator()
@@ -218,11 +223,12 @@ fun SettingsState.DynamicColorsOption(insertSetting: (id: Int, option: Any) -> U
 fun SettingsState.ChangeLanguageOption(insertSetting: (id: Int, option: Any) -> Unit) {
     val context = LocalContext.current
     val dialogController = LocalDialogController.current
+    val option = Setting.LANGUAGE
 
     Column(Modifier.animateContentSize()) {
         PreferenceRow(
-            title = stringResource(Setting.LANGUAGE.title),
-            icon = Setting.LANGUAGE.getIcon(nightMode),
+            title = stringResource(option.title),
+            icon = option.getIcon(nightMode),
             action = {
                 Text(
                     text = remember { context.getCurrentLocaleString() },
@@ -237,7 +243,7 @@ fun SettingsState.ChangeLanguageOption(insertSetting: (id: Int, option: Any) -> 
                         entries = context.getLanguages(),
                         selected = context.getCurrentLocaleString(),
                         onSelect = {
-                            insertSetting(Setting.LANGUAGE.ordinal, it)
+                            insertSetting(option.ordinal, it)
                             val locale = if (it == "") {
                                 LocaleListCompat.getEmptyLocaleList()
                             } else {
@@ -329,12 +335,13 @@ fun SettingsState.AppInfoVersionOption() {
 
 @Composable
 fun SettingsState.FontSizeOption(insertSetting: (id: Int, option: Any) -> Unit) {
+    val option = Setting.FONT_SCALE
     Column(Modifier.animateContentSize()) {
         var expanded by rememberSaveable { mutableStateOf(false) }
         PreferenceRow(
-            title = stringResource(Setting.FONT_SCALE.title),
-            subtitle = Setting.FONT_SCALE.subtitle?.let { stringResource(it) },
-            icon = Setting.FONT_SCALE.getIcon(nightMode),
+            title = stringResource(option.title),
+            subtitle = option.subtitle?.let { stringResource(it) },
+            icon = option.getIcon(nightMode),
             onClick = { expanded = !expanded }
         ) {
             RotationButton(
@@ -349,7 +356,7 @@ fun SettingsState.FontSizeOption(insertSetting: (id: Int, option: Any) -> Unit) 
                     .padding(horizontal = 16.dp),
                 value = fontScale,
                 onValueChange = {
-                    insertSetting(Setting.FONT_SCALE.ordinal, it)
+                    insertSetting(option.ordinal, it)
                 },
                 valueRange = 0.75f..1.25f,
                 steps = 5
@@ -362,13 +369,45 @@ fun SettingsState.FontSizeOption(insertSetting: (id: Int, option: Any) -> Unit) 
 
 @Composable
 fun SettingsState.CartConnectionOption(insertSetting: (id: Int, option: Any) -> Unit) {
+    val option = Setting.CART_CONNECTION
     PreferenceRowSwitch(
-        title = stringResource(Setting.CART_CONNECTION.title),
-        subtitle = Setting.CART_CONNECTION.subtitle?.let { stringResource(it) },
-        icon = Setting.CART_CONNECTION.getIcon(nightMode),
+        title = stringResource(option.title),
+        subtitle = option.subtitle?.let { stringResource(it) },
+        icon = option.getIcon(nightMode),
         checked = cartConnection,
         onClick = {
-            insertSetting(Setting.CART_CONNECTION.ordinal, !cartConnection)
+            insertSetting(option.ordinal, !cartConnection)
+        }
+    )
+    Separator()
+}
+
+@Composable
+fun SettingsState.PureBlackOption(insertSetting: (id: Int, option: Any) -> Unit) {
+    val option = Setting.PURE_BLACK
+    PreferenceRowSwitch(
+        title = stringResource(option.title),
+        subtitle = option.subtitle?.let { stringResource(it) },
+        icon = option.getIcon(nightMode),
+        checked = pureBlack,
+        onClick = {
+            insertSetting(option.ordinal, !pureBlack)
+        }
+    )
+    Separator()
+}
+
+
+@Composable
+fun SettingsState.KeepScreenOnOption(insertSetting: (id: Int, option: Any) -> Unit) {
+    val option = Setting.KEEP_SCREEN_ON
+    PreferenceRowSwitch(
+        title = stringResource(option.title),
+        subtitle = option.subtitle?.let { stringResource(it) },
+        icon = option.getIcon(nightMode),
+        checked = keepScreenOn,
+        onClick = {
+            insertSetting(option.ordinal, !keepScreenOn)
         }
     )
     Separator()

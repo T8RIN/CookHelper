@@ -19,6 +19,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverse
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.darken
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.lighten
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
+import ru.tech.cookhelper.presentation.ui.widgets.KeepScreenOn
 import androidx.compose.material3.ColorScheme as Material3ColorScheme
 
 private val ColorScheme.LightThemeColors: Material3ColorScheme
@@ -94,7 +95,17 @@ fun CookHelperTheme(
             val context = LocalContext.current
             if (isDarkMode()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        else -> LocalSettingsProvider.current.getColorScheme()
+        else -> {
+            with(LocalSettingsProvider.current) {
+                getColorScheme().run {
+                    if (pureBlack && isDarkMode()) copy(
+                        surface = Color.Black,
+                        background = Color.Black
+                    )
+                    else this
+                }
+            }
+        }
     }
 
     val systemUiController = rememberSystemUiController()
@@ -123,6 +134,8 @@ fun CookHelperTheme(
             content()
         }
     )
+
+    KeepScreenOn(LocalSettingsProvider.current.keepScreenOn)
 }
 
 @Composable

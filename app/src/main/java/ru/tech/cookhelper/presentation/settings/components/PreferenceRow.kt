@@ -33,7 +33,6 @@ fun PreferenceRow(
     )
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .clip(MaterialTheme.shapes.large)
             .combinedClickable(

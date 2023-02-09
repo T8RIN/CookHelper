@@ -84,6 +84,16 @@ class MainViewModel @Inject constructor(
                             fontScale = setting.option.toFloatOrNull() ?: 1f
                         )
                     }
+                    Setting.PURE_BLACK.ordinal -> {
+                        state = state.copy(
+                            pureBlack = setting.option.toBooleanStrictOrNull() ?: false
+                        )
+                    }
+                    Setting.KEEP_SCREEN_ON.ordinal -> {
+                        state = state.copy(
+                            keepScreenOn = setting.option.toBooleanStrictOrNull() ?: false
+                        )
+                    }
                 }
             }
             _settingsState.update { state }
