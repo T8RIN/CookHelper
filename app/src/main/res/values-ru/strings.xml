@@ -256,7 +256,7 @@
     <string name="toast_preview">Просмотр тоста!</string>
     <string name="snackbar_preview">Просмотр снекбара!</string>
     <string name="pure_black">Абсолютный черный</string>
-    <string name="pure_black_subtitle">В темном режиме тема будет адоптирована для AMOLED экранов, все поверхности будут максимально черными</string>
+    <string name="pure_black_subtitle">В темном режиме тема будет адаптирована для AMOLED экранов, все поверхности будут максимально черными</string>
     <string name="keep_screen_on">Не выключать экран</string>
-    <string name="keep_screen_on_subtitle">Если включено, телефон не будет уходить в спящий режим при открытом приложении</string>
+    <string name="keep_screen_on_subtitle">При включении, телефон не будет уходить в спящий режим при открытом приложении</string>
 </resources>
