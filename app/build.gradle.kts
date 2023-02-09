@@ -81,7 +81,7 @@ dependencies {
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
     //Desugaring
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 
     //Compose
     implementation("androidx.activity:activity-compose:1.7.0-alpha04")
