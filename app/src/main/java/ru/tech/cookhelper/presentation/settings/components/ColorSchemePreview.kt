@@ -39,6 +39,8 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.theme.invoke
+import ru.tech.cookhelper.presentation.ui.theme.mixedColor
+import ru.tech.cookhelper.presentation.ui.theme.onMixedColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
@@ -241,7 +243,8 @@ private fun ButtonsBlock() {
             icon = {
                 Icon(Icons.Rounded.Edit, null, Modifier.size(it))
             },
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.mixedColor,
+            contentColor = MaterialTheme.colorScheme.onMixedColor,
             onClick = {}
         )
         Spacer(Modifier.width(8.dp))
