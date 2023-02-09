@@ -15,8 +15,8 @@ android {
         applicationId = "ru.tech.cookhelper"
         minSdk = 21
         targetSdk = 33
-        versionCode = 4
-        versionName = "0.1.21-alpha"
+        versionCode = 5
+        versionName = "0.1.22-alpha"
         multiDexEnabled = true
 
         kapt {
