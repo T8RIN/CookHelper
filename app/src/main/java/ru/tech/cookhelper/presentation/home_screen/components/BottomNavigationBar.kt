@@ -3,6 +3,7 @@ package ru.tech.cookhelper.presentation.home_screen.components
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.style.TextOverflow
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.getIcon
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 
@@ -24,7 +25,11 @@ fun <T : Screen> BottomNavigationBar(
                 },
                 alwaysShowLabel = false,
                 label = {
-                    Text(screen.shortTitle.asString())
+                    Text(
+                        screen.shortTitle.asString(),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 selected = selectedItem == screen,
                 onClick = {

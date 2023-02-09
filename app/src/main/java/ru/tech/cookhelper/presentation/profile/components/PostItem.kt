@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.User
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import java.text.SimpleDateFormat
 import java.util.*
 

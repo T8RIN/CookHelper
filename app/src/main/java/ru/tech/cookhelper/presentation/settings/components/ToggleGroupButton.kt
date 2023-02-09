@@ -13,6 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import ru.tech.cookhelper.presentation.ui.theme.mixedColor
+import ru.tech.cookhelper.presentation.ui.theme.onMixedColor
 
 @Composable
 fun ToggleGroupButton(
@@ -29,6 +31,7 @@ fun ToggleGroupButton(
         items.forEachIndexed { index, item ->
             OutlinedButton(
                 onClick = { indexChanged(index) },
+                contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier
                     .widthIn(min = 48.dp)
                     .then(
@@ -60,13 +63,13 @@ fun ToggleGroupButton(
                 },
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 colors = if (selectedIndex == index) ButtonDefaults.outlinedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    containerColor = MaterialTheme.colorScheme.mixedColor
                 )
                 else ButtonDefaults.outlinedButtonColors()
             ) {
                 Text(
                     text = stringResource(item),
-                    color = if (selectedIndex == index) MaterialTheme.colorScheme.onTertiaryContainer
+                    color = if (selectedIndex == index) MaterialTheme.colorScheme.onMixedColor
                     else MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 8.dp),
                     overflow = TextOverflow.Ellipsis

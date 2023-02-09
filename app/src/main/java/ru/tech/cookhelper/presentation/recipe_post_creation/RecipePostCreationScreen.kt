@@ -34,17 +34,17 @@ import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.getLastAvatar
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
+import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
+import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable

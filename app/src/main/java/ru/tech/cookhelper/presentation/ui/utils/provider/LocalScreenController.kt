@@ -25,9 +25,11 @@ fun <T : Any> NavController<T>.navigate(destination: T) = apply {
     if ((currentDestination ?: "")::class.name != destination::class.name) libNavigate(destination)
 }
 
-fun <T> NavController<T>.navigateAndPopAll(destination: T) = apply {
-    popAll()
-    libNavigate(destination)
+fun <T : Any> NavController<T>.navigateAndPopAll(destination: T) = apply {
+    if ((currentDestination ?: "")::class.name != destination::class.name) {
+        popAll()
+        libNavigate(destination)
+    }
 }
 
 fun <T> NavController<T>.goBack(): Boolean {

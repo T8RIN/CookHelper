@@ -12,7 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
@@ -27,8 +26,6 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.kotlin.cptlize
 import ru.tech.cookhelper.domain.model.Product
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.Loading
 import ru.tech.cookhelper.presentation.pick_products.viewModel.PickProductsViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
@@ -41,8 +38,9 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
+import ru.tech.cookhelper.presentation.ui.widgets.*
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PickProductsDialog(
     onPicked: (products: List<Product>) -> Unit,

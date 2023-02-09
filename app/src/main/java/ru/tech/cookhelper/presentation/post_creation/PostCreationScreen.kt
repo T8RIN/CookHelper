@@ -35,17 +35,21 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.getLastAvatar
-import ru.tech.cookhelper.presentation.app.components.*
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
+import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
+import ru.tech.cookhelper.presentation.ui.widgets.LoadingDialog
+import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
+import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)

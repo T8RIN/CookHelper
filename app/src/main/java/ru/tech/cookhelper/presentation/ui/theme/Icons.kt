@@ -1,3 +1,5 @@
+@file:Suppress("ObjectPropertyName", "unused")
+
 package ru.tech.cookhelper.presentation.ui.theme
 
 import androidx.compose.material.icons.Icons
@@ -17,9 +19,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 operator fun ImageVector.invoke(
-    contentDescription: String? = null,
     modifier: Modifier = Modifier,
-    tint: Color = LocalContentColor.current
+    tint: Color = LocalContentColor.current,
+    contentDescription: String? = null,
 ) {
     Icon(
         imageVector = this,
@@ -99,8 +101,7 @@ val Icons.Rounded.Fridge: ImageVector
                 horizontalLineTo(8.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _fridge!!
     }
 
@@ -181,8 +182,7 @@ val Icons.Outlined.Fridge: ImageVector
                 verticalLineTo(6.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _fridgeOutline!!
     }
 
@@ -255,8 +255,7 @@ val Icons.Outlined.ProductMeasure: ImageVector
                 curveTo(11.38f, 18.07f, 11.68f, 18.0f, 12.0f, 18.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _scale!!
     }
 
@@ -310,8 +309,7 @@ val Icons.Filled.MessageDraw: ImageVector
                 curveTo(22.0f, 2.89f, 21.1f, 2.0f, 20.0f, 2.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _messageDraw!!
     }
 
@@ -398,8 +396,7 @@ val Icons.Filled.Loading: ImageVector
                 curveTo(19.4f, 6.6f, 21.1f, 11.4f, 19.2f, 15.4f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _loading!!
     }
 
@@ -461,8 +458,7 @@ val Icons.Outlined.ForumRemove: ImageVector
                 lineTo(20.12f, 14.46f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _forumRemoveOutline!!
     }
 
@@ -511,8 +507,7 @@ val Icons.Rounded.CreateAlt: ImageVector
                 lineTo(13.4f, 6.2f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _createAlt!!
     }
 
@@ -556,8 +551,7 @@ val Icons.Filled.SausageOff: ImageVector
                 curveTo(20.2f, 13.6f, 21.0f, 11.1f, 21.0f, 8.5f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _sausageOff!!
     }
 
@@ -592,8 +586,7 @@ val Icons.Filled.Apple: ImageVector
                 curveTo(15.0f, 7.0f, 18.0f, 7.0f, 20.0f, 10.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _apple!!
     }
 
@@ -699,8 +692,7 @@ val Icons.Filled.Baguette: ImageVector
                 curveTo(7.62f, 21.04f, 6.3f, 22.0f, 5.0f, 22.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _baguette!!
     }
 
@@ -758,8 +750,7 @@ val Icons.Filled.Barley: ImageVector
                 curveTo(9.5f, 20.3f, 8.08f, 19.38f, 7.33f, 18.33f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _barley!!
     }
 
@@ -807,8 +798,7 @@ val Icons.Filled.Bean: ImageVector
                 curveTo(15.5f, 13.0f, 15.7f, 13.1f, 16.0f, 13.1f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _bean!!
     }
 
@@ -851,8 +841,7 @@ val Icons.Filled.Candy: ImageVector
                 curveTo(4.93f, 18.0f, 4.62f, 18.68f, 4.53f, 19.45f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _candy!!
     }
 
@@ -968,8 +957,7 @@ val Icons.Filled.Carrot: ImageVector
                 curveTo(15.14f, 7.85f, 16.0f, 8.85f, 16.0f, 10.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _carrot!!
     }
 
@@ -1026,8 +1014,7 @@ val Icons.Filled.Cheese: ImageVector
                 reflectiveCurveTo(9.55f, 10.0f, 9.0f, 10.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _cheese!!
     }
 
@@ -1081,8 +1068,7 @@ val Icons.Filled.Cherry: ImageVector
                 verticalLineTo(15.5f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _cherry!!
     }
 
@@ -1115,8 +1101,7 @@ val Icons.Filled.Cup: ImageVector
                 horizontalLineTo(3.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _cup!!
     }
 
@@ -1124,10 +1109,10 @@ private var _cup: ImageVector? = null
 
 val Icons.Filled.FriedEgg: ImageVector
     get() {
-        if (_eggfried != null) {
-            return _eggfried!!
+        if (_friedEgg != null) {
+            return _friedEgg!!
         }
-        _eggfried = Builder(
+        _friedEgg = Builder(
             name = "FriedEgg", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
             viewportWidth = 24.0f, viewportHeight = 24.0f
         ).apply {
@@ -1170,12 +1155,11 @@ val Icons.Filled.FriedEgg: ImageVector
                 verticalLineTo(10.0f)
                 close()
             }
-        }
-            .build()
-        return _eggfried!!
+        }.build()
+        return _friedEgg!!
     }
 
-private var _eggfried: ImageVector? = null
+private var _friedEgg: ImageVector? = null
 
 val Icons.Filled.Fish: ImageVector
     get() {
@@ -1239,8 +1223,7 @@ val Icons.Filled.Fish: ImageVector
                 )
                 close()
             }
-        }
-            .build()
+        }.build()
         return _fish!!
     }
 
@@ -1318,8 +1301,7 @@ val Icons.Filled.Flavour: ImageVector
                 horizontalLineTo(5.1f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _flavour!!
     }
 
@@ -1398,8 +1380,7 @@ val Icons.Filled.Jellyfish: ImageVector
                 curveTo(11.06f, 4.37f, 10.88f, 4.65f, 10.6f, 4.7f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _jellyfish!!
     }
 
@@ -1467,8 +1448,7 @@ val Icons.Filled.Mushroom: ImageVector
                 curveTo(20.1f, 11.1f, 18.0f, 13.1f, 15.5f, 13.1f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _mushroom!!
     }
 
@@ -1522,8 +1502,7 @@ val Icons.Filled.Oil: ImageVector
                 curveTo(15.0f, 14.68f, 13.66f, 16.0f, 12.0f, 16.0f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _oil!!
     }
 
@@ -1669,8 +1648,7 @@ val Icons.Filled.Peanut: ImageVector
                 )
                 close()
             }
-        }
-            .build()
+        }.build()
         return _peanut!!
     }
 
@@ -1726,8 +1704,7 @@ val Icons.Filled.Shaker: ImageVector
                 curveTo(8.0f, 11.46f, 8.0f, 12.09f, 8.39f, 12.5f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _shaker!!
     }
 
@@ -1783,8 +1760,7 @@ val Icons.Filled.Steak: ImageVector
                 lineTo(16.0f, 9.2f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _steak!!
     }
 
@@ -1792,11 +1768,11 @@ private var _steak: ImageVector? = null
 
 val Icons.Filled.BorderRadius: ImageVector
     get() {
-        if (_borderradius != null) {
-            return _borderradius!!
+        if (_borderRadius != null) {
+            return _borderRadius!!
         }
-        _borderradius = Builder(
-            name = "Borderradius", defaultWidth = 24.0.dp, defaultHeight =
+        _borderRadius = Builder(
+            name = "BorderRadius", defaultWidth = 24.0.dp, defaultHeight =
             24.0.dp, viewportWidth = 24.0f, viewportHeight = 24.0f
         ).apply {
             path(
@@ -1842,12 +1818,11 @@ val Icons.Filled.BorderRadius: ImageVector
                 horizontalLineTo(8.0f)
                 close()
             }
-        }
-            .build()
-        return _borderradius!!
+        }.build()
+        return _borderRadius!!
     }
 
-private var _borderradius: ImageVector? = null
+private var _borderRadius: ImageVector? = null
 
 val Icons.Filled.Milk: ImageVector
     get() {
@@ -1948,8 +1923,7 @@ val Icons.Filled.Milk: ImageVector
                 curveTo(9.7f, 13.3f, 10.8f, 13.3f, 12.0f, 13.3f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _milk!!
     }
 
@@ -2054,8 +2028,7 @@ val Icons.Filled.DriedGrape: ImageVector
                 curveTo(14.2f, 12.0f, 14.6f, 12.2f, 14.7f, 12.2f)
                 close()
             }
-        }
-            .build()
+        }.build()
         return _driedGrape!!
     }
 

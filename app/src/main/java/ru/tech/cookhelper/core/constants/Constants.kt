@@ -8,7 +8,7 @@ object Constants {
 
     const val HOST_URL = "10.39.12.27:8080"
 
-    const val BASE_URL = "https://$HOST_URL/"
+    const val BASE_URL = "http://$HOST_URL/"
 
     const val WS_BASE_URL = "ws://$HOST_URL/"
 

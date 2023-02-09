@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.ui.widgets
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState

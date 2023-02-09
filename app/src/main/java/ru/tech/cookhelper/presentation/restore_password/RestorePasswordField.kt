@@ -29,9 +29,6 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.Loading
-import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.authentication.components.OTPField
 import ru.tech.cookhelper.presentation.restore_password.components.RestoreState
 import ru.tech.cookhelper.presentation.restore_password.viewModel.RestorePasswordViewModel
@@ -43,6 +40,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalComposeUiApi

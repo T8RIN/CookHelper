@@ -18,8 +18,8 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Reply
 import ru.tech.cookhelper.domain.model.getRating
 import ru.tech.cookhelper.domain.model.userRate
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.profile.components.AuthorBubble
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import java.text.SimpleDateFormat
 import java.util.*
 

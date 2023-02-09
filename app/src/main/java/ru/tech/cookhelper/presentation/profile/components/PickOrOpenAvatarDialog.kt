@@ -24,10 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.close

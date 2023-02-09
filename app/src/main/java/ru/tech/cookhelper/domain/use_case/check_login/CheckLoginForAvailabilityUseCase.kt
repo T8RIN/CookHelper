@@ -8,6 +8,7 @@ class CheckLoginForAvailabilityUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     /*TODO: remove when api will work again */
-    suspend operator fun invoke(login: String): Action<Boolean> = Action.Success(true)
-    //userRepository.checkLoginForAvailability(login)
+    suspend operator fun invoke(
+        login: String
+    ): Action<Boolean> = userRepository.checkLoginForAvailability(login)
 }

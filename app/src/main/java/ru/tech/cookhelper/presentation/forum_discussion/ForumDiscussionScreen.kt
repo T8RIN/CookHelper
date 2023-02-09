@@ -34,11 +34,6 @@ import ru.tech.cookhelper.core.constants.Constants.LOREM_IPSUM
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Reply
 import ru.tech.cookhelper.domain.model.User
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.app.components.Placeholder
-import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.forum_discussion.components.FloatingActionButtonWithExtras
 import ru.tech.cookhelper.presentation.forum_discussion.components.ForumReplyItem
 import ru.tech.cookhelper.presentation.forum_discussion.components.RatingButton
@@ -59,9 +54,13 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingU
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
+import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.domain.model.getLastAvatar
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 
 @Composable
 fun MainModalDrawerHeader(userState: UserState, onClick: () -> Unit) {

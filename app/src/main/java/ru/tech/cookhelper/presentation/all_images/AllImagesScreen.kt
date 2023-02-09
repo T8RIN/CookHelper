@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.all_images.components.AdaptiveVerticalGrid
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
@@ -35,6 +34,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

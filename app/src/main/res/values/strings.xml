@@ -251,4 +251,5 @@
     <string name="clipboard_paste_invalid_empty">Nothing to paste</string>
     <string name="argb" translatable="false">ARGB</string>
     <string name="color">Color</string>
+    <string name="product">Product</string>
 </resources>

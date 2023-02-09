@@ -37,9 +37,6 @@ import androidx.core.view.WindowInsetsCompat
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.Loading
-import ru.tech.cookhelper.presentation.app.components.Placeholder
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.chat.components.MessageBubbleItem
 import ru.tech.cookhelper.presentation.chat.components.MessageHeader
 import ru.tech.cookhelper.presentation.chat.viewModel.ChatViewModel
@@ -51,9 +48,11 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isLastItemVi
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
+import ru.tech.cookhelper.presentation.ui.widgets.Loading
 import java.text.SimpleDateFormat
 import java.util.*
 

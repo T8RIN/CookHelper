@@ -25,7 +25,7 @@
     <string name="stay">Остаться</string>
     <string name="exit">Выйти</string>
     <string name="app_theme_mode">Тема приложения</string>
-    <string name="dynamic_сolors">Динамечские цвета</string>
+    <string name="dynamic_сolors">Динамичские цвета</string>
     <string name="cart_connection">Связь корзины и холодильника</string>
     <string name="color_scheme">Цветовая палитра</string>
     <string name="dynamic_colors_subtitle">При включении, тема приложения будет подстраиваться под ваши текущие обои (Необходим Android версии 12 и выше)</string>

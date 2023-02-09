@@ -21,13 +21,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.LockScreenOrientation
-import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.authentication.components.LockScreenOrientation
 import ru.tech.cookhelper.presentation.confirm_email.ConfirmEmailField
 import ru.tech.cookhelper.presentation.login_screen.LoginField
 import ru.tech.cookhelper.presentation.registration_screen.RegistrationField
 import ru.tech.cookhelper.presentation.restore_password.RestorePasswordField
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
 

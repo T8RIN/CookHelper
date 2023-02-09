@@ -17,12 +17,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
 import ru.tech.cookhelper.presentation.edit_profile.components.EditProfileItem
 import ru.tech.cookhelper.presentation.edit_profile.viewModel.EditProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,7 +112,7 @@ fun EditProfileScreen(
                     isError = !viewModel.emailState.isValid,
                     supportingText = { isError ->
                         Text(viewModel.emailState.error.asString())
-                        isError
+                        //TODO: cock
                     },
                     singleLine = true,
                     startIcon = Icons.Outlined.Email,

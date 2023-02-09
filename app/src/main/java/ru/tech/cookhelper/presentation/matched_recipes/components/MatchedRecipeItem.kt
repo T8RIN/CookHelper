@@ -25,11 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.MatchedRecipe
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 import ru.tech.cookhelper.presentation.ui.theme.Green
 import ru.tech.cookhelper.presentation.ui.theme.Orange
 import ru.tech.cookhelper.presentation.ui.theme.Red
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 
 @Composable
 fun MatchedRecipeItem(matchedRecipe: MatchedRecipe, onClick: () -> Unit) {

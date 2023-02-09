@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.ui.widgets
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -176,7 +176,7 @@ fun AppBarActions(
 @Composable
 fun <S> AppBarTitle(
     targetState: S,
-    content: @Composable() AnimatedVisibilityScope.(targetState: S) -> Unit
+    content: @Composable AnimatedVisibilityScope.(targetState: S) -> Unit
 ) {
     AnimatedContent(
         targetState = targetState,

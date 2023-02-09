@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.domain.model.User
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.LikeColor
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.android.ShareUtils.shareWith
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import java.text.SimpleDateFormat
 import java.util.*
 

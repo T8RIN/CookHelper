@@ -23,7 +23,6 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.isCurrentDestination
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainModalDrawerContent(
     userState: UserState,

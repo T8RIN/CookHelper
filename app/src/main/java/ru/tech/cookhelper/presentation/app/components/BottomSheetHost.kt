@@ -6,11 +6,11 @@ import androidx.compose.ui.Modifier
 import dev.olshevski.navigation.reimagined.NavHost
 import dev.olshevski.navigation.reimagined.popAll
 import ru.tech.cookhelper.presentation.forum_screen.components.ForumFilterBottomSheet
-import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.ModalBottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.provider.BottomSheetController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalBottomSheetController
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
+import ru.tech.cookhelper.presentation.ui.widgets.bottomsheet.ModalBottomSheet
 
 @Composable
 fun BottomSheetHost(

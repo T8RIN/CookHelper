@@ -31,11 +31,11 @@ import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.app.MainActivity
-import ru.tech.cookhelper.presentation.app.components.GlobalExceptionHandler.Companion.getExceptionString
 import ru.tech.cookhelper.presentation.app.components.ToastHost
 import ru.tech.cookhelper.presentation.crash_screen.viewModel.CrashViewModel
 import ru.tech.cookhelper.presentation.ui.theme.CookHelperTheme
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
+import ru.tech.cookhelper.presentation.ui.utils.android.exception.GlobalExceptionHandler.Companion.getExceptionString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState

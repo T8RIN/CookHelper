@@ -8,6 +8,7 @@ class CheckEmailForAvailabilityUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     /*TODO: remove when api will work again */
-    suspend operator fun invoke(email: String): Action<Boolean> = Action.Success(true)
-    //userRepository.checkEmailForAvailability(email)
+    suspend operator fun invoke(
+        email: String
+    ): Action<Boolean> = userRepository.checkEmailForAvailability(email)
 }

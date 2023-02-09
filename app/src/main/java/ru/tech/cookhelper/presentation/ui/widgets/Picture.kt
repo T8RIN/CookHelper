@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.ui.utils.compose.widgets
 
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.shape.CircleShape
@@ -29,9 +29,9 @@ import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.hideSyste
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.isSystemBarsHidden
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.compose.shimmer
-import ru.tech.cookhelper.presentation.ui.utils.compose.zooomable.ZoomParams
-import ru.tech.cookhelper.presentation.ui.utils.compose.zooomable.Zoomable
-import ru.tech.cookhelper.presentation.ui.utils.compose.zooomable.rememberZoomableState
+import ru.tech.cookhelper.presentation.ui.widgets.zooomable.ZoomParams
+import ru.tech.cookhelper.presentation.ui.widgets.zooomable.Zoomable
+import ru.tech.cookhelper.presentation.ui.widgets.zooomable.rememberZoomableState
 
 @Composable
 fun Picture(

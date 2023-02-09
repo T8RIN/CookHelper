@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.blend
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 
 @Suppress("PropertyName")
@@ -540,19 +541,19 @@ sealed interface ColorScheme {
         override val md_theme_light_onPrimaryContainer = Color(0xFF410000)
         override val md_theme_light_secondary = Color(0xFF775651)
         override val md_theme_light_onSecondary = Color(0xFFffffff)
-        override val md_theme_light_secondaryContainer = Color(0xFFE9BCB3)
+        override val md_theme_light_secondaryContainer = Color(0xFFF0B7AA)
         override val md_theme_light_onSecondaryContainer = Color(0xFF2c1511)
         override val md_theme_light_tertiary = Color(0xFF4A702E)
         override val md_theme_light_onTertiary = Color(0xFFffffff)
-        override val md_theme_light_tertiaryContainer = Color(0xFFAADB97)
+        override val md_theme_light_tertiaryContainer = Color(0xFF9AC988)
         override val md_theme_light_onTertiaryContainer = Color(0xFF162600)
         override val md_theme_light_error = Color(0xFFba1b1b)
         override val md_theme_light_errorContainer = Color(0xFFffdad4)
         override val md_theme_light_onError = Color(0xFFffffff)
         override val md_theme_light_onErrorContainer = Color(0xFF410001)
-        override val md_theme_light_background = Color(0xFFFFCDCD)
+        override val md_theme_light_background = Color(0xFFFFE2E2)
         override val md_theme_light_onBackground = Color(0xFF201a19)
-        override val md_theme_light_surface = Color(0xFFFFCDCD)
+        override val md_theme_light_surface = Color(0xFFFFE2E2)
         override val md_theme_light_onSurface = Color(0xFF201a19)
         override val md_theme_light_surfaceVariant = Color(0xFFE4C6C1)
         override val md_theme_light_onSurfaceVariant = Color(0xFF534341)
@@ -568,7 +569,7 @@ sealed interface ColorScheme {
         override val md_theme_dark_onPrimaryContainer = Color(0xFFffdad3)
         override val md_theme_dark_secondary = Color(0xFFe7bdb6)
         override val md_theme_dark_onSecondary = Color(0xFF442925)
-        override val md_theme_dark_secondaryContainer = Color(0xFF5d3f3a)
+        override val md_theme_dark_secondaryContainer = Color(0xFF613129)
         override val md_theme_dark_onSecondaryContainer = Color(0xFFffdad3)
         override val md_theme_dark_tertiary = Color(0xFFA5DE8C)
         override val md_theme_dark_onTertiary = Color(0xFF1C3E04)
@@ -821,3 +822,20 @@ inline val Green: Color
 inline val Gray: Color
     @Composable
     get() = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
+
+
+inline val androidx.compose.material3.ColorScheme.mixedColor: Color
+    @Composable get() = run {
+        primaryContainer.blend(
+            tertiaryContainer,
+            0.7f
+        )
+    }
+
+inline val androidx.compose.material3.ColorScheme.onMixedColor: Color
+    @Composable get() = run {
+        onPrimaryContainer.blend(
+            onTertiaryContainer,
+            0.7f
+        )
+    }

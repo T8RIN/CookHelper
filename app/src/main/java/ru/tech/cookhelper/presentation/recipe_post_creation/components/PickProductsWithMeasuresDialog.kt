@@ -17,7 +17,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -33,8 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Product
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.recipe_post_creation.stripToDouble
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
@@ -42,10 +39,11 @@ import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.toMutableStateMap
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
+import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
+import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
 
 @OptIn(
     ExperimentalAnimationApi::class,
-    ExperimentalComposeUiApi::class,
     ExperimentalMaterial3Api::class
 )
 @Composable

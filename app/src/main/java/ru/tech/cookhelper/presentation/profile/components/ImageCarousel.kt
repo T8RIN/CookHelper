@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 
 @OptIn(ExperimentalMaterial3Api::class)

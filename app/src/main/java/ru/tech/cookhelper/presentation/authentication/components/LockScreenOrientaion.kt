@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.authentication.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect

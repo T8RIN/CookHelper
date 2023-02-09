@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet
+package ru.tech.cookhelper.presentation.ui.widgets.bottomsheet
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.Canvas

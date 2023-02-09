@@ -10,10 +10,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
-import ru.tech.cookhelper.presentation.app.components.NavigationBarsSpacer
 import ru.tech.cookhelper.presentation.settings.components.*
 import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
 import ru.tech.cookhelper.presentation.ui.theme.invoke
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.NavigationBarsSpacer
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarVisuals

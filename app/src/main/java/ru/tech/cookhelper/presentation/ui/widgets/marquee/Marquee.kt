@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.ui.widgets.marquee
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -42,7 +42,13 @@ fun Marquee(
     LaunchedEffect(layoutInfoState.value) {
         val ltr = params.direction == LayoutDirection.Ltr
 
-        val layoutInfo = layoutInfoState.value ?: return@LaunchedEffect
+        val layoutInfo = layoutInfoState.value
+
+        if (layoutInfo == null) {
+            xOffset = 0
+            return@LaunchedEffect
+        }
+
         if (layoutInfo.width <= layoutInfo.containerWidth) return@LaunchedEffect
 
         val duration =

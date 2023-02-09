@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import ru.tech.cookhelper.presentation.app.components.Picture
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 
 @Composable
 fun ChatPicture(

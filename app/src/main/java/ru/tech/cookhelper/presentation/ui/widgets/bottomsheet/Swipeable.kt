@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet
+package ru.tech.cookhelper.presentation.ui.widgets.bottomsheet
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
@@ -28,9 +28,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
-import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.SwipeableDefaults.StandardResistanceFactor
-import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.SwipeableDefaults.VelocityThreshold
-import ru.tech.cookhelper.presentation.ui.utils.compose.bottomsheet.SwipeableDefaults.resistanceConfig
+import ru.tech.cookhelper.presentation.ui.widgets.bottomsheet.SwipeableDefaults.StandardResistanceFactor
+import ru.tech.cookhelper.presentation.ui.widgets.bottomsheet.SwipeableDefaults.VelocityThreshold
+import ru.tech.cookhelper.presentation.ui.widgets.bottomsheet.SwipeableDefaults.resistanceConfig
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.sign

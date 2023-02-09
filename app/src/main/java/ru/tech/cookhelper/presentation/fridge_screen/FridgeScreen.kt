@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.kotlin.cptlize
-import ru.tech.cookhelper.presentation.app.components.Placeholder
 import ru.tech.cookhelper.presentation.fridge_screen.components.ProductItem
 import ru.tech.cookhelper.presentation.fridge_screen.viewModel.FridgeViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
@@ -31,6 +30,7 @@ import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SausageOff
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog

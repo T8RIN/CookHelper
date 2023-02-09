@@ -13,6 +13,7 @@ import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.Recipe
 import ru.tech.cookhelper.presentation.ui.theme.Fridge
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
+import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 
 sealed class Screen(
     open val title: UIText = UIText.Empty(),
@@ -167,6 +168,14 @@ sealed class Screen(
         val imageUrl: String?,
         val chatId: Long,
     ) : Screen(showTopAppBar = false)
+
+    @Parcelize
+    object Buttons : Screen(
+        title = UIText(R.string.buttons_preview),
+        shortTitle = UIText(R.string.buttons_preview),
+        baseIcon = Icons.Outlined.ToggleOn,
+        selectedIcon = Icons.Filled.ToggleOn
+    )
 }
 
 val drawerList = listOf(

@@ -30,10 +30,6 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.constants.Constants.DOTS
 import ru.tech.cookhelper.core.utils.kotlin.cptlize
 import ru.tech.cookhelper.domain.model.Recipe
-import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.app.components.TopAppBar
-import ru.tech.cookhelper.presentation.app.components.TopAppBarSize
-import ru.tech.cookhelper.presentation.app.components.containerColorWithCollapse
 import ru.tech.cookhelper.presentation.forum_screen.components.IndicatorType
 import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_details.viewModel.RecipeDetailsViewModel
@@ -42,6 +38,10 @@ import ru.tech.cookhelper.presentation.ui.theme.scrimColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.stringResourceListOf
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
+import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
+import ru.tech.cookhelper.presentation.ui.widgets.TopAppBarSize
+import ru.tech.cookhelper.presentation.ui.widgets.containerColorWithCollapse
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)

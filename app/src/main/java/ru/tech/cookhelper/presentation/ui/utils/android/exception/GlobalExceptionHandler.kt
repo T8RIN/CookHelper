@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.app.components
+package ru.tech.cookhelper.presentation.ui.utils.android.exception
 
 import android.app.Activity
 import android.content.Context
@@ -13,45 +13,42 @@ class GlobalExceptionHandler<T : Activity> private constructor(
 ) : Thread.UncaughtExceptionHandler {
 
     override fun uncaughtException(p0: Thread, p1: Throwable) {
-        try {
+        kotlin.runCatching {
             Log.e(this.toString(), p1.stackTraceToString())
-            launchActivity(applicationContext, activityToBeLaunched, p1)
+            applicationContext.launchActivity(activityToBeLaunched, p1)
             exitProcess(0)
-        } catch (e: Exception) {
+        }.getOrElse {
             defaultHandler.uncaughtException(p0, p1)
         }
     }
 
-    private fun <T : Activity> launchActivity(
-        applicationContext: Context,
+    private fun <T : Activity> Context.launchActivity(
         activity: Class<T>,
         exception: Throwable
     ) {
         val crashedIntent = Intent(applicationContext, activity).apply {
             putExtra(INTENT_DATA_NAME, "$exception\n${Log.getStackTraceString(exception)}")
-            addFlags(
-                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                        Intent.FLAG_ACTIVITY_NEW_TASK or
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
-            )
+            addFlags(defFlags)
         }
         applicationContext.startActivity(crashedIntent)
     }
 
     companion object {
         private const val INTENT_DATA_NAME = "GlobalExceptionHandler"
+        private const val defFlags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         fun <T : Activity> initialize(
             applicationContext: Context,
             activityToBeLaunched: Class<T>
-        ) {
-            val handler = GlobalExceptionHandler(
+        ) = Thread.setDefaultUncaughtExceptionHandler(
+            GlobalExceptionHandler(
                 applicationContext,
                 Thread.getDefaultUncaughtExceptionHandler() as Thread.UncaughtExceptionHandler,
                 activityToBeLaunched
             )
-            Thread.setDefaultUncaughtExceptionHandler(handler)
-        }
+        )
 
         fun Activity.getExceptionString(): String = intent.getStringExtra(INTENT_DATA_NAME) ?: ""
     }

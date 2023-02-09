@@ -35,8 +35,6 @@ import androidx.core.os.LocaleListCompat
 import com.cookhelper.dynamic.theme.rememberColorScheme
 import ru.tech.cookhelper.BuildConfig
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.Marquee
-import ru.tech.cookhelper.presentation.app.components.Picture
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.*
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getCurrentLocaleString
@@ -44,11 +42,13 @@ import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getLanguage
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.utils.provider.show
+import ru.tech.cookhelper.presentation.ui.widgets.marquee.Marquee
 
 @Composable
 fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
@@ -66,15 +66,13 @@ fun SettingsState.ThemeOption(insertSetting: (id: Int, option: Any) -> Unit) {
             )
         }
         if (expanded) {
-            Marquee {
-                ToggleGroupButton(
-                    items = listOf(R.string.dark, R.string.light, R.string.system),
-                    selectedIndex = nightMode.ordinal,
-                    indexChanged = {
-                        insertSetting(Setting.NIGHT_MODE.ordinal, it)
-                    }
-                )
-            }
+            ToggleGroupButton(
+                items = listOf(R.string.dark, R.string.light, R.string.system),
+                selectedIndex = nightMode.ordinal,
+                indexChanged = {
+                    insertSetting(Setting.NIGHT_MODE.ordinal, it)
+                }
+            )
             Spacer(modifier = Modifier.height(8.dp))
         }
         Separator()

@@ -26,14 +26,13 @@ import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.constants.Constants
 import ru.tech.cookhelper.domain.model.ForumFilters
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.forum_discussion.components.TagItem
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.settings.components.ToggleGroupButton
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.harmonizeWithPrimary
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalBottomSheetController
 import ru.tech.cookhelper.presentation.ui.utils.provider.close
+import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

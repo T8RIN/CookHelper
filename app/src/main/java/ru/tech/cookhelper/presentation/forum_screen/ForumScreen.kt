@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.ForumFilters
-import ru.tech.cookhelper.presentation.app.components.containerColorWithScroll
 import ru.tech.cookhelper.presentation.forum_screen.components.SearchBox
 import ru.tech.cookhelper.presentation.forum_screen.components.TabRow
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
@@ -32,6 +31,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingU
 import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
+import ru.tech.cookhelper.presentation.ui.widgets.containerColorWithScroll
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable

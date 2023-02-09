@@ -28,9 +28,6 @@ import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
-import ru.tech.cookhelper.presentation.app.components.CozyTextField
-import ru.tech.cookhelper.presentation.app.components.Loading
-import ru.tech.cookhelper.presentation.app.components.TextFieldAppearance
 import ru.tech.cookhelper.presentation.registration_screen.viewModel.RegistrationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
@@ -39,6 +36,7 @@ import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
+import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi

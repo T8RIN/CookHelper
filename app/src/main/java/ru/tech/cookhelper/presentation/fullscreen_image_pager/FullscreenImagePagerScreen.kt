@@ -27,11 +27,11 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
-import ru.tech.cookhelper.presentation.app.components.AnimatedTopAppBar
-import ru.tech.cookhelper.presentation.app.components.Loading
-import ru.tech.cookhelper.presentation.app.components.Picture
-import ru.tech.cookhelper.presentation.app.components.Placeholder
-import ru.tech.cookhelper.presentation.ui.utils.compose.zooomable.ZoomParams
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
+import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
+import ru.tech.cookhelper.presentation.ui.widgets.AnimatedTopAppBar
+import ru.tech.cookhelper.presentation.ui.widgets.Loading
+import ru.tech.cookhelper.presentation.ui.widgets.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
