@@ -187,7 +187,9 @@ private fun FridgeBlock() {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(8.dp),
-            pagerState = state
+            pagerState = state,
+            inactiveColor = MaterialTheme.colorScheme.surfaceVariant,
+            activeColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

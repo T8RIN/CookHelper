@@ -99,9 +99,7 @@ fun CookHelperTheme(
                 dynamicLightColorScheme(context)
             }.toBlack(pureBlack = LocalSettingsProvider.current.pureBlack)
         }
-        else -> {
-            LocalSettingsProvider.current.getColorScheme()
-        }
+        else -> LocalSettingsProvider.current.getColorScheme()
     }
 
     val systemUiController = rememberSystemUiController()
