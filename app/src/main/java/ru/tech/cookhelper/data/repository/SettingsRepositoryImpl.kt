@@ -12,11 +12,14 @@ class SettingsRepositoryImpl @Inject constructor(
     private val settingsDao: SettingsDao
 ) : SettingsRepository {
 
-    override fun getSettings(): Flow<List<Setting>> =
-        settingsDao.getSettings()
+    override fun getSettingsFlow(): Flow<List<Setting>> =
+        settingsDao.getSettingsFlow()
             .map { settingsList ->
                 settingsList.map { entity -> entity.asDomain() }
             }
+
+    override suspend fun getSettings(): List<Setting> =
+        settingsDao.getSettings().map { it.asDomain() }
 
     override suspend fun insertSetting(id: Int, option: String) {
         settingsDao.insertSetting(SettingsEntity(id, option))

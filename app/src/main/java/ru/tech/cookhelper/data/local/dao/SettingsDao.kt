@@ -11,7 +11,10 @@ import ru.tech.cookhelper.data.local.entity.SettingsEntity
 interface SettingsDao {
 
     @Query("SELECT * FROM settingsentity")
-    fun getSettings(): Flow<List<SettingsEntity>>
+    fun getSettingsFlow(): Flow<List<SettingsEntity>>
+
+    @Query("SELECT * FROM settingsentity")
+    suspend fun getSettings(): List<SettingsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSetting(setting: SettingsEntity)

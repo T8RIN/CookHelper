@@ -5,7 +5,9 @@ import ru.tech.cookhelper.domain.model.Setting
 
 interface SettingsRepository {
 
-    fun getSettings(): Flow<List<Setting>>
+    fun getSettingsFlow(): Flow<List<Setting>>
+
+    suspend fun getSettings(): List<Setting>
 
     suspend fun insertSetting(id: Int, option: String)
 
