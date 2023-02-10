@@ -6,7 +6,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -94,7 +93,11 @@ fun CookHelperTheme(
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (isDarkMode()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (isDarkMode()) {
+                dynamicDarkColorScheme(context)
+            } else {
+                dynamicLightColorScheme(context)
+            }.toBlack(pureBlack = LocalSettingsProvider.current.pureBlack)
         }
         else -> {
             LocalSettingsProvider.current.getColorScheme()
@@ -141,7 +144,7 @@ fun isDarkMode() = when (LocalSettingsProvider.current.nightMode) {
 @Composable
 fun SettingsState.getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
     return colorScheme.run {
-        if (this == null) rememberColorScheme(isDarkTheme = darkTheme, color = Color(customAccent))
+        if (this == null) rememberColorScheme(isDarkTheme = darkTheme, color = customAccent)
         else if (darkTheme) DarkThemeColors
         else LightThemeColors
     }.toBlack(pureBlack = pureBlack)
@@ -159,13 +162,11 @@ fun ColorScheme.toColorScheme(
 @Composable
 fun Material3ColorScheme.toBlack(pureBlack: Boolean) = run {
     val darkMode = isDarkMode()
-    remember(pureBlack, darkMode) {
-        if (pureBlack && darkMode) copy(
-            surface = Color.Black,
-            background = Color.Black
-        )
-        else this
-    }
+    if (pureBlack && darkMode) copy(
+        surface = Color.Black,
+        background = Color.Black
+    )
+    else this
 }
 
 @Composable

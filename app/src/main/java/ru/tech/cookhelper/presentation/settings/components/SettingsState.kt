@@ -3,9 +3,9 @@ package ru.tech.cookhelper.presentation.settings.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.app.viewModel.toBoolean
 import ru.tech.cookhelper.presentation.ui.theme.ColorScheme
 import ru.tech.cookhelper.presentation.ui.theme.colorList
 import ru.tech.cookhelper.domain.model.Setting as ModelSetting
@@ -17,7 +17,7 @@ data class SettingsState(
     val nightMode: NightMode = NightMode.SYSTEM,
     val language: String = "",
     val fontScale: Float = 1f,
-    val customAccent: Int = Color.Blue.toArgb(),
+    val customAccent: Color = Color.Blue,
     val pureBlack: Boolean = false,
     val keepScreenOn: Boolean = true
 )
@@ -73,31 +73,52 @@ val Setting.subtitle: Int?
         }
     }
 
-private inline operator fun <reified T> List<ModelSetting>.get(setting: Setting): T? {
-    val option = getOrNull(setting.ordinal)?.option
-    return when (T::class) {
-        Boolean::class -> option?.toBooleanStrictOrNull()
-        Int::class -> option?.toIntOrNull()
-        Float::class -> option?.toFloatOrNull()
-        String::class -> option
-        else -> null
-    } as? T
-}
-
-private fun Int?.toNightMode(): NightMode =
-    enumValues<NightMode>()[this ?: NightMode.SYSTEM.ordinal]
-
 fun List<ModelSetting>.mapToState(): SettingsState {
-    val list = this.sortedBy { it.id }
-    return SettingsState(
-        dynamicColors = list[Setting.DYNAMIC_COLORS] ?: true,
-        customAccent = list[Setting.CUSTOM_ACCENT] ?: Color.Blue.toArgb(),
-        colorScheme = colorList.getOrNull(list.get<Int>(Setting.COLOR_SCHEME) ?: -1),
-        nightMode = list.get<Int>(Setting.NIGHT_MODE).toNightMode(),
-        cartConnection = list[Setting.CART_CONNECTION] ?: true,
-        language = list[Setting.LANGUAGE] ?: "",
-        fontScale = list[Setting.FONT_SCALE] ?: 1f,
-        pureBlack = list[Setting.PURE_BLACK] ?: false,
-        keepScreenOn = list[Setting.KEEP_SCREEN_ON] ?: false,
-    )
+    var state = SettingsState()
+    forEach { setting ->
+        when (setting.id) {
+            Setting.DYNAMIC_COLORS.ordinal -> {
+                state = state.copy(dynamicColors = setting.option.toBoolean())
+            }
+            Setting.CUSTOM_ACCENT.ordinal -> {
+                state = state.copy(
+                    customAccent = setting.option.toLongOrNull()?.let { Color(it) } ?: Color.Blue
+                )
+            }
+            Setting.COLOR_SCHEME.ordinal -> {
+                val index = setting.option.toIntOrNull() ?: -1
+                state = state.copy(colorScheme = colorList.getOrNull(index))
+            }
+            Setting.NIGHT_MODE.ordinal -> {
+                val index = setting.option.toIntOrNull() ?: NightMode.SYSTEM.ordinal
+                state = state.copy(nightMode = enumValues<NightMode>()[index])
+            }
+            Setting.CART_CONNECTION.ordinal -> {
+                state = state.copy(
+                    cartConnection = setting.option.toBoolean()
+                )
+            }
+            Setting.LANGUAGE.ordinal -> {
+                state = state.copy(
+                    language = setting.option
+                )
+            }
+            Setting.FONT_SCALE.ordinal -> {
+                state = state.copy(
+                    fontScale = setting.option.toFloatOrNull() ?: 1f
+                )
+            }
+            Setting.PURE_BLACK.ordinal -> {
+                state = state.copy(
+                    pureBlack = setting.option.toBooleanStrictOrNull() ?: false
+                )
+            }
+            Setting.KEEP_SCREEN_ON.ordinal -> {
+                state = state.copy(
+                    keepScreenOn = setting.option.toBooleanStrictOrNull() ?: false
+                )
+            }
+        }
+    }
+    return state
 }

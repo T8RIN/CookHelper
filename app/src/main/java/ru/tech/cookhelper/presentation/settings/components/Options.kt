@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -136,7 +135,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         selected = colorScheme == null,
                         colorScheme = rememberColorScheme(
                             isDarkTheme = isDarkMode(),
-                            color = Color(customAccent)
+                            color = customAccent
                         ).toBlack(pureBlack),
                         onClick = {
                             if (colorScheme == null) showColorPicker = true
@@ -176,7 +175,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
 
     if (showColorPicker) {
         ColorDialog(
-            color = Color(customAccent),
+            color = customAccent,
             onDismissRequest = { showColorPicker = false },
             onColorChange = { insertSetting(Setting.CUSTOM_ACCENT.ordinal, it) }
         )
