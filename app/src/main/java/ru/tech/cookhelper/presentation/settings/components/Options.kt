@@ -136,7 +136,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         selected = colorScheme == null,
                         colorScheme = rememberColorScheme(
                             isDarkTheme = isDarkMode(),
-                            color = customAccent
+                            color = Color(customAccent)
                         ).run {
                             val darkMode = isDarkMode()
                             remember(this) {
@@ -185,7 +185,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
 
     if (showColorPicker) {
         ColorDialog(
-            color = customAccent,
+            color = Color(customAccent),
             onDismissRequest = { showColorPicker = false },
             onColorChange = { insertSetting(Setting.CUSTOM_ACCENT.ordinal, it) }
         )

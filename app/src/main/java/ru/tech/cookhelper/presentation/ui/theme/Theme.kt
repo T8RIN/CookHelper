@@ -140,7 +140,7 @@ fun isDarkMode() = when (LocalSettingsProvider.current.nightMode) {
 @Composable
 fun SettingsState.getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
     return colorScheme.run {
-        if (this == null) rememberColorScheme(isDarkTheme = darkTheme, color = customAccent)
+        if (this == null) rememberColorScheme(isDarkTheme = darkTheme, color = Color(customAccent))
         else if (darkTheme) DarkThemeColors
         else LightThemeColors
     }.run {
