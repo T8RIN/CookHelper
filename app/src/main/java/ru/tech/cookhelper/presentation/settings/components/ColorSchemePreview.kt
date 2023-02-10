@@ -166,13 +166,11 @@ private fun FridgeBlock() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .drawBehind {
-                                    if (it != 2) {
-                                        drawRect(
-                                            color,
-                                            size = this.size.copy(width = width),
-                                            topLeft = Offset(x = this.size.width, y = 0f)
-                                        )
-                                    }
+                                    drawRect(
+                                        color,
+                                        size = this.size.copy(width = width),
+                                        topLeft = Offset(x = this.size.width, y = 0f)
+                                    )
                                 }
                                 .padding(start = 8.dp),
                             product = product,
