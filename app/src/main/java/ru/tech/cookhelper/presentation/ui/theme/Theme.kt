@@ -96,15 +96,7 @@ fun CookHelperTheme(
             if (isDarkMode()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         else -> {
-            with(LocalSettingsProvider.current) {
-                getColorScheme().run {
-                    if (pureBlack && isDarkMode()) copy(
-                        surface = Color.Black,
-                        background = Color.Black
-                    )
-                    else this
-                }
-            }
+            LocalSettingsProvider.current.getColorScheme()
         }
     }
 
@@ -147,18 +139,32 @@ fun isDarkMode() = when (LocalSettingsProvider.current.nightMode) {
 
 @Composable
 fun SettingsState.getColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
-    if (colorScheme == null) {
-        return rememberColorScheme(isDarkTheme = darkTheme, color = customAccent)
-    } else colorScheme.apply {
-        return if (darkTheme) DarkThemeColors
+    return colorScheme.run {
+        if (this == null) rememberColorScheme(isDarkTheme = darkTheme, color = customAccent)
+        else if (darkTheme) DarkThemeColors
         else LightThemeColors
+    }.run {
+        if (pureBlack && isDarkMode()) copy(
+            surface = Color.Black,
+            background = Color.Black
+        )
+        else this
     }
 }
 
 @Composable
-fun ColorScheme.toColorScheme(darkTheme: Boolean = isDarkMode()): Material3ColorScheme {
-    return if (darkTheme) DarkThemeColors
+fun ColorScheme.toColorScheme(
+    settingsState: SettingsState = LocalSettingsProvider.current
+): Material3ColorScheme {
+    val scheme = if (isDarkMode()) DarkThemeColors
     else LightThemeColors
+    return scheme.run {
+        if (settingsState.pureBlack && isDarkMode()) copy(
+            surface = Color.Black,
+            background = Color.Black
+        )
+        else this
+    }
 }
 
 @Composable

@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -136,7 +137,16 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         colorScheme = rememberColorScheme(
                             isDarkTheme = isDarkMode(),
                             color = customAccent
-                        ),
+                        ).run {
+                            val darkMode = isDarkMode()
+                            remember(this) {
+                                if (pureBlack && darkMode) copy(
+                                    surface = Color.Black,
+                                    background = Color.Black
+                                )
+                                else this
+                            }
+                        },
                         onClick = {
                             if (colorScheme == null) showColorPicker = true
                             insertSetting(option.ordinal, null)
