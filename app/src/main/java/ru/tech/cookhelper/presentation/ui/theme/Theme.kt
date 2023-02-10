@@ -1,12 +1,12 @@
 package ru.tech.cookhelper.presentation.ui.theme
 
-import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -15,6 +15,7 @@ import com.cookhelper.dynamic.theme.rememberColorScheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.tech.cookhelper.presentation.settings.components.NightMode
 import ru.tech.cookhelper.presentation.settings.components.SettingsState
+import ru.tech.cookhelper.presentation.ui.utils.android.ConfigurationUtils.isLandscape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createInverseSecondaryColor
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.darken
 import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.lighten
@@ -102,7 +103,7 @@ fun CookHelperTheme(
 
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = !isDarkMode()
-    val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val landscape = LocalConfiguration.current.isLandscape
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -143,13 +144,7 @@ fun SettingsState.getColorScheme(darkTheme: Boolean = isDarkMode()): Material3Co
         if (this == null) rememberColorScheme(isDarkTheme = darkTheme, color = Color(customAccent))
         else if (darkTheme) DarkThemeColors
         else LightThemeColors
-    }.run {
-        if (pureBlack && isDarkMode()) copy(
-            surface = Color.Black,
-            background = Color.Black
-        )
-        else this
-    }
+    }.toBlack(pureBlack = pureBlack)
 }
 
 @Composable
@@ -158,8 +153,14 @@ fun ColorScheme.toColorScheme(
 ): Material3ColorScheme {
     val scheme = if (isDarkMode()) DarkThemeColors
     else LightThemeColors
-    return scheme.run {
-        if (settingsState.pureBlack && isDarkMode()) copy(
+    return scheme.toBlack(pureBlack = settingsState.pureBlack)
+}
+
+@Composable
+fun Material3ColorScheme.toBlack(pureBlack: Boolean) = run {
+    val darkMode = isDarkMode()
+    remember(pureBlack, darkMode) {
+        if (pureBlack && darkMode) copy(
             surface = Color.Black,
             background = Color.Black
         )

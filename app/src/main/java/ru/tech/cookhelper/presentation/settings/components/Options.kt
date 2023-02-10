@@ -137,16 +137,7 @@ fun SettingsState.ColorSchemeOption(insertSetting: (id: Int, option: Any?) -> Un
                         colorScheme = rememberColorScheme(
                             isDarkTheme = isDarkMode(),
                             color = Color(customAccent)
-                        ).run {
-                            val darkMode = isDarkMode()
-                            remember(this) {
-                                if (pureBlack && darkMode) copy(
-                                    surface = Color.Black,
-                                    background = Color.Black
-                                )
-                                else this
-                            }
-                        },
+                        ).toBlack(pureBlack),
                         onClick = {
                             if (colorScheme == null) showColorPicker = true
                             insertSetting(option.ordinal, null)

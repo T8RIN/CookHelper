@@ -1,7 +1,6 @@
 package ru.tech.cookhelper.presentation.profile.components
 
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -16,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
+import ru.tech.cookhelper.presentation.ui.utils.android.ContentUtils.pickImage
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 
@@ -77,7 +77,7 @@ fun PostCreationBlock(onCreateRecipe: () -> Unit, onCreatePost: (imageUri: Strin
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                     contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                 ),
-                onClick = { resultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+                onClick = { resultLauncher.pickImage() }
             ) {
                 Icon(Icons.Outlined.Image, null)
             }

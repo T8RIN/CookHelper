@@ -2,7 +2,6 @@ package ru.tech.cookhelper.presentation.all_images
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +26,7 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.all_images.components.AdaptiveVerticalGrid
 import ru.tech.cookhelper.presentation.ui.theme.Gray
+import ru.tech.cookhelper.presentation.ui.utils.android.ContentUtils.pickImage
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
@@ -83,7 +83,7 @@ fun AllImagesScreen(
             actions = {
                 if (canAddImages) {
                     IconButton(onClick = {
-                        resultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        resultLauncher.pickImage()
                     }) {
                         Icon(Icons.Rounded.Add, null)
                     }

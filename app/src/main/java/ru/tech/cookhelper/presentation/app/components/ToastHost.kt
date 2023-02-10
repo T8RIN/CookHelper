@@ -23,9 +23,9 @@ import androidx.core.graphics.ColorUtils
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import ru.tech.cookhelper.presentation.ui.utils.android.ConfigurationUtils.minScreenDp
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import kotlin.coroutines.resume
-import kotlin.math.min
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -67,8 +67,7 @@ fun Toast(
     containerColor: Color = ToastDefaults.color,
     contentColor: Color = ToastDefaults.contentColor,
 ) {
-    val configuration = LocalConfiguration.current
-    val sizeMin = min(configuration.screenWidthDp, configuration.screenHeightDp).dp
+    val sizeMin = LocalConfiguration.current.minScreenDp
 
     Card(
         colors = CardDefaults.cardColors(
