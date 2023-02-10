@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BreakfastDining
 import androidx.compose.material.icons.rounded.BreakfastDining
@@ -14,15 +12,23 @@ import androidx.compose.material.icons.rounded.Newspaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.constants.Constants.LOREM_IPSUM
 import ru.tech.cookhelper.domain.model.Product
@@ -130,33 +136,62 @@ fun ColorSchemePreview() {
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun FridgeBlock() {
     val title = stringResource(R.string.product)
-    val list = remember {
-        List(21) {
-            Product(it, title, it + 1, "")
-        }
+    val lists = remember {
+        listOf(
+            List(7) {
+                Product(it, title, it + 1, "")
+            },
+            List(7) {
+                Product(it, title, it + 8, "")
+            },
+            List(7) {
+                Product(it, title, it + 15, "")
+            }
+        )
     }
-    Column(
-        Modifier
-            .height(300.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        Spacer(Modifier.height(8.dp))
-        list.forEachIndexed { index, product ->
-            ProductItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                product = product,
-                onDelete = {}
-            )
-            if (index != list.lastIndex) Separator()
+    val state = rememberPagerState()
+    Box {
+        HorizontalPager(count = lists.size, state = state) {
+            Column {
+                lists[it].forEachIndexed { index, product ->
+                    Box {
+                        val color = MaterialTheme.colorScheme.outlineVariant
+                        val density = LocalDensity.current
+                        val width = remember(density) { with(density) { 1.dp.toPx() } }
+                        ProductItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .drawBehind {
+                                    if (it != 2) {
+                                        drawRect(
+                                            color,
+                                            size = this.size.copy(width = width),
+                                            topLeft = Offset(x = this.size.width, y = 0f)
+                                        )
+                                    }
+                                }
+                                .padding(start = 8.dp),
+                            product = product,
+                            onDelete = {}
+                        )
+                    }
+                    Separator()
+                    if (index == lists[it].lastIndex) Spacer(Modifier.height(8.dp))
+                }
+                Spacer(Modifier.height(16.dp))
+            }
         }
-        Spacer(Modifier.height(8.dp))
+        HorizontalPagerIndicator(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(8.dp),
+            pagerState = state
+        )
     }
-
 }
 
 @Composable
@@ -282,41 +317,6 @@ private fun ProfileBlock() {
     Divider()
     Spacer(Modifier.width(8.dp))
     Row {
-        val testMessage = stringResource(R.string.toast_preview)
-        Spacer(
-            Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-        )
-        Toast(
-            modifier = Modifier
-                .heightIn(min = 48.dp)
-                .padding(top = 8.dp)
-                .alpha(0.95f),
-            toastData = object : ToastData {
-                override val visuals: ToastVisuals
-                    get() = object : ToastVisuals {
-                        override val message: String
-                            get() = testMessage
-                        override val icon: ImageVector
-                            get() = Icons.Outlined.BreakfastDining
-                        override val duration: ToastDuration
-                            get() = ToastDuration.Long
-                    }
-
-                override fun dismiss() {}
-            }
-        )
-        Spacer(
-            Modifier
-                .weight(1f)
-                .padding(end = 8.dp)
-        )
-    }
-    Spacer(Modifier.height(8.dp))
-    Divider()
-    Spacer(Modifier.width(8.dp))
-    Row {
         val testMessage = stringResource(R.string.snackbar_preview)
         val ok = stringResource(R.string.ok)
 
@@ -352,4 +352,39 @@ private fun ProfileBlock() {
         )
     }
     Spacer(Modifier.width(8.dp))
+    Divider()
+    Spacer(Modifier.width(8.dp))
+    Row {
+        val testMessage = stringResource(R.string.toast_preview)
+        Spacer(
+            Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+        )
+        Toast(
+            modifier = Modifier
+                .heightIn(min = 48.dp)
+                .padding(top = 8.dp)
+                .alpha(0.95f),
+            toastData = object : ToastData {
+                override val visuals: ToastVisuals
+                    get() = object : ToastVisuals {
+                        override val message: String
+                            get() = testMessage
+                        override val icon: ImageVector
+                            get() = Icons.Outlined.BreakfastDining
+                        override val duration: ToastDuration
+                            get() = ToastDuration.Long
+                    }
+
+                override fun dismiss() {}
+            }
+        )
+        Spacer(
+            Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        )
+    }
+    Spacer(Modifier.height(8.dp))
 }
