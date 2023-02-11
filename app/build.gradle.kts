@@ -72,12 +72,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Coroutine Lifecycle Scopes
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha05")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha05")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-beta01")
 
     //Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.44.2")
+    implementation("com.google.dagger:hilt-android:2.45")
+    kapt("com.google.dagger:hilt-android-compiler:2.45")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
     //Desugaring
@@ -85,15 +85,15 @@ dependencies {
 
     //Compose
     implementation("androidx.activity:activity-compose:1.7.0-alpha04")
-    implementation("androidx.compose.ui:ui:1.4.0-alpha05")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha05")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha05")
-    implementation("androidx.compose.material:material-icons-core:1.4.0-alpha05")
-    implementation("androidx.compose.material:material-icons-extended:1.4.0-alpha05")
+    implementation("androidx.compose.ui:ui:1.4.0-beta01")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha06")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha06")
+    implementation("androidx.compose.material:material-icons-core:1.4.0-beta01")
+    implementation("androidx.compose.material:material-icons-extended:1.4.0-beta01")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha05")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha06")
-    implementation("androidx.compose.foundation:foundation:1.4.0-alpha05")
-    implementation("androidx.compose.ui:ui-util:1.4.0-alpha05")
+    implementation("androidx.compose.foundation:foundation:1.4.0-beta01")
+    implementation("androidx.compose.ui:ui-util:1.4.0-beta01")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.29.1-alpha")
