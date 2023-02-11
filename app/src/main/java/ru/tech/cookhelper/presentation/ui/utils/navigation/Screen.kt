@@ -4,9 +4,11 @@ import android.os.Parcelable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.domain.model.Post
@@ -141,7 +143,7 @@ sealed class Screen(
     class AllImages(
         @IgnoredOnParcel val images: List<FileData> = emptyList(),
         val canAddImages: Boolean = false,
-        @IgnoredOnParcel val onAddImage: (uri: String) -> Unit = {}
+        val onAddImage: @RawValue MutableState<String?>
     ) : Screen(showTopAppBar = false)
 
     @Parcelize

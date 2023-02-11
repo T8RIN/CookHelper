@@ -21,14 +21,18 @@ import ru.tech.cookhelper.presentation.edit_profile.components.EditProfileItem
 import ru.tech.cookhelper.presentation.edit_profile.viewModel.EditProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
-    viewModel: EditProfileViewModel = hiltViewModel(),
-    onBack: () -> Unit
+    viewModel: EditProfileViewModel = hiltViewModel()
 ) {
+    val controller = LocalScreenController.current
+    val onBack: () -> Unit = { controller.goBack() }
+
     val showPassword = remember { mutableStateOf(false) }
     val surname = viewModel.nameAndSurname.second
     val name = viewModel.nameAndSurname.first

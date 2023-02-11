@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,11 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
+import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
+import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.widgets.AnimatedTopAppBar
 import ru.tech.cookhelper.presentation.ui.widgets.Loading
 import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
@@ -35,7 +40,17 @@ import ru.tech.cookhelper.presentation.ui.widgets.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun FullScreenPagerScreen(imageList: List<FileData>, initialId: String, onBack: () -> Unit) {
+fun FullScreenPagerScreen(
+    imageList: List<FileData>,
+    initialId: String
+) {
+    val controller = LocalScreenController.current
+    val activity = LocalContext.current.findActivity()
+    val onBack: () -> Unit = {
+        controller.goBack()
+        activity?.showSystemBars()
+    }
+
     val images by rememberSaveable(imageList, saver = FileDataSaver) { mutableStateOf(imageList) }
 
     val pagerState = rememberPagerState(images.indexOfFirst { it.id == initialId })

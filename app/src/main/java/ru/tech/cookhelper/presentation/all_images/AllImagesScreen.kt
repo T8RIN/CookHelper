@@ -16,6 +16,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.all_images.components.AdaptiveVerticalGrid
+import ru.tech.cookhelper.presentation.fullscreen_image_pager.FileDataSaver
 import ru.tech.cookhelper.presentation.ui.theme.Gray
 import ru.tech.cookhelper.presentation.ui.utils.android.ContentUtils.pickImage
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
@@ -33,18 +38,21 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllImagesScreen(
-    images: List<FileData>,
+    initial: List<FileData>,
     canAddImages: Boolean,
-    onBack: () -> Unit,
-    onAddImage: (uri: String) -> Unit
+    onAddImage: MutableState<String?>
 ) {
+    val images by rememberSaveable(initial, saver = FileDataSaver) { mutableStateOf(initial) }
     val screenController = LocalScreenController.current
+    val onBack: () -> Unit = { screenController.goBack() }
+
     val scrollBehavior = topAppBarScrollBehavior()
     val context = LocalContext.current
     val toastHost = LocalToastHostState.current
@@ -59,7 +67,7 @@ fun AllImagesScreen(
                 )
                 return@rememberLauncherForActivityResult
             }
-            onAddImage(uri.toString())
+            onAddImage.value = uri.toString()
         }
     )
 

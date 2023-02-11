@@ -7,7 +7,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.NavTransitionSpec
@@ -26,12 +25,9 @@ import ru.tech.cookhelper.presentation.recipe_details.RecipeDetailsScreen
 import ru.tech.cookhelper.presentation.recipe_post_creation.RecipePostCreationScreen
 import ru.tech.cookhelper.presentation.settings.SettingsScreen
 import ru.tech.cookhelper.presentation.topic_creation.TopicCreationScreen
-import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
-import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
-import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
@@ -42,7 +38,6 @@ fun ScreenHost(
     transitionSpec: NavTransitionSpec<Any?>,
     onTitleChange: (newTitle: UIText) -> Unit,
 ) {
-    val activity = LocalContext.current.findActivity()
     AnimatedNavHost(
         controller = controller,
         transitionSpec = transitionSpec
@@ -59,23 +54,16 @@ fun ScreenHost(
                 is Screen.RecipeDetails -> {
                     RecipeDetailsScreen(
                         recipe = screen.recipe,
-                        percentString = screen.percentString,
-                        onBack = { controller.goBack() }
+                        percentString = screen.percentString
                     )
                 }
                 is Screen.MatchedRecipes -> {
-                    MatchedRecipesScreen(
-                        onBack = { controller.goBack() }
-                    )
+                    MatchedRecipesScreen()
                 }
                 is Screen.FullscreenImagePager -> {
                     FullScreenPagerScreen(
                         imageList = screen.images,
-                        initialId = screen.id,
-                        onBack = {
-                            controller.goBack()
-                            activity?.showSystemBars()
-                        }
+                        initialId = screen.id
                     )
                 }
                 is Screen.Settings -> {
@@ -86,9 +74,8 @@ fun ScreenHost(
                 }
                 is Screen.AllImages -> {
                     AllImagesScreen(
-                        images = screen.images,
+                        initial = screen.images,
                         canAddImages = screen.canAddImages,
-                        onBack = { controller.goBack() },
                         onAddImage = screen.onAddImage
                     )
                 }
@@ -107,8 +94,7 @@ fun ScreenHost(
                     ChatScreen(
                         image = screen.imageUrl,
                         title = screen.chatTitle,
-                        chatId = screen.chatId,
-                        onBack = { controller.goBack() }
+                        chatId = screen.chatId
                     )
                 }
                 is Screen.Authentication -> {
@@ -116,25 +102,16 @@ fun ScreenHost(
                 }
                 is Screen.PostCreation -> {
                     PostCreationScreen(
-                        onBack = {
-                            controller.goBack()
-                        },
                         /*TODO: Remove this shit*/
                         todoRemoveThisFuckingCostyl = screen.todoRemoveThisFuckingCostyl,
                         initialImageUri = screen.imageUri
                     )
                 }
                 is Screen.RecipePostCreation -> {
-                    RecipePostCreationScreen(
-                        onBack = {
-                            controller.goBack()
-                        }
-                    )
+                    RecipePostCreationScreen()
                 }
                 Screen.EditProfile -> {
-                    EditProfileScreen(
-                        onBack = { controller.goBack() }
-                    )
+                    EditProfileScreen()
                 }
                 Screen.Recipes -> {
                     Placeholder(
@@ -145,16 +122,11 @@ fun ScreenHost(
                 is Screen.ForumDiscussion -> {
                     ForumDiscussionScreen(
                         id = screen.id,
-                        title = screen.label,
-                        onBack = { controller.goBack() }
+                        title = screen.label
                     )
                 }
                 Screen.TopicCreation -> {
-                    TopicCreationScreen(
-                        onBack = {
-                            controller.goBack()
-                        }
-                    )
+                    TopicCreationScreen()
                 }
                 else -> Unit
             }

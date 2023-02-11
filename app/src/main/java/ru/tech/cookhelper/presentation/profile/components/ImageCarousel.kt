@@ -72,12 +72,8 @@ fun ImageCarousel(
             Spacer(Modifier.size(5.dp))
             Text(data.size.toString(), color = Gray, fontSize = 14.sp)
             Spacer(Modifier.weight(1f))
-            if (data.isNotEmpty()) {
-                IconButton(onClick = onExpand) {
-                    Icon(Icons.Rounded.KeyboardArrowRight, null)
-                }
-            } else {
-                Spacer(modifier = Modifier.size(48.dp))
+            IconButton(onClick = onExpand, enabled = data.isNotEmpty()) {
+                Icon(Icons.Rounded.KeyboardArrowRight, null)
             }
         }
         LazyRow(

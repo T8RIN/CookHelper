@@ -43,15 +43,19 @@ import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
 import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun RecipePostCreationScreen(
-    viewModel: RecipePostCreationViewModel = hiltViewModel(),
-    onBack: () -> Unit
+    viewModel: RecipePostCreationViewModel = hiltViewModel()
 ) {
+    val controller = LocalScreenController.current
+    val onBack: () -> Unit = { controller.goBack() }
+
     val focus = LocalFocusManager.current
     var doneEnabled by rememberSaveable { mutableStateOf(false) }
 

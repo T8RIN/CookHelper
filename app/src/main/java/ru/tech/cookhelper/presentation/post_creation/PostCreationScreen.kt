@@ -43,7 +43,9 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
 import ru.tech.cookhelper.presentation.ui.widgets.LoadingDialog
 import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
@@ -55,9 +57,11 @@ import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 fun PostCreationScreen(
     viewModel: PostCreationViewModel = hiltViewModel(),
     initialImageUri: String = "",
-    onBack: () -> Unit,
     /*TODO: Remove this shit*/ todoRemoveThisFuckingCostyl: (Post?) -> Unit
 ) {
+    val controller = LocalScreenController.current
+    val onBack: () -> Unit = { controller.goBack() }
+
     val context = LocalContext.current
     val toastHost = LocalToastHostState.current
     val focus = LocalFocusManager.current

@@ -10,11 +10,8 @@ import androidx.compose.material.icons.twotone.CloudOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -46,6 +43,11 @@ fun ProfileScreen(
     val screenController = LocalScreenController.current
     val activity = LocalContext.current.findActivity()
     val toastHost = LocalToastHostState.current
+
+    val onAddImage = remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(onAddImage.value) {
+        if (onAddImage.value != null) viewModel.addImage(onAddImage.value!!)
+    }
 
     val userState = viewModel.userState
     val nick = userState.user?.nickname
@@ -100,7 +102,7 @@ fun ProfileScreen(
                         Screen.AllImages(
                             images = emptyList(),
                             canAddImages = true,
-                            onAddImage = { viewModel.addImage(it) }
+                            onAddImage = onAddImage
                         )
                     )
                 }

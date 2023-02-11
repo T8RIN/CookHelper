@@ -57,6 +57,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
 import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
@@ -68,9 +69,10 @@ import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
 fun ForumDiscussionScreen(
     id: Int,
     title: String,
-    onBack: () -> Unit,
     viewModel: ForumDiscussionViewModel = hiltViewModel()
 ) {
+    val controller = LocalScreenController.current
+    val onBack: () -> Unit = { controller.goBack() }
     BackHandler(onBack = onBack)
 
     val scrollBehavior = topAppBarScrollBehavior()

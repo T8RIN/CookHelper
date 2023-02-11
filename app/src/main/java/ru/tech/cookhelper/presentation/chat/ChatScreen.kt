@@ -50,7 +50,9 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapeP
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.widgets.Loading
 import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 import java.text.SimpleDateFormat
@@ -74,8 +76,10 @@ fun ChatScreen(
             "image" to image
         )
     ),
-    onBack: () -> Unit
 ) {
+    val controller = LocalScreenController.current
+    val onBack: () -> Unit = { controller.goBack() }
+
     val chatState = viewModel.chatState
     var value by remember { mutableStateOf("") }
     val lazyListState = rememberLazyListState()

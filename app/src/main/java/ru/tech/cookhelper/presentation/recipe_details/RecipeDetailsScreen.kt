@@ -39,6 +39,8 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.stringResourceL
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 import ru.tech.cookhelper.presentation.ui.widgets.TopAppBarSize
 import ru.tech.cookhelper.presentation.ui.widgets.containerColorWithCollapse
@@ -49,9 +51,10 @@ import kotlin.math.roundToInt
 fun RecipeDetailsScreen(
     recipe: Recipe?,
     percentString: String,
-    onBack: () -> Unit,
     viewModel: RecipeDetailsViewModel = hiltViewModel()
 ) {
+    val controller = LocalScreenController.current
+    val onBack: () -> Unit = { controller.goBack() }
     LaunchedEffect(Unit) {
         viewModel.updateRecipe(recipe)
     }

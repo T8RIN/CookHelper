@@ -33,6 +33,7 @@ import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
+import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.widgets.Loading
 import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
@@ -41,9 +42,11 @@ import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun MatchedRecipesScreen(
-    onBack: () -> Unit,
     viewModel: MatchedRecipesViewModel = hiltViewModel()
 ) {
+    val controller = LocalScreenController.current
+    val onBack: () -> Unit = { controller.goBack() }
+
     val context = LocalContext.current
     val toastHost = LocalToastHostState.current
 
