@@ -12,14 +12,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditStatusDialog(currentStatus: String, onDone: (newStatus: String) -> Unit) {
-    val dialogController = LocalDialogController.current
+fun EditStatusDialog(
+    currentStatus: String,
+    onDone: (newStatus: String) -> Unit,
+    onDismissRequest: () -> Unit
+) {
     var status by rememberSaveable { mutableStateOf(currentStatus) }
     val textStyle = LocalTextStyle.current
 
@@ -48,20 +49,20 @@ fun EditStatusDialog(currentStatus: String, onDone: (newStatus: String) -> Unit)
             }
         },
         shape = DialogShape,
-        onDismissRequest = { dialogController.close() },
+        onDismissRequest = { onDismissRequest() },
         icon = { Icon(Icons.Outlined.Edit, null) },
         confirmButton = {
             TextButton(
                 onClick = {
                     onDone(status)
-                    dialogController.close()
+                    onDismissRequest()
                 }
             ) {
                 Text(stringResource(R.string.done))
             }
         },
         dismissButton = {
-            TextButton(onClick = { dialogController.close() }) {
+            TextButton(onClick = { onDismissRequest() }) {
                 Text(stringResource(R.string.cancel))
             }
         }

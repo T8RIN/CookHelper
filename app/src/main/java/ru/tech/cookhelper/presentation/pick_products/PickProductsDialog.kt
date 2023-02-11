@@ -27,17 +27,14 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.kotlin.cptlize
 import ru.tech.cookhelper.domain.model.Product
 import ru.tech.cookhelper.presentation.pick_products.viewModel.PickProductsViewModel
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
-import ru.tech.cookhelper.presentation.ui.utils.provider.show
 import ru.tech.cookhelper.presentation.ui.widgets.*
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -49,7 +46,7 @@ fun PickProductsDialog(
     val context = LocalContext.current
     val toastHost = LocalToastHostState.current
 
-    val dialogController = LocalDialogController.current
+    var showLeaveUnsavedDataDialog by rememberSaveable { mutableStateOf(false) }
     var searchValue by rememberSaveable { mutableStateOf("") }
 
     val selectedProducts = viewModel.selectedProducts
@@ -184,7 +181,7 @@ fun PickProductsDialog(
             TextButton(
                 onClick = {
                     onPicked(selectedProducts.toList())
-                    dialogController.close()
+                    showLeaveUnsavedDataDialog = false
                 }
             ) {
                 Text(stringResource(R.string.add))
@@ -193,17 +190,7 @@ fun PickProductsDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    if (selectedProducts.isNotEmpty()) {
-                        dialogController.show(
-                            Dialog.LeaveUnsavedData(
-                                title = R.string.picking_products,
-                                message = R.string.picking_products_started,
-                                onLeave = { dialogController.close() }
-                            )
-                        )
-                    } else {
-                        dialogController.close()
-                    }
+                    showLeaveUnsavedDataDialog = selectedProducts.isNotEmpty()
                 }
             ) {
                 Text(stringResource(R.string.cancel))
@@ -219,6 +206,15 @@ fun PickProductsDialog(
             )
             else -> {}
         }
+    }
+
+    if (showLeaveUnsavedDataDialog) {
+        LeaveUnsavedDataDialog(
+            title = R.string.picking_products,
+            message = R.string.picking_products_started,
+            onLeave = { showLeaveUnsavedDataDialog = false },
+            onDismissRequest = { showLeaveUnsavedDataDialog = false }
+        )
     }
 
 }

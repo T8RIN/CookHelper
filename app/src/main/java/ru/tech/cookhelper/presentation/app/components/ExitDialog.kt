@@ -11,13 +11,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 @Composable
-fun ExitDialog(onExit: () -> Unit) {
-    val dialogController = LocalDialogController.current
-
+fun ExitDialog(onExit: () -> Unit, onDismissRequest: () -> Unit) {
     AlertDialog(
         title = { Text(stringResource(R.string.app_closing)) },
         text = {
@@ -27,15 +23,15 @@ fun ExitDialog(onExit: () -> Unit) {
             )
         },
         shape = DialogShape,
-        onDismissRequest = { dialogController.close() },
+        onDismissRequest = onDismissRequest,
         icon = { Icon(Icons.Outlined.DoorBack, null) },
         confirmButton = {
-            TextButton(onClick = { dialogController.close() }) {
+            TextButton(onClick = onDismissRequest) {
                 Text(stringResource(R.string.stay))
             }
         },
         dismissButton = {
-            TextButton(onClick = { onExit() }) {
+            TextButton(onClick = onExit) {
                 Text(stringResource(R.string.exit))
             }
         }

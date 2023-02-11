@@ -21,11 +21,11 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.feed_screen.viewModel.FeedViewModel
 import ru.tech.cookhelper.presentation.profile.components.ProfileRecipeItem
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.widgets.Loading
+import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

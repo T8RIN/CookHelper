@@ -29,10 +29,10 @@ import ru.tech.cookhelper.presentation.topic_creation.TopicCreationScreen
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.android.SystemBarUtils.showSystemBars
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSettingsProvider
 import ru.tech.cookhelper.presentation.ui.utils.provider.goBack
+import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +70,7 @@ fun ScreenHost(
                 }
                 is Screen.FullscreenImagePager -> {
                     FullScreenPagerScreen(
-                        images = screen.images,
+                        imageList = screen.images,
                         initialId = screen.id,
                         onBack = {
                             controller.goBack()

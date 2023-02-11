@@ -45,11 +45,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ColorUtils.createSeconda
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
-import ru.tech.cookhelper.presentation.ui.utils.provider.show
 import ru.tech.cookhelper.presentation.ui.widgets.marquee.Marquee
 
 @Composable
@@ -222,7 +218,7 @@ fun SettingsState.DynamicColorsOption(insertSetting: (id: Int, option: Any) -> U
 @Composable
 fun SettingsState.ChangeLanguageOption(insertSetting: (id: Int, option: Any) -> Unit) {
     val context = LocalContext.current
-    val dialogController = LocalDialogController.current
+    var showDialog by rememberSaveable { mutableStateOf(false) }
     val option = Setting.LANGUAGE
 
     Column(Modifier.animateContentSize()) {
@@ -237,26 +233,26 @@ fun SettingsState.ChangeLanguageOption(insertSetting: (id: Int, option: Any) -> 
                     )
                 )
             },
-            onClick = {
-                dialogController.show(
-                    Dialog.PickLanguageDialog(
-                        entries = context.getLanguages(),
-                        selected = context.getCurrentLocaleString(),
-                        onSelect = {
-                            insertSetting(option.ordinal, it)
-                            val locale = if (it == "") {
-                                LocaleListCompat.getEmptyLocaleList()
-                            } else {
-                                LocaleListCompat.forLanguageTags(it)
-                            }
-                            AppCompatDelegate.setApplicationLocales(locale)
-                        },
-                        onDismiss = { dialogController.close() }
-                    )
-                )
-            }
+            onClick = { showDialog = true }
         )
         Separator()
+    }
+
+    if (showDialog) {
+        PickLanguageDialog(
+            entries = context.getLanguages(),
+            selected = context.getCurrentLocaleString(),
+            onSelect = {
+                insertSetting(option.ordinal, it)
+                val locale = if (it == "") {
+                    LocaleListCompat.getEmptyLocaleList()
+                } else {
+                    LocaleListCompat.forLanguageTags(it)
+                }
+                AppCompatDelegate.setApplicationLocales(locale)
+            },
+            onDismiss = { showDialog = false }
+        )
     }
 }
 

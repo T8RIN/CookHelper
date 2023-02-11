@@ -36,16 +36,14 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.Post
 import ru.tech.cookhelper.domain.model.getLastAvatar
 import ru.tech.cookhelper.presentation.post_creation.viewModel.PostCreationViewModel
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
 import ru.tech.cookhelper.presentation.ui.utils.compose.UIText.Companion.UIText
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
-import ru.tech.cookhelper.presentation.ui.utils.provider.show
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
 import ru.tech.cookhelper.presentation.ui.widgets.LoadingDialog
 import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
@@ -71,17 +69,11 @@ fun PostCreationScreen(
 
     val user = viewModel.user
 
-    val dialogController = LocalDialogController.current
+    var showLeaveUnsavedDataDialog by rememberSaveable { mutableStateOf(false) }
 
     val goBack = {
         if (imageUri.isNotEmpty() || content.isNotEmpty() || label.isNotEmpty()) {
-            dialogController.show(
-                Dialog.LeaveUnsavedData(
-                    title = R.string.post_creation_started,
-                    message = R.string.post_creation_started_leave_message,
-                    onLeave = { onBack() }
-                )
-            )
+            showLeaveUnsavedDataDialog = true
         } else onBack()
     }
 
@@ -268,5 +260,14 @@ fun PostCreationScreen(
             )
             else -> {}
         }
+    }
+
+    if (showLeaveUnsavedDataDialog) {
+        LeaveUnsavedDataDialog(
+            title = R.string.post_creation_started,
+            message = R.string.post_creation_started_leave_message,
+            onLeave = { onBack() },
+            onDismissRequest = { showLeaveUnsavedDataDialog = false }
+        )
     }
 }

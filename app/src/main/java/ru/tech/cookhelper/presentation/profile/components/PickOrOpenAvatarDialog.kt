@@ -28,9 +28,7 @@ import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.ResUtils.asString
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -40,9 +38,9 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.close
 fun PickOrOpenAvatarDialog(
     hasAvatar: Boolean,
     onOpenAvatar: () -> Unit,
-    onAvatarPicked: (imageUri: String) -> Unit
+    onAvatarPicked: (imageUri: String) -> Unit,
+    onDismissRequest: () -> Unit
 ) {
-    val dialogController = LocalDialogController.current
     val toastHost = LocalToastHostState.current
     val context = LocalContext.current
 
@@ -72,7 +70,7 @@ fun PickOrOpenAvatarDialog(
                         if (hasAvatar) {
                             Button(
                                 onClick = {
-                                    dialogController.close()
+                                    onDismissRequest()
                                     onOpenAvatar()
                                 },
                                 modifier = Modifier.fillMaxWidth()
@@ -123,13 +121,15 @@ fun PickOrOpenAvatarDialog(
             }
         },
         shape = DialogShape,
-        onDismissRequest = { if (imageUri.isEmpty()) dialogController.close() },
+        onDismissRequest = { if (imageUri.isEmpty()) onDismissRequest() },
         icon = { Icon(Icons.Outlined.AccountCircle, null) },
         confirmButton = {
-            TextButton(onClick = {
-                if (imageUri.isNotEmpty()) onAvatarPicked(imageUri)
-                dialogController.close()
-            }) {
+            TextButton(
+                onClick = {
+                    if (imageUri.isNotEmpty()) onAvatarPicked(imageUri)
+                    onDismissRequest()
+                }
+            ) {
                 if (imageUri.isEmpty()) Text(stringResource(R.string.close))
                 else Text(stringResource(R.string.add))
             }

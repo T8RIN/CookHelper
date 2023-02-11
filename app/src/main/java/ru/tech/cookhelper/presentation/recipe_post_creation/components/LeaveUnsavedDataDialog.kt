@@ -11,27 +11,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 @Composable
-fun LeaveUnsavedDataDialog(title: Int, message: Int, onLeave: () -> Unit) {
-    val dialogController = LocalDialogController.current
-
+fun LeaveUnsavedDataDialog(
+    title: Int,
+    message: Int,
+    onLeave: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
     AlertDialog(
         shape = DialogShape,
         title = { Text(stringResource(title), textAlign = TextAlign.Center) },
         text = { Text(stringResource(message), textAlign = TextAlign.Center) },
-        onDismissRequest = { dialogController.close() },
+        onDismissRequest = { onDismissRequest() },
         icon = { Icon(Icons.Outlined.Save, null) },
         confirmButton = {
-            TextButton(onClick = { dialogController.close() }) {
+            TextButton(onClick = { onDismissRequest() }) {
                 Text(stringResource(R.string.cancel))
             }
         },
         dismissButton = {
             TextButton(onClick = {
-                dialogController.close()
+                onDismissRequest()
                 onLeave()
             }) {
                 Text(stringResource(R.string.leave_without_saving))

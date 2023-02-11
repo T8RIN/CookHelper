@@ -28,7 +28,6 @@ import ru.tech.cookhelper.presentation.matched_recipes.viewModel.MatchedRecipesV
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
@@ -36,6 +35,7 @@ import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.widgets.Loading
+import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)

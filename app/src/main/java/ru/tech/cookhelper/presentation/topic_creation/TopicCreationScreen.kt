@@ -33,6 +33,7 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.getLastAvatar
 import ru.tech.cookhelper.presentation.forum_discussion.components.TagItem
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
 import ru.tech.cookhelper.presentation.topic_creation.viewModel.TopicCreationViewModel
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.getFile
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.rememberMutableStateListOf
@@ -41,10 +42,7 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.show
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
-import ru.tech.cookhelper.presentation.ui.utils.provider.show
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
 import ru.tech.cookhelper.presentation.ui.widgets.LoadingDialog
 import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
@@ -68,17 +66,11 @@ fun TopicCreationScreen(
 
     val user = viewModel.user
 
-    val dialogController = LocalDialogController.current
+    var showLeaveUnsavedDataDialog by rememberSaveable { mutableStateOf(false) }
 
     val goBack = {
         if (imageUri.isNotEmpty() || content.isNotEmpty() || label.isNotEmpty() || tags.isNotEmpty()) {
-            dialogController.show(
-                Dialog.LeaveUnsavedData(
-                    title = R.string.topic_creation_started,
-                    message = R.string.topic_creation_started_leave_message,
-                    onLeave = { onBack() }
-                )
-            )
+            showLeaveUnsavedDataDialog = true
         } else onBack()
     }
 
@@ -347,5 +339,14 @@ fun TopicCreationScreen(
             )
             else -> {}
         }
+    }
+
+    if (showLeaveUnsavedDataDialog) {
+        LeaveUnsavedDataDialog(
+            title = R.string.topic_creation_started,
+            message = R.string.topic_creation_started_leave_message,
+            onLeave = { onBack() },
+            onDismissRequest = { showLeaveUnsavedDataDialog = false }
+        )
     }
 }

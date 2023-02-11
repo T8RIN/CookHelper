@@ -259,4 +259,5 @@
     <string name="pure_black_subtitle">В темном режиме тема будет адаптирована для AMOLED экранов, все поверхности будут максимально черными</string>
     <string name="keep_screen_on">Не выключать экран</string>
     <string name="keep_screen_on_subtitle">При включении, телефон не будет уходить в спящий режим при открытом приложении</string>
+    <string name="no_posts">Нет записей, создайте новую!</string>
 </resources>

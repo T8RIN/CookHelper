@@ -9,10 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.FindReplace
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -24,18 +22,21 @@ import ru.tech.cookhelper.R
 import ru.tech.cookhelper.core.utils.kotlin.cptlize
 import ru.tech.cookhelper.presentation.fridge_screen.components.ProductItem
 import ru.tech.cookhelper.presentation.fridge_screen.viewModel.FridgeViewModel
+import ru.tech.cookhelper.presentation.pick_products.PickProductsDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.FabSize
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.theme.SausageOff
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
-import ru.tech.cookhelper.presentation.ui.utils.provider.*
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
+import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
+import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -47,7 +48,7 @@ fun FridgeScreen(
     val toastHost = LocalToastHostState.current
 
     val screenController = LocalScreenController.current
-    val dialogController = LocalDialogController.current
+    var showDialog by rememberSaveable { mutableStateOf(false) }
 
     val lazyListState = rememberLazyListState()
 
@@ -89,14 +90,6 @@ fun FridgeScreen(
         }
 
 
-        val pickProducts = {
-            dialogController.show(
-                Dialog.PickProducts {
-                    viewModel.addProductsToFridge(it)
-                }
-            )
-        }
-
         val empty = fridge.isEmpty()
 
         Column(
@@ -124,7 +117,7 @@ fun FridgeScreen(
                         )
                     },
                     size = FabSize.Small,
-                    onClick = { pickProducts() }
+                    onClick = { showDialog = true }
                 )
             }
             Spacer(Modifier.height(4.dp))
@@ -144,7 +137,7 @@ fun FridgeScreen(
                 },
                 onClick = {
                     if (!empty) screenController.navigate(Screen.MatchedRecipes)
-                    else pickProducts()
+                    else showDialog = true
                 }
             )
         }
@@ -159,4 +152,6 @@ fun FridgeScreen(
             else -> {}
         }
     }
+
+    if (showDialog) PickProductsDialog(onPicked = viewModel::addProductsToFridge)
 }

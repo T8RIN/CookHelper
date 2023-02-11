@@ -260,4 +260,5 @@
     <string name="pure_black_subtitle">In dark mode theme will be adopted for AMOLED devices, which means all surfaces will be pure black</string>
     <string name="keep_screen_on">Keep screen on</string>
     <string name="keep_screen_on_subtitle">If set to true, phone will be never go to sleep mode while app opened</string>
+    <string name="no_posts">No posts found, create new right now!</string>
 </resources>

@@ -28,16 +28,17 @@ import com.google.accompanist.pager.rememberPagerState
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.FileData
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.widgets.AnimatedTopAppBar
 import ru.tech.cookhelper.presentation.ui.widgets.Loading
+import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.widgets.zooomable.ZoomParams
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun FullScreenPagerScreen(images: List<FileData>, initialId: String, onBack: () -> Unit) {
-    val pagerState =
-        rememberPagerState(images.indexOfFirst { it.id == initialId })
+fun FullScreenPagerScreen(imageList: List<FileData>, initialId: String, onBack: () -> Unit) {
+    val images by rememberSaveable(imageList, saver = FileDataSaver) { mutableStateOf(imageList) }
+
+    val pagerState = rememberPagerState(images.indexOfFirst { it.id == initialId })
 
     var isTopBarHidden by rememberSaveable { mutableStateOf(false) }
 

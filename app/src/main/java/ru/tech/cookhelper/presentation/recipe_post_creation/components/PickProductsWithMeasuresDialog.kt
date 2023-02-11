@@ -37,8 +37,6 @@ import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.StateUtils.toMutableStateMap
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
 import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
 
@@ -50,11 +48,10 @@ import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
 fun PickProductsWithMeasuresDialog(
     products: Map<Product, String>,
     allProducts: List<Product>,
-    onProductsPicked: (newProducts: Map<Product, String>) -> Unit
+    onProductsPicked: (newProducts: Map<Product, String>) -> Unit,
+    onDismissRequest: () -> Unit
 ) {
     val localProducts = rememberSaveable(saver = MapListSaver) { products.toMutableStateMap() }
-
-    val dialogController = LocalDialogController.current
 
     var addingProducts by rememberSaveable { mutableStateOf(false) }
     val selectedProducts = remember { mutableStateListOf<Int>() }
@@ -295,7 +292,7 @@ fun PickProductsWithMeasuresDialog(
         confirmButton = {
             TextButton(onClick = {
                 if (!addingProducts) {
-                    dialogController.close()
+                    onDismissRequest()
                     onProductsPicked(localProducts)
                 } else {
                     localProducts.putAll(

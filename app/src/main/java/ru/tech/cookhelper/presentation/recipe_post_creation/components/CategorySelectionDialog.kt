@@ -19,16 +19,14 @@ import androidx.compose.ui.unit.sp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.theme.SquircleShape
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 @Composable
 fun CategorySelectionDialog(
     categories: List<String>,
     selectedCategory: String,
-    onCategorySelected: (String) -> Unit
+    onCategorySelected: (String) -> Unit,
+    onDismissRequest: () -> Unit
 ) {
-    val dialogController = LocalDialogController.current
     AlertDialog(
         shape = DialogShape,
         title = { Text(stringResource(R.string.choose_category)) },
@@ -46,7 +44,7 @@ fun CategorySelectionDialog(
                                 .clip(SquircleShape(4.dp))
                                 .clickable {
                                     onCategorySelected(it)
-                                    dialogController.close()
+                                    onDismissRequest()
                                 },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -71,10 +69,10 @@ fun CategorySelectionDialog(
                 Separator()
             }
         },
-        onDismissRequest = { dialogController.close() },
+        onDismissRequest = { onDismissRequest() },
         icon = { Icon(Icons.Outlined.Category, null) },
         confirmButton = {
-            TextButton(onClick = { dialogController.close() }) {
+            TextButton(onClick = { onDismissRequest() }) {
                 Text(stringResource(R.string.cancel))
             }
         }

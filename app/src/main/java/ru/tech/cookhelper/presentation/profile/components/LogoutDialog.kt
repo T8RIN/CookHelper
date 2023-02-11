@@ -11,13 +11,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 @Composable
-fun LogoutDialog(onLogout: () -> Unit) {
-    val dialogController = LocalDialogController.current
-
+fun LogoutDialog(onLogout: () -> Unit, onDismissRequest: () -> Unit) {
     AlertDialog(
         title = { Text(stringResource(R.string.account_log_out)) },
         text = {
@@ -27,17 +23,17 @@ fun LogoutDialog(onLogout: () -> Unit) {
             )
         },
         shape = DialogShape,
-        onDismissRequest = { dialogController.close() },
+        onDismissRequest = { onDismissRequest() },
         icon = { Icon(Icons.Outlined.Logout, null) },
         confirmButton = {
-            TextButton(onClick = { dialogController.close() }) {
+            TextButton(onClick = { onDismissRequest() }) {
                 Text(stringResource(R.string.stay))
             }
         },
         dismissButton = {
             TextButton(onClick = {
                 onLogout()
-                dialogController.close()
+                onDismissRequest()
             }) {
                 Text(stringResource(R.string.exit))
             }

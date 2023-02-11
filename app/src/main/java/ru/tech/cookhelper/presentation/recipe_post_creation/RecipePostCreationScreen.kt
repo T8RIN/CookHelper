@@ -34,15 +34,15 @@ import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.domain.model.getLastAvatar
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.CategorySelectionDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.ExpandableFloatingActionButton
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.LeaveUnsavedDataDialog
+import ru.tech.cookhelper.presentation.recipe_post_creation.components.PickProductsWithMeasuresDialog
 import ru.tech.cookhelper.presentation.recipe_post_creation.viewModel.RecipePostCreationViewModel
 import ru.tech.cookhelper.presentation.ui.theme.ProductMeasure
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isScrollingUp
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.show
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
 import ru.tech.cookhelper.presentation.ui.widgets.TopAppBar
 
@@ -57,7 +57,9 @@ fun RecipePostCreationScreen(
 
     val lazyListState = rememberLazyListState()
 
-    val dialogController = LocalDialogController.current
+    var showPickProductsDialog by rememberSaveable { mutableStateOf(false) }
+    var showCategorySelectionDialog by rememberSaveable { mutableStateOf(false) }
+    var showLeaveUnsavedDataDialog by rememberSaveable { mutableStateOf(false) }
 
     val user = viewModel.user
 
@@ -95,13 +97,7 @@ fun RecipePostCreationScreen(
 
     val goBack = {
         if (dataList.any { it != "" }) {
-            dialogController.show(
-                Dialog.LeaveUnsavedData(
-                    title = R.string.recipe_creation_started,
-                    message = R.string.recipe_creation_started_leave_message,
-                    onLeave = { onBack() }
-                )
-            )
+            showLeaveUnsavedDataDialog = true
         } else onBack()
     }
 
@@ -366,17 +362,7 @@ fun RecipePostCreationScreen(
                             label = stringResource(R.string.category),
                             startIcon = Icons.Outlined.Category,
                             endIcon = {
-                                IconButton(onClick = {
-                                    dialogController.show(
-                                        Dialog.CategorySelection(
-                                            categories = viewModel.categories,
-                                            onCategorySelected = {
-                                                category = it
-                                            },
-                                            selectedCategory = category
-                                        )
-                                    )
-                                }) {
+                                IconButton(onClick = { showCategorySelectionDialog = true }) {
                                     Icon(Icons.Rounded.Edit, null)
                                 }
                             }
@@ -402,17 +388,7 @@ fun RecipePostCreationScreen(
         }
 
         ExpandableFloatingActionButton(
-            onClick = {
-                dialogController.show(
-                    Dialog.PickProductsWithMeasures(
-                        products = viewModel.products,
-                        allProducts = viewModel.allProducts,
-                        onProductsPicked = { newProducts ->
-                            viewModel.setProducts(newProducts)
-                        }
-                    )
-                )
-            },
+            onClick = { showPickProductsDialog = true },
             modifier = Modifier
                 .padding(16.dp)
                 .navigationBarsPadding()
@@ -429,6 +405,39 @@ fun RecipePostCreationScreen(
     }
 
     BackHandler { goBack() }
+
+    if (showPickProductsDialog) {
+        PickProductsWithMeasuresDialog(
+            products = viewModel.products,
+            allProducts = viewModel.allProducts,
+            onProductsPicked = { newProducts ->
+                viewModel.setProducts(newProducts)
+            },
+            onDismissRequest = {
+                showPickProductsDialog = false
+            }
+        )
+    } else if (showLeaveUnsavedDataDialog) {
+        LeaveUnsavedDataDialog(
+            title = R.string.recipe_creation_started,
+            message = R.string.recipe_creation_started_leave_message,
+            onLeave = { onBack() },
+            onDismissRequest = {
+                showLeaveUnsavedDataDialog = false
+            }
+        )
+    } else if (showCategorySelectionDialog) {
+        CategorySelectionDialog(
+            categories = viewModel.categories,
+            onCategorySelected = {
+                category = it
+            },
+            selectedCategory = category,
+            onDismissRequest = {
+                showCategorySelectionDialog = false
+            }
+        )
+    }
 
 }
 

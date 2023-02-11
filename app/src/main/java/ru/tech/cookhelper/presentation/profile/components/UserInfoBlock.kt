@@ -34,8 +34,8 @@ import java.util.*
 fun UserInfoBlock(
     userState: UserState,
     onEdit: () -> Unit,
-    onAvatarClick: (/*avatarList: List<FileData?>*/) -> Unit,
-    onStatusUpdate: (currentStatus: String) -> Unit
+    onAvatarClick: () -> Unit,
+    onStatusUpdate: () -> Unit
 ) {
     val lastSeen by remember(userState) {
         derivedStateOf {
@@ -59,7 +59,7 @@ fun UserInfoBlock(
                     .padding(top = 15.dp)
                     .size(80.dp)
                     .clip(CircleShape)
-                    .clickable { onAvatarClick(/*TODO: Provide avatar list from user */) },
+                    .clickable { onAvatarClick() },
                 error = {
                     Icon(Icons.Filled.AccountCircle, null)
                 }
@@ -82,7 +82,7 @@ fun UserInfoBlock(
                         modifier = Modifier
                             .clip(CircleShape)
                             .clickable(
-                                onClick = { onStatusUpdate(userState.user.status) }
+                                onClick = { onStatusUpdate() }
                             )
                     ) {
                         Spacer(Modifier.width(5.dp))
@@ -97,9 +97,7 @@ fun UserInfoBlock(
                     Row(
                         modifier = Modifier
                             .clip(CircleShape)
-                            .clickable(
-                                onClick = { onStatusUpdate(userState.user?.status ?: "") }
-                            )
+                            .clickable { onStatusUpdate() }
                     ) {
                         Spacer(Modifier.width(5.dp))
                         Text(

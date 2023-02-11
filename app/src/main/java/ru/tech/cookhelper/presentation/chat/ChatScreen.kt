@@ -48,11 +48,11 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.ScrollUtils.isLastItemVi
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.widgets.Loading
+import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 import java.text.SimpleDateFormat
 import java.util.*
 

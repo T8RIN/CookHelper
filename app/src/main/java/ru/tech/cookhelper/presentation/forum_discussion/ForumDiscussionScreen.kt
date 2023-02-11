@@ -55,11 +55,11 @@ import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBar
 import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.squareSize
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.widgets.CozyTextField
+import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
 import ru.tech.cookhelper.presentation.ui.widgets.TextFieldAppearance
 
 

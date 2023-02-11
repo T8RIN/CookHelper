@@ -22,14 +22,10 @@ import androidx.compose.ui.unit.dp
 import ru.tech.cookhelper.R
 import ru.tech.cookhelper.presentation.ui.theme.DialogShape
 import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.Picture
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalDialogController
-import ru.tech.cookhelper.presentation.ui.utils.provider.close
 
 
 @Composable
-fun AboutAppDialog() {
-    val dialogController = LocalDialogController.current
-
+fun AboutAppDialog(onDismissRequest: () -> Unit) {
     AlertDialog(
         title = { Text(stringResource(R.string.about_app)) },
         text = {
@@ -51,10 +47,10 @@ fun AboutAppDialog() {
             }
         },
         shape = DialogShape,
-        onDismissRequest = { dialogController.close() },
+        onDismissRequest = onDismissRequest,
         icon = { Icon(Icons.Rounded.HelpOutline, null) },
         confirmButton = {
-            TextButton(onClick = { dialogController.close() }) {
+            TextButton(onClick = onDismissRequest) {
                 Text(stringResource(R.string.ok))
             }
         }

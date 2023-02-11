@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.SignalWifiConnectedNoInternet4
+import androidx.compose.material.icons.twotone.CloudOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -14,11 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.R
@@ -28,40 +31,33 @@ import ru.tech.cookhelper.presentation.profile.viewModel.ProfileViewModel
 import ru.tech.cookhelper.presentation.recipe_post_creation.components.Separator
 import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivity
 import ru.tech.cookhelper.presentation.ui.utils.compose.PaddingUtils.addPadding
+import ru.tech.cookhelper.presentation.ui.utils.compose.navigationBarsLandscapePadding
 import ru.tech.cookhelper.presentation.ui.utils.compose.show
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
-import ru.tech.cookhelper.presentation.ui.utils.provider.*
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
+import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarVisuals
+import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val screenController = LocalScreenController.current
-    val dialogController = LocalDialogController.current
     val activity = LocalContext.current.findActivity()
+    val toastHost = LocalToastHostState.current
 
     val userState = viewModel.userState
     val nick = userState.user?.nickname
 
+    var showAvatarDialog by rememberSaveable { mutableStateOf(false) }
+    var showStatusDialog by rememberSaveable { mutableStateOf(false) }
+    var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
+
     LocalTopAppBarVisuals.current.update {
         actions {
-            val toastHost = LocalToastHostState.current
             IconButton(
-                onClick = {
-                    dialogController.show(
-                        Dialog.Logout(
-                            onLogout = {
-                                if (activity?.isOnline() == true) {
-                                    viewModel.logOut()
-                                } else toastHost.show(
-                                    Icons.Outlined.SignalWifiConnectedNoInternet4,
-                                    message = activity?.getString(R.string.no_connection) ?: ""
-                                )
-                            }
-                        )
-                    )
-                },
+                onClick = { showLogoutDialog = true },
                 content = { Icon(Icons.Outlined.Logout, null) }
             )
         }
@@ -84,24 +80,8 @@ fun ProfileScreen(
             UserInfoBlock(
                 userState = userState,
                 onEdit = { screenController.navigate(Screen.EditProfile) },
-                onStatusUpdate = { currentStatus ->
-                    dialogController.show(
-                        Dialog.EditStatus(
-                            currentStatus = currentStatus,
-                            onDone = { viewModel.updateStatus(it) }
-                        )
-                    )
-                },
-                onAvatarClick = { /* TODO: avatarList -> */
-                    val hasAvatar = /*avatarList?.isNotEmpty == true*/ true
-                    dialogController.show(
-                        Dialog.PickOrOpenAvatar(
-                            hasAvatar = hasAvatar,
-                            onAvatarPicked = { viewModel.addAvatar(it) },
-                            onOpenAvatar = { /*TODO: OpenAvatar*/ }
-                        )
-                    )
-                }
+                onStatusUpdate = { showStatusDialog = true },
+                onAvatarClick = { showAvatarDialog = true }
             )
             Spacer(Modifier.height(20.dp))
             ImageCarousel(
@@ -153,36 +133,88 @@ fun ProfileScreen(
         }
 
         if (selectedTabIndex.toTab() == SelectedTab.Posts) {
-            itemsIndexed(viewModel.posts, key = { _, post -> post.id }) { index, post ->
-                PostItem(
-                    post = post,
-                    onImageClick = {
-                        screenController.navigate(
-                            Screen.FullscreenImagePager(
-                                id = it.id,
-                                images = post.images
+            if (viewModel.posts.isNotEmpty()) {
+                itemsIndexed(viewModel.posts, key = { _, post -> post.id }) { index, post ->
+                    PostItem(
+                        post = post,
+                        onImageClick = {
+                            screenController.navigate(
+                                Screen.FullscreenImagePager(
+                                    id = it.id,
+                                    images = post.images
+                                )
                             )
-                        )
-                    },
-                    onAuthorClick = {
-                        //TODO: Open Author page
-                    },
-                    onPostClick = {
-                        //TODO: Open Post fullscreen
-                    },
-                    onLikeClick = {
-                        //TODO: Like post feature
-                    },
-                    clientUserId = userState.user?.id ?: 0L
-                )
+                        },
+                        onAuthorClick = {
+                            //TODO: Open Author page
+                        },
+                        onPostClick = {
+                            //TODO: Open Post fullscreen
+                        },
+                        onLikeClick = {
+                            //TODO: Like post feature
+                        },
+                        clientUserId = userState.user?.id ?: 0L
+                    )
 //                TODO(Get posts)
-                /*TODO: Remove this shit*/
-                if (viewModel.posts.lastIndex != index) {
-                    Separator(thickness = 8.dp, modifier = Modifier.alpha(0.2f))
+                    /*TODO: Remove this shit*/
+                    if (viewModel.posts.lastIndex != index) {
+                        Separator(thickness = 8.dp, modifier = Modifier.alpha(0.2f))
+                    }
+                }
+            } else {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                            .navigationBarsLandscapePadding(),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Icon(Icons.TwoTone.CloudOff, null, modifier = Modifier.size(96.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(stringResource(R.string.no_posts), textAlign = TextAlign.Center)
+                    }
                 }
             }
         } else {
             //TODO: Recipes
         }
+    }
+
+    if (showAvatarDialog) {
+        PickOrOpenAvatarDialog(
+            hasAvatar = userState.user?.avatar?.isNotEmpty() == true,
+            onAvatarPicked = { viewModel.addAvatar(it) },
+            onOpenAvatar = {
+                screenController.navigate(
+                    Screen.FullscreenImagePager(
+                        images = userState.user?.avatar!!,
+                        id = userState.user.avatar.first().id
+                    )
+                )
+            },
+            onDismissRequest = { showAvatarDialog = false }
+        )
+    } else if (showStatusDialog) {
+        EditStatusDialog(
+            currentStatus = userState.user?.status ?: "",
+            onDone = { viewModel.updateStatus(it) },
+            onDismissRequest = { showStatusDialog = false }
+        )
+    } else if (showLogoutDialog) {
+        LogoutDialog(
+            onLogout = {
+                if (activity?.isOnline() == true) {
+                    viewModel.logOut()
+                } else toastHost.show(
+                    Icons.Outlined.SignalWifiConnectedNoInternet4,
+                    message = activity?.getString(R.string.no_connection) ?: ""
+                )
+            },
+            onDismissRequest = { showLogoutDialog = false }
+        )
     }
 }

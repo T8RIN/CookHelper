@@ -1,12 +1,12 @@
 package ru.tech.cookhelper.presentation.app.components
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -22,7 +22,6 @@ import ru.tech.cookhelper.presentation.ui.utils.android.ContextUtils.findActivit
 import ru.tech.cookhelper.presentation.ui.utils.compose.TopAppBarUtils.topAppBarScrollBehavior
 import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectEvents
-import ru.tech.cookhelper.presentation.ui.utils.navigation.Dialog
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.*
 import ru.tech.cookhelper.presentation.ui.utils.provider.TopAppBarVisuals.Companion.rememberTopAppBarVisuals
@@ -41,7 +40,6 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     val snackbarHostState = rememberSnackbarHostState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val dialogController = rememberNavController<Dialog>(initialBackstack = emptyList())
     val screenController = rememberNavController<Screen>(startDestination = Screen.Home.None)
     val bottomSheetController = BottomSheetController(
         rememberNavController(initialBackstack = emptyList()),
@@ -63,7 +61,6 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
     CompositionLocalProvider(
         values = arrayOf(
             LocalScreenController provides screenController,
-            LocalDialogController provides dialogController,
             LocalBottomSheetController provides bottomSheetController,
             LocalSnackbarHost provides snackbarHostState,
             LocalToastHostState provides toastHostState,
@@ -131,7 +128,6 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
                         )
                     }
                 }
-                DialogHost()
                 ToastHost()
             }
         }
@@ -146,4 +142,17 @@ fun CookHelperApp(viewModel: MainViewModel = viewModel()) {
             else -> {}
         }
     }
+}
+
+@Composable
+private fun Activity?.dialogBackHandler(onBack: () -> Unit = {}) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+    BackHandler {
+        showDialog = true
+        onBack()
+    }
+    if (showDialog) ExitDialog(
+        onExit = { this?.finishAffinity() },
+        onDismissRequest = { showDialog = false }
+    )
 }
