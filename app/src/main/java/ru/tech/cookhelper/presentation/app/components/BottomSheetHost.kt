@@ -10,7 +10,7 @@ import ru.tech.cookhelper.presentation.ui.utils.navigation.BottomSheet
 import ru.tech.cookhelper.presentation.ui.utils.provider.BottomSheetController
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalBottomSheetController
 import ru.tech.cookhelper.presentation.ui.utils.provider.currentDestination
-import ru.tech.cookhelper.presentation.ui.widgets.bottomsheet.ModalBottomSheet
+import ru.tech.cookhelper.presentation.ui.widgets.bottomsheet.ModalBottomSheetScaffold
 
 @Composable
 fun BottomSheetHost(
@@ -20,7 +20,7 @@ fun BottomSheetHost(
     val controller = bottomSheetController.controller
     val state = bottomSheetController.state
 
-    ModalBottomSheet(
+    ModalBottomSheetScaffold(
         modifier = Modifier.animateContentSize(),
         state = state,
         nestedScrollEnabled = controller.currentDestination?.nestedScrollEnabled == true,

@@ -77,8 +77,9 @@ fun MainModalDrawerContent(
                     NavigationDrawerItem(
                         icon = { Icon(item.getIcon(selected), null) },
                         shape = SquircleShape(
-                            topEnd = 36.0.dp,
-                            bottomEnd = 36.0.dp,
+                            topEnd = 24.dp,
+                            bottomEnd = 24.dp,
+                            smoothness = 100
                         ),
                         colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = containerColor),
                         modifier = Modifier.padding(end = 12.dp),

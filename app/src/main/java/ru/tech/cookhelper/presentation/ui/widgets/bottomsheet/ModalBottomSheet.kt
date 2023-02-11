@@ -44,7 +44,7 @@ enum class BottomSheetValue {
 }
 
 /**
- * State of the persistent bottom sheet in [ModalBottomSheet].
+ * State of the persistent bottom sheet in [ModalBottomSheetScaffold].
  *
  * @param initialValue The initial value of the state.
  * @param animationSpec The default animation that will be used to animate to a new state.
@@ -147,7 +147,7 @@ fun rememberBottomSheetState(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModalBottomSheet(
+fun ModalBottomSheetScaffold(
     modifier: Modifier = Modifier,
     state: BottomSheetState,
     sheetContent: @Composable ColumnScope.() -> Unit,
