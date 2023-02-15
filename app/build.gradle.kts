@@ -15,8 +15,8 @@ android {
         applicationId = "ru.tech.cookhelper"
         minSdk = 21
         targetSdk = 33
-        versionCode = 5
-        versionName = "0.1.22-alpha"
+        versionCode = 6
+        versionName = "0.1.23-alpha"
         multiDexEnabled = true
 
         kapt {
@@ -50,7 +50,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.4.2"
     }
     packagingOptions {
         resources {
@@ -62,10 +62,10 @@ android {
 dependencies {
 
     //App Compat
-    implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
+    implementation("androidx.appcompat:appcompat:1.7.0-alpha02")
 
     //Exif interface
-    implementation("androidx.exifinterface:exifinterface:1.3.5")
+    implementation("androidx.exifinterface:exifinterface:1.3.6")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
@@ -84,14 +84,14 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 
     //Compose
-    implementation("androidx.activity:activity-compose:1.7.0-alpha04")
+    implementation("androidx.activity:activity-compose:1.7.0-beta01")
     implementation("androidx.compose.ui:ui:1.4.0-beta01")
     implementation("androidx.compose.material3:material3:1.1.0-alpha06")
     implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha06")
     implementation("androidx.compose.material:material-icons-core:1.4.0-beta01")
     implementation("androidx.compose.material:material-icons-extended:1.4.0-beta01")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha05")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha06")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-beta01")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
     implementation("androidx.compose.foundation:foundation:1.4.0-beta01")
     implementation("androidx.compose.ui:ui-util:1.4.0-beta01")
 
