@@ -178,7 +178,7 @@ fun PickProductsDialog(
         },
         onDismissRequest = { },
         confirmButton = {
-            TextButton(
+            Button(
                 onClick = {
                     onPicked(selectedProducts.toList())
                     showLeaveUnsavedDataDialog = false
@@ -188,7 +188,7 @@ fun PickProductsDialog(
             }
         },
         dismissButton = {
-            TextButton(
+            FilledTonalButton(
                 onClick = {
                     showLeaveUnsavedDataDialog = selectedProducts.isNotEmpty()
                 }

@@ -56,7 +56,7 @@ fun PickLanguageDialog(
             Spacer(modifier = Modifier.height(8.dp))
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            Button(onClick = onDismiss) {
                 Text(stringResource(R.string.cancel))
             }
         }

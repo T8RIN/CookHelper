@@ -72,7 +72,7 @@ fun CategorySelectionDialog(
         onDismissRequest = { onDismissRequest() },
         icon = { Icon(Icons.Outlined.Category, null) },
         confirmButton = {
-            TextButton(onClick = { onDismissRequest() }) {
+            Button(onClick = { onDismissRequest() }) {
                 Text(stringResource(R.string.cancel))
             }
         }

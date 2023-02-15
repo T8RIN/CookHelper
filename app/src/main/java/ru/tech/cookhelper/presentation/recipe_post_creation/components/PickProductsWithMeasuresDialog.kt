@@ -290,7 +290,7 @@ fun PickProductsWithMeasuresDialog(
         },
         onDismissRequest = { },
         confirmButton = {
-            TextButton(onClick = {
+            Button(onClick = {
                 if (!addingProducts) {
                     onDismissRequest()
                     onProductsPicked(localProducts)

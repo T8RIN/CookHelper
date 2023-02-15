@@ -126,7 +126,7 @@ fun ColorSchemePreview() {
             onDismissRequest = { showSampleDialog = false },
             icon = { Icons.Rounded.Newspaper() },
             confirmButton = {
-                TextButton(onClick = { showSampleDialog = false }) {
+                Button(onClick = { showSampleDialog = false }) {
                     Text(stringResource(R.string.ok))
                 }
             },

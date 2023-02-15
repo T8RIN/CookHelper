@@ -52,7 +52,7 @@ fun EditStatusDialog(
         onDismissRequest = { onDismissRequest() },
         icon = { Icon(Icons.Outlined.Edit, null) },
         confirmButton = {
-            TextButton(
+            Button(
                 onClick = {
                     onDone(status)
                     onDismissRequest()
@@ -62,7 +62,7 @@ fun EditStatusDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissRequest() }) {
+            FilledTonalButton(onClick = { onDismissRequest() }) {
                 Text(stringResource(R.string.cancel))
             }
         }

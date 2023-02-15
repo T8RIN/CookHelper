@@ -54,7 +54,7 @@ fun ColorDialog(
             }
         },
         confirmButton = {
-            TextButton(
+            Button(
                 onClick = {
                     onColorChange(_color)
                     onDismissRequest()
@@ -64,7 +64,7 @@ fun ColorDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) {
+            FilledTonalButton(onClick = onDismissRequest) {
                 Text(stringResource(R.string.cancel))
             }
         }
