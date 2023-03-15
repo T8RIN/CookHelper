@@ -10,7 +10,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.tech.cookhelper.core.constants.Constants
-import ru.tech.cookhelper.core.utils.RetrofitUtils
 import ru.tech.cookhelper.core.utils.RetrofitUtils.setTimeout
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -33,7 +32,7 @@ object RetrofitModule {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY)
             httpClient
                 .addInterceptor(logging)
-                .addInterceptor(RetrofitUtils.RetryInterceptor { !it.isSuccessful })
+//                .addInterceptor(RetrofitUtils.RetryInterceptor { !it.isSuccessful })
             return@let it.client(httpClient.build())
         }
         .build()

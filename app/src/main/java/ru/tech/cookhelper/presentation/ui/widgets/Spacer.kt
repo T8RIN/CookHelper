@@ -1,4 +1,4 @@
-package ru.tech.cookhelper.presentation.ui.utils.compose.widgets
+package ru.tech.cookhelper.presentation.ui.widgets
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable

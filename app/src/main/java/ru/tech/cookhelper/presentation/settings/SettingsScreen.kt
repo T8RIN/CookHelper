@@ -17,8 +17,8 @@ import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tech.cookhelper.presentation.settings.components.*
 import ru.tech.cookhelper.presentation.settings.viewModel.SettingsViewModel
 import ru.tech.cookhelper.presentation.ui.theme.invoke
-import ru.tech.cookhelper.presentation.ui.utils.compose.widgets.NavigationBarsSpacer
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalTopAppBarVisuals
+import ru.tech.cookhelper.presentation.ui.widgets.NavigationBarsSpacer
 
 @Composable
 fun SettingsScreen(

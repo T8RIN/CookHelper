@@ -6,7 +6,7 @@ object Constants {
 
     const val DELIMITER = "*"
 
-    const val HOST_URL = "10.39.12.27:8080"
+    const val HOST_URL = "192.168.43.51:8080"
 
     const val BASE_URL = "http://$HOST_URL/"
 

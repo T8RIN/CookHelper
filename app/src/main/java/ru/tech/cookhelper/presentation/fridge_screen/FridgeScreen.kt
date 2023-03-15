@@ -33,7 +33,6 @@ import ru.tech.cookhelper.presentation.ui.utils.event.Event
 import ru.tech.cookhelper.presentation.ui.utils.event.collectWithLifecycle
 import ru.tech.cookhelper.presentation.ui.utils.navigation.Screen
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalScreenController
-import ru.tech.cookhelper.presentation.ui.utils.provider.LocalSnackbarHost
 import ru.tech.cookhelper.presentation.ui.utils.provider.LocalToastHostState
 import ru.tech.cookhelper.presentation.ui.utils.provider.navigate
 import ru.tech.cookhelper.presentation.ui.widgets.Placeholder
@@ -98,9 +97,6 @@ fun FridgeScreen(
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 16.dp)
         ) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                SnackbarHost(LocalSnackbarHost.current)
-            }
             AnimatedVisibility(
                 visible = !empty,
                 enter = fadeIn(),
@@ -108,12 +104,14 @@ fun FridgeScreen(
             ) {
                 ExpandableFloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     expanded = false,
                     icon = {
                         Icon(
-                            Icons.Rounded.Add, null, modifier = Modifier
+                            Icons.Rounded.Add,
+                            null,
+                            modifier = Modifier
                                 .size(it)
-                                .padding(horizontal = 16.dp)
                         )
                     },
                     size = FabSize.Small,
@@ -153,5 +151,8 @@ fun FridgeScreen(
         }
     }
 
-    if (showDialog) PickProductsDialog(onPicked = viewModel::addProductsToFridge)
+    if (showDialog) PickProductsDialog(
+        onPicked = viewModel::addProductsToFridge,
+        onDismiss = { showDialog = false }
+    )
 }

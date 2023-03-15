@@ -41,6 +41,7 @@ import ru.tech.cookhelper.presentation.ui.widgets.*
 @Composable
 fun PickProductsDialog(
     onPicked: (products: List<Product>) -> Unit,
+    onDismiss: () -> Unit,
     viewModel: PickProductsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -181,7 +182,7 @@ fun PickProductsDialog(
             Button(
                 onClick = {
                     onPicked(selectedProducts.toList())
-                    showLeaveUnsavedDataDialog = false
+                    onDismiss()
                 }
             ) {
                 Text(stringResource(R.string.add))
@@ -191,6 +192,7 @@ fun PickProductsDialog(
             FilledTonalButton(
                 onClick = {
                     showLeaveUnsavedDataDialog = selectedProducts.isNotEmpty()
+                    if (!showLeaveUnsavedDataDialog) onDismiss()
                 }
             ) {
                 Text(stringResource(R.string.cancel))
